@@ -22,25 +22,26 @@ Standard errors can be estimated via boostrapping:
 ``` r
 mutual_total(usschools, 'school', 'race', weight = 'n', se = TRUE)
 #> ..........
-#> 0.4256 (4e-04) segegration of unit <school> by group <race>
+#> 0.4253 (8e-04) segegration of unit <school> by group <race>
 #> $M
-#> [1] 0.4255817
+#> [1] 0.4253446
 #> 
 #> $se
-#> [1] 0.0003959416
+#> [1] 0.0007629948
 ```
 
-Local segregration of racial groups:
+Local segregration of racial groups, with group-specific standard errors:
 
 ``` r
-mutual_local(usschools, 'school', 'race', weight = 'n')
-#> 0.4215 segegration of unit <school> by group <race>
-#>     race        ls           p    M_group
-#> 1 native 1.3478746 0.007511419 0.01012445
-#> 2  asian 0.5822905 0.022689250 0.01321173
-#> 3   hisp 0.7720662 0.151558355 0.11701309
-#> 4  black 0.8790017 0.189394665 0.16647824
-#> 5  white 0.1823918 0.628846312 0.11469638
+mutual_local(usschools, 'school', 'race', weight = 'n', se = TRUE)
+#> ..........
+#> 0.4251 segegration of unit <school> by group <race>
+#>     race        ls        ls_se          p    M_group   M_group_se
+#> 1 native 1.4548774 0.0224728194 0.00747723 0.01087096 0.0001633654
+#> 2  asian 0.6252454 0.0039359933 0.02273825 0.01417722 0.0001401293
+#> 3   hisp 0.7768238 0.0024825793 0.15232648 0.11772199 0.0003540134
+#> 4  black 0.8820587 0.0021428177 0.18914736 0.16723418 0.0004235267
+#> 5  white 0.1830953 0.0004177332 0.62831068 0.11511454 0.0002216444
 ```
 
 How to install

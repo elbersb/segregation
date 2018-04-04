@@ -33,10 +33,10 @@ Standard errors can be estimated via boostrapping:
 mutual_total(usschools, 'school', 'race', weight = 'n', se = TRUE)
 ```
 
-Local segregration of racial groups:
+Local segregration of racial groups, with group-specific standard errors:
 
 ```{r}
-mutual_local(usschools, 'school', 'race', weight = 'n')
+mutual_local(usschools, 'school', 'race', weight = 'n', se = TRUE)
 ```
 
 ## How to install
