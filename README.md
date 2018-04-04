@@ -22,12 +22,12 @@ Standard errors can be estimated via boostrapping:
 ``` r
 mutual_total(usschools, 'school', 'race', weight = 'n', se = TRUE)
 #> ..........
-#> 0.4256 (0) segegration of unit <school> by group <race>
+#> 0.4252 (0) segegration of unit <school> by group <race>
 #> $M
-#> [1] 0.4255889
+#> [1] 0.4252167
 #> 
 #> $se
-#> [1] 7.859918e-07
+#> [1] 7.421454e-07
 ```
 
 Local segregration of racial groups:
@@ -46,7 +46,7 @@ mutual_local(usschools, 'school', 'race', weight = 'n')
 How to install
 --------------
 
-The package is not CRAN yet. If you have devtools installed, use
+The package is not on CRAN yet. If you have devtools installed, use
 
 ``` r
 devtools::install_github("elbersb/mutual") 
@@ -60,6 +60,13 @@ To access the documentation, type
 ?mutual
 ```
 
+Features
+--------
+
+-   calculate total, between, within, and local segregation
+-   estimate standard errors via bootstrapping
+-   it's fast, because it uses the [`data.table`](https://github.com/Rdatatable/data.table/wiki) package internally
+
 Papers using the Mutual information index
 -----------------------------------------
 
@@ -70,8 +77,8 @@ Papers using the Mutual information index
 -   Van Puyenbroeck, T., De Bruyne, K., & Sels, L. (2012). More than ‘Mutual Information’: Educational and sectoral gender segregation and their interaction on the Flemish labor market. Labour Economics, 19(1), 1-8. <https://doi.org/10.1016/j.labeco.2011.05.002>
 -   Mora, R., & Ruiz-Castillo, J. (2003). Additively decomposable segregation indexes. The case of gender segregation by occupations and human capital levels in Spain. The Journal of Economic Inequality, 1(2), 147-179. <https://doi.org/10.1023/A:1026198429377>
 
-References
-----------
+References on the Mutual information index
+------------------------------------------
 
 Theil, Henri 1971. Principles of Econometrics. New York: Wiley.
 
