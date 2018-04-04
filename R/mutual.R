@@ -174,7 +174,7 @@ mutual_total <- function(data, unit, group, within = NULL,
       mutual_total_compute(resampled, unit, group, within)
     })
     cat("\n")
-    se <- boot_se(boot_M)
+    se <- stats::sd(boot_M)
     M <- mean(boot_M)
   }
 
@@ -281,9 +281,9 @@ mutual_local <- function(data, unit, group, weight = NULL, se = FALSE, n_bootstr
     boot_ls <- rbindlist(boot_ls)
     # summarize bootstrapped data frames
     ls <- boot_ls[, list(
-      ls = mean(ls), ls_se = boot_se(ls),
+      ls = mean(ls), ls_se = stats::sd(ls),
       p = first(p), M_group = mean(M_group),
-      M_group_se = boot_se(M_group)
+      M_group_se = stats::sd(M_group)
     ),
     by = group
     ]

@@ -22,12 +22,12 @@ Standard errors can be estimated via boostrapping:
 ``` r
 mutual_total(usschools, 'school', 'race', weight = 'n', se = TRUE)
 #> ..........
-#> 0.4252 (0) segegration of unit <school> by group <race>
+#> 0.4256 (4e-04) segegration of unit <school> by group <race>
 #> $M
-#> [1] 0.4252167
+#> [1] 0.4255817
 #> 
 #> $se
-#> [1] 7.421454e-07
+#> [1] 0.0003959416
 ```
 
 Local segregration of racial groups:
