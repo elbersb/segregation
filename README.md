@@ -14,6 +14,9 @@ library(segregation)
 mutual_total(usschools, 'school', 'race', weight = 'n')
 #> $M
 #> [1] 0.4215239
+#> 
+#> $bounds
+#> [1] 0.000000 1.609438
 ```
 
 Standard errors can be estimated via boostrapping:
@@ -26,6 +29,9 @@ mutual_total(usschools, 'school', 'race', weight = 'n', se = TRUE)
 #> 
 #> $se
 #> [1] 0.0007533536
+#> 
+#> $bounds
+#> [1] 0.000000 1.609438
 ```
 
 Local segregation of racial groups, with group-specific standard errors:

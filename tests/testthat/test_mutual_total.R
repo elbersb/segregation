@@ -46,6 +46,6 @@ test_that("within estimations is correct", {
 test_that("bootstrapping works", {
   expect_length(
     mutual_total(test_data, "u", "g", weight = "n", se = TRUE, n_bootstrap = 20),
-    2
+    3
   )
 })

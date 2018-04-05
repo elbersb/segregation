@@ -57,6 +57,7 @@ mutual_total_compute <- function(data, unit, group, within) {
 #' @return Returns a list with an element named \code{M}, containing total
 #'   segregation. If \code{se} is set to \code{TRUE}, the list contains
 #'   another element named \code{se} that contains the bootstrapped standard error.
+#'   If \code{within} is \code{NULL}, also returns the lower and upper bound of M.
 #' @references
 #' Henri Theil. 1971. Principles of Econometrics. New York: Wiley.
 #'
@@ -120,6 +121,10 @@ mutual_total <- function(data, unit, group, within = NULL,
   ret <- list(M = M)
   if (!is.null(se)) {
     ret$se <- se
+  }
+  if (within=='within_dummy') {
+    categories <- d[, list(uniqueN(get(unit)), uniqueN(get(group))),]
+    ret$bounds <- c(0, log(min(categories)))
   }
   ret
 }

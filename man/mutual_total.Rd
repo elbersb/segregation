@@ -37,6 +37,7 @@ computed within the groups defined by the variable, and then averaged.
 Returns a list with an element named \code{M}, containing total
   segregation. If \code{se} is set to \code{TRUE}, the list contains
   another element named \code{se} that contains the bootstrapped standard error.
+  If \code{within} is \code{NULL}, also returns the lower and upper bound of M.
 }
 \description{
 Returns the total segregation between \code{unit} and \code{group}.
