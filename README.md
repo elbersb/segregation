@@ -12,7 +12,6 @@ The package provides an easy way to calculate total and local segregation, based
 ``` r
 library(segregation)
 mutual_total(usschools, 'school', 'race', weight = 'n')
-#> 0.4215 segegration of unit <school> by group <race>
 #> $M
 #> [1] 0.4215239
 ```
@@ -22,12 +21,11 @@ Standard errors can be estimated via boostrapping:
 ``` r
 mutual_total(usschools, 'school', 'race', weight = 'n', se = TRUE)
 #> ..........
-#> 0.4254 (5e-04) segegration of unit <school> by group <race>
 #> $M
-#> [1] 0.4253867
+#> [1] 0.4255106
 #> 
 #> $se
-#> [1] 0.0004722356
+#> [1] 0.0007533536
 ```
 
 Local segregation of racial groups, with group-specific standard errors:
@@ -35,13 +33,12 @@ Local segregation of racial groups, with group-specific standard errors:
 ``` r
 mutual_local(usschools, 'school', 'race', weight = 'n', se = TRUE)
 #> ..........
-#> 0.4252 segegration of unit <school> by group <race>
 #>     race        ls        ls_se           p    M_group   M_group_se
-#> 1 native 1.4383742 0.0207301889 0.007599172 0.01076465 0.0001981138
-#> 2  asian 0.6214575 0.0064239722 0.022698367 0.01413234 0.0001773132
-#> 3   hisp 0.7765922 0.0025033608 0.151573170 0.11774745 0.0004363247
-#> 4  black 0.8847786 0.0035422770 0.189860781 0.16747267 0.0003832720
-#> 5  white 0.1830196 0.0004040319 0.628268510 0.11509556 0.0001781580
+#> 1 native 1.4436245 0.0180736219 0.007544469 0.01083071 0.0001080501
+#> 2  asian 0.6219305 0.0044934643 0.022693809 0.01414213 0.0001944925
+#> 3   hisp 0.7784047 0.0024908422 0.151554936 0.11796737 0.0003087502
+#> 4  black 0.8842662 0.0021405881 0.189574729 0.16743601 0.0004716178
+#> 5  white 0.1831239 0.0006878947 0.628632058 0.11515859 0.0003661788
 ```
 
 How to install

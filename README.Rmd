@@ -12,6 +12,8 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "README-"
 )
+
+set.seed(69839)
 ```
 
 # segregation

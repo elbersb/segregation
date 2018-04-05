@@ -116,21 +116,11 @@ mutual_total <- function(data, unit, group, within = NULL,
     M <- mean(boot_M)
   }
 
-  # display and return
+  # return
   ret <- list(M = M)
-  di <- round(M, 4)
   if (!is.null(se)) {
-    di <- paste0(di, " (", round(se, 4), ")")
     ret$se <- se
   }
-  di <- paste0(
-    di, " segegration of unit <", paste(unit, collapse = "+"), "> by group <",
-    paste(group, collapse = "+"), ">"
-  )
-  if (within != "within_dummy") {
-    di <- paste0(di, ", within <", paste(within, collapse = "+"), ">")
-  }
-  cat(paste0(di, "\n"))
   ret
 }
 
@@ -226,14 +216,6 @@ mutual_local <- function(data, unit, group, weight = NULL, se = FALSE, n_bootstr
     by = group
     ]
   }
-
-  # output total result
-  M <- sum(ls$M_group)
-  di <- paste0(
-    round(M, 4), " segegration of unit <", paste(unit, collapse = "+"),
-    "> by group <", paste(group, collapse = "+"), ">"
-  )
-  cat(paste0(di, "\n"))
 
   # sort and return as data frame
   setorderv(ls, group)
