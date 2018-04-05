@@ -14,16 +14,17 @@ knitr::opts_chunk$set(
 )
 ```
 
-# mutual
+# segregation
 
-An R package to calculate the Mutual Information Index, a segregation index with desirable properties.
+An R package to calculate entropy-based segregation indices, with a focus
+on the mututal information index (M).
 
 ## Example
 
 The package provides an easy way to calculate total and local segregation, based on the Mutual Information Index.
 
 ```{r}
-library(mutual)
+library(segregation)
 mutual_total(usschools, 'school', 'race', weight = 'n')
 ```
 
@@ -33,7 +34,7 @@ Standard errors can be estimated via boostrapping:
 mutual_total(usschools, 'school', 'race', weight = 'n', se = TRUE)
 ```
 
-Local segregration of racial groups, with group-specific standard errors:
+Local segregation of racial groups, with group-specific standard errors:
 
 ```{r}
 mutual_local(usschools, 'school', 'race', weight = 'n', se = TRUE)
@@ -44,7 +45,7 @@ mutual_local(usschools, 'school', 'race', weight = 'n', se = TRUE)
 The package is not on CRAN yet. If you have devtools installed, use
 
 ```{r eval=FALSE}
-devtools::install_github("elbersb/mutual") 
+devtools::install_github("elbersb/segregation") 
 ```
 
 to install the package.
@@ -52,7 +53,7 @@ to install the package.
 To access the documentation, type
 
 ```{r eval=FALSE}
-?mutual
+?segregation
 ```
 
 ## Features
@@ -71,7 +72,7 @@ To access the documentation, type
 - Mora, R., & Ruiz-Castillo, J. (2003). Additively decomposable segregation indexes. The case of gender segregation by occupations and human capital levels in Spain. The Journal of Economic Inequality, 1(2), 147-179. https://doi.org/10.1023/A:1026198429377
 
 
-## References on the Mutual information index
+## References on entropy-based segregation indices
 
 Theil, Henri 1971. Principles of Econometrics. New York: Wiley.
 

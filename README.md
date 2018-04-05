@@ -1,8 +1,8 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-mutual
-======
+segregation
+===========
 
-An R package to calculate the Mutual Information Index, a segregation index with desirable properties.
+An R package to calculate entropy-based segregation indices, with a focus on the mututal information index (M).
 
 Example
 -------
@@ -10,7 +10,7 @@ Example
 The package provides an easy way to calculate total and local segregation, based on the Mutual Information Index.
 
 ``` r
-library(mutual)
+library(segregation)
 mutual_total(usschools, 'school', 'race', weight = 'n')
 #> 0.4215 segegration of unit <school> by group <race>
 #> $M
@@ -22,26 +22,26 @@ Standard errors can be estimated via boostrapping:
 ``` r
 mutual_total(usschools, 'school', 'race', weight = 'n', se = TRUE)
 #> ..........
-#> 0.4253 (8e-04) segegration of unit <school> by group <race>
+#> 0.4254 (5e-04) segegration of unit <school> by group <race>
 #> $M
-#> [1] 0.4253446
+#> [1] 0.4253867
 #> 
 #> $se
-#> [1] 0.0007629948
+#> [1] 0.0004722356
 ```
 
-Local segregration of racial groups, with group-specific standard errors:
+Local segregation of racial groups, with group-specific standard errors:
 
 ``` r
 mutual_local(usschools, 'school', 'race', weight = 'n', se = TRUE)
 #> ..........
-#> 0.4251 segegration of unit <school> by group <race>
-#>     race        ls        ls_se          p    M_group   M_group_se
-#> 1 native 1.4548774 0.0224728194 0.00747723 0.01087096 0.0001633654
-#> 2  asian 0.6252454 0.0039359933 0.02273825 0.01417722 0.0001401293
-#> 3   hisp 0.7768238 0.0024825793 0.15232648 0.11772199 0.0003540134
-#> 4  black 0.8820587 0.0021428177 0.18914736 0.16723418 0.0004235267
-#> 5  white 0.1830953 0.0004177332 0.62831068 0.11511454 0.0002216444
+#> 0.4252 segegration of unit <school> by group <race>
+#>     race        ls        ls_se           p    M_group   M_group_se
+#> 1 native 1.4383742 0.0207301889 0.007599172 0.01076465 0.0001981138
+#> 2  asian 0.6214575 0.0064239722 0.022698367 0.01413234 0.0001773132
+#> 3   hisp 0.7765922 0.0025033608 0.151573170 0.11774745 0.0004363247
+#> 4  black 0.8847786 0.0035422770 0.189860781 0.16747267 0.0003832720
+#> 5  white 0.1830196 0.0004040319 0.628268510 0.11509556 0.0001781580
 ```
 
 How to install
@@ -50,7 +50,7 @@ How to install
 The package is not on CRAN yet. If you have devtools installed, use
 
 ``` r
-devtools::install_github("elbersb/mutual") 
+devtools::install_github("elbersb/segregation") 
 ```
 
 to install the package.
@@ -58,7 +58,7 @@ to install the package.
 To access the documentation, type
 
 ``` r
-?mutual
+?segregation
 ```
 
 Features
@@ -78,8 +78,8 @@ Papers using the Mutual information index
 -   Van Puyenbroeck, T., De Bruyne, K., & Sels, L. (2012). More than ‘Mutual Information’: Educational and sectoral gender segregation and their interaction on the Flemish labor market. Labour Economics, 19(1), 1-8. <https://doi.org/10.1016/j.labeco.2011.05.002>
 -   Mora, R., & Ruiz-Castillo, J. (2003). Additively decomposable segregation indexes. The case of gender segregation by occupations and human capital levels in Spain. The Journal of Economic Inequality, 1(2), 147-179. <https://doi.org/10.1023/A:1026198429377>
 
-References on the Mutual information index
-------------------------------------------
+References on entropy-based segregation indices
+-----------------------------------------------
 
 Theil, Henri 1971. Principles of Econometrics. New York: Wiley.
 

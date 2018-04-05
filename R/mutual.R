@@ -1,65 +1,3 @@
-#' mutual: Calculation of the Mutual Information Index
-#'
-#' Computes the mutual information index (M), a measure
-#' of segregation that is highly decomposable. Provides
-#' tools to decompose the index by units and groups, and by within
-#' and between terms. Includes standard error estimation by bootstrapping.
-#'
-#' @section Methods:
-#'
-#' \itemize{
-#'  \item{}{\code{\link{mutual_total}} Computes M.}
-#'  \item{}{\code{\link{mutual_local}} Computes local segregation.}
-#' }
-#' @section Data:
-#'
-#' \itemize{
-#'  \item{}{\code{\link{usschools}} Example dataset.}
-#' }
-#'
-#' @docType package
-#' @name mutual
-NULL
-
-globalVariables(c(
-  "freq",
-  "n_group", "n_unit", "n_within", "n_within_unit",
-  "p", "p_within", "p_group", "p_unit", "p_unit_g_group",
-  "entropy_cond", "M_group", "ll_part"
-))
-
-#' @import data.table
-prepare_data <- function(data, unit, group, weight, expand, within = NULL) {
-  vars <- c(unit, group)
-
-  # use provided frequency weight
-  if (!is.null(weight)) {
-    data[, "freq"] <- data[, weight]
-  } else {
-    data[, "freq"] <- 1
-  }
-
-  # if within is not set, make up one that applies to the whole dataset
-  if (!is.null(within)) {
-    if (within == "within_dummy") {
-      data[, within] <- 1
-    }
-    vars <- c(vars, within)
-  }
-
-  # include variables and freq, and select only positive weights
-  setDT(data)
-  data <- data["freq" > 0, c(vars, "freq"), with = FALSE]
-  if (expand == TRUE) {
-    # expanded df necessary for SE calculation
-    data <- data[rep(1:.N, freq)]
-    data[, "freq"] <- 1
-    data
-  } else {
-    # collapse, this speeds up calculation
-    data[, list(freq = sum(freq)), by = vars]
-  }
-}
 
 #' @import data.table
 mutual_total_compute <- function(data, unit, group, within) {
@@ -70,8 +8,8 @@ mutual_total_compute <- function(data, unit, group, within) {
   # calculate proportions and entropy for each within unit
   n_within[, `:=`(p_within = n_within / n_total, p = n_within_unit / n_within)]
   entropy <- n_within[, list(entropy = sum(p * log(1 / p)), p_within = first(p_within)),
-    by = within
-  ]
+                      by = within
+                      ]
   setkeyv(entropy, within)
 
   # calculate totals
@@ -81,7 +19,7 @@ mutual_total_compute <- function(data, unit, group, within) {
 
   # calculate entropy within groups
   grouped <- data[, list(p_group = first(p_group), entropy_cond = sum(p_unit_g_group *
-    log(1 / p_unit_g_group))), by = c(within, group)]
+                                                                        log(1 / p_unit_g_group))), by = c(within, group)]
   setkeyv(grouped, within)
   # merge within entropy, and compare to group entropy
   grouped <- merge(grouped, entropy)
@@ -169,8 +107,8 @@ mutual_total <- function(data, unit, group, within = NULL,
       cat(".")
       # resample and collapse by all variables, except 'freq'
       resampled <- d[sample(.N, .N, replace = TRUE)][, list(freq = sum(freq)),
-        by = vars
-      ]
+                                                     by = vars
+                                                     ]
       mutual_total_compute(resampled, unit, group, within)
     })
     cat("\n")
@@ -272,8 +210,8 @@ mutual_local <- function(data, unit, group, weight = NULL, se = FALSE, n_bootstr
       cat(".")
       # resample and collapse by all variables, except 'freq'
       resampled <- d[sample(.N, .N, replace = TRUE)][, list(freq = sum(freq)),
-        by = vars
-      ]
+                                                     by = vars
+                                                     ]
       mutual_local_compute(resampled, unit, group)
     })
 

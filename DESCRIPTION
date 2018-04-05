@@ -1,10 +1,11 @@
-Package: mutual
+Package: segregation
 Type: Package
-Title: Calculation of the Mutual Information Index
+Title: Entropy-based segregation indices
 Version: 0.0.0.9000
 Authors@R: person("Benjamin", "Elbers", email = "be2239@columbia.edu", 
   role = c("aut", "cre"), comment = c(ORCID = "0000-0001-5392-3448"))
-Description: Computes the mututal information index (M), a measure
+Description: Computes entropy-based segregation indices, with a focus
+    on the mututal information index (M). The M is a measure
     of segregation that is highly decomposable. Provides
     tools to decompose the index by units and groups (local segregation), 
     and by within and between terms. 
@@ -14,6 +15,6 @@ Imports: data.table
 Encoding: UTF-8
 LazyData: true
 Suggests: testthat
-URL: http://github.com/elbersb/mutual
-BugReports: http://github.com/elbersb/mutual/issues
+URL: http://github.com/elbersb/segregation
+BugReports: http://github.com/elbersb/segregation/issues
 RoxygenNote: 6.0.1

@@ -1,4 +1,5 @@
 ^.*\.Rproj$
+^.*\.rhistory$
 ^\.Rproj\.user$
 ^data-raw$
 ^README\.Rmd$

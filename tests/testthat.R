@@ -1,4 +1,4 @@
 library(testthat)
-library(mutual)
+library(segregation)
 
-test_check("mutual")
+test_check("segregation")
