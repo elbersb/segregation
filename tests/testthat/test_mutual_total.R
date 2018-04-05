@@ -49,3 +49,19 @@ test_that("bootstrapping works", {
     3
   )
 })
+
+test_data <- data.frame(
+    u = c(rep("a", 4), rep("b", 4)),
+    g = rep(c(1, 2, 3, 4), 2),
+    n = c(40, 0, 0, 0, 0, 0, 0, 40)
+)
+
+test_that("zero weights no problem", {
+    expect_length(mutual_total(test_data, "u", "g", weight = "n", se = TRUE), 3)
+    expect_length(mutual_total(test_data, "u", "g", weight = "n"), 2)
+})
+
+test_that("max bound correct", {
+    expect_equal(mutual_total(test_data, "u", "g", weight = "n")$M, log(2))
+    expect_equal(mutual_total(test_data, "u", "g", weight = "n")$bounds[[2]], log(2))
+})
