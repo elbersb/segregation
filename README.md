@@ -11,7 +11,7 @@ The package provides an easy way to calculate total and local segregation, based
 
 ``` r
 library(segregation)
-mutual_total(usschools, 'school', 'race', weight = 'n')
+mutual_total(usschools, "school", "race", weight = "n")
 #> $M
 #> [1] 0.4215239
 #> 
@@ -22,7 +22,7 @@ mutual_total(usschools, 'school', 'race', weight = 'n')
 Standard errors can be estimated via boostrapping:
 
 ``` r
-mutual_total(usschools, 'school', 'race', weight = 'n', se = TRUE)
+mutual_total(usschools, "school", "race", weight = "n", se = TRUE)
 #> ..........
 #> $M
 #> [1] 0.4255106
@@ -37,7 +37,7 @@ mutual_total(usschools, 'school', 'race', weight = 'n', se = TRUE)
 Local segregation of racial groups, with group-specific standard errors:
 
 ``` r
-mutual_local(usschools, 'school', 'race', weight = 'n', se = TRUE)
+mutual_local(usschools, "school", "race", weight = "n", se = TRUE)
 #> ..........
 #>     race        ls        ls_se           p    M_group   M_group_se
 #> 1 native 1.4436245 0.0180736219 0.007544469 0.01083071 0.0001080501
@@ -84,7 +84,7 @@ Papers using the Mutual information index
 References on entropy-based segregation indices
 -----------------------------------------------
 
-Theil, Henri 1971. Principles of Econometrics. New York: Wiley.
+Theil, Henri. (1971). Principles of Econometrics. New York: Wiley.
 
 Frankel, D. M., & Volij, O. (2011). Measuring school segregation. Journal of Economic Theory, 146(1), 1-38. <https://doi.org/10.1016/j.jet.2010.10.008>
 
