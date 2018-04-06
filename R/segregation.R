@@ -30,7 +30,10 @@ globalVariables(c(
   "cond1", "cond2", "entropy_cond1", "entropy_cond2",
   "group1", "group2", "p_group1",
   "p_group2", "p_unit_g_group1", "p_unit_g_group2",
-  "sumcond1", "sumcond2"
+  "p_unit1", "p_unit2", "sumcond1", "sumcond2",
+  "miss1", "miss2",
+  "ls_group", "ls_group1", "ls_group2",
+  "same_c_diff_m", "diff_c_same_m"
 ))
 
 #' @import data.table
