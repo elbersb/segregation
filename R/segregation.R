@@ -26,7 +26,11 @@ globalVariables(c(
   "freq",
   "n_group", "n_unit", "n_within", "n_within_unit",
   "p", "p_within", "p_group", "p_unit", "p_unit_g_group",
-  "entropy_cond", "M_group", "ll_part"
+  "entropy_cond", "M_group", "ll_part",
+  "cond1", "cond2", "entropy_cond1", "entropy_cond2",
+  "group1", "group2", "p_group1",
+  "p_group2", "p_unit_g_group1", "p_unit_g_group2",
+  "sumcond1", "sumcond2"
 ))
 
 #' @import data.table
