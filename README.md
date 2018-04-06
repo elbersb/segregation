@@ -25,10 +25,7 @@ Standard errors can be estimated via boostrapping:
 mutual_total(usschools, "school", "race", weight = "n", se = TRUE)
 #> ..........
 #> $M
-#> [1] 0.4255106
-#> 
-#> $se
-#> [1] 0.0007533536
+#> [1] 0.4255105888 0.0007533536
 #> 
 #> $bounds
 #> [1] 0.000000 1.609438

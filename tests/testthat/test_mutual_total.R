@@ -10,18 +10,18 @@ test_data <- data.frame(
 
 test_that("mutual works both ways around", {
   expect_equal(
-    mutual_total(test_data, "u", "g", weight = "n"),
-    mutual_total(test_data, "g", "u", weight = "n")
+    mutual_total(test_data, "u", "g", weight = "n")$M,
+    mutual_total(test_data, "g", "u", weight = "n")$M
   )
 
   expect_equal(
-    mutual_total(test_data, "u", c("supergroup", "g"), weight = "n"),
-    mutual_total(test_data, "u", "g", weight = "n")
+    mutual_total(test_data, "u", c("supergroup", "g"), weight = "n")$M,
+    mutual_total(test_data, "u", "g", weight = "n")$M
   )
 
   expect_equal(
-    mutual_total(test_data, "u", c("supergroup", "g"), weight = "n"),
-    mutual_total(test_data, c("supergroup", "g"), "u", weight = "n")
+    mutual_total(test_data, "u", c("supergroup", "g"), weight = "n")$M,
+    mutual_total(test_data, c("supergroup", "g"), "u", weight = "n")$M
   )
 })
 
@@ -44,10 +44,9 @@ test_that("within estimations is correct", {
 })
 
 test_that("bootstrapping works", {
-  expect_length(
-    mutual_total(test_data, "u", "g", weight = "n", se = TRUE, n_bootstrap = 20),
-    3
-  )
+  ret = mutual_total(test_data, "u", "g", weight = "n", se = TRUE, n_bootstrap = 20)
+  expect_length(ret, 2)
+  expect_length(unlist(ret), 4)
 })
 
 test_data <- data.frame(
@@ -57,7 +56,7 @@ test_data <- data.frame(
 )
 
 test_that("zero weights no problem", {
-    expect_length(mutual_total(test_data, "u", "g", weight = "n", se = TRUE), 3)
+    expect_length(mutual_total(test_data, "u", "g", weight = "n", se = TRUE), 2)
     expect_length(mutual_total(test_data, "u", "g", weight = "n"), 2)
 })
 

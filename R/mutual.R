@@ -55,9 +55,9 @@ mutual_total_compute <- function(data, unit, group, within) {
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{10})
 #'
 #' @return Returns a list with an element named \code{M}, containing total
-#'   segregation. If \code{se} is set to \code{TRUE}, the list contains
-#'   another element named \code{se} that contains the bootstrapped standard error.
-#'   If \code{within} is \code{NULL}, also returns the lower and upper bound of M.
+#'   segregation. If \code{se} is set to \code{TRUE}, \code{M} is a vector of length
+#'   two, with the second item containing the bootstrapped standard error.
+#'   The element \code{bounds} contains the lower and upper bound of M.
 #' @references
 #' Henri Theil. 1971. Principles of Econometrics. New York: Wiley.
 #'
@@ -118,14 +118,15 @@ mutual_total <- function(data, unit, group, within = NULL,
   }
 
   # return
-  ret <- list(M = M)
-  if (!is.null(se)) {
-    ret$se <- se
+  if (is.null(se)) {
+    ret <- list(M=M)
+  } else {
+    ret <- list(M=c(M, se))
   }
-  if (within=='within_dummy') {
-    categories <- d[, list(uniqueN(get(unit)), uniqueN(get(group))),]
-    ret$bounds <- c(0, log(min(categories)))
-  }
+
+  # min/max bounds
+  categories <- d[, list(uniqueN(get(unit)), uniqueN(get(group))),]
+  ret$bounds <- c(0, log(min(categories)))
   ret
 }
 
