@@ -30,6 +30,8 @@ mutual_diff_mrc_compute <- function(d1, d2, unit, group) {
         entropy_cond2 = sum(p_unit_g_group2 * log(1 / p_unit_g_group2), na.rm = TRUE),
         p_group1 = mean(p_group1, na.rm = TRUE),
         p_group2 = mean(p_group2, na.rm = TRUE)), by=group]
+    joined[, p_group1:=ifelse(is.na(p_group1), 0, p_group1)]
+    joined[, p_group2:=ifelse(is.na(p_group2), 0, p_group2)]
     joined <- joined[, list(
         cond1 = p_group1 * sumcond2 - p_group1 * sumcond1,
         cond2 = p_group2 * sumcond2 - p_group2 * sumcond1,
