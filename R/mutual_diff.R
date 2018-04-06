@@ -91,8 +91,7 @@ mutual_diff_mrc <- function(data1, data2, unit, group,
     if (se == FALSE) {
         ret <- mutual_diff_mrc_compute(d1, d2, unit, group)
     } else {
-        # define vars (all except freq) for collapse
-        vars <- names(d1)[which(names(d1) != "freq")]
+        vars <- attr(d1, "vars")
         boot_ret <- sapply(1:n_bootstrap, function(i) {
             cat(".")
             # resample and collapse by all variables, except 'freq'

@@ -102,8 +102,7 @@ mutual_total <- function(data, unit, group, within = NULL,
     M <- mutual_total_compute(d, unit, group, within)
     se <- NULL
   } else {
-    # define vars (all except freq) for collapse
-    vars <- names(d)[which(names(d) != "freq")]
+    vars <- attr(d, "vars")
     boot_M <- sapply(1:n_bootstrap, function(i) {
       cat(".")
       # resample and collapse by all variables, except 'freq'
@@ -200,8 +199,7 @@ mutual_local <- function(data, unit, group, weight = NULL, se = FALSE, n_bootstr
     ls <- mutual_local_compute(d, unit, group)
     se <- NULL
   } else {
-    # define vars (all except freq) for collapse
-    vars <- names(d)[which(names(d) != "freq")]
+    vars <- attr(d, "vars")
     boot_ls <- lapply(1:n_bootstrap, function(i) {
       cat(".")
       # resample and collapse by all variables, except 'freq'

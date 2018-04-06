@@ -55,13 +55,15 @@ prepare_data <- function(data, unit, group, weight, expand, within = NULL) {
   # include variables and freq, and select only positive weights
   setDT(data)
   data <- data[freq > 0, c(vars, "freq"), with = FALSE]
+
   if (expand == TRUE) {
     # expanded df necessary for SE calculation
     data <- data[rep(1:.N, freq)]
     data[, "freq"] <- 1
-    data
   } else {
     # collapse, this speeds up calculation
-    data[, list(freq = sum(freq)), by = vars]
+    data <- data[, list(freq = sum(freq)), by = vars]
   }
+  attr(data, "vars") <- vars
+  data
 }
