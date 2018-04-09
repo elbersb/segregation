@@ -50,8 +50,8 @@
 #' @import data.table
 #' @export
 mutual_difference <- function(data1, data2, unit, group,
-                            weight = NULL, method = NULL,
-                            se = FALSE, n_bootstrap = 50) {
+                              weight = NULL, method = NULL,
+                              se = FALSE, n_bootstrap = 50) {
     if(method == "mrc") {
         method = mutual_difference_mrc_compute
     } else if(method == "elbers") {
