@@ -4,6 +4,12 @@ segregation
 
 An R package to calculate entropy-based segregation indices, with a focus on the mututal information index (M).
 
+-   calculate total, between, within, and local segregation
+-   decompose differences in total segregation over time
+-   estimate standard errors via bootstrapping
+-   every method returns a [tidy](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html) data frame for easy post-processing and plotting
+-   it's fast, because it uses the [`data.table`](https://github.com/Rdatatable/data.table/wiki) package internally
+
 Example
 -------
 
@@ -29,7 +35,7 @@ mutual_total(usschools, "school", "race", weight = "n", se = TRUE)
 #> M_max M_max 1.609 0.000000
 ```
 
-Local segregation of racial groups, with group-specific standard errors:
+Local segregation (`ls`) of racial groups, with group-specific standard errors:
 
 ``` r
 mutual_local(usschools, "school", "race", weight = "n", se = TRUE)
@@ -68,15 +74,6 @@ To access the documentation, type
 ``` r
 ?segregation
 ```
-
-Features
---------
-
--   calculate total, between, within, and local segregation
--   decompose changes in total segregation over time
--   estimate standard errors via bootstrapping
--   every method returns a [tidy](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html) data frame for easy post-processing and plotting
--   it's fast, because it uses the [`data.table`](https://github.com/Rdatatable/data.table/wiki) package internally
 
 Papers using the Mutual information index
 -----------------------------------------

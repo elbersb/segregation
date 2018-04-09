@@ -22,6 +22,12 @@ set.seed(69839)
 An R package to calculate entropy-based segregation indices, with a focus
 on the mututal information index (M).
 
+- calculate total, between, within, and local segregation
+- decompose differences in total segregation over time
+- estimate standard errors via bootstrapping
+- every method returns a [tidy](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html) data frame for easy post-processing and plotting
+- it's fast, because it uses the [`data.table`](https://github.com/Rdatatable/data.table/wiki) package internally
+
 ## Example
 
 The package provides an easy way to calculate total and local segregation, based on the Mutual Information Index.
@@ -37,7 +43,7 @@ Standard errors can be estimated via boostrapping:
 mutual_total(usschools, "school", "race", weight = "n", se = TRUE)
 ```
 
-Local segregation of racial groups, with group-specific standard errors:
+Local segregation (`ls`) of racial groups, with group-specific standard errors:
 
 ```{r}
 mutual_local(usschools, "school", "race", weight = "n", se = TRUE)
@@ -59,14 +65,6 @@ To access the documentation, type
 ?segregation
 ```
 
-## Features
-
-- calculate total, between, within, and local segregation
-- decompose changes in total segregation over time
-- estimate standard errors via bootstrapping
-- every method returns a [tidy](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html) data frame for easy post-processing and plotting
-- it's fast, because it uses the [`data.table`](https://github.com/Rdatatable/data.table/wiki) package internally
-
 ## Papers using the Mutual information index
 
 (list incomplete)
@@ -75,7 +73,6 @@ To access the documentation, type
 - Forster, A. G., & Bol, T. (2017). Vocational education and employment over the life course using a new measure of occupational specificity. Social Science Research, 70, 176-197. https://doi.org/10.1016/j.ssresearch.2017.11.004
 - Van Puyenbroeck, T., De Bruyne, K., & Sels, L. (2012). More than ‘Mutual Information’: Educational and sectoral gender segregation and their interaction on the Flemish labor market. Labour Economics, 19(1), 1-8. https://doi.org/10.1016/j.labeco.2011.05.002
 - Mora, R., & Ruiz-Castillo, J. (2003). Additively decomposable segregation indexes. The case of gender segregation by occupations and human capital levels in Spain. The Journal of Economic Inequality, 1(2), 147-179. https://doi.org/10.1023/A:1026198429377
-
 
 ## References on entropy-based segregation indices
 
