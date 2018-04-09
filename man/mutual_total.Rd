@@ -2,7 +2,7 @@
 % Please edit documentation in R/mutual.R
 \name{mutual_total}
 \alias{mutual_total}
-\title{Calculate the total mututal information index}
+\title{Calculate the total mutual information index}
 \usage{
 mutual_total(data, unit, group, within = NULL, weight = NULL, se = FALSE,
   n_bootstrap = 10)

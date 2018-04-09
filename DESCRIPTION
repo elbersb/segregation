@@ -5,7 +5,7 @@ Version: 0.0.0.9000
 Authors@R: person("Benjamin", "Elbers", email = "be2239@columbia.edu", 
   role = c("aut", "cre"), comment = c(ORCID = "0000-0001-5392-3448"))
 Description: Computes entropy-based segregation indices, with a focus
-    on the mututal information index (M). The M is a measure
+    on the Mutual Information Index (M). The M is a measure
     of segregation that is highly decomposable. Provides
     tools to decompose the index by units and groups (local segregation), 
     and by within and between terms. 

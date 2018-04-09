@@ -2,7 +2,7 @@
 segregation
 ===========
 
-An R package to calculate entropy-based segregation indices, with a focus on the mututal information index (M).
+An R package to calculate entropy-based segregation indices, with a focus on the Mutual Information Index (M).
 
 -   calculate total, between, within, and local segregation
 -   decompose differences in total segregation over time

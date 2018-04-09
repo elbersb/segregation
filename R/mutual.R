@@ -38,7 +38,7 @@ mutual_total_compute <- function(data, unit, group, within) {
                        log(min(categories))))
 }
 
-#' Calculate the total mututal information index
+#' Calculate the total mutual information index
 #'
 #' Returns the total segregation between \code{unit} and \code{group}.
 #'
