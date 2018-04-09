@@ -18,14 +18,14 @@ test_that("mutual_difference", {
     expect_equal(ret["diff", "est"], ret["M2", "est"] - ret["M1", "est"])
     expect_equal(ret["diff", "est"],
                  ret["group_marginal", "est"] + ret["unit_marginal", "est"] + ret["conditional", "est"] +
-                     ret["additions", "est"] - ret["removals", "est"])
+                     ret["additions", "est"] + ret["removals", "est"])
 
     ret = mutual_difference(test_data1, test_data2, "g", "u", weight = "n", method = "elbers")
 
     expect_equal(ret["diff", "est"], ret["M2", "est"] - ret["M1", "est"])
     expect_equal(ret["diff", "est"],
                  ret["group_marginal", "est"] + ret["unit_marginal", "est"] + ret["conditional", "est"] +
-                     ret["additions", "est"] - ret["removals", "est"])
+                     ret["additions", "est"] + ret["removals", "est"])
 
     expect_equal(nrow(ret), 8)
     expect_equal(ncol(ret), 2)
@@ -92,14 +92,14 @@ test_that("mutual_elbers empty cells", {
     expect_equal(ret["diff", "est"], ret["M2", "est"] - ret["M1", "est"])
     expect_equal(ret["diff", "est"],
                  ret["group_marginal", "est"] + ret["unit_marginal", "est"] + ret["conditional", "est"] +
-                     ret["additions", "est"] - ret["removals", "est"])
+                     ret["additions", "est"] + ret["removals", "est"])
 
     ret = mutual_difference(test_data1, test_data2, "g", "u", weight = "n", method = "elbers")
 
     expect_equal(ret["diff", "est"], ret["M2", "est"] - ret["M1", "est"])
     expect_equal(ret["diff", "est"],
                  ret["group_marginal", "est"] + ret["unit_marginal", "est"] + ret["conditional", "est"] +
-                     ret["additions", "est"] - ret["removals", "est"])
+                     ret["additions", "est"] + ret["removals", "est"])
 
     expect_equal(nrow(ret), 8)
     expect_equal(ncol(ret), 2)

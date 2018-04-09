@@ -48,8 +48,8 @@ Returns a data frame with columns \code{stat} and \code{est}. The data frame con
   \code{unit_marginal} is the contribution of the change in unit marginals.
   \code{conditional} is the contribution of the change in the conditional probabilities.
   \code{additions} is the weighted local linkage for \code{group} elements not in \code{data1}.
-  \code{removals} is the weighted local linkage for \code{group} elements not in \code{data2}.
-  Note that \code{diff = group_marginal + unit_marginal + conditional + additions - removals}
+  \code{removals} is the negative weighted local linkage for \code{group} elements not in \code{data2}.
+  Note that \code{diff = group_marginal + unit_marginal + conditional + additions + removals}
 
   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
   the associated bootstrapped standard errors, and the column \code{est} contains

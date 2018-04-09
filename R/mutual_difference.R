@@ -35,8 +35,8 @@
 #'   \code{unit_marginal} is the contribution of the change in unit marginals.
 #'   \code{conditional} is the contribution of the change in the conditional probabilities.
 #'   \code{additions} is the weighted local linkage for \code{group} elements not in \code{data1}.
-#'   \code{removals} is the weighted local linkage for \code{group} elements not in \code{data2}.
-#'   Note that \code{diff = group_marginal + unit_marginal + conditional + additions - removals}
+#'   \code{removals} is the negative weighted local linkage for \code{group} elements not in \code{data2}.
+#'   Note that \code{diff = group_marginal + unit_marginal + conditional + additions + removals}
 #'
 #'   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
 #'   the associated bootstrapped standard errors, and the column \code{est} contains
@@ -214,12 +214,12 @@ mutual_difference_elbers_compute <- function(d1, d2, unit, group) {
     unit_marginal = (rowMeans(byg[, list(p_group1, p_group2)]) %*% byg$ls_marginal)[1,1]
     conditional = (rowMeans(byg[, list(p_group1, p_group2)]) %*% byg$ls_structural)[1,1]
     additions = (not_in_1$p_group2 %*% not_in_1$ls_group2)[1,1]
-    removals = (not_in_2$p_group1 %*% not_in_2$ls_group1)[1,1]
+    removals = -(not_in_2$p_group1 %*% not_in_2$ls_group1)[1,1]
 
     stat = c("M1", "M2", "diff",
              "group_marginal", "unit_marginal", "conditional",
              "additions", "removals")
-    est = c(M1, M2, group_marginal + unit_marginal + conditional + additions - removals,
+    est = c(M1, M2, group_marginal + unit_marginal + conditional + additions + removals,
             group_marginal, unit_marginal, conditional,
             additions, removals)
     data.table(stat = stat, est = est)
