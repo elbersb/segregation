@@ -26,7 +26,7 @@ and between terms. Includes standard error estimation by bootstrapping.
 
 
 \itemize{
- \item{}{\code{\link{usschools}} Example dataset.}
+ \item{}{\code{\link{usschools00}} and \code{\link{usschools05}} Example datasets.}
 }
 }
 

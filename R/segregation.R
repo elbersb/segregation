@@ -16,7 +16,7 @@
 #' @section Data:
 #'
 #' \itemize{
-#'  \item{}{\code{\link{usschools}} Example dataset.}
+#'  \item{}{\code{\link{usschools00}} and \code{\link{usschools05}} Example datasets.}
 #' }
 #'
 #' @docType package

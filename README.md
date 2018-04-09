@@ -17,7 +17,8 @@ The package provides an easy way to calculate total and local segregation, based
 
 ``` r
 library(segregation)
-mutual_total(usschools, "school", "race", weight = "n")
+# the dataset contains information on the racial composition of schools in three U.S. states
+mutual_total(usschools00, "school", "race", weight = "n")
 #>        stat   est
 #> M         M 0.422
 #> M_min M_min 0.000
@@ -27,7 +28,7 @@ mutual_total(usschools, "school", "race", weight = "n")
 Standard errors can be estimated via boostrapping:
 
 ``` r
-mutual_total(usschools, "school", "race", weight = "n", se = TRUE)
+mutual_total(usschools00, "school", "race", weight = "n", se = TRUE)
 #> ..........
 #>        stat   est       sd
 #> M         M 0.426 0.000753
@@ -38,7 +39,7 @@ mutual_total(usschools, "school", "race", weight = "n", se = TRUE)
 Local segregation (`ls`) of racial groups, with group-specific standard errors:
 
 ``` r
-mutual_local(usschools, "school", "race", weight = "n", se = TRUE)
+mutual_local(usschools00, "school", "race", weight = "n", se = TRUE)
 #> ..........
 #>      race    stat    est        sd
 #> 1  native      ls 1.4436 0.0180736
@@ -56,6 +57,20 @@ mutual_local(usschools, "school", "race", weight = "n", se = TRUE)
 #> 13   hisp M_group 0.1180 0.0003088
 #> 14  black M_group 0.1674 0.0004716
 #> 15  white M_group 0.1152 0.0003662
+```
+
+Decompose the difference in segregation between 2000 and 2005, using the method developed by Mora and Ruiz-Castillo (2009):
+
+``` r
+mutual_difference(usschools00, usschools05, "school", "race", 
+                  weight = "n", method = "mrc")
+#>                          stat      est
+#> M1                         M1  0.42152
+#> M2                         M2  0.41045
+#> diff                     diff -0.01107
+#> group_marginal group_marginal  0.00761
+#> unit_entropy     unit_entropy -0.06375
+#> invariant           invariant  0.04506
 ```
 
 How to install
@@ -91,5 +106,7 @@ References on entropy-based segregation indices
 Theil, Henri. (1971). Principles of Econometrics. New York: Wiley.
 
 Frankel, D. M., & Volij, O. (2011). Measuring school segregation. Journal of Economic Theory, 146(1), 1-38. <https://doi.org/10.1016/j.jet.2010.10.008>
+
+Mora, R., & Ruiz-Castillo, J. (2009). The Invariance Properties of the Mutual Information Index of Multigroup Segregation. Research on Economic Inequality, 17, 33-53.
 
 Mora, R., & Ruiz-Castillo, J. (2011). Entropy-based Segregation Indices. Sociological Methodology, 41(1), 159–194. <https://doi.org/10.1111/j.1467-9531.2011.01237.x>

@@ -59,6 +59,12 @@ Returns a data frame with columns \code{stat} and \code{est}. The data frame con
 Uses either the method developed by Mora and Ruiz-Castillo (2009) or
 the method developed by Elbers (2018)
 }
+\examples{
+mutual_difference(usschools00, usschools05, unit="race", group="school",
+    weight="n", method="mrc")
+mutual_difference(usschools00, usschools05, unit="race", group="school",
+    weight="n", method="elbers")
+}
 \references{
 Ricardo Mora and Javier Ruiz-Castillo. 2009. "The Invariance Properties of the
   Mutual Information Index of Multigroup Segregation". Research on Economic Inequality 17: 33-53.

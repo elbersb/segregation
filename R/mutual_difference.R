@@ -47,6 +47,10 @@
 #'
 #' Elbers, Benjamin. 2018. An Alternative Difference Decomposition of M. Working Paper.
 #' @examples
+#' mutual_difference(usschools00, usschools05, unit="race", group="school",
+#'     weight="n", method="mrc")
+#' mutual_difference(usschools00, usschools05, unit="race", group="school",
+#'     weight="n", method="elbers")
 #' @import data.table
 #' @export
 mutual_difference <- function(data1, data2, unit, group,

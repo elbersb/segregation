@@ -46,27 +46,27 @@ Returns the total segregation between \code{unit} and \code{group}.
 }
 \examples{
 # calculate school racial segregation
-mutual_total(usschools, "school", "race", weight="n") # => .422
+mutual_total(usschools00, "school", "race", weight="n") # => .422
 
 # note that the definition of units and groups is arbitrary
-mutual_total(usschools, "race", "school", weight="n") # => .422
+mutual_total(usschools00, "race", "school", weight="n") # => .422
 
 # if units or groups are defined by a combination of variables,
 # vectors of variable names can be provided -
 # here there is no difference, because schools
 # are nested within districts
-mutual_total(usschools, "race", c("district", "school"),
+mutual_total(usschools00, "race", c("district", "school"),
              weight="n") # => .422
 
 # estimate a standard error of M
-mutual_total(usschools, "race", "school", weight="n", se=TRUE)
+mutual_total(usschools00, "race", "school", weight="n", se=TRUE)
 
 # estimate segregation within school districts
-mutual_total(usschools, "race", "school",
+mutual_total(usschools00, "race", "school",
              within="district", weight="n") # => .084
 
 # estimate between-district racial segregation
-mutual_total(usschools, "race", "district", weight="n") # => .337
+mutual_total(usschools00, "race", "district", weight="n") # => .337
 # note that the sum of within-district and between-district
 # segregation equals total school-race segregation;
 # here, most segregation is between school districts

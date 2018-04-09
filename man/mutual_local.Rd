@@ -42,14 +42,14 @@ by \code{group}.
 }
 \examples{
 # which racial groups are most segregated?
-(localseg = mutual_local(usschools, "school", "race", weight="n"))
+(localseg = mutual_local(usschools00, "school", "race", weight="n"))
 # native americans are most segregated, whites are least segregated.
 
 sum(localseg[localseg["stat"]=="p", "est"]) # => 1
 
 # the sum of the weighted local segregation scores equals
 # total segregation
-mutual_total(usschools, "school", "race", weight="n") # => .4215
+mutual_total(usschools00, "school", "race", weight="n") # => .4215
 sum(localseg[localseg["stat"]=="M_group", "est"]) # => .4215
 }
 \references{
