@@ -27,8 +27,15 @@ mutual_total_compute <- function(data, unit, group, within) {
     part_m = sum(p_group * (entropy - entropy_cond)),
     p_within = first(p_within)
   ), by = within]
+
+  # min/max bounds
+  categories <- data[, list(uniqueN(get(unit)), uniqueN(get(group))),]
+
   # total M is the sum of weighted within-group partial M
-  sum(by_within$part_m %*% by_within$p_within)
+  data.table(stat = c("M", "M_min", "M_max"),
+             est = c(sum(by_within$part_m %*% by_within$p_within),
+                   0,
+                   log(min(categories))))
 }
 
 #' Calculate the total mututal information index
@@ -54,37 +61,39 @@ mutual_total_compute <- function(data, unit, group, within) {
 #'   (Default \code{FALSE})
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{10})
 #'
-#' @return Returns a list with an element named \code{M}, containing total
-#'   segregation. If \code{se} is set to \code{TRUE}, \code{M} is a vector of length
-#'   two, with the second item containing the bootstrapped standard error.
-#'   The element \code{bounds} contains the lower and upper bound of M.
+#' @return Returns a data frame with three rows. The column \code{est} contains
+#'   in the first row total segregation. The second and third rows contain
+#'   the lower and upper bounds of M, respectively.
+#'   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
+#'   the associated bootstrapped standard errors, and the column \code{est} contains
+#'   bootstrapped estimates.
 #' @references
 #' Henri Theil. 1971. Principles of Econometrics. New York: Wiley.
 #'
 #' Ricardo Mora and Javier Ruiz-Castillo. 2011. "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
 #' @examples
 #' # calculate school racial segregation
-#' mutual_total(usschools, 'school', 'race', weight='n') # => .422
+#' mutual_total(usschools, "school", "race", weight="n") # => .422
 #'
 #' # note that the definition of units and groups is arbitrary
-#' mutual_total(usschools, 'race', 'school', weight='n') # => .422
+#' mutual_total(usschools, "race", "school", weight="n") # => .422
 #'
 #' # if units or groups are defined by a combination of variables,
 #' # vectors of variable names can be provided -
 #' # here there is no difference, because schools
 #' # are nested within districts
-#' mutual_total(usschools, 'race', c('district', 'school'),
-#'              weight='n') # => .422
+#' mutual_total(usschools, "race", c("district", "school"),
+#'              weight="n") # => .422
 #'
 #' # estimate a standard error of M
-#' mutual_total(usschools, 'race', 'school', weight='n', se=TRUE)
+#' mutual_total(usschools, "race", "school", weight="n", se=TRUE)
 #'
 #' # estimate segregation within school districts
-#' mutual_total(usschools, 'race', 'school',
-#'              within='district', weight='n') # => .084
+#' mutual_total(usschools, "race", "school",
+#'              within="district", weight="n") # => .084
 #'
 #' # estimate between-district racial segregation
-#' mutual_total(usschools, 'race', 'district', weight='n') # => .337
+#' mutual_total(usschools, "race", "district", weight="n") # => .337
 #' # note that the sum of within-district and between-district
 #' # segregation equals total school-race segregation;
 #' # here, most segregation is between school districts
@@ -99,33 +108,25 @@ mutual_total <- function(data, unit, group, within = NULL,
   d <- prepare_data(data, unit, group, weight, expand = se, within = within)
 
   if (se == FALSE) {
-    M <- mutual_total_compute(d, unit, group, within)
-    se <- NULL
+    ret <- mutual_total_compute(d, unit, group, within)
   } else {
     vars <- attr(d, "vars")
-    boot_M <- sapply(1:n_bootstrap, function(i) {
+    boot_ret <- lapply(1:n_bootstrap, function(i) {
       cat(".")
-      # resample and collapse by all variables, except 'freq'
+      # resample and collapse by all variables, except "freq"
       resampled <- d[sample(.N, .N, replace = TRUE)][, list(freq = sum(freq)),
                                                      by = vars
                                                      ]
       mutual_total_compute(resampled, unit, group, within)
     })
     cat("\n")
-    se <- stats::sd(boot_M)
-    M <- mean(boot_M)
+    boot_ret <- rbindlist(boot_ret)
+    # summarize bootstrapped data frames
+    ret <- boot_ret[, list(
+        est = mean(est), sd = stats::sd(est)), by = c("stat")]
   }
-
-  # return
-  if (is.null(se)) {
-    ret <- list(M=M)
-  } else {
-    ret <- list(M=c(M, se))
-  }
-
-  # min/max bounds
-  categories <- d[, list(uniqueN(get(unit)), uniqueN(get(group))),]
-  ret$bounds <- c(0, log(min(categories)))
+  ret <- as.data.frame(ret)
+  rownames(ret) <- ret[, "stat"]
   ret
 }
 
@@ -147,7 +148,10 @@ mutual_local_compute <- function(data, unit, group) {
   local <- data[, list(ls = sum(ll_part), p = first(p_group)), by = group]
   # calculate contribution to linkage linkage
   local[, `:=`(M_group = ls * p)]
-  local
+  # melt into long form
+  melt(local,
+       id.vars = group, measure.vars = c("ls", "p", "M_group"),
+       variable.name = "stat", value.name = "est")
 }
 
 #' Calculates local segregation indices
@@ -167,61 +171,56 @@ mutual_local_compute <- function(data, unit, group) {
 #' @param se If \code{TRUE}, standard errors are estimated via bootstrap.
 #'   (Default \code{FALSE})
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{10})
-#'
-#' @return Returns a data frame, with one row for each of the categories
-#'   defined by \code{group}. The first column(s) define the \code{group}.
-#'   The column \code{ls} contains the local segregation index, with a
-#'   column \code{ls_se} containing the standard error (if \code{se} is \code{TRUE}).
-#'   The column \code{p} contains the proportion of each group from the total
-#'   number of cases. The column \code{M_group} calculates \code{ls * p}. Standard
-#'   errors for this column are contained in \code{M_group_se} if requested.
+#' @return Returns a data frame with three rows for each category defined by \code{group},
+#'   for a total of \code{3*(number of groups)} rows. The column \code{est} defines three statistics that
+#'   are provided for each group: \code{ls}, the local segregation score,
+#'   \code{p}, the proportion of the group from the total number of cases, and
+#'   \code{M_group}, the product of \code{ls} and \code{p}.
+#'   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
+#'   the associated bootstrapped standard errors, and the column \code{est} contains
+#'   bootstrapped estimates.
 #' @references
 #' Henri Theil. 1971. Principles of Econometrics. New York: Wiley.
 #'
-#' Ricardo Mora and Javier Ruiz-Castillo. 2011. "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
+#' Ricardo Mora and Javier Ruiz-Castillo. 2011.
+#'   "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
 #' @examples
 #' # which racial groups are most segregated?
-#' (localseg = mutual_local(usschools, 'school', 'race', weight='n'))
+#' (localseg = mutual_local(usschools, "school", "race", weight="n"))
 #' # native americans are most segregated, whites are least segregated.
 #'
-#' sum(localseg[, 'p']) # => 1
+#' sum(localseg[localseg["stat"]=="p", "est"]) # => 1
 #'
 #' # the sum of the weighted local segregation scores equals
 #' # total segregation
-#' mutual_total(usschools, 'school', 'race', weight='n') # => .422
-#' sum(localseg[, 'M_group']) # => .422
+#' mutual_total(usschools, "school", "race", weight="n") # => .4215
+#' sum(localseg[localseg["stat"]=="M_group", "est"]) # => .4215
 #' @import data.table
 #' @export
 mutual_local <- function(data, unit, group, weight = NULL, se = FALSE, n_bootstrap = 10) {
   d <- prepare_data(data, unit, group, weight, expand = se)
 
   if (se == FALSE) {
-    ls <- mutual_local_compute(d, unit, group)
-    se <- NULL
+    ret <- mutual_local_compute(d, unit, group)
   } else {
     vars <- attr(d, "vars")
-    boot_ls <- lapply(1:n_bootstrap, function(i) {
+    boot_ret <- lapply(1:n_bootstrap, function(i) {
       cat(".")
-      # resample and collapse by all variables, except 'freq'
+      # resample and collapse by all variables, except "freq"
       resampled <- d[sample(.N, .N, replace = TRUE)][, list(freq = sum(freq)),
                                                      by = vars
                                                      ]
       mutual_local_compute(resampled, unit, group)
     })
-
     cat("\n")
-    boot_ls <- rbindlist(boot_ls)
+    boot_ret <- rbindlist(boot_ret)
     # summarize bootstrapped data frames
-    ls <- boot_ls[, list(
-      ls = mean(ls), ls_se = stats::sd(ls),
-      p = first(p), M_group = mean(M_group),
-      M_group_se = stats::sd(M_group)
-    ),
-    by = group
-    ]
+    ret <- boot_ret[, list(
+        est = mean(est), sd = stats::sd(est)),
+        by = c(group, "stat")]
   }
-
   # sort and return as data frame
-  setorderv(ls, group)
-  as.data.frame(ls)
+  setorderv(ret, c("stat", group))
+  ret <- as.data.frame(ret)
+  ret
 }

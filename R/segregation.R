@@ -34,7 +34,7 @@ globalVariables(c(
   "p_unit1", "p_unit2", "sumcond1", "sumcond2",
   "miss1", "miss2",
   "ls_group", "ls_group1", "ls_group2",
-  "same_c_diff_m", "diff_c_same_m"
+  "same_c_diff_m", "diff_c_same_m", "est"
 ))
 
 #' @import data.table

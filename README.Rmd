@@ -12,7 +12,8 @@ knitr::opts_chunk$set(
   comment = "#>",
   fig.path = "README-"
 )
-
+options(scipen=999)
+options(digits=3)
 set.seed(69839)
 ```
 
@@ -61,7 +62,9 @@ To access the documentation, type
 ## Features
 
 - calculate total, between, within, and local segregation
+- decompose changes in total segregation over time
 - estimate standard errors via bootstrapping
+- every method returns a [tidy](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html) data frame for easy post-processing and plotting
 - it's fast, because it uses the [`data.table`](https://github.com/Rdatatable/data.table/wiki) package internally
 
 ## Papers using the Mutual information index

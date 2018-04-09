@@ -18,18 +18,19 @@
 #'   (Default \code{FALSE})
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{50})
 #'
-#' @return Returns a list with the following elements:
+#' @return Returns a data frame with columns \code{stat} and \code{est}. The data frame contains
+#'   the following rows defined by \code{stat}:
 #'   \code{M1} contains the M for \code{data1}.
 #'   \code{M2} contains the M for \code{data2}.
 #'   \code{diff} is the difference between \code{M2} and \code{M1}.
 #'
-#'   If \code{method} is "mrc", the list contains the following additional elements:
+#'   If \code{method} is "mrc", the data frame contains the following additional rows:
 #'   \code{unit_entropy} is the difference in unit entropy.
 #'   \code{group_marginal} is the contribution of group composition differences.
 #'   \code{invariant} is the contribution of group composition-invariant differences.
 #'   Note that \code{diff = unit_entropy + group_marginal + invariant}
 #'
-#'   If \code{method} is "elbers", the list contains the following additional elements:
+#'   If \code{method} is "elbers", the data frame contains the following additional rows:
 #'   \code{group_marginal} is the contribution of the change in group marginals.
 #'   \code{unit_marginal} is the contribution of the change in unit marginals.
 #'   \code{conditional} is the contribution of the change in the conditional probabilities.
@@ -37,8 +38,9 @@
 #'   \code{removals} is the weighted local linkage for \code{group} elements not in \code{data2}.
 #'   Note that \code{diff = group_marginal + unit_marginal + conditional + additions - removals}
 #'
-#'   If \code{se} is \code{TRUE}, each element will be a vector of length two, with
-#'   the second item containing the associated bootstrapped standard error.
+#'   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
+#'   the associated bootstrapped standard errors, and the column \code{est} contains
+#'   bootstrapped estimates.
 #' @references
 #' Ricardo Mora and Javier Ruiz-Castillo. 2009. "The Invariance Properties of the
 #'   Mutual Information Index of Multigroup Segregation". Research on Economic Inequality 17: 33-53.
@@ -65,9 +67,9 @@ mutual_difference <- function(data1, data2, unit, group,
         ret <- method(d1, d2, unit, group)
     } else {
         vars <- attr(d1, "vars")
-        boot_ret <- sapply(1:n_bootstrap, function(i) {
+        boot_ret <- lapply(1:n_bootstrap, function(i) {
             cat(".")
-            # resample and collapse by all variables, except 'freq'
+            # resample and collapse by all variables, except "freq"
             resampled1 <- d1[sample(.N, .N, replace = TRUE)][, list(freq = sum(freq)),
                                                              by = vars
                                                              ]
@@ -77,14 +79,14 @@ mutual_difference <- function(data1, data2, unit, group,
             method(resampled1, resampled2, unit, group)
         })
         cat("\n")
-        ret = list()
-        for(i in 1:nrow(boot_ret)) {
-            v = unlist(boot_ret[i,])
-            ret[[i]] = c(mean(v), stats::sd(v))
-        }
-        names(ret) = dimnames(boot_ret)[[1]]
+        boot_ret <- rbindlist(boot_ret)
+        # summarize bootstrapped data frames
+        ret <- boot_ret[, list(
+            est = mean(est), sd = stats::sd(est)), by = c("stat")]
     }
-    return(ret)
+    ret <- as.data.frame(ret)
+    rownames(ret) <- ret[, "stat"]
+    ret
 }
 
 #' @import data.table
@@ -132,11 +134,11 @@ mutual_difference_mrc_compute <- function(d1, d2, unit, group) {
     M1 <- entropy_unit1 - sum(joined[, entropy_cond1])
     M2 <- entropy_unit2 - sum(joined[, entropy_cond2])
 
-    list(M1 = M1, M2 = M2,
-         diff = unit_entropy + group_marginal + cond,
-         unit_entropy = unit_entropy,
-         group_marginal = group_marginal,
-         invariant = cond)
+    stat = c("M1", "M2", "diff",
+             "group_marginal", "unit_entropy", "invariant")
+    est = c(M1, M2, unit_entropy + group_marginal + cond,
+            group_marginal, unit_entropy, cond)
+    data.table(stat = stat, est = est)
 }
 
 #' @import data.table
@@ -210,12 +212,11 @@ mutual_difference_elbers_compute <- function(d1, d2, unit, group) {
     additions = (not_in_1$p_group2 %*% not_in_1$ls_group2)[1,1]
     removals = (not_in_2$p_group1 %*% not_in_2$ls_group1)[1,1]
 
-    list(M1 = M1, M2 = M2,
-         diff = group_marginal + unit_marginal + conditional + additions - removals,
-         group_marginal = group_marginal,
-         unit_marginal = unit_marginal,
-         conditional = conditional,
-         additions = additions,
-         removals = removals
-    )
+    stat = c("M1", "M2", "diff",
+             "group_marginal", "unit_marginal", "conditional",
+             "additions", "removals")
+    est = c(M1, M2, group_marginal + unit_marginal + conditional + additions - removals,
+            group_marginal, unit_marginal, conditional,
+            additions, removals)
+    data.table(stat = stat, est = est)
 }

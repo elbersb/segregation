@@ -31,18 +31,19 @@ over which segregation is computed.}
 \item{n_bootstrap}{Number of bootstrap iterations. (Default \code{50})}
 }
 \value{
-Returns a list with the following elements:
+Returns a data frame with columns \code{stat} and \code{est}. The data frame contains
+  the following rows defined by \code{stat}:
   \code{M1} contains the M for \code{data1}.
   \code{M2} contains the M for \code{data2}.
   \code{diff} is the difference between \code{M2} and \code{M1}.
 
-  If \code{method} is "mrc", the list contains the following additional elements:
+  If \code{method} is "mrc", the data frame contains the following additional rows:
   \code{unit_entropy} is the difference in unit entropy.
   \code{group_marginal} is the contribution of group composition differences.
   \code{invariant} is the contribution of group composition-invariant differences.
   Note that \code{diff = unit_entropy + group_marginal + invariant}
 
-  If \code{method} is "elbers", the list contains the following additional elements:
+  If \code{method} is "elbers", the data frame contains the following additional rows:
   \code{group_marginal} is the contribution of the change in group marginals.
   \code{unit_marginal} is the contribution of the change in unit marginals.
   \code{conditional} is the contribution of the change in the conditional probabilities.
@@ -50,8 +51,9 @@ Returns a list with the following elements:
   \code{removals} is the weighted local linkage for \code{group} elements not in \code{data2}.
   Note that \code{diff = group_marginal + unit_marginal + conditional + additions - removals}
 
-  If \code{se} is \code{TRUE}, each element will be a vector of length two, with
-  the second item containing the associated bootstrapped standard error.
+  If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
+  the associated bootstrapped standard errors, and the column \code{est} contains
+  bootstrapped estimates.
 }
 \description{
 Uses either the method developed by Mora and Ruiz-Castillo (2009) or
