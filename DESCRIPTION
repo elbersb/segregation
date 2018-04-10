@@ -10,7 +10,7 @@ Description: Computes entropy-based segregation indices, with a focus
     tools to decompose the index by units and groups (local segregation), 
     and by within and between terms. 
     Includes standard error estimation by bootstrapping.
-License: GPL-3
+License: MIT + file LICENSE
 Imports: data.table
 Encoding: UTF-8
 LazyData: true
