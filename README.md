@@ -30,7 +30,7 @@ Standard errors can be estimated via boostrapping:
 ``` r
 mutual_total(usschools00, "school", "race", weight = "n", se = TRUE)
 #> ..........
-#>        stat   est       sd
+#>        stat   est       se
 #> M         M 0.426 0.000753
 #> M_min M_min 0.000 0.000000
 #> M_max M_max 1.609 0.000000
@@ -41,7 +41,7 @@ Local segregation (`ls`) of racial groups, with group-specific standard errors:
 ``` r
 mutual_local(usschools00, "school", "race", weight = "n", se = TRUE)
 #> ..........
-#>      race    stat    est        sd
+#>      race    stat    est        se
 #> 1  native      ls 1.4436 0.0180736
 #> 2   asian      ls 0.6219 0.0044935
 #> 3    hisp      ls 0.7784 0.0024908

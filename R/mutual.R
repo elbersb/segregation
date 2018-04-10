@@ -123,7 +123,7 @@ mutual_total <- function(data, unit, group, within = NULL,
         boot_ret <- rbindlist(boot_ret)
         # summarize bootstrapped data frames
         ret <- boot_ret[, list(
-            est = mean(est), sd = stats::sd(est)), by = c("stat")]
+            est = mean(est), se = stats::sd(est)), by = c("stat")]
     }
     ret <- as.data.frame(ret)
     rownames(ret) <- ret[, "stat"]
@@ -216,7 +216,7 @@ mutual_local <- function(data, unit, group, weight = NULL, se = FALSE, n_bootstr
         boot_ret <- rbindlist(boot_ret)
         # summarize bootstrapped data frames
         ret <- boot_ret[, list(
-            est = mean(est), sd = stats::sd(est)),
+            est = mean(est), se = stats::sd(est)),
             by = c(group, "stat")]
     }
     # sort and return as data frame

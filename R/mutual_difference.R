@@ -86,7 +86,7 @@ mutual_difference <- function(data1, data2, unit, group,
         boot_ret <- rbindlist(boot_ret)
         # summarize bootstrapped data frames
         ret <- boot_ret[, list(
-            est = mean(est), sd = stats::sd(est)), by = c("stat")]
+            est = mean(est), se = stats::sd(est)), by = c("stat")]
     }
     ret <- as.data.frame(ret)
     rownames(ret) <- ret[, "stat"]
