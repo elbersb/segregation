@@ -31,7 +31,7 @@ Standard errors can be estimated via boostrapping:
 mutual_total(usschools00, "school", "race", weight = "n", se = TRUE)
 #> ..........
 #>        stat   est       se
-#> M         M 0.426 0.000753
+#> M         M 0.425 0.000591
 #> M_min M_min 0.000 0.000000
 #> M_max M_max 1.609 0.000000
 ```
@@ -41,22 +41,22 @@ Local segregation (`ls`) of racial groups, with group-specific standard errors:
 ``` r
 mutual_local(usschools00, "school", "race", weight = "n", se = TRUE)
 #> ..........
-#>      race    stat    est        se
-#> 1  native      ls 1.4436 0.0180736
-#> 2   asian      ls 0.6219 0.0044935
-#> 3    hisp      ls 0.7784 0.0024908
-#> 4   black      ls 0.8843 0.0021406
-#> 5   white      ls 0.1831 0.0006879
-#> 6  native       p 0.0075 0.0000631
-#> 7   asian       p 0.0227 0.0001692
-#> 8    hisp       p 0.1516 0.0002587
-#> 9   black       p 0.1894 0.0005151
-#> 10  white       p 0.6289 0.0005570
-#> 11 native M_group 0.0108 0.0001081
-#> 12  asian M_group 0.0141 0.0001945
-#> 13   hisp M_group 0.1180 0.0003088
-#> 14  black M_group 0.1674 0.0004716
-#> 15  white M_group 0.1152 0.0003662
+#>      race    stat     est        se
+#> 1  native      ls 1.44064 0.0179202
+#> 2   asian      ls 0.62401 0.0076724
+#> 3    hisp      ls 0.77865 0.0013172
+#> 4   black      ls 0.88337 0.0021738
+#> 5   white      ls 0.18261 0.0006489
+#> 6  native       p 0.00751 0.0000904
+#> 7   asian       p 0.02271 0.0001572
+#> 8    hisp       p 0.15149 0.0003427
+#> 9   black       p 0.18922 0.0004567
+#> 10  white       p 0.62908 0.0006681
+#> 11 native M_group 0.01082 0.0001129
+#> 12  asian M_group 0.01417 0.0001352
+#> 13   hisp M_group 0.11796 0.0003884
+#> 14  black M_group 0.16715 0.0004115
+#> 15  white M_group 0.11487 0.0003110
 ```
 
 Decompose the difference in segregation between 2000 and 2005, using the method developed by Mora and Ruiz-Castillo (2009):

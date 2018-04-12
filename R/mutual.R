@@ -105,18 +105,19 @@ mutual_total <- function(data, unit, group, within = NULL,
     if (is.null(within)) {
         within <- "within_dummy"
     }
-    d <- prepare_data(data, unit, group, weight, expand = se, within = within)
+    d <- prepare_data(data, unit, group, weight, within = within)
 
     if (se == FALSE) {
         ret <- mutual_total_compute(d, unit, group, within)
     } else {
         vars <- attr(d, "vars")
+        n_total <- sum(d[, "freq"])
         boot_ret <- lapply(1:n_bootstrap, function(i) {
             cat(".")
             # resample and collapse by all variables, except "freq"
-            resampled <- d[sample(.N, .N, replace = TRUE)][, list(freq = sum(freq)),
-                                                           by = vars
-                                                           ]
+            resampled <- d[
+                sample(.N, n_total, replace = TRUE, prob = freq)][, 
+                list(freq = .N), by = vars]
             mutual_total_compute(resampled, unit, group, within)
         })
         cat("\n")
@@ -198,18 +199,19 @@ mutual_local_compute <- function(data, unit, group) {
 #' @import data.table
 #' @export
 mutual_local <- function(data, unit, group, weight = NULL, se = FALSE, n_bootstrap = 10) {
-    d <- prepare_data(data, unit, group, weight, expand = se)
+    d <- prepare_data(data, unit, group, weight)
 
     if (se == FALSE) {
         ret <- mutual_local_compute(d, unit, group)
     } else {
         vars <- attr(d, "vars")
+        n_total <- sum(d[, "freq"])
         boot_ret <- lapply(1:n_bootstrap, function(i) {
             cat(".")
             # resample and collapse by all variables, except "freq"
-            resampled <- d[sample(.N, .N, replace = TRUE)][, list(freq = sum(freq)),
-                                                           by = vars
-                                                           ]
+            resampled <- d[
+                sample(.N, n_total, replace = TRUE, prob = freq)][, 
+                list(freq = .N), by = vars]
             mutual_local_compute(resampled, unit, group)
         })
         cat("\n")

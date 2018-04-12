@@ -38,7 +38,7 @@ globalVariables(c(
 ))
 
 #' @import data.table
-prepare_data <- function(data, unit, group, weight, expand, within = NULL) {
+prepare_data <- function(data, unit, group, weight, within = NULL) {
     vars <- c(unit, group)
 
     # use provided frequency weight
@@ -56,18 +56,9 @@ prepare_data <- function(data, unit, group, weight, expand, within = NULL) {
         vars <- c(vars, within)
     }
 
-    # include variables and freq, and select only positive weights
+    # collapse on vars, and select only positive weights
     setDT(data)
-    data <- data[freq > 0, c(vars, "freq"), with = FALSE]
-
-    if (expand == TRUE) {
-        # expanded df necessary for SE calculation
-        data <- data[rep(1:.N, freq)]
-        data[, "freq"] <- 1
-    } else {
-        # collapse, this speeds up calculation
-        data <- data[, list(freq = sum(freq)), by = vars]
-    }
+    data <- data[freq > 0, list(freq = sum(freq)), by = vars]
     attr(data, "vars") <- vars
     data
 }

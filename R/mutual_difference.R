@@ -64,22 +64,24 @@ mutual_difference <- function(data1, data2, unit, group,
         # raise error
     }
 
-    d1 <- prepare_data(data1, unit, group, weight, expand = se)
-    d2 <- prepare_data(data2, unit, group, weight, expand = se)
+    d1 <- prepare_data(data1, unit, group, weight)
+    d2 <- prepare_data(data2, unit, group, weight)
 
     if (se == FALSE) {
         ret <- method(d1, d2, unit, group)
     } else {
         vars <- attr(d1, "vars")
+        n_total1 <- sum(d1[, "freq"])
+        n_total2 <- sum(d2[, "freq"])
         boot_ret <- lapply(1:n_bootstrap, function(i) {
             cat(".")
             # resample and collapse by all variables, except "freq"
-            resampled1 <- d1[sample(.N, .N, replace = TRUE)][, list(freq = sum(freq)),
-                                                             by = vars
-                                                             ]
-            resampled2 <- d2[sample(.N, .N, replace = TRUE)][, list(freq = sum(freq)),
-                                                             by = vars
-                                                             ]
+            resampled1 <- d1[
+                sample(.N, n_total1, replace = TRUE, prob = freq)][, 
+                list(freq = .N), by = vars]
+            resampled2 <- d2[
+                sample(.N, n_total2, replace = TRUE, prob = freq)][, 
+                list(freq = .N), by = vars]
             method(resampled1, resampled2, unit, group)
         })
         cat("\n")
