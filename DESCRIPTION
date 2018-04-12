@@ -14,7 +14,7 @@ License: MIT + file LICENSE
 Imports: data.table
 Encoding: UTF-8
 LazyData: true
-Suggests: testthat
+Suggests: tibble, testthat
 URL: http://github.com/elbersb/segregation
 BugReports: http://github.com/elbersb/segregation/issues
 RoxygenNote: 6.0.1

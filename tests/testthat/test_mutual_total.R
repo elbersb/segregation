@@ -10,26 +10,26 @@ test_data <- data.frame(
 
 test_that("mutual works both ways around", {
     expect_equal(
-        mutual_total(test_data, "u", "g", weight = "n")["M", "est"],
-        mutual_total(test_data, "g", "u", weight = "n")["M", "est"]
+        mutual_total(test_data, "u", "g", weight = "n")[["M", "est"]],
+        mutual_total(test_data, "g", "u", weight = "n")[["M", "est"]]
     )
 
     expect_equal(
-        mutual_total(test_data, "u", c("supergroup", "g"), weight = "n")["M", "est"],
-        mutual_total(test_data, "u", "g", weight = "n")["M", "est"]
+        mutual_total(test_data, "u", c("supergroup", "g"), weight = "n")[["M", "est"]],
+        mutual_total(test_data, "u", "g", weight = "n")[["M", "est"]]
     )
 
     expect_equal(
-        mutual_total(test_data, "u", c("supergroup", "g"), weight = "n")["M", "est"],
-        mutual_total(test_data, c("supergroup", "g"), "u", weight = "n")["M", "est"]
+        mutual_total(test_data, "u", c("supergroup", "g"), weight = "n")[["M", "est"]],
+        mutual_total(test_data, c("supergroup", "g"), "u", weight = "n")[["M", "est"]]
     )
 })
 
 test_that("between + within = total", {
     expect_equal(
-        mutual_total(test_data, "u", "g", weight = "n")["M", "est"],
-        mutual_total(test_data, "u", "supergroup", weight = "n")["M", "est"] +
-            mutual_total(test_data, "u", "g", within = "supergroup", weight = "n")["M", "est"]
+        mutual_total(test_data, "u", "g", weight = "n")[["M", "est"]],
+        mutual_total(test_data, "u", "supergroup", weight = "n")[["M", "est"]] +
+            mutual_total(test_data, "u", "g", within = "supergroup", weight = "n")[["M", "est"]]
     )
 })
 
@@ -37,9 +37,9 @@ p_12 <- sum(test_data[test_data$supergroup == 12, "n"]) / sum(test_data$n)
 p_34 <- sum(test_data[test_data$supergroup == 34, "n"]) / sum(test_data$n)
 test_that("within estimations is correct", {
     expect_equal(
-        p_12 * mutual_total(test_data[test_data$supergroup == 12, ], "u", "g", weight = "n")["M", "est"] +
-            p_34 * mutual_total(test_data[test_data$supergroup == 34, ], "u", "g", weight = "n")["M", "est"],
-        mutual_total(test_data, "u", "g", within = "supergroup", weight = "n")["M", "est"]
+        p_12 * mutual_total(test_data[test_data$supergroup == 12, ], "u", "g", weight = "n")[["M", "est"]] +
+            p_34 * mutual_total(test_data[test_data$supergroup == 34, ], "u", "g", weight = "n")[["M", "est"]],
+        mutual_total(test_data, "u", "g", within = "supergroup", weight = "n")[["M", "est"]]
     )
 })
 
@@ -60,6 +60,6 @@ test_that("zero weights no problem", {
 })
 
 test_that("max bound correct", {
-    expect_equal(mutual_total(test_data, "u", "g", weight = "n")["M", "est"], log(2))
-    expect_equal(mutual_total(test_data, "u", "g", weight = "n")["M_max", "est"], log(2))
+    expect_equal(mutual_total(test_data, "u", "g", weight = "n")[["M", "est"]], log(2))
+    expect_equal(mutual_total(test_data, "u", "g", weight = "n")[["M_max", "est"]], log(2))
 })

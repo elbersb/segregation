@@ -90,9 +90,8 @@ mutual_difference <- function(data1, data2, unit, group,
         ret <- boot_ret[, list(
             est = mean(est), se = stats::sd(est)), by = c("stat")]
     }
-    ret <- as.data.frame(ret)
-    rownames(ret) <- ret[, "stat"]
-    ret
+    rownames(ret) <- ret[["stat"]]
+    as_tibble_or_df(ret)
 }
 
 #' @import data.table

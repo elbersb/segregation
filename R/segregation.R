@@ -37,6 +37,17 @@ globalVariables(c(
     "same_c_diff_m", "diff_c_same_m", "est"
 ))
 
+as_tibble_or_df <- function(data) {
+    if (requireNamespace("tibble", quietly = TRUE)) {
+        tibble::as_tibble(data)
+    } else {
+        df <- as.data.frame(data, stringsAsFactors = FALSE)
+        rownames(df) = rownames(data)
+        df
+    }
+}
+
+
 #' @import data.table
 prepare_data <- function(data, unit, group, weight, within = NULL) {
     vars <- c(unit, group)

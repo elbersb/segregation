@@ -25,7 +25,7 @@ on the Mutual Information Index (M).
 - calculate total, between, within, and local segregation
 - decompose differences in total segregation over time
 - estimate standard errors via bootstrapping
-- every method returns a [tidy](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html) data frame for easy post-processing and plotting
+- every method returns a [tidy](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html) data frame (or [tibble](https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html), if the package is installed) for easy post-processing and plotting
 - it's fast, because it uses the [`data.table`](https://github.com/Rdatatable/data.table/wiki) package internally
 
 ## Example

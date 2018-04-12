@@ -7,7 +7,7 @@ An R package to calculate entropy-based segregation indices, with a focus on the
 -   calculate total, between, within, and local segregation
 -   decompose differences in total segregation over time
 -   estimate standard errors via bootstrapping
--   every method returns a [tidy](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html) data frame for easy post-processing and plotting
+-   every method returns a [tidy](https://cran.r-project.org/web/packages/tidyr/vignettes/tidy-data.html) data frame (or [tibble](https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html), if the package is installed) for easy post-processing and plotting
 -   it's fast, because it uses the [`data.table`](https://github.com/Rdatatable/data.table/wiki) package internally
 
 Example
@@ -19,10 +19,12 @@ The package provides an easy way to calculate total and local segregation, based
 library(segregation)
 # the dataset contains information on the racial composition of schools in three U.S. states
 mutual_total(usschools00, "school", "race", weight = "n")
-#>        stat   est
-#> M         M 0.422
-#> M_min M_min 0.000
-#> M_max M_max 1.609
+#> # A tibble: 3 x 2
+#>   stat    est
+#> * <chr> <dbl>
+#> 1 M     0.422
+#> 2 M_min 0.   
+#> 3 M_max 1.61
 ```
 
 Standard errors can be estimated via boostrapping:
@@ -30,10 +32,12 @@ Standard errors can be estimated via boostrapping:
 ``` r
 mutual_total(usschools00, "school", "race", weight = "n", se = TRUE)
 #> ..........
-#>        stat   est       se
-#> M         M 0.425 0.000591
-#> M_min M_min 0.000 0.000000
-#> M_max M_max 1.609 0.000000
+#> # A tibble: 3 x 3
+#>   stat    est       se
+#> * <chr> <dbl>    <dbl>
+#> 1 M     0.425 0.000591
+#> 2 M_min 0.    0.      
+#> 3 M_max 1.61  0.
 ```
 
 Local segregation (`ls`) of racial groups, with group-specific standard errors:
@@ -41,22 +45,24 @@ Local segregation (`ls`) of racial groups, with group-specific standard errors:
 ``` r
 mutual_local(usschools00, "school", "race", weight = "n", se = TRUE)
 #> ..........
-#>      race    stat     est        se
-#> 1  native      ls 1.44064 0.0179202
-#> 2   asian      ls 0.62401 0.0076724
-#> 3    hisp      ls 0.77865 0.0013172
-#> 4   black      ls 0.88337 0.0021738
-#> 5   white      ls 0.18261 0.0006489
-#> 6  native       p 0.00751 0.0000904
-#> 7   asian       p 0.02271 0.0001572
-#> 8    hisp       p 0.15149 0.0003427
-#> 9   black       p 0.18922 0.0004567
-#> 10  white       p 0.62908 0.0006681
-#> 11 native M_group 0.01082 0.0001129
-#> 12  asian M_group 0.01417 0.0001352
-#> 13   hisp M_group 0.11796 0.0003884
-#> 14  black M_group 0.16715 0.0004115
-#> 15  white M_group 0.11487 0.0003110
+#> # A tibble: 15 x 4
+#>    race   stat        est        se
+#>    <fct>  <fct>     <dbl>     <dbl>
+#>  1 native ls      1.44    0.0179   
+#>  2 asian  ls      0.624   0.00767  
+#>  3 hisp   ls      0.779   0.00132  
+#>  4 black  ls      0.883   0.00217  
+#>  5 white  ls      0.183   0.000649 
+#>  6 native p       0.00751 0.0000904
+#>  7 asian  p       0.0227  0.000157 
+#>  8 hisp   p       0.151   0.000343 
+#>  9 black  p       0.189   0.000457 
+#> 10 white  p       0.629   0.000668 
+#> 11 native M_group 0.0108  0.000113 
+#> 12 asian  M_group 0.0142  0.000135 
+#> 13 hisp   M_group 0.118   0.000388 
+#> 14 black  M_group 0.167   0.000412 
+#> 15 white  M_group 0.115   0.000311
 ```
 
 Decompose the difference in segregation between 2000 and 2005, using the method developed by Mora and Ruiz-Castillo (2009):
@@ -64,13 +70,15 @@ Decompose the difference in segregation between 2000 and 2005, using the method 
 ``` r
 mutual_difference(usschools00, usschools05, "school", "race", 
                   weight = "n", method = "mrc")
-#>                          stat      est
-#> M1                         M1  0.42152
-#> M2                         M2  0.41045
-#> diff                     diff -0.01107
-#> group_marginal group_marginal  0.00761
-#> unit_entropy     unit_entropy -0.06375
-#> invariant           invariant  0.04506
+#> # A tibble: 6 x 2
+#>   stat                est
+#> * <chr>             <dbl>
+#> 1 M1              0.422  
+#> 2 M2              0.410  
+#> 3 diff           -0.0111 
+#> 4 group_marginal  0.00761
+#> 5 unit_entropy   -0.0637 
+#> 6 invariant       0.0451
 ```
 
 How to install

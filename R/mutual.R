@@ -126,9 +126,8 @@ mutual_total <- function(data, unit, group, within = NULL,
         ret <- boot_ret[, list(
             est = mean(est), se = stats::sd(est)), by = c("stat")]
     }
-    ret <- as.data.frame(ret)
-    rownames(ret) <- ret[, "stat"]
-    ret
+    rownames(ret) <- ret[["stat"]]
+    as_tibble_or_df(ret)
 }
 
 #' @import data.table
@@ -223,6 +222,5 @@ mutual_local <- function(data, unit, group, weight = NULL, se = FALSE, n_bootstr
     }
     # sort and return as data frame
     setorderv(ret, c("stat", group))
-    ret <- as.data.frame(ret)
-    ret
+    as_tibble_or_df(ret)
 }

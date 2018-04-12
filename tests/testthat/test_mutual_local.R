@@ -22,7 +22,7 @@ test_that("local calculation works", {
     )
     expect_equal(
         sum(local[local$stat=="M_group", "est"]),
-        mutual_total(test_data, "u", "g", weight = "n")["M", "est"]
+        mutual_total(test_data, "u", "g", weight = "n")[["M", "est"]]
     )
 })
 
