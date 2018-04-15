@@ -73,27 +73,27 @@ mutual_total_compute <- function(data, unit, group, within) {
 #' Ricardo Mora and Javier Ruiz-Castillo. 2011. "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
 #' @examples
 #' # calculate school racial segregation
-#' mutual_total(usschools00, "school", "race", weight="n") # => .422
+#' mutual_total(schools00, "school", "race", weight="n") # => .425
 #'
 #' # note that the definition of units and groups is arbitrary
-#' mutual_total(usschools00, "race", "school", weight="n") # => .422
+#' mutual_total(schools00, "race", "school", weight="n") # => .425
 #'
 #' # if units or groups are defined by a combination of variables,
 #' # vectors of variable names can be provided -
 #' # here there is no difference, because schools
 #' # are nested within districts
-#' mutual_total(usschools00, "race", c("district", "school"),
-#'              weight="n") # => .422
+#' mutual_total(schools00, "race", c("district", "school"),
+#'              weight="n") # => .424
 #'
 #' # estimate a standard error of M
-#' mutual_total(usschools00, "race", "school", weight="n", se=TRUE)
+#' mutual_total(schools00, "race", "school", weight="n", se=TRUE)
 #'
 #' # estimate segregation within school districts
-#' mutual_total(usschools00, "race", "school",
-#'              within="district", weight="n") # => .084
+#' mutual_total(schools00, "race", "school",
+#'              within="district", weight="n") # => .087
 #'
 #' # estimate between-district racial segregation
-#' mutual_total(usschools00, "race", "district", weight="n") # => .337
+#' mutual_total(schools00, "race", "district", weight="n") # => .338
 #' # note that the sum of within-district and between-district
 #' # segregation equals total school-race segregation;
 #' # here, most segregation is between school districts
@@ -116,7 +116,7 @@ mutual_total <- function(data, unit, group, within = NULL,
             cat(".")
             # resample and collapse by all variables, except "freq"
             resampled <- d[
-                sample(.N, n_total, replace = TRUE, prob = freq)][, 
+                sample(.N, n_total, replace = TRUE, prob = freq)][,
                 list(freq = .N), by = vars]
             mutual_total_compute(resampled, unit, group, within)
         })
@@ -186,15 +186,15 @@ mutual_local_compute <- function(data, unit, group) {
 #'   "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
 #' @examples
 #' # which racial groups are most segregated?
-#' (localseg = mutual_local(usschools00, "school", "race", weight="n"))
+#' (localseg = mutual_local(schools00, "school", "race", weight="n"))
 #' # native americans are most segregated, whites are least segregated.
 #'
 #' sum(localseg[localseg["stat"]=="p", "est"]) # => 1
 #'
 #' # the sum of the weighted local segregation scores equals
 #' # total segregation
-#' mutual_total(usschools00, "school", "race", weight="n") # => .4215
-#' sum(localseg[localseg["stat"]=="M_group", "est"]) # => .4215
+#' mutual_total(schools00, "school", "race", weight="n") # => .425
+#' sum(localseg[localseg["stat"]=="M_group", "est"]) # => .425
 #' @import data.table
 #' @export
 mutual_local <- function(data, unit, group, weight = NULL, se = FALSE, n_bootstrap = 10) {
@@ -209,7 +209,7 @@ mutual_local <- function(data, unit, group, weight = NULL, se = FALSE, n_bootstr
             cat(".")
             # resample and collapse by all variables, except "freq"
             resampled <- d[
-                sample(.N, n_total, replace = TRUE, prob = freq)][, 
+                sample(.N, n_total, replace = TRUE, prob = freq)][,
                 list(freq = .N), by = vars]
             mutual_local_compute(resampled, unit, group)
         })

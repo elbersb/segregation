@@ -17,12 +17,12 @@ The package provides an easy way to calculate total and local segregation, based
 
 ``` r
 library(segregation)
-# the dataset contains information on the racial composition of schools in three U.S. states
-mutual_total(usschools00, "school", "race", weight = "n")
+# example dataset with fake data provided by the package
+mutual_total(schools00, "school", "race", weight = "n")
 #> # A tibble: 3 x 2
 #>   stat    est
 #> * <chr> <dbl>
-#> 1 M     0.422
+#> 1 M     0.425
 #> 2 M_min 0.   
 #> 3 M_max 1.61
 ```
@@ -30,12 +30,12 @@ mutual_total(usschools00, "school", "race", weight = "n")
 Standard errors can be estimated via boostrapping:
 
 ``` r
-mutual_total(usschools00, "school", "race", weight = "n", se = TRUE)
+mutual_total(schools00, "school", "race", weight = "n", se = TRUE)
 #> ..........
 #> # A tibble: 3 x 3
 #>   stat    est       se
 #> * <chr> <dbl>    <dbl>
-#> 1 M     0.425 0.000591
+#> 1 M     0.429 0.000851
 #> 2 M_min 0.    0.      
 #> 3 M_max 1.61  0.
 ```
@@ -43,42 +43,42 @@ mutual_total(usschools00, "school", "race", weight = "n", se = TRUE)
 Local segregation (`ls`) of racial groups, with group-specific standard errors:
 
 ``` r
-mutual_local(usschools00, "school", "race", weight = "n", se = TRUE)
+mutual_local(schools00, "school", "race", weight = "n", se = TRUE)
 #> ..........
 #> # A tibble: 15 x 4
 #>    race   stat        est        se
 #>    <fct>  <fct>     <dbl>     <dbl>
-#>  1 native ls      1.44    0.0179   
-#>  2 asian  ls      0.624   0.00767  
-#>  3 hisp   ls      0.779   0.00132  
-#>  4 black  ls      0.883   0.00217  
-#>  5 white  ls      0.183   0.000649 
-#>  6 native p       0.00751 0.0000904
-#>  7 asian  p       0.0227  0.000157 
-#>  8 hisp   p       0.151   0.000343 
-#>  9 black  p       0.189   0.000457 
-#> 10 white  p       0.629   0.000668 
-#> 11 native M_group 0.0108  0.000113 
-#> 12 asian  M_group 0.0142  0.000135 
-#> 13 hisp   M_group 0.118   0.000388 
-#> 14 black  M_group 0.167   0.000412 
-#> 15 white  M_group 0.115   0.000311
+#>  1 native ls      1.53    0.0134   
+#>  2 asian  ls      0.663   0.00302  
+#>  3 hisp   ls      0.781   0.00141  
+#>  4 black  ls      0.889   0.00251  
+#>  5 white  ls      0.184   0.000806 
+#>  6 native p       0.00760 0.0000859
+#>  7 asian  p       0.0227  0.000136 
+#>  8 hisp   p       0.152   0.000426 
+#>  9 black  p       0.189   0.000254 
+#> 10 white  p       0.629   0.000584 
+#> 11 native M_group 0.0116  0.000162 
+#> 12 asian  M_group 0.0151  0.000134 
+#> 13 hisp   M_group 0.119   0.000391 
+#> 14 black  M_group 0.168   0.000502 
+#> 15 white  M_group 0.115   0.000427
 ```
 
 Decompose the difference in segregation between 2000 and 2005, using the method developed by Mora and Ruiz-Castillo (2009):
 
 ``` r
-mutual_difference(usschools00, usschools05, "school", "race", 
+mutual_difference(schools00, schools05, "school", "race", 
                   weight = "n", method = "mrc")
 #> # A tibble: 6 x 2
 #>   stat                est
 #> * <chr>             <dbl>
-#> 1 M1              0.422  
-#> 2 M2              0.410  
-#> 3 diff           -0.0111 
-#> 4 group_marginal  0.00761
-#> 5 unit_entropy   -0.0637 
-#> 6 invariant       0.0451
+#> 1 M1              0.425  
+#> 2 M2              0.415  
+#> 3 diff           -0.0102 
+#> 4 group_marginal  0.00768
+#> 5 unit_entropy   -0.0639 
+#> 6 invariant       0.0460
 ```
 
 How to install

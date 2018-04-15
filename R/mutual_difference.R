@@ -34,7 +34,7 @@
 #' Ricardo Mora and Javier Ruiz-Castillo. 2009. "The Invariance Properties of the
 #'   Mutual Information Index of Multigroup Segregation". Research on Economic Inequality 17: 33-53.
 #' @examples
-#' mutual_difference(usschools00, usschools05, unit="race", group="school",
+#' mutual_difference(schools00, schools05, unit="race", group="school",
 #'     weight="n", method="mrc")
 #' @import data.table
 #' @export

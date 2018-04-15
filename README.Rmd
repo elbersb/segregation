@@ -34,27 +34,27 @@ The package provides an easy way to calculate total and local segregation, based
 
 ```{r}
 library(segregation)
-# the dataset contains information on the racial composition of schools in three U.S. states
-mutual_total(usschools00, "school", "race", weight = "n")
+# example dataset with fake data provided by the package
+mutual_total(schools00, "school", "race", weight = "n")
 ```
 
 Standard errors can be estimated via boostrapping:
 
 ```{r}
-mutual_total(usschools00, "school", "race", weight = "n", se = TRUE)
+mutual_total(schools00, "school", "race", weight = "n", se = TRUE)
 ```
 
 Local segregation (`ls`) of racial groups, with group-specific standard errors:
 
 ```{r}
-mutual_local(usschools00, "school", "race", weight = "n", se = TRUE)
+mutual_local(schools00, "school", "race", weight = "n", se = TRUE)
 ```
 
 Decompose the difference in segregation between 2000 and 2005, 
 using the method developed by Mora and Ruiz-Castillo (2009):
 
 ```{r}
-mutual_difference(usschools00, usschools05, "school", "race", 
+mutual_difference(schools00, schools05, "school", "race", 
                   weight = "n", method = "mrc")
 ```
 
