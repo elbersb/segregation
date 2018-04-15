@@ -1,7 +1,6 @@
 #' Decomposes the difference between two M indices
 #'
-#' Uses either the method developed by Mora and Ruiz-Castillo (2009) or
-#' the method developed by Elbers (2018)
+#' Uses the method developed by Mora and Ruiz-Castillo (2009).
 #'
 #' @param data1 A data frame with same structure as \code{data2}.
 #' @param data2 A data frame with same structure as \code{data1}.
@@ -13,7 +12,7 @@
 #'   over which segregation is computed.
 #' @param weight Numeric. Only frequency weights are allowed.
 #'   (Default \code{NULL})
-#' @param method Either "mrc" (Mora and Ruiz-Castillo, 2009) or "elbers" (Elbers, 2018)
+#' @param method for now, only "mrc" (Mora and Ruiz-Castillo, 2009) is possible
 #' @param se If \code{TRUE}, standard errors are estimated via bootstrap.
 #'   (Default \code{FALSE})
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{50})
@@ -23,20 +22,10 @@
 #'   \code{M1} contains the M for \code{data1}.
 #'   \code{M2} contains the M for \code{data2}.
 #'   \code{diff} is the difference between \code{M2} and \code{M1}.
-#'
-#'   If \code{method} is "mrc", the data frame contains the following additional rows:
 #'   \code{unit_entropy} is the difference in unit entropy.
 #'   \code{group_marginal} is the contribution of group composition differences.
 #'   \code{invariant} is the contribution of group composition-invariant differences.
 #'   Note that \code{diff = unit_entropy + group_marginal + invariant}
-#'
-#'   If \code{method} is "elbers", the data frame contains the following additional rows:
-#'   \code{group_marginal} is the contribution of the change in group marginals.
-#'   \code{unit_marginal} is the contribution of the change in unit marginals.
-#'   \code{conditional} is the contribution of the change in the conditional probabilities.
-#'   \code{additions} is the weighted local linkage for \code{group} elements not in \code{data1}.
-#'   \code{removals} is the negative weighted local linkage for \code{group} elements not in \code{data2}.
-#'   Note that \code{diff = group_marginal + unit_marginal + conditional + additions + removals}
 #'
 #'   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
 #'   the associated bootstrapped standard errors, and the column \code{est} contains
@@ -44,24 +33,18 @@
 #' @references
 #' Ricardo Mora and Javier Ruiz-Castillo. 2009. "The Invariance Properties of the
 #'   Mutual Information Index of Multigroup Segregation". Research on Economic Inequality 17: 33-53.
-#'
-#' Elbers, Benjamin. 2018. An Alternative Difference Decomposition of M. Working Paper.
 #' @examples
 #' mutual_difference(usschools00, usschools05, unit="race", group="school",
 #'     weight="n", method="mrc")
-#' mutual_difference(usschools00, usschools05, unit="race", group="school",
-#'     weight="n", method="elbers")
 #' @import data.table
 #' @export
 mutual_difference <- function(data1, data2, unit, group,
-                              weight = NULL, method = NULL,
+                              weight = NULL, method = "mrc",
                               se = FALSE, n_bootstrap = 50) {
     if(method == "mrc") {
         method = mutual_difference_mrc_compute
-    } else if(method == "elbers") {
-        method = mutual_difference_elbers_compute
     } else {
-        # raise error
+        stop("unknown method")
     }
 
     d1 <- prepare_data(data1, unit, group, weight)
@@ -77,10 +60,10 @@ mutual_difference <- function(data1, data2, unit, group,
             cat(".")
             # resample and collapse by all variables, except "freq"
             resampled1 <- d1[
-                sample(.N, n_total1, replace = TRUE, prob = freq)][, 
+                sample(.N, n_total1, replace = TRUE, prob = freq)][,
                 list(freq = .N), by = vars]
             resampled2 <- d2[
-                sample(.N, n_total2, replace = TRUE, prob = freq)][, 
+                sample(.N, n_total2, replace = TRUE, prob = freq)][,
                 list(freq = .N), by = vars]
             method(resampled1, resampled2, unit, group)
         })
@@ -146,82 +129,3 @@ mutual_difference_mrc_compute <- function(d1, d2, unit, group) {
     data.table(stat = stat, est = est)
 }
 
-#' @import data.table
-mutual_difference_elbers_compute <- function(d1, d2, unit, group) {
-    n_total1 <- sum(d1$freq)
-    n_total2 <- sum(d2$freq)
-
-    d1[, `:=`(n_unit, sum(freq)), by = unit]
-    d1[, `:=`(n_group, sum(freq)), by = group]
-    d1[, `:=`(
-        p_unit1 = n_unit / n_total1,
-        p_group1 = n_group / n_total1,
-        p_unit_g_group1 = freq / n_group
-    )]
-    d1[, `:=`(ll_part = p_unit_g_group1 * log(p_unit_g_group1 / p_unit1))]
-    d1[, ls_group1 := sum(ll_part), by = group]
-    M1 <- sum(d1[, list(p_group = first(p_group1),
-                        ls_group = first(ls_group1)), by=group][, p_group*ls_group])
-
-    d2[, `:=`(n_unit, sum(freq)), by = unit]
-    d2[, `:=`(n_group, sum(freq)), by = group]
-    d2[, `:=`(
-        p_unit2 = n_unit / n_total2,
-        p_group2 = n_group / n_total2,
-        p_unit_g_group2 = freq / n_group
-    )]
-    d2[, `:=`(ll_part = p_unit_g_group2 * log(p_unit_g_group2 / p_unit2))]
-    d2[, ls_group2 := sum(ll_part), by = group]
-    M2 <- sum(d2[, list(p_group = first(p_group2),
-                        ls_group = first(ls_group2)), by=group][, p_group*ls_group])
-
-    setkeyv(d1, c(unit, group))
-    setkeyv(d2, c(unit, group))
-
-    joined <- merge(d1, d2, all=TRUE)
-    # which groups are only in 1 or only in 2 & fill empty cells
-    joined[, `:=`(
-        miss1 = sum(is.na(p_group1)/.N),
-        miss2 = sum(is.na(p_group2)/.N),
-        ls_group1 = mean(ls_group1, na.rm=TRUE),
-        ls_group2 = mean(ls_group2, na.rm=TRUE),
-        p_group1 = mean(p_group1, na.rm=TRUE),
-        p_group2 = mean(p_group2, na.rm=TRUE)), by=group]
-
-    # split into three groups
-    not_in_1 <- joined[miss1==1, list(p_group2=first(p_group2),
-                                      ls_group2=first(ls_group2)), by=group]
-    not_in_2 <- joined[miss2==1, list(p_group1=first(p_group1),
-                                      ls_group1=first(ls_group1)), by=group]
-    joined <- joined[miss1!=1 & miss2!=1]
-
-    byg <- joined[, `:=`(
-        same_c_diff_m = p_unit_g_group1 * log(p_unit_g_group1 / p_unit2),
-        diff_c_same_m = p_unit_g_group2 * log(p_unit_g_group2 / p_unit1)
-    )][, list(
-        p_group1 = first(p_group1),
-        p_group2 = first(p_group2),
-        ls_group1 = first(ls_group1),
-        ls_group2 = first(ls_group2),
-        ls_marginal = 1/2*(sum(same_c_diff_m, na.rm=TRUE) - first(ls_group1)) +
-            1/2*(first(ls_group2) - sum(diff_c_same_m, na.rm=TRUE)),
-        ls_structural = 1/2*(sum(diff_c_same_m, na.rm=TRUE) - first(ls_group1)) +
-            1/2*(first(ls_group2) - sum(same_c_diff_m, na.rm=TRUE))
-    ), by = group]
-
-    weight1 = byg$p_group2 %*% byg$ls_group2 - byg$p_group1 %*% byg$ls_group2
-    weight2 = byg$p_group2 %*% byg$ls_group1 - byg$p_group1 %*% byg$ls_group1
-    group_marginal = mean(c(weight1[1,1], weight2[1,1]))
-    unit_marginal = (rowMeans(byg[, list(p_group1, p_group2)]) %*% byg$ls_marginal)[1,1]
-    conditional = (rowMeans(byg[, list(p_group1, p_group2)]) %*% byg$ls_structural)[1,1]
-    additions = (not_in_1$p_group2 %*% not_in_1$ls_group2)[1,1]
-    removals = -(not_in_2$p_group1 %*% not_in_2$ls_group1)[1,1]
-
-    stat = c("M1", "M2", "diff",
-             "group_marginal", "unit_marginal", "conditional",
-             "additions", "removals")
-    est = c(M1, M2, group_marginal + unit_marginal + conditional + additions + removals,
-            group_marginal, unit_marginal, conditional,
-            additions, removals)
-    data.table(stat = stat, est = est)
-}

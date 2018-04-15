@@ -4,7 +4,7 @@
 \alias{mutual_difference}
 \title{Decomposes the difference between two M indices}
 \usage{
-mutual_difference(data1, data2, unit, group, weight = NULL, method = NULL,
+mutual_difference(data1, data2, unit, group, weight = NULL, method = "mrc",
   se = FALSE, n_bootstrap = 50)
 }
 \arguments{
@@ -23,7 +23,7 @@ over which segregation is computed.}
 \item{weight}{Numeric. Only frequency weights are allowed.
 (Default \code{NULL})}
 
-\item{method}{Either "mrc" (Mora and Ruiz-Castillo, 2009) or "elbers" (Elbers, 2018)}
+\item{method}{for now, only "mrc" (Mora and Ruiz-Castillo, 2009) is possible}
 
 \item{se}{If \code{TRUE}, standard errors are estimated via bootstrap.
 (Default \code{FALSE})}
@@ -36,38 +36,23 @@ Returns a data frame with columns \code{stat} and \code{est}. The data frame con
   \code{M1} contains the M for \code{data1}.
   \code{M2} contains the M for \code{data2}.
   \code{diff} is the difference between \code{M2} and \code{M1}.
-
-  If \code{method} is "mrc", the data frame contains the following additional rows:
   \code{unit_entropy} is the difference in unit entropy.
   \code{group_marginal} is the contribution of group composition differences.
   \code{invariant} is the contribution of group composition-invariant differences.
   Note that \code{diff = unit_entropy + group_marginal + invariant}
-
-  If \code{method} is "elbers", the data frame contains the following additional rows:
-  \code{group_marginal} is the contribution of the change in group marginals.
-  \code{unit_marginal} is the contribution of the change in unit marginals.
-  \code{conditional} is the contribution of the change in the conditional probabilities.
-  \code{additions} is the weighted local linkage for \code{group} elements not in \code{data1}.
-  \code{removals} is the negative weighted local linkage for \code{group} elements not in \code{data2}.
-  Note that \code{diff = group_marginal + unit_marginal + conditional + additions + removals}
 
   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
   the associated bootstrapped standard errors, and the column \code{est} contains
   bootstrapped estimates.
 }
 \description{
-Uses either the method developed by Mora and Ruiz-Castillo (2009) or
-the method developed by Elbers (2018)
+Uses the method developed by Mora and Ruiz-Castillo (2009).
 }
 \examples{
 mutual_difference(usschools00, usschools05, unit="race", group="school",
     weight="n", method="mrc")
-mutual_difference(usschools00, usschools05, unit="race", group="school",
-    weight="n", method="elbers")
 }
 \references{
 Ricardo Mora and Javier Ruiz-Castillo. 2009. "The Invariance Properties of the
   Mutual Information Index of Multigroup Segregation". Research on Economic Inequality 17: 33-53.
-
-Elbers, Benjamin. 2018. An Alternative Difference Decomposition of M. Working Paper.
 }
