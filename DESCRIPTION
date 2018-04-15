@@ -1,7 +1,7 @@
 Package: segregation
 Type: Package
-Title: Entropy-based segregation indices
-Version: 0.0.0.9000
+Title: Entropy-Based Segregation Indices
+Version: 0.0.1
 Authors@R: person("Benjamin", "Elbers", email = "be2239@columbia.edu", 
   role = c("aut", "cre"), comment = c(ORCID = "0000-0001-5392-3448"))
 Description: Computes entropy-based segregation indices, with a focus

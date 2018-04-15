@@ -6,15 +6,12 @@
 \title{Ethnic/racial composition of schools for 2000/2001}
 \format{A data frame with 8,142 rows and 5 variables:
 \describe{
-  \item{state}{either "A", "B", or "C"}
+  \item{state}{either A, B, or C}
   \item{district}{school agency/district ID}
   \item{school}{school ID}
   \item{race}{either native, asian, hispanic, black, or white}
   \item{n}{n of students by school and race}
 }}
-\source{
-\url{https://nces.ed.gov/ccd/}
-}
 \usage{
 schools00
 }
