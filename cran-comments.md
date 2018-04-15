@@ -1,4 +1,7 @@
-This is the first submission of this package.
+This is a resubmission.
+
+* fixed LICENSE file
+* updated URLs in README
 
 ## Test environments
 
