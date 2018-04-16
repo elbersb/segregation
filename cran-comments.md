@@ -1,4 +1,8 @@
-This is a resubmission.
+This is the second resubmission.
+
+* added references to Description text
+
+## First resubmission.
 
 * fixed LICENSE file
 * updated URLs in README

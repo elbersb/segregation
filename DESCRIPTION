@@ -4,11 +4,14 @@ Title: Entropy-Based Segregation Indices
 Version: 0.0.1
 Authors@R: person("Benjamin", "Elbers", email = "be2239@columbia.edu", 
   role = c("aut", "cre"), comment = c(ORCID = "0000-0001-5392-3448"))
-Description: Computes entropy-based segregation indices, with a focus
-    on the Mutual Information Index (M). The M is a measure
-    of segregation that is highly decomposable. Provides
+Description: Computes entropy-based segregation indices, as developed by
+    Theil (1971) <isbn:978-0471858454>, with a focus on 
+    the Mutual Information Index (M). The M, further described by 
+    Mora and Ruiz-Castillo (2011) <doi:https://doi.org/10.1111/j.1467-9531.2011.01237.x>
+    and Frankel and Volij (2011) <doi:https://doi.org/10.1016/j.jet.2010.10.008>, 
+    is a measure of segregation that is highly decomposable. The package provides
     tools to decompose the index by units and groups (local segregation), 
-    and by within and between terms. 
+    and by within and between terms.
     Includes standard error estimation by bootstrapping.
 License: MIT + file LICENSE
 Imports: data.table
