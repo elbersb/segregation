@@ -16,8 +16,8 @@ focus on the Mutual Information Index (M).
     [`data.table`](https://github.com/Rdatatable/data.table/wiki)
     package internally
 
-Example
--------
+Usage
+-----
 
 The package provides an easy way to calculate total and local
 segregation, based on the Mutual Information Index.
@@ -93,15 +93,21 @@ mutual_difference(schools00, schools05, "school", "race",
 How to install
 --------------
 
-The package is not on CRAN yet. If you have devtools installed, use
+To install the package from CRAN, use
+
+``` r
+install.packages("segregation") 
+```
+
+To install the development version, use
 
 ``` r
 devtools::install_github("elbersb/segregation") 
 ```
 
-to install the package.
-
-To access the documentation, type
+To access the documentation
+([PDF](https://cran.r-project.org/web/packages/segregation/segregation.pdf)),
+type
 
 ``` r
 ?segregation
