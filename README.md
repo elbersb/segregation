@@ -25,7 +25,7 @@ segregation, based on the Mutual Information Index.
 ``` r
 library(segregation)
 # example dataset with fake data provided by the package
-mutual_total(schools00, "school", "race", weight = "n")
+mutual_total(schools00, "race", "school", weight = "n")
 #> # A tibble: 3 x 2
 #>   stat    est
 #> * <chr> <dbl>
@@ -37,7 +37,7 @@ mutual_total(schools00, "school", "race", weight = "n")
 Standard errors can be estimated via boostrapping:
 
 ``` r
-mutual_total(schools00, "school", "race", weight = "n", se = TRUE)
+mutual_total(schools00, "race", "school", weight = "n", se = TRUE)
 #> ..........
 #> # A tibble: 3 x 3
 #>   stat    est       se
@@ -47,37 +47,38 @@ mutual_total(schools00, "school", "race", weight = "n", se = TRUE)
 #> 3 M_max 1.61  0.
 ```
 
-Local segregation (`ls`) of racial groups, with group-specific standard
+Local segregation (`ls`) by units (here racial groups), with standard
 errors:
 
 ``` r
-mutual_local(schools00, "school", "race", weight = "n", se = TRUE)
+mutual_local(schools00, group="school", unit="race", weight = "n", se = TRUE)
 #> ..........
 #> # A tibble: 15 x 4
-#>    race   stat        est       se
-#>    <fct>  <fct>     <dbl>    <dbl>
-#>  1 asian  ls      0.667   0.00674 
-#>  2 black  ls      0.885   0.00259 
-#>  3 hisp   ls      0.782   0.00258 
-#>  4 white  ls      0.184   0.000725
-#>  5 native ls      1.53    0.0229  
-#>  6 asian  p       0.0226  0.000124
-#>  7 black  p       0.190   0.000465
-#>  8 hisp   p       0.152   0.000317
-#>  9 white  p       0.628   0.000687
-#> 10 native p       0.00745 0.000135
-#> 11 asian  M_group 0.0151  0.000193
-#> 12 black  M_group 0.168   0.000354
-#> 13 hisp   M_group 0.119   0.000336
-#> 14 white  M_group 0.116   0.000357
-#> 15 native M_group 0.0114  0.000101
+#>    race   stat       est       se
+#>    <fct>  <fct>    <dbl>    <dbl>
+#>  1 asian  ls     0.667   0.00674 
+#>  2 black  ls     0.885   0.00259 
+#>  3 hisp   ls     0.782   0.00258 
+#>  4 white  ls     0.184   0.000725
+#>  5 native ls     1.53    0.0229  
+#>  6 asian  p      0.0226  0.000124
+#>  7 black  p      0.190   0.000465
+#>  8 hisp   p      0.152   0.000317
+#>  9 white  p      0.628   0.000687
+#> 10 native p      0.00745 0.000135
+#> 11 asian  M_unit 0.0151  0.000193
+#> 12 black  M_unit 0.168   0.000354
+#> 13 hisp   M_unit 0.119   0.000336
+#> 14 white  M_unit 0.116   0.000357
+#> 15 native M_unit 0.0114  0.000101
 ```
 
 Decompose the difference in segregation between 2000 and 2005, using the
 method developed by Mora and Ruiz-Castillo (2009):
 
 ``` r
-mutual_difference(schools00, schools05, "school", "race", 
+mutual_difference(schools00, schools05,
+                  group="race", unit="school",
                   weight = "n", method = "mrc")
 #> # A tibble: 6 x 2
 #>   stat                est

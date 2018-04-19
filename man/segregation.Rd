@@ -9,7 +9,7 @@
 Computes entropy-based segregation indices, with a focus on
 the mutual information index (M). The M is a measure
 of segregation that is highly decomposable. Provides
-tools to decompose the index by units and groups, and by within
+tools to decompose the index by groups and units, and by within
 and between terms. Includes standard error estimation by bootstrapping.
 }
 \section{Methods}{

@@ -4,17 +4,17 @@
 \alias{mutual_local}
 \title{Calculates local segregation indices}
 \usage{
-mutual_local(data, unit, group, weight = NULL, se = FALSE,
+mutual_local(data, group, unit, weight = NULL, se = FALSE,
   n_bootstrap = 10)
 }
 \arguments{
 \item{data}{A data frame.}
 
-\item{unit}{A categorical variable or a vector of variables
+\item{group}{A categorical variable or a vector of variables
 contained in \code{data}. Defines the dimension
 over which segregation is computed.}
 
-\item{group}{A categorical variable or a vector of variables
+\item{unit}{A categorical variable or a vector of variables
 contained in \code{data}. Defines the group for which local
 segregation indices are calculated.}
 
@@ -27,18 +27,18 @@ segregation indices are calculated.}
 \item{n_bootstrap}{Number of bootstrap iterations. (Default \code{10})}
 }
 \value{
-Returns a data frame with three rows for each category defined by \code{group},
-  for a total of \code{3*(number of groups)} rows. The column \code{est} defines three statistics that
-  are provided for each group: \code{ls}, the local segregation score,
-  \code{p}, the proportion of the group from the total number of cases, and
-  \code{M_group}, the product of \code{ls} and \code{p}.
+Returns a data frame with three rows for each category defined by \code{unit},
+  for a total of \code{3*(number of units)} rows. The column \code{est} defines three statistics that
+  are provided for each unit: \code{ls}, the local segregation score,
+  \code{p}, the proportion of the unit from the total number of cases, and
+  \code{M_unit}, the product of \code{ls} and \code{p}.
   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
   the associated bootstrapped standard errors, and the column \code{est} contains
   bootstrapped estimates.
 }
 \description{
 Returns local segregation indices for each category defined
-by \code{group}.
+by \code{unit}.
 }
 \examples{
 # which racial groups are most segregated?
@@ -50,7 +50,7 @@ sum(localseg[localseg["stat"]=="p", "est"]) # => 1
 # the sum of the weighted local segregation scores equals
 # total segregation
 mutual_total(schools00, "school", "race", weight="n") # => .425
-sum(localseg[localseg["stat"]=="M_group", "est"]) # => .425
+sum(localseg[localseg["stat"]=="M_unit", "est"]) # => .425
 }
 \references{
 Henri Theil. 1971. Principles of Econometrics. New York: Wiley.

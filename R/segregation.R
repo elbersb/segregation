@@ -3,7 +3,7 @@
 #' Computes entropy-based segregation indices, with a focus on
 #' the mutual information index (M). The M is a measure
 #' of segregation that is highly decomposable. Provides
-#' tools to decompose the index by units and groups, and by within
+#' tools to decompose the index by groups and units, and by within
 #' and between terms. Includes standard error estimation by bootstrapping.
 #'
 #' @section Methods:
@@ -25,8 +25,9 @@ NULL
 
 globalVariables(c(
     "freq",
-    "n_group", "n_unit", "n_within", "n_within_unit",
-    "p", "p_within", "p_group", "p_unit", "p_unit_g_group",
+    "n_group", "n_unit", "n_within", "n_within_unit", "n_within_group",
+    "p", "p_within", "p_group", "p_unit",
+    "p_unit_g_group", "p_group_g_unit",
     "entropy_cond", "M_group", "ll_part",
     "cond1", "cond2", "entropy_cond1", "entropy_cond2",
     "group1", "group2", "p_group1",
@@ -49,8 +50,8 @@ as_tibble_or_df <- function(data) {
 
 
 #' @import data.table
-prepare_data <- function(data, unit, group, weight, within = NULL) {
-    vars <- c(unit, group)
+prepare_data <- function(data, group, unit, weight, within = NULL) {
+    vars <- c(group, unit)
 
     # use provided frequency weight
     if (!is.null(weight)) {

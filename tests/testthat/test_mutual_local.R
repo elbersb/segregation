@@ -17,11 +17,11 @@ test_that("local calculation works", {
     expect_equal(sum(localse[localse$stat=="p", "est"]), 1)
 
     expect_equal(
-        sum(local[local$stat=="M_group", "est"]),
-        sum(local2[local2$stat=="M_group", "est"])
+        sum(local[local$stat=="M_unit", "est"]),
+        sum(local2[local2$stat=="M_unit", "est"])
     )
     expect_equal(
-        sum(local[local$stat=="M_group", "est"]),
+        sum(local[local$stat=="M_unit", "est"]),
         mutual_total(test_data, "u", "g", weight = "n")[["M", "est"]]
     )
 })

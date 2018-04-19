@@ -4,7 +4,7 @@
 \alias{mutual_difference}
 \title{Decomposes the difference between two M indices}
 \usage{
-mutual_difference(data1, data2, unit, group, weight = NULL, method = "mrc",
+mutual_difference(data1, data2, group, unit, weight = NULL, method = "mrc",
   se = FALSE, n_bootstrap = 50)
 }
 \arguments{
@@ -12,11 +12,11 @@ mutual_difference(data1, data2, unit, group, weight = NULL, method = "mrc",
 
 \item{data2}{A data frame with same structure as \code{data1}.}
 
-\item{unit}{A categorical variable or a vector of variables
+\item{group}{A categorical variable or a vector of variables
 contained in \code{data}. Defines the first dimension
 over which segregation is computed.}
 
-\item{group}{A categorical variable or a vector of variables
+\item{unit}{A categorical variable or a vector of variables
 contained in \code{data}. Defines the second dimension
 over which segregation is computed.}
 
@@ -49,7 +49,7 @@ Returns a data frame with columns \code{stat} and \code{est}. The data frame con
 Uses the method developed by Mora and Ruiz-Castillo (2009).
 }
 \examples{
-mutual_difference(schools00, schools05, unit="race", group="school",
+mutual_difference(schools00, schools05, group="race", unit="school",
     weight="n", method="mrc")
 }
 \references{
