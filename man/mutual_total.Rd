@@ -2,7 +2,7 @@
 % Please edit documentation in R/mutual.R
 \name{mutual_total}
 \alias{mutual_total}
-\title{Calculate the total mutual information index}
+\title{Calculate total segregation for M and H}
 \usage{
 mutual_total(data, group, unit, within = NULL, weight = NULL, se = FALSE,
   n_bootstrap = 10)
@@ -34,9 +34,9 @@ computed within the groups defined by the variable, and then averaged.
 \item{n_bootstrap}{Number of bootstrap iterations. (Default \code{10})}
 }
 \value{
-Returns a data frame with three rows. The column \code{est} contains
-  in the first row total segregation. The second and third rows contain
-  the lower and upper bounds of M, respectively.
+Returns a data frame with two rows. The column \code{est} contains
+  the Mutual Information Index, M, and Theil's Entropy Index, H. The H is the
+  the M divided by the \code{group} entropy.
   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
   the associated bootstrapped standard errors, and the column \code{est} contains
   bootstrapped estimates.
@@ -46,27 +46,27 @@ Returns the total segregation between \code{group} and \code{unit}.
 }
 \examples{
 # calculate school racial segregation
-mutual_total(schools00, "school", "race", weight="n") # => .425
+mutual_total(schools00, "school", "race", weight="n") # M => .425
 
 # note that the definition of groups and units is arbitrary
-mutual_total(schools00, "race", "school", weight="n") # => .425
+mutual_total(schools00, "race", "school", weight="n") # M => .425
 
 # if groups or units are defined by a combination of variables,
 # vectors of variable names can be provided -
 # here there is no difference, because schools
 # are nested within districts
 mutual_total(schools00, "race", c("district", "school"),
-             weight="n") # => .424
+             weight="n") # M => .424
 
-# estimate a standard error of M
+# estimate standard errors for M and H
 mutual_total(schools00, "race", "school", weight="n", se=TRUE)
 
 # estimate segregation within school districts
 mutual_total(schools00, "race", "school",
-             within="district", weight="n") # => .087
+             within="district", weight="n") # M => .087
 
 # estimate between-district racial segregation
-mutual_total(schools00, "race", "district", weight="n") # => .338
+mutual_total(schools00, "race", "district", weight="n") # M => .338
 # note that the sum of within-district and between-district
 # segregation equals total school-race segregation;
 # here, most segregation is between school districts

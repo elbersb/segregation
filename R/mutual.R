@@ -7,7 +7,7 @@ mutual_total_compute <- function(data, group, unit, within) {
     n_within[, `:=`(n_within = sum(n_within_group)), by = within]
     # calculate proportions and entropy for each within unit
     n_within[, `:=`(p_within = n_within / n_total, p = n_within_group / n_within)]
-    entropy <- n_within[, list(entropy = sum(p * log(1 / p)), p_within = first(p_within)),
+    entropy <- n_within[, list(entropyw = sum(p * log(1 / p)), p_within = first(p_within)),
                         by = within
                         ]
     setkeyv(entropy, within)
@@ -18,27 +18,34 @@ mutual_total_compute <- function(data, group, unit, within) {
     data[, `:=`(p_unit = n_unit / n_total, p_group_g_unit = freq / n_unit)]
 
     # calculate entropy within groups
-    grouped <- data[, list(p_unit = first(p_unit), entropy_cond = sum(p_group_g_unit *
-                                                                            log(1 / p_group_g_unit))), by = c(within, unit)]
-    setkeyv(grouped, within)
+    by_unit <- data[, list(
+        p_unit = first(p_unit),
+        entropy_cond = sum(p_group_g_unit * log(1 / p_group_g_unit))),
+        by = c(within, unit)]
+    setkeyv(by_unit, within)
+
+    # compute total entropy
+    p <- data[, list(p=sum(freq)), by=group][["p"]] / n_total
+    entropy_overall = sum(p*log(1/p))
+
     # merge within entropy, and compare to group entropy
-    grouped <- merge(grouped, entropy)
-    by_within <- grouped[, list(
-        part_m = sum(p_unit * (entropy - entropy_cond)),
+    by_unit <- merge(by_unit, entropy)
+    by_within <- by_unit[, list(
+        part_m = sum(p_unit * (entropyw - entropy_cond)),
+        h_within = sum(p_unit * (entropyw - entropy_cond) / entropyw),
+        ph_within = first(p_within) * first(entropyw) / entropy_overall,
         p_within = first(p_within)
     ), by = within]
-
-    # min/max bounds
-    categories <- data[, list(uniqueN(get(unit)), uniqueN(get(group))),]
+    by_within$h_within = ifelse(is.finite(by_within$h_within), by_within$h_within, 0)
 
     # total M is the sum of weighted within-group partial M
-    data.table(stat = c("M", "M_min", "M_max"),
-               est = c(sum(by_within$part_m %*% by_within$p_within),
-                       0,
-                       log(min(categories))))
+    M <- sum(by_within$part_m %*% by_within$p_within)
+    H <- sum(by_within$h_within %*% by_within$ph_within) # or: M / entropy_overall
+
+    data.table(stat = c("M", "H"), est = c(M, H))
 }
 
-#' Calculate the total mutual information index
+#' Calculate total segregation for M and H
 #'
 #' Returns the total segregation between \code{group} and \code{unit}.
 #'
@@ -61,9 +68,9 @@ mutual_total_compute <- function(data, group, unit, within) {
 #'   (Default \code{FALSE})
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{10})
 #'
-#' @return Returns a data frame with three rows. The column \code{est} contains
-#'   in the first row total segregation. The second and third rows contain
-#'   the lower and upper bounds of M, respectively.
+#' @return Returns a data frame with two rows. The column \code{est} contains
+#'   the Mutual Information Index, M, and Theil's Entropy Index, H. The H is the
+#'   the M divided by the \code{group} entropy.
 #'   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
 #'   the associated bootstrapped standard errors, and the column \code{est} contains
 #'   bootstrapped estimates.
@@ -73,27 +80,27 @@ mutual_total_compute <- function(data, group, unit, within) {
 #' Ricardo Mora and Javier Ruiz-Castillo. 2011. "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
 #' @examples
 #' # calculate school racial segregation
-#' mutual_total(schools00, "school", "race", weight="n") # => .425
+#' mutual_total(schools00, "school", "race", weight="n") # M => .425
 #'
 #' # note that the definition of groups and units is arbitrary
-#' mutual_total(schools00, "race", "school", weight="n") # => .425
+#' mutual_total(schools00, "race", "school", weight="n") # M => .425
 #'
 #' # if groups or units are defined by a combination of variables,
 #' # vectors of variable names can be provided -
 #' # here there is no difference, because schools
 #' # are nested within districts
 #' mutual_total(schools00, "race", c("district", "school"),
-#'              weight="n") # => .424
+#'              weight="n") # M => .424
 #'
-#' # estimate a standard error of M
+#' # estimate standard errors for M and H
 #' mutual_total(schools00, "race", "school", weight="n", se=TRUE)
 #'
 #' # estimate segregation within school districts
 #' mutual_total(schools00, "race", "school",
-#'              within="district", weight="n") # => .087
+#'              within="district", weight="n") # M => .087
 #'
 #' # estimate between-district racial segregation
-#' mutual_total(schools00, "race", "district", weight="n") # => .338
+#' mutual_total(schools00, "race", "district", weight="n") # M => .338
 #' # note that the sum of within-district and between-district
 #' # segregation equals total school-race segregation;
 #' # here, most segregation is between school districts
@@ -154,7 +161,7 @@ mutual_local_compute <- function(data, group, unit) {
          variable.name = "stat", value.name = "est")
 }
 
-#' Calculates local segregation indices
+#' Calculates local segregation indices based on M
 #'
 #' Returns local segregation indices for each category defined
 #' by \code{unit}.
@@ -193,7 +200,7 @@ mutual_local_compute <- function(data, group, unit) {
 #'
 #' # the sum of the weighted local segregation scores equals
 #' # total segregation
-#' mutual_total(schools00, "school", "race", weight="n") # => .425
+#' mutual_total(schools00, "school", "race", weight="n") # M => .425
 #' sum(localseg[localseg["stat"]=="M_unit", "est"]) # => .425
 #' @import data.table
 #' @export

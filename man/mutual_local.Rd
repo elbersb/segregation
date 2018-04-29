@@ -2,7 +2,7 @@
 % Please edit documentation in R/mutual.R
 \name{mutual_local}
 \alias{mutual_local}
-\title{Calculates local segregation indices}
+\title{Calculates local segregation indices based on M}
 \usage{
 mutual_local(data, group, unit, weight = NULL, se = FALSE,
   n_bootstrap = 10)
@@ -49,7 +49,7 @@ sum(localseg[localseg["stat"]=="p", "est"]) # => 1
 
 # the sum of the weighted local segregation scores equals
 # total segregation
-mutual_total(schools00, "school", "race", weight="n") # => .425
+mutual_total(schools00, "school", "race", weight="n") # M => .425
 sum(localseg[localseg["stat"]=="M_unit", "est"]) # => .425
 }
 \references{

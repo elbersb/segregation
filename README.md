@@ -2,8 +2,9 @@
 segregation
 ===========
 
-An R package to calculate entropy-based segregation indices, with a
-focus on the Mutual Information Index (M).
+An R package to calculate and decompose entropy-based, multigroup
+segregation indices, with a focus on the Mutual Information Index (M)
+and Theil’s Information Index (H).
 
 -   calculate total, between, within, and local segregation
 -   decompose differences in total segregation over time
@@ -19,19 +20,18 @@ focus on the Mutual Information Index (M).
 Usage
 -----
 
-The package provides an easy way to calculate total and local
-segregation, based on the Mutual Information Index.
+The package provides an easy way to calculate segregation measures,
+based on the Mutual Information Index (M) and Theil’s Entropy Index (H).
 
 ``` r
 library(segregation)
 # example dataset with fake data provided by the package
 mutual_total(schools00, "race", "school", weight = "n")
-#> # A tibble: 3 x 2
+#> # A tibble: 2 x 2
 #>   stat    est
 #> * <chr> <dbl>
 #> 1 M     0.426
-#> 2 M_min 0.   
-#> 3 M_max 1.61
+#> 2 H     0.419
 ```
 
 Standard errors can be estimated via boostrapping:
@@ -39,16 +39,15 @@ Standard errors can be estimated via boostrapping:
 ``` r
 mutual_total(schools00, "race", "school", weight = "n", se = TRUE)
 #> ..........
-#> # A tibble: 3 x 3
+#> # A tibble: 2 x 3
 #>   stat    est       se
 #> * <chr> <dbl>    <dbl>
 #> 1 M     0.429 0.000935
-#> 2 M_min 0.    0.      
-#> 3 M_max 1.61  0.
+#> 2 H     0.422 0.000985
 ```
 
-Local segregation (`ls`) by units (here racial groups), with standard
-errors:
+Local segregation (`ls`) is a decomposition by units (here racial
+groups), which aggregate to the M index:
 
 ``` r
 mutual_local(schools00, group="school", unit="race", weight = "n", se = TRUE)
@@ -73,8 +72,8 @@ mutual_local(schools00, group="school", unit="race", weight = "n", se = TRUE)
 #> 15 native M_unit 0.0114  0.000101
 ```
 
-Decompose the difference in segregation between 2000 and 2005, using the
-method developed by Mora and Ruiz-Castillo (2009):
+Decompose the difference in M between 2000 and 2005, using the method
+developed by Mora and Ruiz-Castillo (2009):
 
 ``` r
 mutual_difference(schools00, schools05,

@@ -1,15 +1,14 @@
 #' segregation: Entropy-based segregation indices
 #'
-#' Computes entropy-based segregation indices, with a focus on
-#' the mutual information index (M). The M is a measure
-#' of segregation that is highly decomposable. Provides
-#' tools to decompose the index by groups and units, and by within
+#' Calculate and decompose entropy-based, multigroup segregation indices, with a focus
+#' on the Mutual Information Index (M) and Theil's Information Index (H).
+#' Provides tools to decompose the measures by groups and units, and by within
 #' and between terms. Includes standard error estimation by bootstrapping.
 #'
 #' @section Methods:
 #'
 #' \itemize{
-#'  \item{}{\code{\link{mutual_total}} Computes M.}
+#'  \item{}{\code{\link{mutual_total}} Computes M and H.}
 #'  \item{}{\code{\link{mutual_local}} Computes local segregation based on M.}
 #'  \item{}{\code{\link{mutual_difference}} Decomposes difference between two M indices.}
 #' }

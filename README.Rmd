@@ -19,8 +19,8 @@ set.seed(69839)
 
 # segregation
 
-An R package to calculate entropy-based segregation indices, with a focus
-on the Mutual Information Index (M).
+An R package to calculate and decompose entropy-based, multigroup segregation indices, with a focus
+on the Mutual Information Index (M) and Theil's Information Index (H).
 
 - calculate total, between, within, and local segregation
 - decompose differences in total segregation over time
@@ -30,7 +30,7 @@ on the Mutual Information Index (M).
 
 ## Usage
 
-The package provides an easy way to calculate total and local segregation, based on the Mutual Information Index.
+The package provides an easy way to calculate segregation measures, based on the Mutual Information Index (M) and Theil's Entropy Index (H).
 
 ```{r}
 library(segregation)
@@ -44,13 +44,13 @@ Standard errors can be estimated via boostrapping:
 mutual_total(schools00, "race", "school", weight = "n", se = TRUE)
 ```
 
-Local segregation (`ls`) by units (here racial groups), with standard errors:
+Local segregation (`ls`) is a decomposition by units (here racial groups), which aggregate to the M index:
 
 ```{r}
 mutual_local(schools00, group="school", unit="race", weight = "n", se = TRUE)
 ```
 
-Decompose the difference in segregation between 2000 and 2005, 
+Decompose the difference in M between 2000 and 2005, 
 using the method developed by Mora and Ruiz-Castillo (2009):
 
 ```{r}
