@@ -18,6 +18,7 @@ and between terms. Includes standard error estimation by bootstrapping.
  \item{}{\code{\link{mutual_total}} Computes M and H.}
  \item{}{\code{\link{mutual_local}} Computes local segregation based on M.}
  \item{}{\code{\link{mutual_difference}} Decomposes difference between two M indices.}
+ \item{}{\code{\link{entropy}} Calculates the entropy of a distribution.}
 }
 }
 

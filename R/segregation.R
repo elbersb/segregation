@@ -11,6 +11,7 @@
 #'  \item{}{\code{\link{mutual_total}} Computes M and H.}
 #'  \item{}{\code{\link{mutual_local}} Computes local segregation based on M.}
 #'  \item{}{\code{\link{mutual_difference}} Decomposes difference between two M indices.}
+#'  \item{}{\code{\link{entropy}} Calculates the entropy of a distribution.}
 #' }
 #' @section Data:
 #'
@@ -27,7 +28,7 @@ globalVariables(c(
     "n_group", "n_unit", "n_within", "n_within_unit", "n_within_group",
     "p", "p_within", "p_group", "p_unit",
     "p_unit_g_group", "p_group_g_unit",
-    "entropy_cond", "M_group", "ll_part",
+    "entropyw", "entropy_cond", "M_group", "ll_part",
     "cond1", "cond2", "entropy_cond1", "entropy_cond2",
     "group1", "group2", "p_group1",
     "p_group2", "p_unit_g_group1", "p_unit_g_group2",
@@ -45,6 +46,42 @@ as_tibble_or_df <- function(data) {
         rownames(df) = rownames(data)
         df
     }
+}
+
+#' Calculates the entropy of a distribution
+#'
+#' Returns the entropy of the distribution defined by
+#' \code{group}.
+#'
+#' @param data A data frame.
+#' @param group A categorical variable or a vector of variables
+#'   contained in \code{data}.
+#' @param weight Numeric. Only frequency weights are allowed.
+#'   (Default \code{NULL})
+#' @param base Base of the logarithm that is used in the entropy
+#'   calculation. Defaults to the natural logarithm.
+#' @return A single number, the entropy.
+#' @examples
+#' d <- data.frame(cat = c("A", "B"), n = c(25, 75))
+#' entropy(d, "cat", weight = "n") # => .56
+#' # this is equivalent to -.25*log(.25)-.75*log(.75)
+#'
+#' d <- data.frame(cat = c("A", "B"), n = c(50, 50))
+#' # use base 2 for the logarithm, then entropy is maximized at 1
+#' entropy(d, "cat", weight = "n", base = 2) # => 1
+#' @import data.table
+#' @export
+entropy <- function(data, group, weight = NULL, base = exp(1)) {
+    # use provided frequency weight
+    if (!is.null(weight)) {
+        data[, "freq"] <- data[, weight]
+    } else {
+        data[, "freq"] <- 1
+    }
+    setDT(data)
+    n_total <- sum(data[, "freq"])
+    p <- data[, list(p=sum(freq)), by=group][["p"]] / n_total
+    sum(p * log(1/p, base))
 }
 
 
