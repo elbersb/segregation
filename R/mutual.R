@@ -247,7 +247,7 @@ mutual_within <- function(data, group, unit, within,
             resampled <- d[
                 sample(.N, n_total, replace = TRUE, prob = freq)][,
                 list(freq = .N), by = vars]
-            mutual_total_within_compute(d, group, unit, within, base, components = TRUE)
+            mutual_total_within_compute(resampled, group, unit, within, base, components = TRUE)
         })
         cat("\n")
         boot_ret <- rbindlist(boot_ret)
@@ -256,6 +256,9 @@ mutual_within <- function(data, group, unit, within,
             est = mean(est), se = stats::sd(est)),
             by = c(within, "stat")]
     }
+
+    f = as.formula(paste(within, '~ stat'))
+    dcast(ret, f, value.var=c('est', 'se'))
     as_tibble_or_df(ret)
 }
 
