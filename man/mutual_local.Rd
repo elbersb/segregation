@@ -5,7 +5,7 @@
 \title{Calculates local segregation indices based on M}
 \usage{
 mutual_local(data, group, unit, weight = NULL, se = FALSE,
-  n_bootstrap = 10, base = exp(1))
+  n_bootstrap = 10, base = exp(1), wide = FALSE)
 }
 \arguments{
 \item{data}{A data frame.}
@@ -28,6 +28,9 @@ segregation indices are calculated.}
 
 \item{base}{Base of the logarithm that is used in the calculation.
 Defaults to the natural logarithm.}
+
+\item{wide}{Returns a wide dataframe instead of a long dataframe.
+(Default \code{FALSE})}
 }
 \value{
 Returns a data frame with two rows for each category defined by \code{unit},
@@ -37,6 +40,8 @@ Returns a data frame with two rows for each category defined by \code{unit},
   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
   the associated bootstrapped standard errors, and the column \code{est} contains
   bootstrapped estimates.
+  If \code{wide} is set to \code{TRUE}, returns instead a wide dataframe, with one
+  row for each \code{unit}, and the associated statistics in separate columns.
 }
 \description{
 Returns local segregation indices for each category defined
@@ -44,16 +49,14 @@ by \code{unit}.
 }
 \examples{
 # which racial groups are most segregated?
-(localseg = mutual_local(schools00, "school", "race", weight="n"))
-# native americans are most segregated, whites are least segregated.
+(localseg = mutual_local(schools00, "school", "race",
+                         weight="n", wide = TRUE))
 
-sum(localseg[localseg["stat"]=="p", "est"]) # => 1
+sum(localseg$p) # => 1
 
 # the sum of the weighted local segregation scores equals
 # total segregation
-ls <- localseg[localseg["stat"]=="ls", "est"]
-p <- localseg[localseg["stat"]=="p", "est"]
-sum(ls * p) # => .425
+sum(localseg$ls * localseg$p) # => .425
 mutual_total(schools00, "school", "race", weight="n") # M => .425
 }
 \references{

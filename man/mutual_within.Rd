@@ -5,7 +5,7 @@
 \title{Calculate detailed within-category segregation scores for M and H}
 \usage{
 mutual_within(data, group, unit, within, weight = NULL, se = FALSE,
-  n_bootstrap = 10, base = exp(1))
+  n_bootstrap = 10, base = exp(1), wide = FALSE)
 }
 \arguments{
 \item{data}{A data frame.}
@@ -31,28 +31,34 @@ contained in \code{data} that defines the within-segregation categoriess.}
 
 \item{base}{Base of the logarithm that is used in the calculation.
 Defaults to the natural logarithm.}
+
+\item{wide}{Returns a wide dataframe instead of a long dataframe.
+(Default \code{FALSE})}
 }
 \value{
 Returns a data frame with four rows for each category defined by \code{within}.
   The column \code{est} contains four statistics that
-  are provided for each unit: 
+  are provided for each unit:
   \code{M} is the within-category M, and \code{p} is the proportion of the category.
   Multiplying \code{M} and \code{p} gives the contribution of each within-category
   towards the total M.
-  \code{H} is the within-category H, and \code{h_weight} provides the weight. 
+  \code{H} is the within-category H, and \code{h_weight} provides the weight.
   Multiplying \code{H} and \code{h_weight} gives the contribution of each within-category
   towards the total H. \code{h_weight} is defined as \code{p * EW/E}, where \code{EW} is the
-  within-category entropy, and \code{E} is the overall entropy. 
+  within-category entropy, and \code{E} is the overall entropy.
   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
   the associated bootstrapped standard errors, and the column \code{est} contains
   bootstrapped estimates.
+  If \code{wide} is set to \code{TRUE}, returns instead a wide dataframe, with one
+  row for each \code{within} category, and the associated statistics in separate columns.
 }
 \description{
 Calculates the segregation between \code{group} and \code{unit}
 within each category defined by \code{within}.
 }
 \examples{
-(within <- mutual_within(schools00, "race", "school", within = "state", weight = "n"))
+(within <- mutual_within(schools00, "race", "school", within = "state",
+                         weight = "n", wide = TRUE))
 # the M for "AL" is .409
 # manual calculation
 schools_AL <- schools00[schools00$state=="AL",]
@@ -60,15 +66,14 @@ mutual_total(schools_AL, "race", "school", weight = "n") # M => .409
 
 # to recover the within M and H from the output, multiply
 # p * M and h_weight * H, respectively
-within = unstack(within, form=est ~ stat) # to wide format
 sum(within$p * within$M) # => .326
 sum(within$H * within$h_weight) # => .321
-# compare with 
+# compare with:
 mutual_total(schools00, "race", "school", within = "state", weight = "n")
 }
 \references{
 Henri Theil. 1971. Principles of Econometrics. New York: Wiley.
 
-Ricardo Mora and Javier Ruiz-Castillo. 2011. 
+Ricardo Mora and Javier Ruiz-Castillo. 2011.
      "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
 }

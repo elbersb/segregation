@@ -49,7 +49,8 @@ Standard errors in all functions can be estimated via boostrapping:
 mutual_total(schools00, "race", "school", weight = "n", se = TRUE)
 ```
 
-Decompose segregation into a between-state and a within-state term:
+Decompose segregation into a between-state and a within-state term 
+(the sum of these equals total segregation):
 
 ```{r}
 # between states
@@ -63,15 +64,17 @@ Local segregation (`ls`) is a decomposition by units (here racial groups).
 The sum of the proportion-weighted local segregation scores equals M:
 
 ```{r}
-mutual_local(schools00, group = "school", unit = "race", weight = "n", se = TRUE)
+(local <- mutual_local(schools00, group = "school", unit = "race", weight = "n", 
+             se = TRUE, wide = TRUE))
+
+sum(local$p * local$ls)
 ```
 
 Decompose the difference in M between 2000 and 2005, 
 using the method developed by Mora and Ruiz-Castillo (2009):
 
 ```{r}
-mutual_difference(schools00, schools05,
-                  group = "race", unit = "school",
+mutual_difference(schools00, schools05, group = "race", unit = "school",
                   weight = "n", method = "mrc")
 ```
 

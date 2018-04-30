@@ -68,8 +68,14 @@ test_that("H is correct", {
 })
 
 test_that("bootstrapping works", {
-    ret <- mutual_total(test_data, "u", "g", weight = "n", se = TRUE, n_bootstrap = 5)
+    ret <- mutual_total(test_data, "u", "g", weight = "n", se = TRUE)
     expect_equal(dim(ret), c(2, 3))
+    expect_equal(all(ret$se > 0), TRUE)
+
+    ret <- mutual_total(test_data, "u", "g", weight = "n", se = TRUE,
+                        within = "supergroup")
+    expect_equal(dim(ret), c(2, 3))
+    expect_equal(all(ret$se > 0), TRUE)
 })
 
 test_data <- data.frame(

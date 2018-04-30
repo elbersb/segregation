@@ -35,10 +35,12 @@ test_that("mutual_difference", {
 })
 
 test_that("mutual_difference SE", {
-    ret = mutual_difference(test_data1, test_data2, "u", "g", weight = "n", method = "mrc", se = TRUE)
+    ret = mutual_difference(test_data1, test_data2, "u", "g", weight = "n",
+                            method = "mrc", se = TRUE, n_bootstrap = 5)
 
     expect_equal(nrow(ret), 6)
     expect_equal(ncol(ret), 3)
+    expect_equal(all(ret$se > 0), TRUE)
 })
 
 test_that("mutual_mrc same as mutual_total", {

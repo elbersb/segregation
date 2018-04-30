@@ -47,7 +47,7 @@ Returns a data frame with two rows. The column \code{est} contains
 }
 \description{
 Returns the total segregation between \code{group} and \code{unit}.
-If \code{within} is given, calculates segregation within each 
+If \code{within} is given, calculates segregation within each
 \code{within} category separately, and takes the weighted average.
 Also see \code{\link{mutual_within}} for detailed within calculations.
 }
@@ -81,6 +81,6 @@ mutual_total(schools00, "race", "district", weight="n") # M => .338
 \references{
 Henri Theil. 1971. Principles of Econometrics. New York: Wiley.
 
-Ricardo Mora and Javier Ruiz-Castillo. 2011. 
+Ricardo Mora and Javier Ruiz-Castillo. 2011.
      "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
 }

@@ -198,6 +198,8 @@ mutual_total <- function(data, group, unit, within = NULL,
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{10})
 #' @param base Base of the logarithm that is used in the calculation.
 #'   Defaults to the natural logarithm.
+#' @param wide Returns a wide dataframe instead of a long dataframe.
+#'   (Default \code{FALSE})
 #' @return Returns a data frame with four rows for each category defined by \code{within}.
 #'   The column \code{est} contains four statistics that
 #'   are provided for each unit:
@@ -211,13 +213,16 @@ mutual_total <- function(data, group, unit, within = NULL,
 #'   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
 #'   the associated bootstrapped standard errors, and the column \code{est} contains
 #'   bootstrapped estimates.
+#'   If \code{wide} is set to \code{TRUE}, returns instead a wide dataframe, with one
+#'   row for each \code{within} category, and the associated statistics in separate columns.
 #' @references
 #' Henri Theil. 1971. Principles of Econometrics. New York: Wiley.
 #'
 #' Ricardo Mora and Javier Ruiz-Castillo. 2011.
 #'      "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
 #' @examples
-#' (within <- mutual_within(schools00, "race", "school", within = "state", weight = "n"))
+#' (within <- mutual_within(schools00, "race", "school", within = "state",
+#'                          weight = "n", wide = TRUE))
 #' # the M for "AL" is .409
 #' # manual calculation
 #' schools_AL <- schools00[schools00$state=="AL",]
@@ -225,15 +230,15 @@ mutual_total <- function(data, group, unit, within = NULL,
 #'
 #' # to recover the within M and H from the output, multiply
 #' # p * M and h_weight * H, respectively
-#' within = unstack(within, form=est ~ stat) # to wide format
 #' sum(within$p * within$M) # => .326
 #' sum(within$H * within$h_weight) # => .321
-#' # compare with
+#' # compare with:
 #' mutual_total(schools00, "race", "school", within = "state", weight = "n")
 #' @import data.table
 #' @export
 mutual_within <- function(data, group, unit, within,
-                         weight = NULL, se = FALSE, n_bootstrap = 10, base = exp(1)) {
+                         weight = NULL, se = FALSE, n_bootstrap = 10, base = exp(1),
+                         wide = FALSE) {
     d <- prepare_data(data, group, unit, weight, within)
 
     if (se == FALSE) {
@@ -256,6 +261,23 @@ mutual_within <- function(data, group, unit, within,
             est = mean(est), se = stats::sd(est)),
             by = c(within, "stat")]
     }
+
+    if(wide == TRUE) {
+        f <- stats::as.formula(paste(within,
+                                     "~ factor(stat, levels=c('M', 'p', 'H', 'h_weight'))"))
+        if(se == TRUE) {
+            ret <- dcast(ret, f, value.var=c('est', 'se'))
+            names(ret) <- c(within,
+                            "M", "p", "H", "h_weight",
+                            "M_se", "p_se", "H_se", "h_weight_se")
+            setcolorder(ret, c(within,
+                               "M", "M_se", "p", "p_se",
+                               "H", "H_se", "h_weight", "h_weight_se"))
+        } else {
+            ret <- dcast(ret, f, value.var=c('est'))
+        }
+    }
+
     as_tibble_or_df(ret)
 }
 
@@ -301,6 +323,8 @@ mutual_local_compute <- function(data, group, unit, base = exp(1)) {
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{10})
 #' @param base Base of the logarithm that is used in the calculation.
 #'   Defaults to the natural logarithm.
+#' @param wide Returns a wide dataframe instead of a long dataframe.
+#'   (Default \code{FALSE})
 #' @return Returns a data frame with two rows for each category defined by \code{unit},
 #'   for a total of \code{2*(number of units)} rows. The column \code{est} contains two statistics that
 #'   are provided for each unit: \code{ls}, the local segregation score, and
@@ -308,6 +332,8 @@ mutual_local_compute <- function(data, group, unit, base = exp(1)) {
 #'   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
 #'   the associated bootstrapped standard errors, and the column \code{est} contains
 #'   bootstrapped estimates.
+#'   If \code{wide} is set to \code{TRUE}, returns instead a wide dataframe, with one
+#'   row for each \code{unit}, and the associated statistics in separate columns.
 #' @references
 #' Henri Theil. 1971. Principles of Econometrics. New York: Wiley.
 #'
@@ -315,21 +341,20 @@ mutual_local_compute <- function(data, group, unit, base = exp(1)) {
 #'   "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
 #' @examples
 #' # which racial groups are most segregated?
-#' (localseg = mutual_local(schools00, "school", "race", weight="n"))
-#' # native americans are most segregated, whites are least segregated.
+#' (localseg = mutual_local(schools00, "school", "race",
+#'                          weight="n", wide = TRUE))
 #'
-#' sum(localseg[localseg["stat"]=="p", "est"]) # => 1
+#' sum(localseg$p) # => 1
 #'
 #' # the sum of the weighted local segregation scores equals
 #' # total segregation
-#' ls <- localseg[localseg["stat"]=="ls", "est"]
-#' p <- localseg[localseg["stat"]=="p", "est"]
-#' sum(ls * p) # => .425
+#' sum(localseg$ls * localseg$p) # => .425
 #' mutual_total(schools00, "school", "race", weight="n") # M => .425
 #' @import data.table
 #' @export
 mutual_local <- function(data, group, unit, weight = NULL,
-                         se = FALSE, n_bootstrap = 10, base = exp(1)) {
+                         se = FALSE, n_bootstrap = 10, base = exp(1),
+                         wide = FALSE) {
     d <- prepare_data(data, group, unit, weight)
 
     if (se == FALSE) {
@@ -352,6 +377,17 @@ mutual_local <- function(data, group, unit, weight = NULL,
             est = mean(est), se = stats::sd(est)),
             by = c(unit, "stat")]
     }
-    # sort and return as data frame
+
+    if(wide == TRUE) {
+        f <- stats::as.formula(paste(unit, "~ factor(stat, levels=c('ls', 'p'))"))
+        if(se == TRUE) {
+            ret <- dcast(ret, f, value.var=c('est', 'se'))
+            names(ret) <- c(unit, "ls", "p", "ls_se", "p_se")
+            setcolorder(ret, c(unit, "ls", "ls_se", "p", "p_se"))
+        } else {
+            ret <- dcast(ret, f, value.var=c('est'))
+        }
+    }
+
     as_tibble_or_df(ret)
 }

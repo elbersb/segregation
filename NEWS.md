@@ -4,6 +4,7 @@ Development version
 * add Theil's Information Index (H) 
 * add entropy function
 * add mutual_within function to decompose weighted within indices
+* add "wide" option to mutual_local and mutual_within
 
 v0.0.1
 ======

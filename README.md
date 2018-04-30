@@ -52,7 +52,8 @@ mutual_total(schools00, "race", "school", weight = "n", se = TRUE)
 #> 2 H     0.422 0.000985
 ```
 
-Decompose segregation into a between-state and a within-state term:
+Decompose segregation into a between-state and a within-state term (the
+sum of these equals total segregation):
 
 ``` r
 # between states
@@ -77,29 +78,27 @@ groups). The sum of the proportion-weighted local segregation scores
 equals M:
 
 ``` r
-mutual_local(schools00, group = "school", unit = "race", weight = "n", se = TRUE)
+(local <- mutual_local(schools00, group = "school", unit = "race", weight = "n", 
+             se = TRUE, wide = TRUE))
 #> ..........
-#> # A tibble: 10 x 4
-#>    race   stat      est       se
-#>    <fct>  <chr>   <dbl>    <dbl>
-#>  1 white  ls    0.184   0.000725
-#>  2 black  ls    0.885   0.00259 
-#>  3 hisp   ls    0.782   0.00258 
-#>  4 native ls    1.53    0.0229  
-#>  5 asian  ls    0.667   0.00674 
-#>  6 white  p     0.628   0.000687
-#>  7 black  p     0.190   0.000465
-#>  8 hisp   p     0.152   0.000317
-#>  9 native p     0.00745 0.000135
-#> 10 asian  p     0.0226  0.000124
+#> # A tibble: 5 x 5
+#>   race      ls    ls_se       p     p_se
+#>   <fct>  <dbl>    <dbl>   <dbl>    <dbl>
+#> 1 asian  0.667 0.00674  0.0226  0.000124
+#> 2 black  0.885 0.00259  0.190   0.000465
+#> 3 hisp   0.782 0.00258  0.152   0.000317
+#> 4 white  0.184 0.000725 0.628   0.000687
+#> 5 native 1.53  0.0229   0.00745 0.000135
+
+sum(local$p * local$ls)
+#> [1] 0.429
 ```
 
 Decompose the difference in M between 2000 and 2005, using the method
 developed by Mora and Ruiz-Castillo (2009):
 
 ``` r
-mutual_difference(schools00, schools05,
-                  group = "race", unit = "school",
+mutual_difference(schools00, schools05, group = "race", unit = "school",
                   weight = "n", method = "mrc")
 #> # A tibble: 6 x 2
 #>   stat                est
