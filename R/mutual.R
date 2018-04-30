@@ -10,7 +10,7 @@ mutual_total_compute <- function(data, group, unit, base) {
         p_unit = first(p_unit),
         entropy_cond = sum(p_group_g_unit * logf(1 / p_group_g_unit, base))),
         by = unit]
-    
+
     # compute total entropies
     p <- data[, list(p = sum(freq)), by = group][["p"]] / n_total
     entropy_group = sum(p * logf(1/p, base))
@@ -78,7 +78,7 @@ mutual_total_within_compute <- function(data, group, unit, within, base,
 #' Calculate total segregation for M and H
 #'
 #' Returns the total segregation between \code{group} and \code{unit}.
-#' If \code{within} is given, calculates segregation within each 
+#' If \code{within} is given, calculates segregation within each
 #' \code{within} category separately, and takes the weighted average.
 #' Also see \code{\link{mutual_within}} for detailed within calculations.
 #'
@@ -112,7 +112,7 @@ mutual_total_within_compute <- function(data, group, unit, within, base,
 #' @references
 #' Henri Theil. 1971. Principles of Econometrics. New York: Wiley.
 #'
-#' Ricardo Mora and Javier Ruiz-Castillo. 2011. 
+#' Ricardo Mora and Javier Ruiz-Castillo. 2011.
 #'      "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
 #' @examples
 #' # calculate school racial segregation
@@ -200,21 +200,21 @@ mutual_total <- function(data, group, unit, within = NULL,
 #'   Defaults to the natural logarithm.
 #' @return Returns a data frame with four rows for each category defined by \code{within}.
 #'   The column \code{est} contains four statistics that
-#'   are provided for each unit: 
+#'   are provided for each unit:
 #'   \code{M} is the within-category M, and \code{p} is the proportion of the category.
 #'   Multiplying \code{M} and \code{p} gives the contribution of each within-category
 #'   towards the total M.
-#'   \code{H} is the within-category H, and \code{h_weight} provides the weight. 
+#'   \code{H} is the within-category H, and \code{h_weight} provides the weight.
 #'   Multiplying \code{H} and \code{h_weight} gives the contribution of each within-category
 #'   towards the total H. \code{h_weight} is defined as \code{p * EW/E}, where \code{EW} is the
-#'   within-category entropy, and \code{E} is the overall entropy. 
+#'   within-category entropy, and \code{E} is the overall entropy.
 #'   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
 #'   the associated bootstrapped standard errors, and the column \code{est} contains
 #'   bootstrapped estimates.
 #' @references
 #' Henri Theil. 1971. Principles of Econometrics. New York: Wiley.
 #'
-#' Ricardo Mora and Javier Ruiz-Castillo. 2011. 
+#' Ricardo Mora and Javier Ruiz-Castillo. 2011.
 #'      "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
 #' @examples
 #' (within <- mutual_within(schools00, "race", "school", within = "state", weight = "n"))
@@ -222,13 +222,13 @@ mutual_total <- function(data, group, unit, within = NULL,
 #' # manual calculation
 #' schools_AL <- schools00[schools00$state=="AL",]
 #' mutual_total(schools_AL, "race", "school", weight = "n") # M => .409
-#' 
+#'
 #' # to recover the within M and H from the output, multiply
 #' # p * M and h_weight * H, respectively
 #' within = unstack(within, form=est ~ stat) # to wide format
 #' sum(within$p * within$M) # => .326
 #' sum(within$H * within$h_weight) # => .321
-#' # compare with 
+#' # compare with
 #' mutual_total(schools00, "race", "school", within = "state", weight = "n")
 #' @import data.table
 #' @export
@@ -247,7 +247,7 @@ mutual_within <- function(data, group, unit, within,
             resampled <- d[
                 sample(.N, n_total, replace = TRUE, prob = freq)][,
                 list(freq = .N), by = vars]
-            mutual_total_within_compute(d, group, unit, within, base, components = TRUE)
+            mutual_total_within_compute(resampled, group, unit, within, base, components = TRUE)
         })
         cat("\n")
         boot_ret <- rbindlist(boot_ret)
