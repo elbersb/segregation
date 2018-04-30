@@ -48,6 +48,12 @@ as_tibble_or_df <- function(data) {
     }
 }
 
+logf <- function(v, base) {
+    if(missing(base)) { stop("argument base required") }
+    v <- v[v > 0]
+    log(v, base=base)
+}
+
 #' Calculates the entropy of a distribution
 #'
 #' Returns the entropy of the distribution defined by
@@ -81,7 +87,7 @@ entropy <- function(data, group, weight = NULL, base = exp(1)) {
     setDT(data)
     n_total <- sum(data[, "freq"])
     p <- data[, list(p=sum(freq)), by=group][["p"]] / n_total
-    sum(p * log(1/p, base))
+    sum(p * logf(1/p, base))
 }
 
 

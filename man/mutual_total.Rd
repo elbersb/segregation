@@ -5,7 +5,7 @@
 \title{Calculate total segregation for M and H}
 \usage{
 mutual_total(data, group, unit, within = NULL, weight = NULL, se = FALSE,
-  n_bootstrap = 10)
+  n_bootstrap = 10, base = exp(1))
 }
 \arguments{
 \item{data}{A data frame.}
@@ -32,6 +32,9 @@ computed within the groups defined by the variable, and then averaged.
 (Default \code{FALSE})}
 
 \item{n_bootstrap}{Number of bootstrap iterations. (Default \code{10})}
+
+\item{base}{Base of the logarithm that is used in the calculation.
+Defaults to the natural logarithm.}
 }
 \value{
 Returns a data frame with two rows. The column \code{est} contains

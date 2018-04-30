@@ -10,6 +10,7 @@ test_data <- data.frame(
 local <- mutual_local(test_data, "u", "g", weight = "n")
 local2 <- mutual_local(test_data, "g", "u", weight = "n")
 localse <- mutual_local(test_data, "u", "g", weight = "n", se = TRUE, n_bootstrap = 10)
+localbase2 <- mutual_local(test_data, "g", "u", weight = "n", base = 2)
 
 test_that("local calculation works", {
     expect_equal(sum(local[local$stat=="p", "est"]), 1)
@@ -23,6 +24,10 @@ test_that("local calculation works", {
     expect_equal(
         sum(local[local$stat=="M_unit", "est"]),
         mutual_total(test_data, "u", "g", weight = "n")[["M", "est"]]
+    )
+    expect_equal(
+        sum(localbase2[localbase2$stat=="M_unit", "est"]),
+        mutual_total(test_data, "u", "g", weight = "n", base = 2)[["M", "est"]]
     )
 })
 

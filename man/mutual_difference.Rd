@@ -5,7 +5,7 @@
 \title{Decomposes the difference between two M indices}
 \usage{
 mutual_difference(data1, data2, group, unit, weight = NULL, method = "mrc",
-  se = FALSE, n_bootstrap = 50)
+  se = FALSE, n_bootstrap = 50, base = exp(1))
 }
 \arguments{
 \item{data1}{A data frame with same structure as \code{data2}.}
@@ -29,6 +29,9 @@ over which segregation is computed.}
 (Default \code{FALSE})}
 
 \item{n_bootstrap}{Number of bootstrap iterations. (Default \code{50})}
+
+\item{base}{Base of the logarithm that is used in the calculation.
+Defaults to the natural logarithm.}
 }
 \value{
 Returns a data frame with columns \code{stat} and \code{est}. The data frame contains

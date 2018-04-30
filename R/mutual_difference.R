@@ -16,7 +16,8 @@
 #' @param se If \code{TRUE}, standard errors are estimated via bootstrap.
 #'   (Default \code{FALSE})
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{50})
-#'
+#' @param base Base of the logarithm that is used in the calculation.
+#'   Defaults to the natural logarithm.
 #' @return Returns a data frame with columns \code{stat} and \code{est}. The data frame contains
 #'   the following rows defined by \code{stat}:
 #'   \code{M1} contains the M for \code{data1}.
@@ -40,7 +41,7 @@
 #' @export
 mutual_difference <- function(data1, data2, group, unit,
                               weight = NULL, method = "mrc",
-                              se = FALSE, n_bootstrap = 50) {
+                              se = FALSE, n_bootstrap = 50, base = exp(1)) {
     if(method == "mrc") {
         method = mutual_difference_mrc_compute
     } else {
@@ -51,7 +52,7 @@ mutual_difference <- function(data1, data2, group, unit,
     d2 <- prepare_data(data2, group, unit, weight)
 
     if (se == FALSE) {
-        ret <- method(d1, d2, group, unit)
+        ret <- method(d1, d2, group, unit, base)
     } else {
         vars <- attr(d1, "vars")
         n_total1 <- sum(d1[, "freq"])
@@ -65,7 +66,7 @@ mutual_difference <- function(data1, data2, group, unit,
             resampled2 <- d2[
                 sample(.N, n_total2, replace = TRUE, prob = freq)][,
                 list(freq = .N), by = vars]
-            method(resampled1, resampled2, group, unit)
+            method(resampled1, resampled2, group, unit, base)
         })
         cat("\n")
         boot_ret <- rbindlist(boot_ret)
@@ -78,14 +79,14 @@ mutual_difference <- function(data1, data2, group, unit,
 }
 
 #' @import data.table
-mutual_difference_mrc_compute <- function(d1, d2, group, unit) {
+mutual_difference_mrc_compute <- function(d1, d2, group, unit, base) {
     n_total1 <- sum(d1$freq)
     n_total2 <- sum(d2$freq)
 
     p_unit1 <- d1[, list(p_unit = sum(freq) / n_total1), by = unit][, p_unit]
     p_unit2 <- d2[, list(p_unit = sum(freq) / n_total2), by = unit][, p_unit]
-    entropy_unit1 <- sum(p_unit1 * log(1/p_unit1))
-    entropy_unit2 <- sum(p_unit2 * log(1/p_unit2))
+    entropy_unit1 <- sum(p_unit1 * logf(1/p_unit1, base))
+    entropy_unit2 <- sum(p_unit2 * logf(1/p_unit2, base))
     unit_entropy <- entropy_unit2 - entropy_unit1
 
     d1[, `:=`(n_group = sum(freq)), by = group]
@@ -102,10 +103,10 @@ mutual_difference_mrc_compute <- function(d1, d2, group, unit) {
     setkeyv(d2, c(group, unit))
 
     joined <- merge(d1, d2, all=TRUE)[, list(
-        sumcond1 = sum(p_unit_g_group1 * log(p_unit_g_group1), na.rm = TRUE),
-        sumcond2 = sum(p_unit_g_group2 * log(p_unit_g_group2), na.rm = TRUE),
-        entropy_cond1 = sum(p_unit_g_group1 * log(1 / p_unit_g_group1), na.rm = TRUE),
-        entropy_cond2 = sum(p_unit_g_group2 * log(1 / p_unit_g_group2), na.rm = TRUE),
+        sumcond1 = sum(p_unit_g_group1 * logf(p_unit_g_group1, base), na.rm = TRUE),
+        sumcond2 = sum(p_unit_g_group2 * logf(p_unit_g_group2, base), na.rm = TRUE),
+        entropy_cond1 = sum(p_unit_g_group1 * logf(1 / p_unit_g_group1, base), na.rm = TRUE),
+        entropy_cond2 = sum(p_unit_g_group2 * logf(1 / p_unit_g_group2, base), na.rm = TRUE),
         p_group1 = mean(p_group1, na.rm = TRUE),
         p_group2 = mean(p_group2, na.rm = TRUE)), by=group]
     joined[, p_group1:=ifelse(is.na(p_group1), 0, p_group1)]

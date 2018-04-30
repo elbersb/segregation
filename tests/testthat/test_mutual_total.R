@@ -15,6 +15,11 @@ test_that("mutual M works both ways around", {
     )
 
     expect_equal(
+        mutual_total(test_data, "u", "g", weight = "n", base = 2)[["M", "est"]],
+        mutual_total(test_data, "g", "u", weight = "n", base = 2)[["M", "est"]]
+    )
+
+    expect_equal(
         mutual_total(test_data, "u", c("supergroup", "g"), weight = "n")[["M", "est"]],
         mutual_total(test_data, "u", "g", weight = "n")[["M", "est"]]
     )
@@ -63,5 +68,13 @@ test_data <- data.frame(
 test_that("zero weights no problem", {
     expect_equal(dim(mutual_total(test_data, "u", "g", weight = "n", se = TRUE)), c(2, 3))
     expect_equal(dim(mutual_total(test_data, "u", "g", weight = "n")), c(2, 2))
+
+    test_data2 <- copy(test_data)
+    test_data2$g <- as.factor(test_data2$g)
+    expect_equal(
+        mutual_total(test_data, "u", "g", weight = "n")[["est"]],
+        mutual_total(test_data2, "u", "g", weight = "n")[["est"]])
 })
+
+
 

@@ -27,6 +27,11 @@ test_that("mutual_difference", {
 
     expect_equal(nrow(ret), 6)
     expect_equal(ncol(ret), 2)
+
+    ret = mutual_difference(test_data1, test_data2, "g", "u", weight = "n", method = "mrc", base = 2)
+    expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
+    expect_equal(nrow(ret), 6)
+    expect_equal(ncol(ret), 2)
 })
 
 test_that("mutual_difference SE", {

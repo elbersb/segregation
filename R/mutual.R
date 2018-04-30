@@ -1,13 +1,13 @@
 
 #' @import data.table
-mutual_total_compute <- function(data, group, unit, within) {
+mutual_total_compute <- function(data, group, unit, within, base) {
     # calculate totals
     n_total <- sum(data$freq)
     n_within <- data[, list(n_within_group = sum(freq)), by = c(within, group)]
     n_within[, `:=`(n_within = sum(n_within_group)), by = within]
     # calculate proportions and entropy for each within unit
     n_within[, `:=`(p_within = n_within / n_total, p = n_within_group / n_within)]
-    entropy <- n_within[, list(entropyw = sum(p * log(1 / p)), p_within = first(p_within)),
+    entropy <- n_within[, list(entropyw = sum(p * logf(1 / p, base)), p_within = first(p_within)),
                         by = within
                         ]
     setkeyv(entropy, within)
@@ -20,13 +20,13 @@ mutual_total_compute <- function(data, group, unit, within) {
     # calculate entropy within groups
     by_unit <- data[, list(
         p_unit = first(p_unit),
-        entropy_cond = sum(p_group_g_unit * log(1 / p_group_g_unit))),
+        entropy_cond = sum(p_group_g_unit * logf(1 / p_group_g_unit, base))),
         by = c(within, unit)]
     setkeyv(by_unit, within)
 
     # compute total entropy
     p <- data[, list(p=sum(freq)), by=group][["p"]] / n_total
-    entropy_overall = sum(p*log(1/p))
+    entropy_overall = sum(p * logf(1/p, base))
 
     # merge within entropy, and compare to group entropy
     by_unit <- merge(by_unit, entropy)
@@ -67,7 +67,8 @@ mutual_total_compute <- function(data, group, unit, within) {
 #' @param se If \code{TRUE}, standard errors are estimated via bootstrap.
 #'   (Default \code{FALSE})
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{10})
-#'
+#' @param base Base of the logarithm that is used in the calculation.
+#'   Defaults to the natural logarithm.
 #' @return Returns a data frame with two rows. The column \code{est} contains
 #'   the Mutual Information Index, M, and Theil's Entropy Index, H. The H is the
 #'   the M divided by the \code{group} entropy.
@@ -107,7 +108,7 @@ mutual_total_compute <- function(data, group, unit, within) {
 #' @import data.table
 #' @export
 mutual_total <- function(data, group, unit, within = NULL,
-                         weight = NULL, se = FALSE, n_bootstrap = 10) {
+                         weight = NULL, se = FALSE, n_bootstrap = 10, base = exp(1)) {
     # define as a dummy variable that is equal for all cases
     if (is.null(within)) {
         within <- "within_dummy"
@@ -115,7 +116,7 @@ mutual_total <- function(data, group, unit, within = NULL,
     d <- prepare_data(data, group, unit, weight, within = within)
 
     if (se == FALSE) {
-        ret <- mutual_total_compute(d, group, unit, within)
+        ret <- mutual_total_compute(d, group, unit, within, base)
     } else {
         vars <- attr(d, "vars")
         n_total <- sum(d[, "freq"])
@@ -125,7 +126,7 @@ mutual_total <- function(data, group, unit, within = NULL,
             resampled <- d[
                 sample(.N, n_total, replace = TRUE, prob = freq)][,
                 list(freq = .N), by = vars]
-            mutual_total_compute(resampled, group, unit, within)
+            mutual_total_compute(resampled, group, unit, within, base)
         })
         cat("\n")
         boot_ret <- rbindlist(boot_ret)
@@ -138,7 +139,7 @@ mutual_total <- function(data, group, unit, within = NULL,
 }
 
 #' @import data.table
-mutual_local_compute <- function(data, group, unit) {
+mutual_local_compute <- function(data, group, unit, base = exp(1)) {
     # generate unit and group totals
     n_total <- sum(data$freq)
     data[, `:=`(n_unit, sum(freq)), by = unit]
@@ -151,7 +152,7 @@ mutual_local_compute <- function(data, group, unit) {
         p_group_g_unit = freq / n_unit
     )]
     # calculate local linkage, i.e. log(cond.) * log(cond./marginal)
-    data[, `:=`(ll_part = p_group_g_unit * log(p_group_g_unit / p_group))]
+    data[, `:=`(ll_part = p_group_g_unit * logf(p_group_g_unit / p_group, base))]
     local <- data[, list(ls = sum(ll_part), p = first(p_unit)), by = unit]
     # calculate contribution to linkage linkage
     local[, `:=`(M_unit = ls * p)]
@@ -178,6 +179,8 @@ mutual_local_compute <- function(data, group, unit) {
 #' @param se If \code{TRUE}, standard errors are estimated via bootstrap.
 #'   (Default \code{FALSE})
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{10})
+#' @param base Base of the logarithm that is used in the calculation.
+#'   Defaults to the natural logarithm.
 #' @return Returns a data frame with three rows for each category defined by \code{unit},
 #'   for a total of \code{3*(number of units)} rows. The column \code{est} defines three statistics that
 #'   are provided for each unit: \code{ls}, the local segregation score,
@@ -204,11 +207,12 @@ mutual_local_compute <- function(data, group, unit) {
 #' sum(localseg[localseg["stat"]=="M_unit", "est"]) # => .425
 #' @import data.table
 #' @export
-mutual_local <- function(data, group, unit, weight = NULL, se = FALSE, n_bootstrap = 10) {
+mutual_local <- function(data, group, unit, weight = NULL,
+                         se = FALSE, n_bootstrap = 10, base = exp(1)) {
     d <- prepare_data(data, group, unit, weight)
 
     if (se == FALSE) {
-        ret <- mutual_local_compute(d, group, unit)
+        ret <- mutual_local_compute(d, group, unit, base)
     } else {
         vars <- attr(d, "vars")
         n_total <- sum(d[, "freq"])
@@ -218,7 +222,7 @@ mutual_local <- function(data, group, unit, weight = NULL, se = FALSE, n_bootstr
             resampled <- d[
                 sample(.N, n_total, replace = TRUE, prob = freq)][,
                 list(freq = .N), by = vars]
-            mutual_local_compute(resampled, group, unit)
+            mutual_local_compute(resampled, group, unit, base)
         })
         cat("\n")
         boot_ret <- rbindlist(boot_ret)
