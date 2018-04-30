@@ -2,6 +2,12 @@
 segregation
 ===========
 
+[![CRAN
+Version](https://www.r-pkg.org/badges/version/segregation)](https://CRAN.R-project.org/package=segregation)
+[![Build
+Status](https://travis-ci.org/elbersb/segregation.svg?branch=master)](https://travis-ci.org/elbersb/segregation)
+[![codecov](https://codecov.io/gh/elbersb/segregation/branch/master/graph/badge.svg)](https://codecov.io/gh/elbersb/segregation)
+
 An R package to calculate and decompose entropy-based, multigroup
 segregation indices, with a focus on the Mutual Information Index (M)
 and Theil’s Information Index (H).
