@@ -256,9 +256,6 @@ mutual_within <- function(data, group, unit, within,
             est = mean(est), se = stats::sd(est)),
             by = c(within, "stat")]
     }
-
-    f = as.formula(paste(within, '~ stat'))
-    dcast(ret, f, value.var=c('est', 'se'))
     as_tibble_or_df(ret)
 }
 
