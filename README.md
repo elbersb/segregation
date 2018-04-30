@@ -40,7 +40,7 @@ mutual_total(schools00, "race", "school", weight = "n")
 #> 2 H     0.419
 ```
 
-Standard errors can be estimated via boostrapping:
+Standard errors in all functions can be estimated via boostrapping:
 
 ``` r
 mutual_total(schools00, "race", "school", weight = "n", se = TRUE)
@@ -52,30 +52,46 @@ mutual_total(schools00, "race", "school", weight = "n", se = TRUE)
 #> 2 H     0.422 0.000985
 ```
 
-Local segregation (`ls`) is a decomposition by units (here racial
-groups), which aggregate to the M index:
+Decompose segregation into a between-state and a within-state term:
 
 ``` r
-mutual_local(schools00, group="school", unit="race", weight = "n", se = TRUE)
+# between states
+mutual_total(schools00, "race", "state", weight = "n")
+#> # A tibble: 2 x 2
+#>   stat     est
+#> * <chr>  <dbl>
+#> 1 M     0.0992
+#> 2 H     0.0977
+
+# within states
+mutual_total(schools00, "race", "school", within = "state", weight = "n")
+#> # A tibble: 2 x 2
+#>   stat    est
+#> * <chr> <dbl>
+#> 1 M     0.326
+#> 2 H     0.321
+```
+
+Local segregation (`ls`) is a decomposition by units (here racial
+groups). The sum of the proportion-weighted local segregation scores
+equals M:
+
+``` r
+mutual_local(schools00, group = "school", unit = "race", weight = "n", se = TRUE)
 #> ..........
-#> # A tibble: 15 x 4
-#>    race   stat       est       se
-#>    <fct>  <fct>    <dbl>    <dbl>
-#>  1 asian  ls     0.667   0.00674 
-#>  2 black  ls     0.885   0.00259 
-#>  3 hisp   ls     0.782   0.00258 
-#>  4 white  ls     0.184   0.000725
-#>  5 native ls     1.53    0.0229  
-#>  6 asian  p      0.0226  0.000124
-#>  7 black  p      0.190   0.000465
-#>  8 hisp   p      0.152   0.000317
-#>  9 white  p      0.628   0.000687
-#> 10 native p      0.00745 0.000135
-#> 11 asian  M_unit 0.0151  0.000193
-#> 12 black  M_unit 0.168   0.000354
-#> 13 hisp   M_unit 0.119   0.000336
-#> 14 white  M_unit 0.116   0.000357
-#> 15 native M_unit 0.0114  0.000101
+#> # A tibble: 10 x 4
+#>    race   stat      est       se
+#>    <fct>  <chr>   <dbl>    <dbl>
+#>  1 white  ls    0.184   0.000725
+#>  2 black  ls    0.885   0.00259 
+#>  3 hisp   ls    0.782   0.00258 
+#>  4 native ls    1.53    0.0229  
+#>  5 asian  ls    0.667   0.00674 
+#>  6 white  p     0.628   0.000687
+#>  7 black  p     0.190   0.000465
+#>  8 hisp   p     0.152   0.000317
+#>  9 native p     0.00745 0.000135
+#> 10 asian  p     0.0226  0.000124
 ```
 
 Decompose the difference in M between 2000 and 2005, using the method
@@ -83,7 +99,7 @@ developed by Mora and Ruiz-Castillo (2009):
 
 ``` r
 mutual_difference(schools00, schools05,
-                  group="race", unit="school",
+                  group = "race", unit = "school",
                   weight = "n", method = "mrc")
 #> # A tibble: 6 x 2
 #>   stat                est

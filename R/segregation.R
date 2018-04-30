@@ -9,6 +9,7 @@
 #'
 #' \itemize{
 #'  \item{}{\code{\link{mutual_total}} Computes M and H.}
+#'  \item{}{\code{\link{mutual_within}} Computes detailed within-category segregation.}
 #'  \item{}{\code{\link{mutual_local}} Computes local segregation based on M.}
 #'  \item{}{\code{\link{mutual_difference}} Decomposes difference between two M indices.}
 #'  \item{}{\code{\link{entropy}} Calculates the entropy of a distribution.}
@@ -86,7 +87,7 @@ entropy <- function(data, group, weight = NULL, base = exp(1)) {
     }
     setDT(data)
     n_total <- sum(data[, "freq"])
-    p <- data[, list(p=sum(freq)), by=group][["p"]] / n_total
+    p <- data[, list(p = sum(freq)), by = group][["p"]] / n_total
     sum(p * logf(1/p, base))
 }
 
@@ -95,18 +96,14 @@ entropy <- function(data, group, weight = NULL, base = exp(1)) {
 prepare_data <- function(data, group, unit, weight, within = NULL) {
     vars <- c(group, unit)
 
-    # use provided frequency weight
+    # use provided frequency weight or weight of 1
     if (!is.null(weight)) {
         data[, "freq"] <- data[, weight]
     } else {
         data[, "freq"] <- 1
     }
 
-    # if within is not set, make up one that applies to the whole dataset
     if (!is.null(within)) {
-        if (within == "within_dummy") {
-            data[, within] <- 1
-        }
         vars <- c(vars, within)
     }
 

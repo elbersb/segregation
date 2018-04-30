@@ -53,17 +53,22 @@ test_that("between + within = total", {
 
 p_12 <- sum(test_data[test_data$supergroup == 12, "n"]) / sum(test_data$n)
 p_34 <- sum(test_data[test_data$supergroup == 34, "n"]) / sum(test_data$n)
-test_that("within estimations is correct", {
+test_that("within estimations are correct", {
     expect_equal(
         p_12 * mutual_total(test_data[test_data$supergroup == 12, ], "u", "g", weight = "n")[["M", "est"]] +
             p_34 * mutual_total(test_data[test_data$supergroup == 34, ], "u", "g", weight = "n")[["M", "est"]],
         mutual_total(test_data, "u", "g", within = "supergroup", weight = "n")[["M", "est"]]
     )
-    # this decomposition does not exist for H
+    # this decomposition does not exist in the same way for H
+})
+
+test_that("H is correct", {
+    ret <- mutual_total(test_data, "u", "g", weight = "n")
+    expect_equal(ret[["H", "est"]] >= 0 & ret[["H", "est"]] <= 1, TRUE)
 })
 
 test_that("bootstrapping works", {
-    ret = mutual_total(test_data, "u", "g", weight = "n", se = TRUE, n_bootstrap = 5)
+    ret <- mutual_total(test_data, "u", "g", weight = "n", se = TRUE, n_bootstrap = 5)
     expect_equal(dim(ret), c(2, 3))
 })
 

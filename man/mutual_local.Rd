@@ -30,11 +30,10 @@ segregation indices are calculated.}
 Defaults to the natural logarithm.}
 }
 \value{
-Returns a data frame with three rows for each category defined by \code{unit},
-  for a total of \code{3*(number of units)} rows. The column \code{est} defines three statistics that
-  are provided for each unit: \code{ls}, the local segregation score,
-  \code{p}, the proportion of the unit from the total number of cases, and
-  \code{M_unit}, the product of \code{ls} and \code{p}.
+Returns a data frame with two rows for each category defined by \code{unit},
+  for a total of \code{2*(number of units)} rows. The column \code{est} contains two statistics that
+  are provided for each unit: \code{ls}, the local segregation score, and
+  \code{p}, the proportion of the unit from the total number of cases.
   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
   the associated bootstrapped standard errors, and the column \code{est} contains
   bootstrapped estimates.
@@ -52,8 +51,10 @@ sum(localseg[localseg["stat"]=="p", "est"]) # => 1
 
 # the sum of the weighted local segregation scores equals
 # total segregation
+ls <- localseg[localseg["stat"]=="ls", "est"]
+p <- localseg[localseg["stat"]=="p", "est"]
+sum(ls * p) # => .425
 mutual_total(schools00, "school", "race", weight="n") # M => .425
-sum(localseg[localseg["stat"]=="M_unit", "est"]) # => .425
 }
 \references{
 Henri Theil. 1971. Principles of Econometrics. New York: Wiley.

@@ -39,13 +39,17 @@ Defaults to the natural logarithm.}
 \value{
 Returns a data frame with two rows. The column \code{est} contains
   the Mutual Information Index, M, and Theil's Entropy Index, H. The H is the
-  the M divided by the \code{group} entropy.
+  the M divided by the \code{group} entropy. If \code{within} was given,
+  M and H are weighted averages of the within-category segregation scores.
   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
   the associated bootstrapped standard errors, and the column \code{est} contains
   bootstrapped estimates.
 }
 \description{
 Returns the total segregation between \code{group} and \code{unit}.
+If \code{within} is given, calculates segregation within each 
+\code{within} category separately, and takes the weighted average.
+Also see \code{\link{mutual_within}} for detailed within calculations.
 }
 \examples{
 # calculate school racial segregation
@@ -77,5 +81,6 @@ mutual_total(schools00, "race", "district", weight="n") # M => .338
 \references{
 Henri Theil. 1971. Principles of Econometrics. New York: Wiley.
 
-Ricardo Mora and Javier Ruiz-Castillo. 2011. "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
+Ricardo Mora and Javier Ruiz-Castillo. 2011. 
+     "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
 }

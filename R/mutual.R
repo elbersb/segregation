@@ -1,8 +1,32 @@
+#' @import data.table
+mutual_total_compute <- function(data, group, unit, base) {
+    # calculate totals
+    n_total = sum(data[, "freq"])
+    data[, `:=`(n_unit = sum(freq)), by = unit]
+    data[, `:=`(p_unit = n_unit / n_total, p_group_g_unit = freq / n_unit)]
+
+    # calculate entropy within units
+    by_unit <- data[, list(
+        p_unit = first(p_unit),
+        entropy_cond = sum(p_group_g_unit * logf(1 / p_group_g_unit, base))),
+        by = unit]
+    
+    # compute total entropies
+    p <- data[, list(p = sum(freq)), by = group][["p"]] / n_total
+    entropy_group = sum(p * logf(1/p, base))
+
+    # merge within entropy, and compare to group entropy
+    M <- sum(by_unit$p_unit * (entropy_group - by_unit$entropy_cond))
+    H <- M / entropy_group
+
+    data.table(stat = c("M", "H"), est = c(M, H), stringsAsFactors = FALSE)
+}
 
 #' @import data.table
-mutual_total_compute <- function(data, group, unit, within, base) {
+mutual_total_within_compute <- function(data, group, unit, within, base,
+                                        components = FALSE) {
     # calculate totals
-    n_total <- sum(data$freq)
+    n_total <- sum(data[, "freq"])
     n_within <- data[, list(n_within_group = sum(freq)), by = c(within, group)]
     n_within[, `:=`(n_within = sum(n_within_group)), by = within]
     # calculate proportions and entropy for each within unit
@@ -31,23 +55,32 @@ mutual_total_compute <- function(data, group, unit, within, base) {
     # merge within entropy, and compare to group entropy
     by_unit <- merge(by_unit, entropy)
     by_within <- by_unit[, list(
-        part_m = sum(p_unit * (entropyw - entropy_cond)),
-        h_within = sum(p_unit * (entropyw - entropy_cond) / entropyw),
-        ph_within = first(p_within) * first(entropyw) / entropy_overall,
-        p_within = first(p_within)
+        M = sum(p_unit * (entropyw - entropy_cond)),
+        p = first(p_within),
+        H = sum(p_unit * (entropyw - entropy_cond)) / first(entropyw),
+        h_weight = first(p_within) * first(entropyw) / entropy_overall
     ), by = within]
-    by_within$h_within = ifelse(is.finite(by_within$h_within), by_within$h_within, 0)
+    by_within$H = ifelse(is.finite(by_within$H), by_within$H, 0)
 
-    # total M is the sum of weighted within-group partial M
-    M <- sum(by_within$part_m %*% by_within$p_within)
-    H <- sum(by_within$h_within %*% by_within$ph_within) # or: M / entropy_overall
-
-    data.table(stat = c("M", "H"), est = c(M, H))
+    if(components == TRUE) {
+        melt(by_within,
+             id.vars = within, measure.vars = c("M", "p", "H", "h_weight"),
+             variable.name = "stat", value.name = "est",
+             variable.factor = FALSE)
+    } else {
+        # total M is the sum of weighted within-group partial M
+        M <- sum(by_within$M %*% by_within$p)
+        H <- sum(by_within$H %*% by_within$h_weight)
+        data.table(stat = c("M", "H"), est = c(M, H), stringsAsFactors = FALSE)
+    }
 }
 
 #' Calculate total segregation for M and H
 #'
 #' Returns the total segregation between \code{group} and \code{unit}.
+#' If \code{within} is given, calculates segregation within each 
+#' \code{within} category separately, and takes the weighted average.
+#' Also see \code{\link{mutual_within}} for detailed within calculations.
 #'
 #' @param data A data frame.
 #' @param group A categorical variable or a vector of variables
@@ -71,14 +104,16 @@ mutual_total_compute <- function(data, group, unit, within, base) {
 #'   Defaults to the natural logarithm.
 #' @return Returns a data frame with two rows. The column \code{est} contains
 #'   the Mutual Information Index, M, and Theil's Entropy Index, H. The H is the
-#'   the M divided by the \code{group} entropy.
+#'   the M divided by the \code{group} entropy. If \code{within} was given,
+#'   M and H are weighted averages of the within-category segregation scores.
 #'   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
 #'   the associated bootstrapped standard errors, and the column \code{est} contains
 #'   bootstrapped estimates.
 #' @references
 #' Henri Theil. 1971. Principles of Econometrics. New York: Wiley.
 #'
-#' Ricardo Mora and Javier Ruiz-Castillo. 2011. "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
+#' Ricardo Mora and Javier Ruiz-Castillo. 2011. 
+#'      "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
 #' @examples
 #' # calculate school racial segregation
 #' mutual_total(schools00, "school", "race", weight="n") # M => .425
@@ -109,14 +144,14 @@ mutual_total_compute <- function(data, group, unit, within, base) {
 #' @export
 mutual_total <- function(data, group, unit, within = NULL,
                          weight = NULL, se = FALSE, n_bootstrap = 10, base = exp(1)) {
-    # define as a dummy variable that is equal for all cases
-    if (is.null(within)) {
-        within <- "within_dummy"
-    }
-    d <- prepare_data(data, group, unit, weight, within = within)
+    d <- prepare_data(data, group, unit, weight, within)
 
     if (se == FALSE) {
-        ret <- mutual_total_compute(d, group, unit, within, base)
+        if(is.null(within)) {
+            ret <- mutual_total_compute(d, group, unit, base)
+        } else {
+            ret <- mutual_total_within_compute(d, group, unit, within, base)
+        }
     } else {
         vars <- attr(d, "vars")
         n_total <- sum(d[, "freq"])
@@ -126,7 +161,11 @@ mutual_total <- function(data, group, unit, within = NULL,
             resampled <- d[
                 sample(.N, n_total, replace = TRUE, prob = freq)][,
                 list(freq = .N), by = vars]
-            mutual_total_compute(resampled, group, unit, within, base)
+            if(is.null(within)) {
+                mutual_total_compute(resampled, group, unit, base)
+            } else {
+                mutual_total_within_compute(resampled, group, unit, within, base)
+            }
         })
         cat("\n")
         boot_ret <- rbindlist(boot_ret)
@@ -135,6 +174,88 @@ mutual_total <- function(data, group, unit, within = NULL,
             est = mean(est), se = stats::sd(est)), by = c("stat")]
     }
     rownames(ret) <- ret[["stat"]]
+    as_tibble_or_df(ret)
+}
+
+#' Calculate detailed within-category segregation scores for M and H
+#'
+#' Calculates the segregation between \code{group} and \code{unit}
+#' within each category defined by \code{within}.
+#'
+#' @param data A data frame.
+#' @param group A categorical variable or a vector of variables
+#'   contained in \code{data}. Defines the first dimension
+#'   over which segregation is computed.
+#' @param unit A categorical variable or a vector of variables
+#'   contained in \code{data}. Defines the second dimension
+#'   over which segregation is computed.
+#' @param within A categorical variable or a vector of variables
+#'   contained in \code{data} that defines the within-segregation categoriess.
+#' @param weight Numeric. Only frequency weights are allowed.
+#'   (Default \code{NULL})
+#' @param se If \code{TRUE}, standard errors are estimated via bootstrap.
+#'   (Default \code{FALSE})
+#' @param n_bootstrap Number of bootstrap iterations. (Default \code{10})
+#' @param base Base of the logarithm that is used in the calculation.
+#'   Defaults to the natural logarithm.
+#' @return Returns a data frame with four rows for each category defined by \code{within}.
+#'   The column \code{est} contains four statistics that
+#'   are provided for each unit: 
+#'   \code{M} is the within-category M, and \code{p} is the proportion of the category.
+#'   Multiplying \code{M} and \code{p} gives the contribution of each within-category
+#'   towards the total M.
+#'   \code{H} is the within-category H, and \code{h_weight} provides the weight. 
+#'   Multiplying \code{H} and \code{h_weight} gives the contribution of each within-category
+#'   towards the total H. \code{h_weight} is defined as \code{p * EW/E}, where \code{EW} is the
+#'   within-category entropy, and \code{E} is the overall entropy. 
+#'   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
+#'   the associated bootstrapped standard errors, and the column \code{est} contains
+#'   bootstrapped estimates.
+#' @references
+#' Henri Theil. 1971. Principles of Econometrics. New York: Wiley.
+#'
+#' Ricardo Mora and Javier Ruiz-Castillo. 2011. 
+#'      "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
+#' @examples
+#' (within <- mutual_within(schools00, "race", "school", within = "state", weight = "n"))
+#' # the M for "AL" is .409
+#' # manual calculation
+#' schools_AL <- schools00[schools00$state=="AL",]
+#' mutual_total(schools_AL, "race", "school", weight = "n") # M => .409
+#' 
+#' # to recover the within M and H from the output, multiply
+#' # p * M and h_weight * H, respectively
+#' within = unstack(within, form=est ~ stat) # to wide format
+#' sum(within$p * within$M) # => .326
+#' sum(within$H * within$h_weight) # => .321
+#' # compare with 
+#' mutual_total(schools00, "race", "school", within = "state", weight = "n")
+#' @import data.table
+#' @export
+mutual_within <- function(data, group, unit, within,
+                         weight = NULL, se = FALSE, n_bootstrap = 10, base = exp(1)) {
+    d <- prepare_data(data, group, unit, weight, within)
+
+    if (se == FALSE) {
+        ret <- mutual_total_within_compute(d, group, unit, within, base, components = TRUE)
+    } else {
+        vars <- attr(d, "vars")
+        n_total <- sum(d[, "freq"])
+        boot_ret <- lapply(1:n_bootstrap, function(i) {
+            cat(".")
+            # resample and collapse by all variables, except "freq"
+            resampled <- d[
+                sample(.N, n_total, replace = TRUE, prob = freq)][,
+                list(freq = .N), by = vars]
+            mutual_total_within_compute(d, group, unit, within, base, components = TRUE)
+        })
+        cat("\n")
+        boot_ret <- rbindlist(boot_ret)
+        # summarize bootstrapped data frames
+        ret <- boot_ret[, list(
+            est = mean(est), se = stats::sd(est)),
+            by = c(within, "stat")]
+    }
     as_tibble_or_df(ret)
 }
 
@@ -154,12 +275,11 @@ mutual_local_compute <- function(data, group, unit, base = exp(1)) {
     # calculate local linkage, i.e. log(cond.) * log(cond./marginal)
     data[, `:=`(ll_part = p_group_g_unit * logf(p_group_g_unit / p_group, base))]
     local <- data[, list(ls = sum(ll_part), p = first(p_unit)), by = unit]
-    # calculate contribution to linkage linkage
-    local[, `:=`(M_unit = ls * p)]
     # melt into long form
     melt(local,
-         id.vars = unit, measure.vars = c("ls", "p", "M_unit"),
-         variable.name = "stat", value.name = "est")
+         id.vars = unit, measure.vars = c("ls", "p"),
+         variable.name = "stat", value.name = "est",
+         variable.factor = FALSE)
 }
 
 #' Calculates local segregation indices based on M
@@ -181,11 +301,10 @@ mutual_local_compute <- function(data, group, unit, base = exp(1)) {
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{10})
 #' @param base Base of the logarithm that is used in the calculation.
 #'   Defaults to the natural logarithm.
-#' @return Returns a data frame with three rows for each category defined by \code{unit},
-#'   for a total of \code{3*(number of units)} rows. The column \code{est} defines three statistics that
-#'   are provided for each unit: \code{ls}, the local segregation score,
-#'   \code{p}, the proportion of the unit from the total number of cases, and
-#'   \code{M_unit}, the product of \code{ls} and \code{p}.
+#' @return Returns a data frame with two rows for each category defined by \code{unit},
+#'   for a total of \code{2*(number of units)} rows. The column \code{est} contains two statistics that
+#'   are provided for each unit: \code{ls}, the local segregation score, and
+#'   \code{p}, the proportion of the unit from the total number of cases.
 #'   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
 #'   the associated bootstrapped standard errors, and the column \code{est} contains
 #'   bootstrapped estimates.
@@ -203,8 +322,10 @@ mutual_local_compute <- function(data, group, unit, base = exp(1)) {
 #'
 #' # the sum of the weighted local segregation scores equals
 #' # total segregation
+#' ls <- localseg[localseg["stat"]=="ls", "est"]
+#' p <- localseg[localseg["stat"]=="p", "est"]
+#' sum(ls * p) # => .425
 #' mutual_total(schools00, "school", "race", weight="n") # M => .425
-#' sum(localseg[localseg["stat"]=="M_unit", "est"]) # => .425
 #' @import data.table
 #' @export
 mutual_local <- function(data, group, unit, weight = NULL,
@@ -232,6 +353,5 @@ mutual_local <- function(data, group, unit, weight = NULL,
             by = c(unit, "stat")]
     }
     # sort and return as data frame
-    setorderv(ret, c("stat", unit))
     as_tibble_or_df(ret)
 }

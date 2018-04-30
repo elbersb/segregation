@@ -18,25 +18,25 @@ test_that("local calculation works", {
     expect_equal(sum(localse[localse$stat=="p", "est"]), 1)
 
     expect_equal(
-        sum(local[local$stat=="M_unit", "est"]),
-        sum(local2[local2$stat=="M_unit", "est"])
+        sum(local[local$stat=="p", "est"] * local[local$stat=="ls", "est"]),
+        sum(local2[local2$stat=="p", "est"] * local2[local2$stat=="ls", "est"])
     )
     expect_equal(
-        sum(local[local$stat=="M_unit", "est"]),
+        sum(local[local$stat=="p", "est"] * local[local$stat=="ls", "est"]),
         mutual_total(test_data, "u", "g", weight = "n")[["M", "est"]]
     )
     expect_equal(
-        sum(localbase2[localbase2$stat=="M_unit", "est"]),
+        sum(localbase2[localbase2$stat=="p", "est"] * localbase2[localbase2$stat=="ls", "est"]),
         mutual_total(test_data, "u", "g", weight = "n", base = 2)[["M", "est"]]
     )
 })
 
 test_that("return works", {
-    expect_equal(nrow(local), 4*3)
+    expect_equal(nrow(local), 2*4)
     expect_equal(ncol(local), 3)
 })
 
 test_that("bootstrapping works", {
-    expect_equal(nrow(localse), 4*3)
+    expect_equal(nrow(localse), 2*4)
     expect_equal(ncol(localse), 4)
 })
