@@ -9,6 +9,7 @@ prepare <- function(d) {
     filter(level == 1) %>%
     na.omit() %>%
     filter(state %in% c("AL", "CO", "CT")) %>%
+    mutate(state = recode(state, AL = "A", "CO" = "B", "CT" = "C")) %>%
     mutate(check = native + asian + hisp + black + white) %>%
     # only schools with >100 students
     filter(total == check, total > 100) %>%
@@ -27,7 +28,6 @@ schools00 <- select(rawd,
     native = AM00, asian = ASIAN00, hisp = HISP00,
     black = BLACK00, white = WHITE00
 ) %>% prepare
-levels(schools00$state) = c('A', 'B', 'C')
 schools00$n <- round(rnorm(nrow(schools00), schools00$n, sd=sqrt(schools00$n)))
 schools00 <- filter(schools00, n > 0)
 
@@ -40,13 +40,13 @@ schools05 <- select(rawd,
     native = AM05, asian = ASIAN05, hisp = HISP05,
     black = BLACK05, white = WHITE05
 ) %>% prepare
-levels(schools05$state) = c('A', 'B', 'C')
 schools05$n <- round(rnorm(nrow(schools05), schools05$n, sd=sqrt(schools05$n)))
 schools05 <- filter(schools05, n > 0)
 
 # create new school and district identifiers
-district <- bind_rows(select(schools00, state, district), 
-    select(schools05, state, district)) %>%
+district <- bind_rows(
+        select(schools00, state, district), 
+        select(schools05, state, district)) %>%
     distinct() %>%
     group_by(state) %>%
     mutate(district_new=paste0(state, 1:n())) %>%
