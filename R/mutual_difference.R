@@ -82,7 +82,7 @@
 #'   bootstrapped estimates.
 #' @references
 #' T. Karmel and M. Maclachlan. 1988.
-#'   "Occupational Sex Segregation - Increasing or Decreasing." Economic Record 64: 187-195.
+#'   "Occupational Sex Segregation — Increasing or Decreasing?" Economic Record 64: 187-195.
 #'
 #' R. Mora and J. Ruiz-Castillo. 2009. "The Invariance Properties of the
 #'   Mutual Information Index of Multigroup Segregation". Research on Economic Inequality 17: 33-53.

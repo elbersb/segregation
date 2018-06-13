@@ -47,7 +47,7 @@
 #'   Annals of Mathematical Statistics. 11 (4): 427–444.
 #' 
 #'  T. Karmel and M. Maclachlan. 1988.
-#'   "Occupational Sex Segregation - Increasing or Decreasing." Economic Record 64: 187-195.
+#'   "Occupational Sex Segregation — Increasing or Decreasing?" Economic Record 64: 187-195.
 #' @examples
 #' # adjusts the marginals of group and unit categories so that
 #' # schools00 has similar marginals as schools05
