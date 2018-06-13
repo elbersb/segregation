@@ -169,3 +169,22 @@ test_that("difference same as mutual_total (zero weights)", {
     expect_equal(mrc_adj[["M1", "est"]], M1)
     expect_equal(mrc_adj[["M2", "est"]], M2)
 })
+
+test_that("forward_only", {
+    f1 <- mutual_difference(test_data1, test_data2, "g", "u", 
+                            weight = "n", method = "ipf", forward_only = TRUE)
+    f2 <- mutual_difference(test_data2, test_data1, "g", "u", 
+                            weight = "n", method = "ipf", forward_only = TRUE)
+    both <- mutual_difference(test_data1, test_data2, "g", "u", 
+                            weight = "n", method = "ipf", forward_only = FALSE)
+
+    expect_equal(f1[["M1", "est"]], f2[["M2", "est"]], both[["M1", "est"]])
+    expect_equal(f1[["M2", "est"]], f2[["M1", "est"]], both[["M2", "est"]])
+    expect_equal(f1[["diff", "est"]], -f2[["diff", "est"]], both[["diff", "est"]])
+    expect_equal(f1[["additions", "est"]], -f2[["removals", "est"]], both[["additions", "est"]])
+    expect_equal(f1[["removals", "est"]], -f2[["additions", "est"]], both[["removals", "est"]])
+    expect_equal((f1[["unit_marginal", "est"]] + -f2[["unit_marginal", "est"]]) / 2, both[["unit_marginal", "est"]])
+    expect_equal((f1[["group_marginal", "est"]] + -f2[["group_marginal", "est"]]) / 2, both[["group_marginal", "est"]])
+    expect_equal((f1[["interaction", "est"]] + -f2[["interaction", "est"]]) / 2, both[["interaction", "est"]])
+    expect_equal((f1[["structural", "est"]] + -f2[["structural", "est"]]) / 2, both[["structural", "est"]])
+})
