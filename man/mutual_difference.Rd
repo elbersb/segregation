@@ -4,8 +4,9 @@
 \alias{mutual_difference}
 \title{Decomposes the difference between two M indices}
 \usage{
-mutual_difference(data1, data2, group, unit, weight = NULL, method = "mrc",
-  se = FALSE, n_bootstrap = 50, base = exp(1))
+mutual_difference(data1, data2, group, unit, weight = NULL, method = "ipf",
+  forward_only = FALSE, se = FALSE, n_bootstrap = 50, base = exp(1),
+  ...)
 }
 \arguments{
 \item{data1}{A data frame with same structure as \code{data2}.}
@@ -23,7 +24,13 @@ over which segregation is computed.}
 \item{weight}{Numeric. Only frequency weights are allowed.
 (Default \code{NULL})}
 
-\item{method}{for now, only "mrc" (Mora and Ruiz-Castillo, 2009) is possible}
+\item{method}{Either "ipf" (the default) (Karmel and Machlachlan 1988), or
+"mrc" / "mrc_adjusted" (Mora and Ruiz-Castillo 2009). See below for an explanation.}
+
+\item{forward_only}{Only relevant for "ipf". If set to \code{TRUE}, the decomposition will
+only adjust the margins of \code{data2} to those \code{data1}, and not vice versa. This 
+is recommended when \code{data1} and \code{data2} are measurements at different points in time.
+(Default \code{FALSE})}
 
 \item{se}{If \code{TRUE}, standard errors are estimated via bootstrap.
 (Default \code{FALSE})}
@@ -32,6 +39,9 @@ over which segregation is computed.}
 
 \item{base}{Base of the logarithm that is used in the calculation.
 Defaults to the natural logarithm.}
+
+\item{...}{Only used for additional arguments when
+when \code{method} is set to \code{ipf}. See \link{ipf} for details.}
 }
 \value{
 Returns a data frame with columns \code{stat} and \code{est}. The data frame contains
@@ -39,23 +49,81 @@ Returns a data frame with columns \code{stat} and \code{est}. The data frame con
   \code{M1} contains the M for \code{data1}.
   \code{M2} contains the M for \code{data2}.
   \code{diff} is the difference between \code{M2} and \code{M1}.
-  \code{unit_entropy} is the difference in unit entropy.
+
+  The sum of all rows following \code{diff} equal \code{diff}.
+
+  When using "ipf" or "mrc_adjusted", two additionals rows are reported:
+  \code{additions} contains the change in M induces by \code{unit} and code{group} categories
+  present in \code{data2} but not \code{data1}, and \code{removals} the reverse.
+  
+  When using "ipf", four additional rows are returned:
+  \code{unit_marginal} is the contribution of unit composition differences.
   \code{group_marginal} is the contribution of group composition differences.
-  \code{invariant} is the contribution of group composition-invariant differences.
-  Note that \code{diff = unit_entropy + group_marginal + invariant}
+  \code{interaction} is the contribution of differences in the joint marginal distribution
+     of \code{unit} and \code{group}. The total effect of changes in the margins is the sum
+     of \code{unit_marginal}, \code{group_marginal}, and \code{interaction}.
+  \code{structural} is the contribution unexplained by the marginal changes, i.e. the structural
+    difference.
+  
+  When using "mrc" or "mrc_adjusted", three additional rows are returned:
+  \code{unit_marginal} is the contribution of unit composition differences.
+  \code{group_marginal} is the difference in group entropy.
+  \code{structural} is the contribution of unit composition-invariant differences.
+  For details on the interpretation of these terms, see Mora and Ruiz-Castillo (2009).
 
   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
   the associated bootstrapped standard errors, and the column \code{est} contains
   bootstrapped estimates.
 }
 \description{
-Uses the method developed by Mora and Ruiz-Castillo (2009).
+Uses either a method based on the IPF algorithm (recommended and the default) or
+the method developed by Mora and Ruiz-Castillo (2009).
+}
+\details{
+The IPF method (Karmel and Maclachlan 1988) adjusts the margins of \code{data2} to be similar 
+to the margins of \code{data1}. This is an iterative process, and may take of few seconds depending
+on the size of the dataset (see \link{ipf} for details). 
+The difference in M between \code{data1} and the margins-adjusted \code{data2} 
+is the structural difference between \code{data1} and \code{data2}. 
+The remaining, unexplained difference is due to changes in the marginal distribution.
+Unless \code{forward_only} is set to \code{TRUE}, the process
+is then repeated the other way around, and the differences are averaged.
+
+A problem arises when there are \code{group} and/or \code{unit} categories in \code{data1}
+that are not present in \code{data2} (or vice versa). The IPF method estimates the difference only
+for categories that are present in both datasets, and reports additionally
+the change in M that is induced by these cases as 
+\code{additions} (present in \code{data2}, but not in \code{data1}) and 
+\code{removals} (present in \code{data1}, but not in \code{data2}). For the method developed 
+by Mora and Ruiz-Castillo (2009), there are two options provided: When using "mrc", the
+categories not present in the other data source are set 0. When using "mrc_adjusted", the same 
+procedure as for the IPF method is used, and \code{additions} and \code{removals} are reported.
+
+Note that the IPF method is symmetric, i.e. the reversal of \code{group} and \code{unit}
+definitions will yield the same results. The method developed by Mora and Ruiz-Castillo (2009)
+is not symmetric, and will yield different results based on what is defined as the \code{group}
+and \code{unit} categories.
 }
 \examples{
-mutual_difference(schools00, schools05, group="race", unit="school",
-    weight="n", method="mrc")
+# decompose the difference in school segregation between 2000 and 2005
+mutual_difference(schools00, schools05, group = "race", unit = "school",
+    weight = "n", method = "ipf")
+# => the structural component is close to zero, thus most change is in the marginals.
+# note that this method gives identical results when we switch the unit and group definitions
+mutual_difference(schools00, schools05, group = "school", unit = "race",
+    weight = "n", method = "ipf")
+
+# the MRC method indicates a much higher structural change
+mutual_difference(schools00, schools05, group = "race", unit = "school",
+    weight = "n", method = "mrc_adjusted")
+# ...and is not symmetric
+mutual_difference(schools00, schools05, group = "school", unit = "race",
+    weight = "n", method = "mrc_adjusted")
 }
 \references{
-Ricardo Mora and Javier Ruiz-Castillo. 2009. "The Invariance Properties of the
+T. Karmel and M. Maclachlan. 1988.
+  "Occupational Sex Segregation - Increasing or Decreasing." Economic Record 64: 187-195.
+
+R. Mora and J. Ruiz-Castillo. 2009. "The Invariance Properties of the
   Mutual Information Index of Multigroup Segregation". Research on Economic Inequality 17: 33-53.
 }

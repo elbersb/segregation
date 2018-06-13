@@ -1,25 +1,16 @@
 #' @import data.table
 mutual_total_compute <- function(data, group, unit, base) {
-    # calculate totals
-    n_total = sum(data[, "freq"])
-    data[, `:=`(n_unit = sum(freq)), by = unit]
-    data[, `:=`(p_unit = n_unit / n_total, p_group_g_unit = freq / n_unit)]
+    # calculate M
+    add_local(data, group, unit, base)
+    M <- sum(data[, list(p = first(p_unit), ls = first(ls_unit)), by = unit][, p * ls])
 
-    # calculate entropy within units
-    by_unit <- data[, list(
-        p_unit = first(p_unit),
-        entropy_cond = sum(p_group_g_unit * logf(1 / p_group_g_unit, base))),
-        by = unit]
+    # calculate H
+    p <- data[, list(p = first(p_group)), by = group][["p"]]
+    entropy_group <- sum(p * logf(1 / p, base))
+    H <- M / entropy_group   
 
-    # compute total entropies
-    p <- data[, list(p = sum(freq)), by = group][["p"]] / n_total
-    entropy_group = sum(p * logf(1/p, base))
-
-    # merge within entropy, and compare to group entropy
-    M <- sum(by_unit$p_unit * (entropy_group - by_unit$entropy_cond))
-    H <- M / entropy_group
-
-    data.table(stat = c("M", "H"), est = c(M, H), stringsAsFactors = FALSE)
+    data.table(stat = c("M", "H"), est = c(M, H), 
+               stringsAsFactors = FALSE)
 }
 
 #' @import data.table
@@ -283,20 +274,9 @@ mutual_within <- function(data, group, unit, within,
 
 #' @import data.table
 mutual_local_compute <- function(data, group, unit, base = exp(1)) {
-    # generate unit and group totals
-    n_total <- sum(data$freq)
-    data[, `:=`(n_unit, sum(freq)), by = unit]
-    data[, `:=`(n_group, sum(freq)), by = group]
-    # generate unit and group proportions and the
-    # conditional probability of being in any group given the unit
-    data[, `:=`(
-        p_unit = n_unit / n_total,
-        p_group = n_group / n_total,
-        p_group_g_unit = freq / n_unit
-    )]
-    # calculate local linkage, i.e. log(cond.) * log(cond./marginal)
-    data[, `:=`(ll_part = p_group_g_unit * logf(p_group_g_unit / p_group, base))]
-    local <- data[, list(ls = sum(ll_part), p = first(p_unit)), by = unit]
+    add_local(data, group, unit, base)
+
+    local <- data[, list(ls = first(ls_unit), p = first(p_unit)), by = unit]
     # melt into long form
     melt(local,
          id.vars = unit, measure.vars = c("ls", "p"),

@@ -20,6 +20,8 @@ and between terms. Includes standard error estimation by bootstrapping.
  \item{}{\code{\link{mutual_local}} Computes local segregation based on M.}
  \item{}{\code{\link{mutual_difference}} Decomposes difference between two M indices.}
  \item{}{\code{\link{entropy}} Calculates the entropy of a distribution.}
+ \item{}{\code{\link{ipf}} Uses iterative proportional fitting to adjust
+   the marginal distributions in one dataset to those of another dataset.}
 }
 }
 

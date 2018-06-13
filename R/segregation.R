@@ -13,6 +13,8 @@
 #'  \item{}{\code{\link{mutual_local}} Computes local segregation based on M.}
 #'  \item{}{\code{\link{mutual_difference}} Decomposes difference between two M indices.}
 #'  \item{}{\code{\link{entropy}} Calculates the entropy of a distribution.}
+#'  \item{}{\code{\link{ipf}} Uses iterative proportional fitting to adjust
+#'    the marginal distributions in one dataset to those of another dataset.}
 #' }
 #' @section Data:
 #'
@@ -25,19 +27,13 @@
 NULL
 
 globalVariables(c(
-    "freq",
-    "n_group", "n_unit", "n_within", "n_within_unit", "n_within_group",
-    "p", "p_within", "p_group", "p_unit",
-    "p_unit_g_group", "p_group_g_unit",
-    "entropyw", "entropy_cond", "M_group", "ll_part",
-    "cond1", "cond2", "entropy_cond1", "entropy_cond2",
-    "group1", "group2", "p_group1",
-    "p_group2", "p_unit_g_group1", "p_unit_g_group2",
-    "p_unit1", "p_unit2", "sumcond1", "sumcond2",
-    "miss1", "miss2",
-    "ls_group", "ls_group1", "ls_group2",
-    "same_c_diff_m", "diff_c_same_m", "est"
-))
+    "cond1", "cond2", "entropy_cond", "entropy_cond1", "entropy_cond2", "entropyw",
+    "est", "freq", "freq1", "freq2", "freq_orig1", "freq_orig2",
+    "ls_unit", "n_group", "n_group_s", "n_group_t",
+    "n_group_target", "n_source", "n_target", "n_unit", "n_unit_s", "n_unit_t",
+    "n_unit_target", "n_within_group", "p", "p_group", "p_group_g_unit", "p_group_g_unit1",
+    "p_group_g_unit2", "p_unit", "p_unit1", "p_unit2", "p_within", "ratio", "sumcond1",
+    "sumcond2", "unit1", "unit2"))
 
 as_tibble_or_df <- function(data) {
     if (requireNamespace("tibble", quietly = TRUE)) {
@@ -51,8 +47,7 @@ as_tibble_or_df <- function(data) {
 
 logf <- function(v, base) {
     if(missing(base)) { stop("argument base required") }
-    v <- v[v > 0]
-    log(v, base=base)
+    ifelse(v > 0 & is.finite(v), log(v, base=base), 0)
 }
 
 #' Calculates the entropy of a distribution
@@ -98,7 +93,7 @@ prepare_data <- function(data, group, unit, weight, within = NULL) {
 
     # use provided frequency weight or weight of 1
     if (!is.null(weight)) {
-        data[, "freq"] <- data[, weight]
+        data[, "freq"] <- as.double(data[[weight]])
     } else {
         data[, "freq"] <- 1
     }
@@ -112,4 +107,23 @@ prepare_data <- function(data, group, unit, weight, within = NULL) {
     data <- data[freq > 0, list(freq = sum(freq)), by = vars]
     attr(data, "vars") <- vars
     data
+}
+
+
+#' @import data.table
+add_local <- function(data, group, unit, base, weight = "freq") {
+    n_total <- sum(data[, get(weight)])
+    # generate unit and group totals
+    data[, n_unit := sum(get(weight)), by = unit]
+    data[, n_group := sum(get(weight)), by = group]
+    # generate unit and group proportions and the
+    # conditional probability of being in any group given the unit
+    data[, `:=`(
+        p_unit = n_unit / n_total,
+        p_group = n_group / n_total,
+        p_group_g_unit = get(weight) / n_unit
+    )]
+    # calculate local linkage, i.e. log(cond.) * log(cond./marginal)
+    data[, ls_unit := sum(p_group_g_unit * logf(p_group_g_unit / p_group, base)),
+           by = unit]
 }

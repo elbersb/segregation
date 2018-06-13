@@ -5,6 +5,9 @@ Development version
 * add entropy function
 * add mutual_within function to decompose weighted within indices
 * add "wide" option to mutual_local and mutual_within
+* add "ipf" (iterative proportional fitting) function and a difference decomposition based on IPF
+* "mrc_adjusted" difference decomposition is defined only on overlap sample of units and groups
+* internal refactoring
 
 v0.0.1
 ======
