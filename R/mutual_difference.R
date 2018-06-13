@@ -89,11 +89,11 @@
 #' @examples
 #' # decompose the difference in school segregation between 2000 and 2005
 #' mutual_difference(schools00, schools05, group = "race", unit = "school",
-#'     weight = "n", method = "ipf")
+#'     weight = "n", method = "ipf", precision = .01)
 #' # => the structural component is close to zero, thus most change is in the marginals.
 #' # note that this method gives identical results when we switch the unit and group definitions
 #' mutual_difference(schools00, schools05, group = "school", unit = "race",
-#'     weight = "n", method = "ipf")
+#'     weight = "n", method = "ipf", precision = .01)
 #' 
 #' # the MRC method indicates a much higher structural change
 #' mutual_difference(schools00, schools05, group = "race", unit = "school",

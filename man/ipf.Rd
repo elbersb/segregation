@@ -84,5 +84,5 @@ W. E. Deming and F. F. Stephan. 1940.
   Annals of Mathematical Statistics. 11 (4): 427–444.
 
  T. Karmel and M. Maclachlan. 1988.
-  "Occupational Sex Segregation - Increasing or Decreasing." Economic Record 64: 187-195.
+  "Occupational Sex Segregation — Increasing or Decreasing?" Economic Record 64: 187-195.
 }

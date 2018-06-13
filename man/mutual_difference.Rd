@@ -107,11 +107,11 @@ and \code{unit} categories.
 \examples{
 # decompose the difference in school segregation between 2000 and 2005
 mutual_difference(schools00, schools05, group = "race", unit = "school",
-    weight = "n", method = "ipf")
+    weight = "n", method = "ipf", precision = .01)
 # => the structural component is close to zero, thus most change is in the marginals.
 # note that this method gives identical results when we switch the unit and group definitions
 mutual_difference(schools00, schools05, group = "school", unit = "race",
-    weight = "n", method = "ipf")
+    weight = "n", method = "ipf", precision = .01)
 
 # the MRC method indicates a much higher structural change
 mutual_difference(schools00, schools05, group = "race", unit = "school",
@@ -122,7 +122,7 @@ mutual_difference(schools00, schools05, group = "school", unit = "race",
 }
 \references{
 T. Karmel and M. Maclachlan. 1988.
-  "Occupational Sex Segregation - Increasing or Decreasing." Economic Record 64: 187-195.
+  "Occupational Sex Segregation — Increasing or Decreasing?" Economic Record 64: 187-195.
 
 R. Mora and J. Ruiz-Castillo. 2009. "The Invariance Properties of the
   Mutual Information Index of Multigroup Segregation". Research on Economic Inequality 17: 33-53.
