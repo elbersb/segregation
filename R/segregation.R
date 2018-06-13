@@ -36,7 +36,7 @@ globalVariables(c(
     "sumcond2", "unit1", "unit2"))
 
 as_tibble_or_df <- function(data) {
-    if (requireNamespace("tibble", quietly = TRUE)) {
+    if ("package:tibble" %in% search()) {
         tibble::as_tibble(data)
     } else {
         df <- as.data.frame(data, stringsAsFactors = FALSE)

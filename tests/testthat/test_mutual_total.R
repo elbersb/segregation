@@ -38,6 +38,17 @@ test_that("mutual M works both ways around", {
     )
 })
 
+test_that("as tibble works", {
+    ret <- mutual_total(test_data, "u", "g", weight = "n")
+    expect_true("data.frame" %in% class(ret))
+
+    if(requireNamespace("tibble", quietly = TRUE)) {
+        library(tibble)
+        ret <- mutual_total(test_data, "u", "g", weight = "n")
+        expect_true("tbl_df" %in% class(ret))
+    }
+})
+
 test_that("between + within = total", {
     expect_equal(
         mutual_total(test_data, "u", "g", weight = "n")[["M", "est"]],

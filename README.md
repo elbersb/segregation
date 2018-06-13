@@ -1,3 +1,4 @@
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # segregation
@@ -17,8 +18,8 @@ and Theil’s Information Index (H).
   - estimate standard errors via bootstrapping
   - every method returns a
     [tidy](http://vita.had.co.nz/papers/tidy-data.html) data frame (or
-    [tibble](http://tibble.tidyverse.org), if the package is installed)
-    for easy post-processing and plotting
+    [tibble](http://tibble.tidyverse.org), if the package is loaded) for
+    easy post-processing and plotting
   - it’s fast, because it uses the
     [`data.table`](https://github.com/Rdatatable/data.table/wiki)
     package internally
@@ -30,13 +31,12 @@ based on the Mutual Information Index (M) and Theil’s Entropy Index (H).
 
 ``` r
 library(segregation)
+
 # example dataset with fake data provided by the package
 mutual_total(schools00, "race", "school", weight = "n")
-#> # A tibble: 2 x 2
-#>   stat    est
-#> * <chr> <dbl>
-#> 1 M     0.426
-#> 2 H     0.419
+#>  stat   est
+#>     M 0.426
+#>     H 0.419
 ```
 
 Standard errors in all functions can be estimated via boostrapping:
@@ -44,11 +44,9 @@ Standard errors in all functions can be estimated via boostrapping:
 ``` r
 mutual_total(schools00, "race", "school", weight = "n", se = TRUE)
 #> ..........
-#> # A tibble: 2 x 3
-#>   stat    est       se
-#> * <chr> <dbl>    <dbl>
-#> 1 M     0.429 0.000935
-#> 2 H     0.422 0.000985
+#>  stat   est       se
+#>     M 0.429 0.000935
+#>     H 0.422 0.000985
 ```
 
 Decompose segregation into a between-state and a within-state term (the
@@ -57,19 +55,15 @@ sum of these equals total segregation):
 ``` r
 # between states
 mutual_total(schools00, "race", "state", weight = "n")
-#> # A tibble: 2 x 2
-#>   stat     est
-#> * <chr>  <dbl>
-#> 1 M     0.0992
-#> 2 H     0.0977
+#>  stat    est
+#>     M 0.0992
+#>     H 0.0977
 
 # within states
 mutual_total(schools00, "race", "school", within = "state", weight = "n")
-#> # A tibble: 2 x 2
-#>   stat    est
-#> * <chr> <dbl>
-#> 1 M     0.326
-#> 2 H     0.321
+#>  stat   est
+#>     M 0.326
+#>     H 0.321
 ```
 
 Local segregation (`ls`) is a decomposition by units (here racial
@@ -81,14 +75,12 @@ M:
 (local <- mutual_local(schools00, group = "school", unit = "race", weight = "n", 
              se = TRUE, wide = TRUE))
 #> ..........
-#> # A tibble: 5 x 5
-#>   race      ls    ls_se       p     p_se
-#>   <fct>  <dbl>    <dbl>   <dbl>    <dbl>
-#> 1 asian  0.667 0.00674  0.0226  0.000124
-#> 2 black  0.885 0.00259  0.190   0.000465
-#> 3 hisp   0.782 0.00258  0.152   0.000317
-#> 4 white  0.184 0.000725 0.628   0.000687
-#> 5 native 1.53  0.0229   0.00745 0.000135
+#>    race    ls    ls_se       p     p_se
+#>   asian 0.667 0.006736 0.02261 0.000124
+#>   black 0.885 0.002595 0.19005 0.000465
+#>    hisp 0.782 0.002582 0.15179 0.000317
+#>   white 0.184 0.000725 0.62810 0.000687
+#>  native 1.528 0.022868 0.00745 0.000135
 
 sum(local$p * local$ls)
 #> [1] 0.429
@@ -103,18 +95,16 @@ mutual_difference(schools00, schools05, group = "race", unit = "school",
                   weight = "n", method = "ipf")
 #> ........
 #> .........
-#> # A tibble: 9 x 2
-#>   stat                est
-#> * <chr>             <dbl>
-#> 1 M1              0.426  
-#> 2 M2              0.413  
-#> 3 diff           -0.0122 
-#> 4 additions      -0.00341
-#> 5 removals       -0.0114 
-#> 6 unit_marginal  -0.0202 
-#> 7 group_marginal  0.0172 
-#> 8 interaction     0.00245
-#> 9 structural      0.00318
+#>            stat      est
+#>              M1  0.42554
+#>              M2  0.41339
+#>            diff -0.01215
+#>       additions -0.00341
+#>        removals -0.01141
+#>   unit_marginal -0.02020
+#>  group_marginal  0.01723
+#>     interaction  0.00245
+#>      structural  0.00318
 ```
 
 ## How to install

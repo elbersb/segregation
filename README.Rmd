@@ -30,7 +30,7 @@ on the Mutual Information Index (M) and Theil's Information Index (H).
 - calculate total, between, within, and local segregation
 - decompose differences in total segregation over time
 - estimate standard errors via bootstrapping
-- every method returns a [tidy](http://vita.had.co.nz/papers/tidy-data.html) data frame (or [tibble](http://tibble.tidyverse.org), if the package is installed) for easy post-processing and plotting
+- every method returns a [tidy](http://vita.had.co.nz/papers/tidy-data.html) data frame (or [tibble](http://tibble.tidyverse.org), if the package is loaded) for easy post-processing and plotting
 - it's fast, because it uses the [`data.table`](https://github.com/Rdatatable/data.table/wiki) package internally
 
 ## Usage
@@ -39,6 +39,7 @@ The package provides an easy way to calculate segregation measures, based on the
 
 ```{r}
 library(segregation)
+
 # example dataset with fake data provided by the package
 mutual_total(schools00, "race", "school", weight = "n")
 ```
