@@ -12,8 +12,13 @@ test_data2 <- data.frame(
     n = c(20, 20, 20, 15, 5, 10, 10, 15)
 )
 
+test_that("mutual_difference error", {
+    expect_error(mutual_difference(test_data1, test_data2, "g", "u", weight = "n", method = "X"))
+})
+
 test_that("mutual_difference IPF", {
-    ret1 <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n", method = "ipf")
+    ret1 <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n", method = "ipf",
+        precision = .0001)
 
     expect_equal(ret1[["diff", "est"]], ret1[["M2", "est"]] - ret1[["M1", "est"]])
     expect_equal(ret1[["diff", "est"]],
@@ -22,7 +27,8 @@ test_that("mutual_difference IPF", {
     expect_equal(ret1[["removals", "est"]], 0)
 
     # other way around
-    ret <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n", method = "ipf")
+    ret <- mutual_difference(test_data1, test_data2, "u", "g", weight = "n", method = "ipf",
+        precision = .0001)
 
     expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
     expect_equal(ret[["diff", "est"]],
@@ -35,10 +41,18 @@ test_that("mutual_difference IPF", {
     expect_equal(nrow(ret), 9)
     expect_equal(ncol(ret), 2)
 
-    ret <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n", method = "ipf", base = 2)
-    expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
-    expect_equal(nrow(ret), 9)
-    expect_equal(ncol(ret), 2)
+    # symmetrical
+    ret$est = round(ret$est, 5)
+    ret1$est = round(ret1$est, 5)
+    expect_equal(ret[["M1", "est"]], ret1[["M1", "est"]])
+    expect_equal(ret[["M2", "est"]], ret1[["M2", "est"]])
+    expect_equal(ret[["diff", "est"]], ret1[["diff", "est"]])
+    expect_equal(ret[["additions", "est"]], ret1[["additions", "est"]])
+    expect_equal(ret[["removals", "est"]], ret1[["removals", "est"]])
+    expect_equal(ret[["unit_marginal", "est"]], ret1[["group_marginal", "est"]])
+    expect_equal(ret[["group_marginal", "est"]], ret1[["unit_marginal", "est"]])
+    expect_equal(ret[["interaction", "est"]], ret1[["interaction", "est"]])
+    expect_equal(ret[["structural", "est"]], ret1[["structural", "est"]])
 })
 
 
@@ -49,9 +63,9 @@ test_that("mutual_difference MRC", {
     expect_equal(ret[["diff", "est"]],
                  sum(ret[c("unit_marginal", "group_marginal", "structural"), "est"]))
 
-    ret <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n", method = "mrc")
-
     # other way around
+    ret <- mutual_difference(test_data1, test_data2, "u", "g", weight = "n", method = "mrc")
+    
     expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
     expect_equal(ret[["diff", "est"]],
                  sum(ret[c("unit_marginal", "group_marginal", "structural"), "est"]))
@@ -60,11 +74,6 @@ test_that("mutual_difference MRC", {
     expect_equal(ret[["M1", "est"]], mutual_total(test_data1, "u", "g", weight = "n")[["M", "est"]])
     expect_equal(ret[["M2", "est"]], mutual_total(test_data2, "u", "g", weight = "n")[["M", "est"]])
 
-    expect_equal(nrow(ret), 6)
-    expect_equal(ncol(ret), 2)
-
-    ret <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n", method = "mrc", base = 2)
-    expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
     expect_equal(nrow(ret), 6)
     expect_equal(ncol(ret), 2)
 })
@@ -80,7 +89,7 @@ test_that("mutual_difference MRC-ADJUSTED", {
     expect_equal(ret[["removals", "est"]], 0)
 
     # other way around
-    ret <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n", method = "mrc_adjusted")
+    ret <- mutual_difference(test_data1, test_data2, "u", "g", weight = "n", method = "mrc_adjusted")
 
     expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
     expect_equal(ret[["diff", "est"]],
@@ -92,32 +101,47 @@ test_that("mutual_difference MRC-ADJUSTED", {
 
     expect_equal(nrow(ret), 8)
     expect_equal(ncol(ret), 2)
-
-    ret <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n", method = "mrc_adjusted", base = 2)
-    expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
-    expect_equal(nrow(ret), 8)
-    expect_equal(ncol(ret), 2)
 })
 
 
 test_that("mutual_difference SE", {
     ret <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n",
-                            method = "ipf", se = TRUE, n_bootstrap = 5)
+                             method = "ipf", se = TRUE, n_bootstrap = 5)
     expect_equal(nrow(ret), 9)
     expect_equal(ncol(ret), 3)
-    expect_equal(all(ret[ret$est>0, "se"] > 0), TRUE)
+    expect_equal(all(ret[ret$est > 0, "se"] > 0), TRUE)
 
     ret <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n",
-                            method = "mrc", se = TRUE, n_bootstrap = 5)
+                             method = "mrc", se = TRUE, n_bootstrap = 5)
     expect_equal(nrow(ret), 6)
     expect_equal(ncol(ret), 3)
-    expect_equal(all(ret$se > 0), TRUE)
+    expect_equal(all(ret[ret$est > 0, "se"] > 0), TRUE)
 
     ret <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n",
-                            method = "mrc_adjusted", se = TRUE, n_bootstrap = 5)
+                             method = "mrc_adjusted", se = TRUE, n_bootstrap = 5)
     expect_equal(nrow(ret), 8)
     expect_equal(ncol(ret), 3)
-    expect_equal(all(ret[ret$est>0, "se"] > 0), TRUE)
+    expect_equal(all(ret[ret$est > 0, "se"] > 0), TRUE)
+})
+
+test_that("mutual_difference log base", {
+    ret <- mutual_difference(test_data1, test_data2, "g", "u", 
+                             weight = "n", method = "ipf", base = 2)
+    expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
+    expect_equal(nrow(ret), 9)
+    expect_equal(ncol(ret), 2)
+
+    ret <- mutual_difference(test_data1, test_data2, "g", "u", 
+                             weight = "n", method = "mrc", base = 2)
+    expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
+    expect_equal(nrow(ret), 6)
+    expect_equal(ncol(ret), 2)
+
+    ret <- mutual_difference(test_data1, test_data2, "g", "u", 
+                             weight = "n", method = "mrc_adjusted", base = 2)
+    expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
+    expect_equal(nrow(ret), 8)
+    expect_equal(ncol(ret), 2)
 })
 
 test_data1 <- data.frame(
