@@ -1,4 +1,4 @@
-Development version
+# segregation 0.0.1.9000
 
 * switch group and unit definitions, to be consistent with the literature
 * add Theil's Information Index (H) 
@@ -9,7 +9,7 @@ Development version
 * "mrc_adjusted" difference decomposition is defined only on overlap sample of units and groups
 * internal refactoring
 
-v0.0.1
-======
+# segregation 0.0.1
 
 Initial release.
+

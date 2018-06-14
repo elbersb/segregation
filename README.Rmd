@@ -117,13 +117,10 @@ Theil, Henri. (1971). Principles of Econometrics. New York: Wiley.
 
 Frankel, D. M., & Volij, O. (2011). Measuring school segregation. Journal of Economic Theory, 146(1), 1-38. https://doi.org/10.1016/j.jet.2010.10.008
 
-Mora, R., & Ruiz-Castillo, J. (2009). The Invariance Properties of the
-   Mutual Information Index of Multigroup Segregation, in: Yves Flückiger, Sean F. Reardon, Jacques Silber (eds.) Occupational and Residential Segregation (Research on Economic Inequality, Volume 17), 33-53.
+Mora, R., & Ruiz-Castillo, J. (2009). The Invariance Properties of the Mutual Information Index of Multigroup Segregation, in: Yves Flückiger, Sean F. Reardon, Jacques Silber (eds.) Occupational and Residential Segregation (Research on Economic Inequality, Volume 17), 33-53.
 
 Mora, R., & Ruiz-Castillo, J. (2011). Entropy-based Segregation Indices. Sociological Methodology, 41(1), 159–194. https://doi.org/10.1111/j.1467-9531.2011.01237.x
 
-Karmel, T. & Maclachlan, M. (1988). Occupational Sex Segregation — Increasing or Decreasing? 
-    Economic Record 64: 187-195. https://doi.org/10.1111/j.1475-4932.1988.tb02057.x
+Karmel, T. & Maclachlan, M. (1988). Occupational Sex Segregation — Increasing or Decreasing? Economic Record 64: 187-195. https://doi.org/10.1111/j.1475-4932.1988.tb02057.x
 
-Watts, M. The Use and Abuse of Entropy Based Segregation Indices. Working Paper.
-    URL: http://www.ecineq.org/ecineq_lux15/FILESx2015/CR2/p217.pdf
+Watts, M. The Use and Abuse of Entropy Based Segregation Indices. Working Paper. URL: http://www.ecineq.org/ecineq_lux15/FILESx2015/CR2/p217.pdf
