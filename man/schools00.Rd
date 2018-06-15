@@ -19,6 +19,6 @@ schools00
 Fake dataset used for examples. Loosely based on data provided by
 the National Center for Education Statistics, Common Core of Data,
 with information on U.S. primary schools in three U.S. states.
-The original data can be downloaded free of charge at https://nces.ed.gov/ccd/.
+The original data can be downloaded at \url{https://nces.ed.gov/ccd/}.
 }
 \keyword{datasets}

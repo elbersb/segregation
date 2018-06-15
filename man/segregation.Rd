@@ -11,25 +11,6 @@ on the Mutual Information Index (M) and Theil's Information Index (H).
 Provides tools to decompose the measures by groups and units, and by within
 and between terms. Includes standard error estimation by bootstrapping.
 }
-\section{Methods}{
-
-
-\itemize{
- \item{}{\code{\link{mutual_total}} Computes M and H.}
- \item{}{\code{\link{mutual_within}} Computes detailed within-category segregation.}
- \item{}{\code{\link{mutual_local}} Computes local segregation based on M.}
- \item{}{\code{\link{mutual_difference}} Decomposes difference between two M indices.}
- \item{}{\code{\link{entropy}} Calculates the entropy of a distribution.}
- \item{}{\code{\link{ipf}} Uses iterative proportional fitting to adjust
-   the marginal distributions in one dataset to those of another dataset.}
+\seealso{
+\url{https://elbersb.de/segregation}
 }
-}
-
-\section{Data}{
-
-
-\itemize{
- \item{}{\code{\link{schools00}} and \code{\link{schools05}} Example datasets.}
-}
-}
-

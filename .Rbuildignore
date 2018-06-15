@@ -8,3 +8,4 @@
 ^codecov\.yml$
 ^\.travis\.yml$
 ^render_README\.R$
+^docs$

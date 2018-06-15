@@ -107,6 +107,9 @@ mutual_difference(schools00, schools05, group = "race", unit = "school",
 #>      structural  0.00318
 ```
 
+Find more information in the
+[documentation](https://elbersb.de/segregation).
+
 ## How to install
 
 To install the package from CRAN, use
@@ -119,14 +122,6 @@ To install the development version, use
 
 ``` r
 devtools::install_github("elbersb/segregation") 
-```
-
-To access the documentation
-([PDF](https://cran.r-project.org/web/packages/segregation/segregation.pdf)),
-type
-
-``` r
-?segregation
 ```
 
 ## Papers using the Mutual information index

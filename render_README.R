@@ -8,4 +8,3 @@ rmarkdown::render("README.Rmd",
                       html_preview = FALSE))
 
 pkgdown::build_site()
-
