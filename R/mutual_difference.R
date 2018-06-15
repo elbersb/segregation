@@ -37,7 +37,7 @@
 #'   over which segregation is computed.
 #' @param weight Numeric. Only frequency weights are allowed.
 #'   (Default \code{NULL})
-#' @param method Either "ipf" (the default) (Karmel and Machlachlan 1988), or
+#' @param method Either "ipf" (the default) (Karmel and Maclachlan 1988), or
 #'   "mrc" / "mrc_adjusted" (Mora and Ruiz-Castillo 2009). See below for an explanation.
 #' @param forward_only Only relevant for "ipf". If set to \code{TRUE}, the decomposition will
 #'   only adjust the margins of \code{data2} to those \code{data1}, and not vice versa. This 
@@ -58,7 +58,7 @@
 #' 
 #'   The sum of all rows following \code{diff} equal \code{diff}.
 #' 
-#'   When using "ipf" or "mrc_adjusted", two additionals rows are reported:
+#'   When using "ipf" or "mrc_adjusted", two additional rows are reported:
 #'   \code{additions} contains the change in M induces by \code{unit} and code{group} categories
 #'   present in \code{data2} but not \code{data1}, and \code{removals} the reverse.
 #'   

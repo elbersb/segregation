@@ -19,7 +19,7 @@ contained in \code{data}. Defines the second dimension
 over which segregation is computed.}
 
 \item{within}{A categorical variable or a vector of variables
-contained in \code{data} that defines the within-segregation categoriess.}
+contained in \code{data} that defines the within-segregation categories.}
 
 \item{weight}{Numeric. Only frequency weights are allowed.
 (Default \code{NULL})}

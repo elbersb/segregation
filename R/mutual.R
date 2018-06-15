@@ -181,7 +181,7 @@ mutual_total <- function(data, group, unit, within = NULL,
 #'   contained in \code{data}. Defines the second dimension
 #'   over which segregation is computed.
 #' @param within A categorical variable or a vector of variables
-#'   contained in \code{data} that defines the within-segregation categoriess.
+#'   contained in \code{data} that defines the within-segregation categories.
 #' @param weight Numeric. Only frequency weights are allowed.
 #'   (Default \code{NULL})
 #' @param se If \code{TRUE}, standard errors are estimated via bootstrap.

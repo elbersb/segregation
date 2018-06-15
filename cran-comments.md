@@ -1,19 +1,9 @@
-This is the second resubmission.
-
-* added references to Description text
-
-## First resubmission.
-
-* fixed LICENSE file
-* updated URLs in README
-
 ## Test environments
 
-* local OS X, R 3.4.4
-* CRAN win-builder
+* local OS X, R 3.5.0
+* CRAN win-builder (NOTE: "Theil's" is not misspelled)
+* ubuntu 14.04 (on travis-ci), R 3.5.0
 
 ## R CMD check results
 
 No ERRORs, WARNINGSs, or NOTES.
-
-
