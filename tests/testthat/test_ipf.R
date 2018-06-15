@@ -43,3 +43,30 @@ test_that("gives sames results as mutual_difference", {
     expect_equal(M_05 - M_00 - structural_change, 
         sum(diff[c("unit_marginal", "group_marginal", "interaction"), "est"]))
 })
+
+test_that("example from Karmel & Maclachlan 1988", {
+    source <- data.frame(
+        occ = rep(c(1, 2, 3), 2),
+        gender = c(rep("male", 3), rep("female", 3)),
+        n = c(100, 50, 100, 50, 50, 50)
+    )
+    target <- data.frame(
+        occ = rep(c(1, 2, 3), 2),
+        gender = c(rep("male", 3), rep("female", 3)),
+        n = c(125, 100, 100, 100, 100, 75)
+    )
+    adj <- ipf(source, target, "occ", "gender", "n", precision = 0)
+    adj$n = round(adj$n, 1)
+    expect_equal(adj[adj$gender=="male" & adj$occ==1, "n"], 134.7)
+    expect_equal(adj[adj$gender=="male" & adj$occ==2, "n"], 85.5)
+    expect_equal(adj[adj$gender=="male" & adj$occ==3, "n"], 104.8)
+    expect_equal(adj[adj$gender=="female" & adj$occ==1, "n"], 90.3)
+    expect_equal(adj[adj$gender=="female" & adj$occ==2, "n"], 114.5)
+    expect_equal(adj[adj$gender=="female" & adj$occ==3, "n"], 70.2)
+
+    expect_equal(sum(adj[adj$gender=='male', 'n']), sum(adj[adj$gender=='male', 'n_target']))
+    expect_equal(sum(adj[adj$gender=='female', 'n']), sum(adj[adj$gender=='female', 'n_target']))
+    expect_equal(sum(adj[adj$occ==1, 'n']), sum(adj[adj$occ==1, 'n_target']))
+    expect_equal(sum(adj[adj$occ==2, 'n']), sum(adj[adj$occ==2, 'n_target']))
+    expect_equal(sum(adj[adj$occ==3, 'n']), sum(adj[adj$occ==3, 'n_target']))
+})
