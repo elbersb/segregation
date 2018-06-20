@@ -1,4 +1,8 @@
-# segregation 0.0.1.9000
+# segregation 0.1.0.9000
+
+
+
+# segregation 0.1.0
 
 * switch group and unit definitions, to be consistent with the literature
 * add Theil's Information Index (H) 
