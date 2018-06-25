@@ -34,7 +34,8 @@ Defaults to the natural logarithm.}
 }
 \value{
 Returns a data frame with two rows for each category defined by \code{unit},
-  for a total of \code{2*(number of units)} rows. The column \code{est} contains two statistics that
+  for a total of \code{2*(number of units)} rows.
+  The column \code{est} contains two statistics that
   are provided for each unit: \code{ls}, the local segregation score, and
   \code{p}, the proportion of the unit from the total number of cases.
   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains

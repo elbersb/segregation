@@ -153,7 +153,7 @@ over which segregation is computed.</p></td>
     <tr>
       <th>forward_only</th>
       <td><p>Only relevant for "ipf". If set to <code>TRUE</code>, the decomposition will
-only adjust the margins of <code>data2</code> to those <code>data1</code>, and not vice versa. This 
+only adjust the margins of <code>data2</code> to those <code>data1</code>, and not vice versa. This
 is recommended when <code>data1</code> and <code>data2</code> are measurements at different points in time.
 (Default <code>FALSE</code>)</p></td>
     </tr>
@@ -188,7 +188,7 @@ when <code>method</code> is set to <code>ipf</code>. See <a href='ipf.html'>ipf<
 <p>The sum of all rows following <code>diff</code> equal <code>diff</code>.</p>
 <p>When using "ipf" or "mrc_adjusted", two additional rows are reported:
   <code>additions</code> contains the change in M induces by <code>unit</code> and codegroup categories
-  present in <code>data2</code> but not <code>data1</code>, and <code>removals</code> the reverse.</p>  
+  present in <code>data2</code> but not <code>data1</code>, and <code>removals</code> the reverse.</p>
 <p>When using "ipf", four additional rows are returned:
   <code>unit_marginal</code> is the contribution of unit composition differences.
   <code>group_marginal</code> is the contribution of group composition differences.
@@ -196,7 +196,7 @@ when <code>method</code> is set to <code>ipf</code>. See <a href='ipf.html'>ipf<
      of <code>unit</code> and <code>group</code>. The total effect of changes in the margins is the sum
      of <code>unit_marginal</code>, <code>group_marginal</code>, and <code>interaction</code>.
   <code>structural</code> is the contribution unexplained by the marginal changes, i.e. the structural
-    difference.</p>  
+    difference.</p>
 <p>When using "mrc" or "mrc_adjusted", three additional rows are returned:
   <code>unit_marginal</code> is the contribution of unit composition differences.
   <code>group_marginal</code> is the difference in group entropy.
@@ -208,22 +208,24 @@ when <code>method</code> is set to <code>ipf</code>. See <a href='ipf.html'>ipf<
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The IPF method (Karmel and Maclachlan 1988) adjusts the margins of <code>data2</code> to be similar 
-to the margins of <code>data1</code>. This is an iterative process, and may take of few seconds depending
-on the size of the dataset (see <a href='ipf.html'>ipf</a> for details). 
-The difference in M between <code>data1</code> and the margins-adjusted <code>data2</code> 
-is the structural difference between <code>data1</code> and <code>data2</code>. 
+    <p>The IPF method (Karmel and Maclachlan 1988) adjusts the margins of <code>data2</code> to be similar
+to the margins of <code>data1</code>.
+This is an iterative process, and may take of few seconds depending
+on the size of the dataset (see <a href='ipf.html'>ipf</a> for details).
+The difference in M between <code>data1</code> and the margins-adjusted <code>data2</code>
+is the structural difference between <code>data1</code> and <code>data2</code>.
 The remaining, unexplained difference is due to changes in the marginal distribution.
 Unless <code>forward_only</code> is set to <code>TRUE</code>, the process
 is then repeated the other way around, and the differences are averaged.</p>
 <p>A problem arises when there are <code>group</code> and/or <code>unit</code> categories in <code>data1</code>
-that are not present in <code>data2</code> (or vice versa). The IPF method estimates the difference only
+that are not present in <code>data2</code> (or vice versa).
+The IPF method estimates the difference only
 for categories that are present in both datasets, and reports additionally
-the change in M that is induced by these cases as 
-<code>additions</code> (present in <code>data2</code>, but not in <code>data1</code>) and 
-<code>removals</code> (present in <code>data1</code>, but not in <code>data2</code>). For the method developed 
+the change in M that is induced by these cases as
+<code>additions</code> (present in <code>data2</code>, but not in <code>data1</code>) and
+<code>removals</code> (present in <code>data1</code>, but not in <code>data2</code>). For the method developed
 by Mora and Ruiz-Castillo (2009), there are two options provided: When using "mrc", the
-categories not present in the other data source are set 0. When using "mrc_adjusted", the same 
+categories not present in the other data source are set 0. When using "mrc_adjusted", the same
 procedure as for the IPF method is used, and <code>additions</code> and <code>removals</code> are reported.</p>
 <p>Note that the IPF method is symmetric, i.e. the reversal of <code>group</code> and <code>unit</code>
 definitions will yield the same results. The method developed by Mora and Ruiz-Castillo (2009)

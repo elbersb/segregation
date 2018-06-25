@@ -40,8 +40,8 @@ mutual_total_within_compute <- function(data, group, unit, within, base,
     setkeyv(by_unit, within)
 
     # compute total entropy
-    p <- data[, list(p=sum(freq)), by=group][["p"]] / n_total
-    entropy_overall = sum(p * logf(1/p, base))
+    p <- data[, list(p = sum(freq)), by = group][["p"]] / n_total
+    entropy_overall <- sum(p * logf(1 / p, base))
 
     # merge within entropy, and compare to group entropy
     by_unit <- merge(by_unit, entropy)
@@ -51,9 +51,9 @@ mutual_total_within_compute <- function(data, group, unit, within, base,
         H = sum(p_unit * (entropyw - entropy_cond)) / first(entropyw),
         h_weight = first(p_within) * first(entropyw) / entropy_overall
     ), by = within]
-    by_within$H = ifelse(is.finite(by_within$H), by_within$H, 0)
+    by_within$H <- ifelse(is.finite(by_within$H), by_within$H, 0)
 
-    if(components == TRUE) {
+    if (components == TRUE) {
         melt(by_within,
              id.vars = within, measure.vars = c("M", "p", "H", "h_weight"),
              variable.name = "stat", value.name = "est",
@@ -138,7 +138,7 @@ mutual_total <- function(data, group, unit, within = NULL,
     d <- prepare_data(data, group, unit, weight, within)
 
     if (se == FALSE) {
-        if(is.null(within)) {
+        if (is.null(within)) {
             ret <- mutual_total_compute(d, group, unit, base)
         } else {
             ret <- mutual_total_within_compute(d, group, unit, within, base)
@@ -152,7 +152,7 @@ mutual_total <- function(data, group, unit, within = NULL,
             resampled <- d[
                 sample(.N, n_total, replace = TRUE, prob = freq)][,
                 list(freq = .N), by = vars]
-            if(is.null(within)) {
+            if (is.null(within)) {
                 mutual_total_compute(resampled, group, unit, base)
             } else {
                 mutual_total_within_compute(resampled, group, unit, within, base)
@@ -253,11 +253,11 @@ mutual_within <- function(data, group, unit, within,
             by = c(within, "stat")]
     }
 
-    if(wide == TRUE) {
+    if (wide == TRUE) {
         f <- stats::as.formula(paste(paste(within, collapse = "+"),
                                      "~ factor(stat, levels=c('M', 'p', 'H', 'h_weight'))"))
-        if(se == TRUE) {
-            ret <- dcast(ret, f, value.var=c('est', 'se'))
+        if (se == TRUE) {
+            ret <- dcast(ret, f, value.var = c("est", "se"))
             names(ret) <- c(within,
                             "M", "p", "H", "h_weight",
                             "M_se", "p_se", "H_se", "h_weight_se")
@@ -265,7 +265,7 @@ mutual_within <- function(data, group, unit, within,
                                "M", "M_se", "p", "p_se",
                                "H", "H_se", "h_weight", "h_weight_se"))
         } else {
-            ret <- dcast(ret, f, value.var=c('est'))
+            ret <- dcast(ret, f, value.var = c("est"))
         }
     }
 
@@ -306,7 +306,8 @@ mutual_local_compute <- function(data, group, unit, base = exp(1)) {
 #' @param wide Returns a wide dataframe instead of a long dataframe.
 #'   (Default \code{FALSE})
 #' @return Returns a data frame with two rows for each category defined by \code{unit},
-#'   for a total of \code{2*(number of units)} rows. The column \code{est} contains two statistics that
+#'   for a total of \code{2*(number of units)} rows.
+#'   The column \code{est} contains two statistics that
 #'   are provided for each unit: \code{ls}, the local segregation score, and
 #'   \code{p}, the proportion of the unit from the total number of cases.
 #'   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
@@ -358,15 +359,15 @@ mutual_local <- function(data, group, unit, weight = NULL,
             by = c(unit, "stat")]
     }
 
-    if(wide == TRUE) {
+    if (wide == TRUE) {
         f <- stats::as.formula(paste(paste(unit, collapse = "+"),
                                      "~ factor(stat, levels=c('ls', 'p'))"))
-        if(se == TRUE) {
-            ret <- dcast(ret, f, value.var=c('est', 'se'))
+        if (se == TRUE) {
+            ret <- dcast(ret, f, value.var = c("est", "se"))
             names(ret) <- c(unit, "ls", "p", "ls_se", "p_se")
             setcolorder(ret, c(unit, "ls", "ls_se", "p", "p_se"))
         } else {
-            ret <- dcast(ret, f, value.var=c('est'))
+            ret <- dcast(ret, f, value.var = c("est"))
         }
     }
 

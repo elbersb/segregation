@@ -16,5 +16,5 @@ test_that("correct entropy calculation", {
     expect_equal(entropy(data.frame(x = c(1, 2), n = c(10, 10)), "x", weight = "n", base = 2),
                  1)
     expect_equal(entropy(data.frame(x = c(1, 2), n = c(10, 30)), "x", weight = "n"),
-                 .25*log(1/.25)+.75*log(1/.75))
+                 .25 * log(1 / .25) + .75 * log(1 / .75))
 })

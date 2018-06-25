@@ -37,10 +37,11 @@ than \code{1 + precision}.}
 Returns a dataset that retains
   the association structure of \code{source} while approximating
   the marginal distributions for \code{group} and \code{unit} of \code{target}.
-  The dataset identifies each combination of \code{group} and \code{unit}, and categories that only
-  occur in either \code{source} or \code{target} are dropped. The adjusted
-  frequency of each combination is given by the column \code{n}, while \code{n_target} and
-  \code{n_source} contain the zero-adjusted frequencies in the target and source dataset, respectively.
+  The dataset identifies each combination of \code{group} and \code{unit},
+  and categories that only occur in either \code{source} or \code{target} are dropped.
+  The adjusted frequency of each combination is given by the column \code{n},
+  while \code{n_target} and \code{n_source} contain the zero-adjusted frequencies
+  in the target and source dataset, respectively.
 }
 \description{
 Adjusts the marginal distributions for \code{group} and \code{unit}
@@ -50,11 +51,11 @@ proportional fitting algorithm (IPF).
 \details{
 The algorithm works by scaling
 the marginal distribution of \code{group} in the \code{source} data frame towards the
-marginal distribution of \code{target}; then repeating this process for \code{unit}. The 
+marginal distribution of \code{target}; then repeating this process for \code{unit}. The
 algorithm then keeps alternating between \code{group} and \code{unit} until the marginals
-of the adjusted data frame are within the allowed precision. This results in a dataset that 
+of the adjusted data frame are within the allowed precision. This results in a dataset that
 retains the association structure of \code{source} while approximating
-the marginal distribution of \code{target}. If the number of \code{unit} and 
+the marginal distribution of \code{target}. If the number of \code{unit} and
 \code{group} categories is different in \code{source} and \code{target}, the data frame returns
 the combination of \code{unit} and \code{group} categories that occur in both datasets.
 Zero values are replaced by a small, non-zero number (1e-4).
@@ -71,16 +72,16 @@ aggregate(adj$n_target, list(adj$race), sum)
 
 # note that the adjusted dataset contains fewer
 # schools than either the source or the target dataset,
-# because the marginals are only defined for the overlap 
+# because the marginals are only defined for the overlap
 # of schools
 length(unique(schools00$school))
 length(unique(schools05$school))
 length(unique(adj$school))
 }
 \references{
-W. E. Deming and F. F. Stephan. 1940. 
-  "On a Least Squares Adjustment of a Sampled Frequency Table 
-  When the Expected Marginal Totals are Known". 
+W. E. Deming and F. F. Stephan. 1940.
+  "On a Least Squares Adjustment of a Sampled Frequency Table
+  When the Expected Marginal Totals are Known".
   Annals of Mathematical Statistics. 11 (4): 427–444.
 
  T. Karmel and M. Maclachlan. 1988.

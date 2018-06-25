@@ -42,7 +42,7 @@ test_that("as tibble works", {
     ret <- mutual_total(test_data, "u", "g", weight = "n")
     expect_true("data.frame" %in% class(ret))
 
-    if(requireNamespace("tibble", quietly = TRUE)) {
+    if (requireNamespace("tibble", quietly = TRUE)) {
         library(tibble)
         ret <- mutual_total(test_data, "u", "g", weight = "n")
         expect_true("tbl_df" %in% class(ret))
@@ -65,9 +65,11 @@ test_that("between + within = total", {
 p_12 <- sum(test_data[test_data$supergroup == 12, "n"]) / sum(test_data$n)
 p_34 <- sum(test_data[test_data$supergroup == 34, "n"]) / sum(test_data$n)
 test_that("within estimations are correct", {
+    d_12 <- test_data[test_data$supergroup == 12, ]
+    d_34 <- test_data[test_data$supergroup == 34, ]
     expect_equal(
-        p_12 * mutual_total(test_data[test_data$supergroup == 12, ], "u", "g", weight = "n")[["M", "est"]] +
-            p_34 * mutual_total(test_data[test_data$supergroup == 34, ], "u", "g", weight = "n")[["M", "est"]],
+        p_12 * mutual_total(d_12, "u", "g", weight = "n")[["M", "est"]] +
+            p_34 * mutual_total(d_34, "u", "g", weight = "n")[["M", "est"]],
         mutual_total(test_data, "u", "g", within = "supergroup", weight = "n")[["M", "est"]]
     )
     # this decomposition does not exist in the same way for H
@@ -107,6 +109,3 @@ test_that("zero weights no problem", {
         mutual_total(test_data, "u", "g", weight = "n")[["est"]],
         mutual_total(test_data2, "u", "g", weight = "n")[["est"]])
 })
-
-
-

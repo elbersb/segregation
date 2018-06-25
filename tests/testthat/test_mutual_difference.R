@@ -21,8 +21,8 @@ test_that("mutual_difference IPF", {
         precision = .0001)
 
     expect_equal(ret1[["diff", "est"]], ret1[["M2", "est"]] - ret1[["M1", "est"]])
-    expect_equal(ret1[["diff", "est"]],
-                 sum(ret1[c("unit_marginal", "group_marginal", "interaction", "structural"), "est"]))
+    diff <- sum(ret1[c("unit_marginal", "group_marginal", "interaction", "structural"), "est"])
+    expect_equal(ret1[["diff", "est"]], diff)
     expect_equal(ret1[["additions", "est"]], 0)
     expect_equal(ret1[["removals", "est"]], 0)
 
@@ -42,8 +42,8 @@ test_that("mutual_difference IPF", {
     expect_equal(ncol(ret), 2)
 
     # symmetrical
-    ret$est = round(ret$est, 5)
-    ret1$est = round(ret1$est, 5)
+    ret$est <- round(ret$est, 5)
+    ret1$est <- round(ret1$est, 5)
     expect_equal(ret[["M1", "est"]], ret1[["M1", "est"]])
     expect_equal(ret[["M2", "est"]], ret1[["M2", "est"]])
     expect_equal(ret[["diff", "est"]], ret1[["diff", "est"]])
@@ -65,7 +65,7 @@ test_that("mutual_difference MRC", {
 
     # other way around
     ret <- mutual_difference(test_data1, test_data2, "u", "g", weight = "n", method = "mrc")
-    
+
     expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
     expect_equal(ret[["diff", "est"]],
                  sum(ret[c("unit_marginal", "group_marginal", "structural"), "est"]))
@@ -80,7 +80,8 @@ test_that("mutual_difference MRC", {
 
 
 test_that("mutual_difference MRC-ADJUSTED", {
-    ret <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n", method = "mrc_adjusted")
+    ret <- mutual_difference(test_data1, test_data2,
+                             "g", "u", weight = "n", method = "mrc_adjusted")
 
     expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
     expect_equal(ret[["diff", "est"]],
@@ -89,7 +90,8 @@ test_that("mutual_difference MRC-ADJUSTED", {
     expect_equal(ret[["removals", "est"]], 0)
 
     # other way around
-    ret <- mutual_difference(test_data1, test_data2, "u", "g", weight = "n", method = "mrc_adjusted")
+    ret <- mutual_difference(test_data1, test_data2,
+                             "u", "g", weight = "n", method = "mrc_adjusted")
 
     expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
     expect_equal(ret[["diff", "est"]],
@@ -125,19 +127,19 @@ test_that("mutual_difference SE", {
 })
 
 test_that("mutual_difference log base", {
-    ret <- mutual_difference(test_data1, test_data2, "g", "u", 
+    ret <- mutual_difference(test_data1, test_data2, "g", "u",
                              weight = "n", method = "ipf", base = 2)
     expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
     expect_equal(nrow(ret), 9)
     expect_equal(ncol(ret), 2)
 
-    ret <- mutual_difference(test_data1, test_data2, "g", "u", 
+    ret <- mutual_difference(test_data1, test_data2, "g", "u",
                              weight = "n", method = "mrc", base = 2)
     expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
     expect_equal(nrow(ret), 6)
     expect_equal(ncol(ret), 2)
 
-    ret <- mutual_difference(test_data1, test_data2, "g", "u", 
+    ret <- mutual_difference(test_data1, test_data2, "g", "u",
                              weight = "n", method = "mrc_adjusted", base = 2)
     expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
     expect_equal(nrow(ret), 8)
@@ -155,13 +157,16 @@ test_data2 <- data.frame(
     n = c(40, 20, 20, 15, 5, 10, 10, 0, 1, 2, 3, 4)
 )
 
-ipf <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n", method = "ipf", precision = .1)
-mrc <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n", method = "mrc")
-mrc_adj <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n", method = "mrc_adjusted")
+ipf <- mutual_difference(test_data1, test_data2,
+                         "g", "u", weight = "n", method = "ipf", precision = .1)
+mrc <- mutual_difference(test_data1, test_data2,
+                         "g", "u", weight = "n", method = "mrc")
+mrc_adj <- mutual_difference(test_data1, test_data2,
+                             "g", "u", weight = "n", method = "mrc_adjusted")
 M1 <- mutual_total(test_data1, "g", "u", weight = "n")[["M", "est"]]
 M2 <- mutual_total(test_data2, "g", "u", weight = "n")[["M", "est"]]
 
-test_that("difference same as mutual_total (zero weights)", {    
+test_that("difference same as mutual_total (zero weights)", {
     expect_equal(ipf[["M1", "est"]], M1)
     expect_equal(ipf[["M2", "est"]], M2)
     expect_equal(mrc[["M1", "est"]], M1)
@@ -171,11 +176,11 @@ test_that("difference same as mutual_total (zero weights)", {
 })
 
 test_that("forward_only", {
-    f1 <- mutual_difference(test_data1, test_data2, "g", "u", 
+    f1 <- mutual_difference(test_data1, test_data2, "g", "u",
                             weight = "n", method = "ipf", forward_only = TRUE)
-    f2 <- mutual_difference(test_data2, test_data1, "g", "u", 
+    f2 <- mutual_difference(test_data2, test_data1, "g", "u",
                             weight = "n", method = "ipf", forward_only = TRUE)
-    both <- mutual_difference(test_data1, test_data2, "g", "u", 
+    both <- mutual_difference(test_data1, test_data2, "g", "u",
                             weight = "n", method = "ipf", forward_only = FALSE)
 
     expect_equal(f1[["M1", "est"]], f2[["M2", "est"]], both[["M1", "est"]])
@@ -183,8 +188,12 @@ test_that("forward_only", {
     expect_equal(f1[["diff", "est"]], -f2[["diff", "est"]], both[["diff", "est"]])
     expect_equal(f1[["additions", "est"]], -f2[["removals", "est"]], both[["additions", "est"]])
     expect_equal(f1[["removals", "est"]], -f2[["additions", "est"]], both[["removals", "est"]])
-    expect_equal((f1[["unit_marginal", "est"]] + -f2[["unit_marginal", "est"]]) / 2, both[["unit_marginal", "est"]])
-    expect_equal((f1[["group_marginal", "est"]] + -f2[["group_marginal", "est"]]) / 2, both[["group_marginal", "est"]])
-    expect_equal((f1[["interaction", "est"]] + -f2[["interaction", "est"]]) / 2, both[["interaction", "est"]])
-    expect_equal((f1[["structural", "est"]] + -f2[["structural", "est"]]) / 2, both[["structural", "est"]])
+    expect_equal((f1[["unit_marginal", "est"]] + -f2[["unit_marginal", "est"]]) / 2,
+        both[["unit_marginal", "est"]])
+    expect_equal((f1[["group_marginal", "est"]] + -f2[["group_marginal", "est"]]) / 2,
+        both[["group_marginal", "est"]])
+    expect_equal((f1[["interaction", "est"]] + -f2[["interaction", "est"]]) / 2,
+        both[["interaction", "est"]])
+    expect_equal((f1[["structural", "est"]] + -f2[["structural", "est"]]) / 2,
+        both[["structural", "est"]])
 })

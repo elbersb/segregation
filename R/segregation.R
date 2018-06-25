@@ -25,14 +25,16 @@ as_tibble_or_df <- function(data) {
         tibble::as_tibble(data)
     } else {
         df <- as.data.frame(data, stringsAsFactors = FALSE)
-        rownames(df) = rownames(data)
+        rownames(df) <- rownames(data)
         df
     }
 }
 
 logf <- function(v, base) {
-    if(missing(base)) { stop("argument base required") }
-    ifelse(v > 0 & is.finite(v), log(v, base=base), 0)
+    if (missing(base)) {
+        stop("argument base required")
+    }
+    ifelse(v > 0 & is.finite(v), log(v, base = base), 0)
 }
 
 #' Calculates the entropy of a distribution
@@ -68,7 +70,7 @@ entropy <- function(data, group, weight = NULL, base = exp(1)) {
     setDT(data)
     n_total <- sum(data[, "freq"])
     p <- data[, list(p = sum(freq)), by = group][["p"]] / n_total
-    sum(p * logf(1/p, base))
+    sum(p * logf(1 / p, base))
 }
 
 

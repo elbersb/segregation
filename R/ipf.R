@@ -2,15 +2,15 @@
 #'
 #' Adjusts the marginal distributions for \code{group} and \code{unit}
 #' in \code{source} to the respective marginal distributions in \code{target}, using the iterative
-#' proportional fitting algorithm (IPF). 
-#' 
+#' proportional fitting algorithm (IPF).
+#'
 #' The algorithm works by scaling
 #' the marginal distribution of \code{group} in the \code{source} data frame towards the
-#' marginal distribution of \code{target}; then repeating this process for \code{unit}. The 
+#' marginal distribution of \code{target}; then repeating this process for \code{unit}. The
 #' algorithm then keeps alternating between \code{group} and \code{unit} until the marginals
-#' of the adjusted data frame are within the allowed precision. This results in a dataset that 
+#' of the adjusted data frame are within the allowed precision. This results in a dataset that
 #' retains the association structure of \code{source} while approximating
-#' the marginal distribution of \code{target}. If the number of \code{unit} and 
+#' the marginal distribution of \code{target}. If the number of \code{unit} and
 #' \code{group} categories is different in \code{source} and \code{target}, the data frame returns
 #' the combination of \code{unit} and \code{group} categories that occur in both datasets.
 #' Zero values are replaced by a small, non-zero number (1e-4).
@@ -36,16 +36,17 @@
 #' @return Returns a dataset that retains
 #'   the association structure of \code{source} while approximating
 #'   the marginal distributions for \code{group} and \code{unit} of \code{target}.
-#'   The dataset identifies each combination of \code{group} and \code{unit}, and categories that only
-#'   occur in either \code{source} or \code{target} are dropped. The adjusted
-#'   frequency of each combination is given by the column \code{n}, while \code{n_target} and
-#'   \code{n_source} contain the zero-adjusted frequencies in the target and source dataset, respectively.
+#'   The dataset identifies each combination of \code{group} and \code{unit},
+#'   and categories that only occur in either \code{source} or \code{target} are dropped.
+#'   The adjusted frequency of each combination is given by the column \code{n},
+#'   while \code{n_target} and \code{n_source} contain the zero-adjusted frequencies
+#'   in the target and source dataset, respectively.
 #' @references
-#'   W. E. Deming and F. F. Stephan. 1940. 
-#'   "On a Least Squares Adjustment of a Sampled Frequency Table 
-#'   When the Expected Marginal Totals are Known". 
+#'   W. E. Deming and F. F. Stephan. 1940.
+#'   "On a Least Squares Adjustment of a Sampled Frequency Table
+#'   When the Expected Marginal Totals are Known".
 #'   Annals of Mathematical Statistics. 11 (4): 427–444.
-#' 
+#'
 #'  T. Karmel and M. Maclachlan. 1988.
 #'   "Occupational Sex Segregation — Increasing or Decreasing?" Economic Record 64: 187-195.
 #' @examples
@@ -57,10 +58,10 @@
 #' # (the same could be done for schools)
 #' aggregate(adj$n, list(adj$race), sum)
 #' aggregate(adj$n_target, list(adj$race), sum)
-#' 
+#'
 #' # note that the adjusted dataset contains fewer
 #' # schools than either the source or the target dataset,
-#' # because the marginals are only defined for the overlap 
+#' # because the marginals are only defined for the overlap
 #' # of schools
 #' length(unique(schools00$school))
 #' length(unique(schools05$school))
@@ -84,8 +85,8 @@ create_common_data <- function(d1, d2, group, unit, fill_na = 1e-4) {
     # preserve all possible combinations
     common_group <- fintersect(d1[, group, with = FALSE], d2[, group, with = FALSE])
     common_unit <- fintersect(d1[, unit, with = FALSE], d2[, unit, with = FALSE])
-    common_group$key = 1
-    common_unit$key = 1
+    common_group$key <- 1
+    common_unit$key <- 1
     common <- merge(common_unit, common_group, allow.cartesian = TRUE)
     common[, "key" := NULL]
 
@@ -100,22 +101,22 @@ create_common_data <- function(d1, d2, group, unit, fill_na = 1e-4) {
     common[, freq_orig1 := ifelse(is.na(freq_orig1), 0, freq_orig1)]
     common[, freq_orig2 := ifelse(is.na(freq_orig2), 0, freq_orig2)]
     # drop when both are ~zero
-    common[!(freq1==fill_na & freq2==fill_na),]
+    common[!(freq1 == fill_na & freq2 == fill_na), ]
 }
 
 
 #' @import data.table
-ipf_compute <- function(data, group, unit, 
+ipf_compute <- function(data, group, unit,
                         max_iterations = 100, precision = .001) {
     data[, `:=`(n_unit_s = sum(freq1), n_unit_t = sum(freq2)), by = unit]
     data[, `:=`(n_group_s = sum(freq1), n_group_t = sum(freq2)), by = group]
-    data$n_source = data$freq1
+    data$n_source <- data$freq1
 
     # IPF algorithm
-    precision = abs(log(1/(1+precision)))
-    converged = FALSE
-    for(i in 1:(max_iterations * 2)) {
-        if(i %% 2 == 0) {
+    precision <- abs(log(1 / (1 + precision)))
+    converged <- FALSE
+    for (i in 1:(max_iterations * 2)) {
+        if (i %% 2 == 0) {
             data[, `:=`(freq1 = freq1 * n_unit_t / n_unit_s)]
             cat(".")
         } else {
@@ -128,16 +129,16 @@ ipf_compute <- function(data, group, unit,
             by = group][, ratio]
         unit_ratio <- data[, list(ratio = abs(log(first(n_unit_s) / first(n_unit_t)))),
             by = unit][, ratio]
-        if(all(group_ratio <= precision & all(unit_ratio <= precision))) {
-            converged = TRUE
+        if (all(group_ratio <= precision & all(unit_ratio <= precision))) {
+            converged <- TRUE
             break
         }
     }
     cat("\n")
-    if(!converged) {
+    if (!converged) {
         warning("IPF did not converge; increase max_iterations.")
     }
-    data[, c("n_unit_t", "n_unit_s", "n_group_t", "n_group_s", 
+    data[, c("n_unit_t", "n_unit_s", "n_group_t", "n_group_s",
              "freq_orig1", "freq_orig2") := NULL]
     setnames(data, "freq1", "n")
     setnames(data, "freq2", "n_target")

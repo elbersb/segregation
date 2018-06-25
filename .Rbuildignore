@@ -9,3 +9,4 @@
 ^\.travis\.yml$
 ^render_README\.R$
 ^docs$
+^\.lintr$

@@ -28,7 +28,7 @@ over which segregation is computed.}
 "mrc" / "mrc_adjusted" (Mora and Ruiz-Castillo 2009). See below for an explanation.}
 
 \item{forward_only}{Only relevant for "ipf". If set to \code{TRUE}, the decomposition will
-only adjust the margins of \code{data2} to those \code{data1}, and not vice versa. This 
+only adjust the margins of \code{data2} to those \code{data1}, and not vice versa. This
 is recommended when \code{data1} and \code{data2} are measurements at different points in time.
 (Default \code{FALSE})}
 
@@ -55,7 +55,7 @@ Returns a data frame with columns \code{stat} and \code{est}. The data frame con
   When using "ipf" or "mrc_adjusted", two additional rows are reported:
   \code{additions} contains the change in M induces by \code{unit} and code{group} categories
   present in \code{data2} but not \code{data1}, and \code{removals} the reverse.
-  
+
   When using "ipf", four additional rows are returned:
   \code{unit_marginal} is the contribution of unit composition differences.
   \code{group_marginal} is the contribution of group composition differences.
@@ -64,7 +64,7 @@ Returns a data frame with columns \code{stat} and \code{est}. The data frame con
      of \code{unit_marginal}, \code{group_marginal}, and \code{interaction}.
   \code{structural} is the contribution unexplained by the marginal changes, i.e. the structural
     difference.
-  
+
   When using "mrc" or "mrc_adjusted", three additional rows are returned:
   \code{unit_marginal} is the contribution of unit composition differences.
   \code{group_marginal} is the difference in group entropy.
@@ -80,23 +80,25 @@ Uses either a method based on the IPF algorithm (recommended and the default) or
 the method developed by Mora and Ruiz-Castillo (2009).
 }
 \details{
-The IPF method (Karmel and Maclachlan 1988) adjusts the margins of \code{data2} to be similar 
-to the margins of \code{data1}. This is an iterative process, and may take of few seconds depending
-on the size of the dataset (see \link{ipf} for details). 
-The difference in M between \code{data1} and the margins-adjusted \code{data2} 
-is the structural difference between \code{data1} and \code{data2}. 
+The IPF method (Karmel and Maclachlan 1988) adjusts the margins of \code{data2} to be similar
+to the margins of \code{data1}.
+This is an iterative process, and may take of few seconds depending
+on the size of the dataset (see \link{ipf} for details).
+The difference in M between \code{data1} and the margins-adjusted \code{data2}
+is the structural difference between \code{data1} and \code{data2}.
 The remaining, unexplained difference is due to changes in the marginal distribution.
 Unless \code{forward_only} is set to \code{TRUE}, the process
 is then repeated the other way around, and the differences are averaged.
 
 A problem arises when there are \code{group} and/or \code{unit} categories in \code{data1}
-that are not present in \code{data2} (or vice versa). The IPF method estimates the difference only
+that are not present in \code{data2} (or vice versa).
+The IPF method estimates the difference only
 for categories that are present in both datasets, and reports additionally
-the change in M that is induced by these cases as 
-\code{additions} (present in \code{data2}, but not in \code{data1}) and 
-\code{removals} (present in \code{data1}, but not in \code{data2}). For the method developed 
+the change in M that is induced by these cases as
+\code{additions} (present in \code{data2}, but not in \code{data1}) and
+\code{removals} (present in \code{data1}, but not in \code{data2}). For the method developed
 by Mora and Ruiz-Castillo (2009), there are two options provided: When using "mrc", the
-categories not present in the other data source are set 0. When using "mrc_adjusted", the same 
+categories not present in the other data source are set 0. When using "mrc_adjusted", the same
 procedure as for the IPF method is used, and \code{additions} and \code{removals} are reported.
 
 Note that the IPF method is symmetric, i.e. the reversal of \code{group} and \code{unit}
