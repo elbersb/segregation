@@ -7,9 +7,9 @@ mutual_total_compute <- function(data, group, unit, base) {
     # calculate H
     p <- data[, list(p = first(p_group)), by = group][["p"]]
     entropy_group <- sum(p * logf(1 / p, base))
-    H <- M / entropy_group   
+    H <- M / entropy_group
 
-    data.table(stat = c("M", "H"), est = c(M, H), 
+    data.table(stat = c("M", "H"), est = c(M, H),
                stringsAsFactors = FALSE)
 }
 
@@ -254,7 +254,7 @@ mutual_within <- function(data, group, unit, within,
     }
 
     if(wide == TRUE) {
-        f <- stats::as.formula(paste(within,
+        f <- stats::as.formula(paste(paste(within, collapse = "+"),
                                      "~ factor(stat, levels=c('M', 'p', 'H', 'h_weight'))"))
         if(se == TRUE) {
             ret <- dcast(ret, f, value.var=c('est', 'se'))
@@ -359,7 +359,8 @@ mutual_local <- function(data, group, unit, weight = NULL,
     }
 
     if(wide == TRUE) {
-        f <- stats::as.formula(paste(unit, "~ factor(stat, levels=c('ls', 'p'))"))
+        f <- stats::as.formula(paste(paste(unit, collapse = "+"),
+                                     "~ factor(stat, levels=c('ls', 'p'))"))
         if(se == TRUE) {
             ret <- dcast(ret, f, value.var=c('est', 'se'))
             names(ret) <- c(unit, "ls", "p", "ls_se", "p_se")
