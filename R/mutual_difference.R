@@ -119,6 +119,11 @@ mutual_difference <- function(data1, data2, group, unit,
     d1 <- prepare_data(data1, group, unit, weight)
     d2 <- prepare_data(data2, group, unit, weight)
 
+    nrow_group <- nrow(merge(unique(d1[, group, with=FALSE]), unique(d2[, group, with=FALSE])))
+    if(nrow_group==0) stop("No overlap in group")
+    nrow_unit <- nrow(merge(unique(d1[, unit, with=FALSE]), unique(d2[, unit, with=FALSE])))
+    if(nrow_unit==0) stop("No overlap in unit")
+
     if (se == FALSE) {
         ret <- method(d1, d2, group, unit, forward_only, base, ...)
     } else {
