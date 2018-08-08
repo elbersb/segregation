@@ -42,13 +42,13 @@ test_that("between + within = total", {
 
 test_that("option wide works", {
     nowide <- mutual_within(test_data, "u", "g",
-            within = "supergroup", weight = "n")
+                            within = "supergroup", weight = "n")
     nowide_se <- mutual_within(test_data, "u", "g",
-            within = "supergroup", weight = "n", se = T)
+                            within = "supergroup", weight = "n", se = T)
     wide <- mutual_within(test_data, "u", "g",
-            within = "supergroup", weight = "n", wide = T)
+                            within = "supergroup", weight = "n", wide = T)
     wide_se <- mutual_within(test_data, "u", "g",
-            within = "supergroup", weight = "n", wide = T, se = T)
+                            within = "supergroup", weight = "n", wide = T, se = T)
 
     expect_equal(ncol(nowide) + 1, ncol(nowide_se))
     expect_equal(nrow(nowide), 2 * 4)
