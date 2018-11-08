@@ -129,7 +129,7 @@ ipf_compute <- function(data, group, unit,
             by = group][, ratio]
         unit_ratio <- data[, list(ratio = abs(log(first(n_unit_s) / first(n_unit_t)))),
             by = unit][, ratio]
-        if (all(group_ratio <= precision & all(unit_ratio <= precision))) {
+        if (all(group_ratio <= precision) & all(unit_ratio <= precision)) {
             converged <- TRUE
             break
         }
