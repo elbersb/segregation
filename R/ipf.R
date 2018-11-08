@@ -90,7 +90,7 @@ create_common_data <- function(d1, d2, group, unit, fill_na = 1e-4) {
     common <- merge(common_unit, common_group, allow.cartesian = TRUE)
     common[, "key" := NULL]
 
-    # fill undefined matrix values with ~zero, and generate counts
+    # join original frequencies
     common <- merge(common, d1, by = c(group, unit), all.x = TRUE)
     setnames(common, "freq", "freq_orig1")
     common <- merge(common, d2, by = c(group, unit), all.x = TRUE)
@@ -142,5 +142,6 @@ ipf_compute <- function(data, group, unit,
              "freq_orig1", "freq_orig2") := NULL]
     setnames(data, "freq1", "n")
     setnames(data, "freq2", "n_target")
+    setkey(data, NULL)
     data
 }

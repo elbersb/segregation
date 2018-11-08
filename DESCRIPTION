@@ -24,4 +24,4 @@ Suggests:
     lintr
 URL: http://github.com/elbersb/segregation
 BugReports: http://github.com/elbersb/segregation/issues
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0

@@ -93,6 +93,7 @@ prepare_data <- function(data, group, unit, weight, within = NULL) {
     setDT(data)
     data <- data[freq > 0, list(freq = sum(freq)), by = vars]
     attr(data, "vars") <- vars
+    setkey(data, NULL)
     data
 }
 
