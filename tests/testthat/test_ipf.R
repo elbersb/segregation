@@ -18,7 +18,7 @@ test_that("different precisions", {
 })
 
 test_that("warn if iterations are too low", {
-    expect_warning(ipf(schools00, schools05, "race", "school", weight = "n",
+    expect_error(ipf(schools00, schools05, "race", "school", weight = "n",
         precision = .00001, max_iterations = 1))
 })
 
