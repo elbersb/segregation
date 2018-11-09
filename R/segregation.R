@@ -67,7 +67,7 @@ entropy <- function(data, group, weight = NULL, base = exp(1)) {
     } else {
         data[, "freq"] <- 1
     }
-    setDT(data)
+    data.table::setDT(data)
     n_total <- sum(data[, "freq"])
     p <- data[, list(p = sum(freq)), by = group][["p"]] / n_total
     sum(p * logf(1 / p, base))
@@ -90,7 +90,7 @@ prepare_data <- function(data, group, unit, weight, within = NULL) {
     }
 
     # collapse on vars, and select only positive weights
-    setDT(data)
+    data.table::setDT(data)
     data <- data[freq > 0, list(freq = sum(freq)), by = vars]
     attr(data, "vars") <- vars
     setkey(data, NULL)
