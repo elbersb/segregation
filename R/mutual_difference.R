@@ -212,10 +212,10 @@ shapley_compute <- function(d1, d2, group, unit, base, ...) {
     marginal <- .5 * (m_BBA - m_AAA) + .5 * (m_BBB - m_AAB)
     structural <- .5 * (m_AAB - m_AAA) + .5 * (m_BBB - m_BBA)
 
-    group_marginal <- .25 * ( (m_BAA - m_AAA) + (m_BBA - m_ABA) +
-                                    (m_BBB - m_ABB) + (m_BAB - m_AAB))
-    unit_marginal <- .25 * ( (m_ABA - m_AAA) + (m_BBA - m_BAA) +
-                                   (m_BBB - m_BAB) + (m_ABB - m_AAB))
+    group_marginal <- .25 * (m_BAA - m_AAA + (m_BBA - m_ABA) +
+                             m_BBB - m_ABB + (m_BAB - m_AAB))
+    unit_marginal <- .25 * (m_ABA - m_AAA + (m_BBA - m_BAA) +
+                            m_BBB - m_BAB + (m_ABB - m_AAB))
     stopifnot(round(group_marginal + unit_marginal, 4) == round(marginal, 4))
 
     stat <- c("M1", "M2", "diff", "additions", "removals",
