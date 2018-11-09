@@ -121,7 +121,7 @@
 <a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; M    M 0.326</span></a>
 <a class="sourceLine" id="cb3-11" data-line-number="11"><span class="co">#&gt; H    H 0.321</span></a></code></pre></div>
 <p>Local segregation (<code>ls</code>) is a decomposition by units (here racial groups). The sum of the proportion-weighted local segregation scores equals M:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">(local &lt;-<span class="st"> </span><span class="kw"><a href="reference/mutual_local.html">mutual_local</a></span>(schools00, <span class="dt">group =</span> <span class="st">"school"</span>, <span class="dt">unit =</span> <span class="st">"race"</span>, <span class="dt">weight =</span> <span class="st">"n"</span>, </a>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">(local &lt;-<span class="st"> </span><span class="kw"><a href="reference/mutual_local.html">mutual_local</a></span>(schools00, <span class="dt">group =</span> <span class="st">"school"</span>, <span class="dt">unit =</span> <span class="st">"race"</span>, <span class="dt">weight =</span> <span class="st">"n"</span>,</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2">             <span class="dt">se =</span> <span class="ot">TRUE</span>, <span class="dt">wide =</span> <span class="ot">TRUE</span>))</a>
 <a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt; ..........</span></a>
 <a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt;     race    ls    ls_se       p     p_se</span></a>
@@ -133,30 +133,33 @@
 <a class="sourceLine" id="cb4-10" data-line-number="10"></a>
 <a class="sourceLine" id="cb4-11" data-line-number="11"><span class="kw">sum</span>(local<span class="op">$</span>p <span class="op">*</span><span class="st"> </span>local<span class="op">$</span>ls)</a>
 <a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; [1] 0.429</span></a></code></pre></div>
-<p>Decompose the difference in M between 2000 and 2005, using iterative proportional fitting (IPF), as suggested by Karmel and Maclachlan (1988):</p>
+<p>Decompose the difference in M between 2000 and 2005, using iterative proportional fitting (IPF) and the Shapley decomposition, as suggested by Karmel and Maclachlan (1988) and Deutsch et al. (2006):</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="reference/mutual_difference.html">mutual_difference</a></span>(schools00, schools05, <span class="dt">group =</span> <span class="st">"race"</span>, <span class="dt">unit =</span> <span class="st">"school"</span>,</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">                  <span class="dt">weight =</span> <span class="st">"n"</span>, <span class="dt">method =</span> <span class="st">"ipf"</span>)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">                  <span class="dt">weight =</span> <span class="st">"n"</span>, <span class="dt">method =</span> <span class="st">"shapley"</span>)</a>
 <a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt; ........</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; .........</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt;                          stat      est</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; M1                         M1  0.42554</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; M2                         M2  0.41339</span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; diff                     diff -0.01215</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; additions           additions -0.00341</span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt; removals             removals -0.01141</span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; unit_marginal   unit_marginal -0.02020</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; group_marginal group_marginal  0.01723</span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; interaction       interaction  0.00245</span></a>
-<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; structural         structural  0.00318</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; ........</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; ......</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; .........</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; ........</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; .......</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt;                          stat      est</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt; M1                         M1  0.42554</span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; M2                         M2  0.41339</span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; diff                     diff -0.01215</span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; additions           additions -0.00341</span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; removals             removals -0.01141</span></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt; group_marginal group_marginal  0.01623</span></a>
+<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt; unit_marginal   unit_marginal -0.01674</span></a>
+<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt; structural         structural  0.00318</span></a></code></pre></div>
 <p>Find more information in the <a href="https://elbersb.de/segregation">documentation</a>.</p>
 </div>
 <div id="how-to-install" class="section level2">
 <h2 class="hasAnchor">
 <a href="#how-to-install" class="anchor"></a>How to install</h2>
 <p>To install the package from CRAN, use</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">"segregation"</span>) </a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">"segregation"</span>)</a></code></pre></div>
 <p>To install the development version, use</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"elbersb/segregation"</span>) </a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"elbersb/segregation"</span>)</a></code></pre></div>
 </div>
 <div id="papers-using-the-mutual-information-index" class="section level2">
 <h2 class="hasAnchor">
@@ -170,7 +173,8 @@
 <div id="references-on-entropy-based-segregation-indices" class="section level2">
 <h2 class="hasAnchor">
 <a href="#references-on-entropy-based-segregation-indices" class="anchor"></a>References on entropy-based segregation indices</h2>
-<p>Theil, Henri. (1971). Principles of Econometrics. New York: Wiley.</p>
+<p>Deutsch, J., Flückiger, Y. &amp; Silber, J. (2009). Analyzing Changes in Occupational Segregation: The Case of Switzerland (1970–2000), in: Yves Flückiger, Sean F. Reardon, Jacques Silber (eds.) Occupational and Residential Segregation (Research on Economic Inequality, Volume 17), 171–202.</p>
+<p>Theil, H. (1971). Principles of Econometrics. New York: Wiley.</p>
 <p>Frankel, D. M., &amp; Volij, O. (2011). Measuring school segregation. Journal of Economic Theory, 146(1), 1-38. <a href="https://doi.org/10.1016/j.jet.2010.10.008" class="uri">https://doi.org/10.1016/j.jet.2010.10.008</a></p>
 <p>Mora, R., &amp; Ruiz-Castillo, J. (2009). The Invariance Properties of the Mutual Information Index of Multigroup Segregation, in: Yves Flückiger, Sean F. Reardon, Jacques Silber (eds.) Occupational and Residential Segregation (Research on Economic Inequality, Volume 17), 33-53.</p>
 <p>Mora, R., &amp; Ruiz-Castillo, J. (2011). Entropy-based Segregation Indices. Sociological Methodology, 41(1), 159–194. <a href="https://doi.org/10.1111/j.1467-9531.2011.01237.x" class="uri">https://doi.org/10.1111/j.1467-9531.2011.01237.x</a></p>

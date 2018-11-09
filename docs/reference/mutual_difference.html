@@ -32,8 +32,12 @@
 
 <meta property="og:title" content="Decomposes the difference between two M indices — mutual_difference" />
 
-<meta property="og:description" content="Uses either a method based on the IPF algorithm (recommended and the default) or
-the method developed by Mora and Ruiz-Castillo (2009)." />
+<meta property="og:description" content="Uses one of three methods to decompose the difference between two M indices:
+(1) &quot;shapley&quot;: a method based on the Shapley decomposition with a few advantages over the
+Karmel-Maclachlan method (recommended and the default, Deutsch et al. 2006),
+(2) &quot;km&quot;: the method based on Karmel-Maclachlan (1988),
+(3) &quot;mrc&quot;: the method developed by Mora and Ruiz-Castillo (2009).
+All methods have been extended to account for missing units/groups in either data input." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -108,13 +112,17 @@ the method developed by Mora and Ruiz-Castillo (2009)." />
 
     <div class="ref-description">
     
-    <p>Uses either a method based on the IPF algorithm (recommended and the default) or
-the method developed by Mora and Ruiz-Castillo (2009).</p>
+    <p>Uses one of three methods to decompose the difference between two M indices:
+(1) "shapley": a method based on the Shapley decomposition with a few advantages over the
+Karmel-Maclachlan method (recommended and the default, Deutsch et al. 2006),
+(2) "km": the method based on Karmel-Maclachlan (1988),
+(3) "mrc": the method developed by Mora and Ruiz-Castillo (2009).
+All methods have been extended to account for missing units/groups in either data input.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>mutual_difference</span>(<span class='no'>data1</span>, <span class='no'>data2</span>, <span class='no'>group</span>, <span class='no'>unit</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"ipf"</span>,
-  <span class='kw'>forward_only</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>se</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>n_bootstrap</span> <span class='kw'>=</span> <span class='fl'>50</span>, <span class='kw'>base</span> <span class='kw'>=</span> <span class='fu'>exp</span>(<span class='fl'>1</span>),
+    <pre class="usage"><span class='fu'>mutual_difference</span>(<span class='no'>data1</span>, <span class='no'>data2</span>, <span class='no'>group</span>, <span class='no'>unit</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"shapley"</span>, <span class='kw'>se</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>n_bootstrap</span> <span class='kw'>=</span> <span class='fl'>50</span>, <span class='kw'>base</span> <span class='kw'>=</span> <span class='fu'>exp</span>(<span class='fl'>1</span>),
   <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -147,15 +155,8 @@ over which segregation is computed.</p></td>
     </tr>
     <tr>
       <th>method</th>
-      <td><p>Either "ipf" (the default) (Karmel and Maclachlan 1988), or
-"mrc" / "mrc_adjusted" (Mora and Ruiz-Castillo 2009). See below for an explanation.</p></td>
-    </tr>
-    <tr>
-      <th>forward_only</th>
-      <td><p>Only relevant for "ipf". If set to <code>TRUE</code>, the decomposition will
-only adjust the margins of <code>data2</code> to those <code>data1</code>, and not vice versa. This
-is recommended when <code>data1</code> and <code>data2</code> are measurements at different points in time.
-(Default <code>FALSE</code>)</p></td>
+      <td><p>Either "shapley" (the default), "km" (Karmel and Maclachlan method), or
+"mrc" (Mora and Ruiz-Castillo method).</p></td>
     </tr>
     <tr>
       <th>se</th>
@@ -174,7 +175,7 @@ Defaults to the natural logarithm.</p></td>
     <tr>
       <th>...</th>
       <td><p>Only used for additional arguments when
-when <code>method</code> is set to <code>ipf</code>. See <a href='ipf.html'>ipf</a> for details.</p></td>
+when <code>method</code> is set to <code>shapley</code> or <code>km</code>. See <a href='ipf.html'>ipf</a> for details.</p></td>
     </tr>
     </table>
     
@@ -184,92 +185,134 @@ when <code>method</code> is set to <code>ipf</code>. See <a href='ipf.html'>ipf<
   the following rows defined by <code>stat</code>:
   <code>M1</code> contains the M for <code>data1</code>.
   <code>M2</code> contains the M for <code>data2</code>.
-  <code>diff</code> is the difference between <code>M2</code> and <code>M1</code>.</p>
-<p>The sum of all rows following <code>diff</code> equal <code>diff</code>.</p>
-<p>When using "ipf" or "mrc_adjusted", two additional rows are reported:
-  <code>additions</code> contains the change in M induces by <code>unit</code> and codegroup categories
+  <code>diff</code> is the difference between <code>M2</code> and <code>M1</code>.
+  The sum of all rows following <code>diff</code> equal <code>diff</code>.</p>
+<p><code>additions</code> contains the change in M induces by <code>unit</code> and <code>group</code> categories
   present in <code>data2</code> but not <code>data1</code>, and <code>removals</code> the reverse.</p>
-<p>When using "ipf", four additional rows are returned:
+<p>All methods return the following three terms:
   <code>unit_marginal</code> is the contribution of unit composition differences.
   <code>group_marginal</code> is the contribution of group composition differences.
-  <code>interaction</code> is the contribution of differences in the joint marginal distribution
-     of <code>unit</code> and <code>group</code>. The total effect of changes in the margins is the sum
-     of <code>unit_marginal</code>, <code>group_marginal</code>, and <code>interaction</code>.
   <code>structural</code> is the contribution unexplained by the marginal changes, i.e. the structural
-    difference.</p>
-<p>When using "mrc" or "mrc_adjusted", three additional rows are returned:
-  <code>unit_marginal</code> is the contribution of unit composition differences.
-  <code>group_marginal</code> is the difference in group entropy.
-  <code>structural</code> is the contribution of unit composition-invariant differences.
-  For details on the interpretation of these terms, see Mora and Ruiz-Castillo (2009).</p>
+    difference. Note that the interpretation of these terms depend on the exact method used.</p>
+<p>When using "km", three additional rows are returned:
+   <code>interaction</code> is the contribution of differences in the joint marginal distribution
+     of <code>unit</code> and <code>group</code>. The total effect of changes in the margins is the sum
+     of <code>unit_marginal</code>, <code>group_marginal</code>, and <code>interaction</code>.</p>
 <p>If <code>se</code> is set to <code>TRUE</code>, an additional column <code>se</code> contains
   the associated bootstrapped standard errors, and the column <code>est</code> contains
   bootstrapped estimates.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The IPF method (Karmel and Maclachlan 1988) adjusts the margins of <code>data2</code> to be similar
-to the margins of <code>data1</code>.
-This is an iterative process, and may take of few seconds depending
-on the size of the dataset (see <a href='ipf.html'>ipf</a> for details).
-The difference in M between <code>data1</code> and the margins-adjusted <code>data2</code>
-is the structural difference between <code>data1</code> and <code>data2</code>.
-The remaining, unexplained difference is due to changes in the marginal distribution.
-Unless <code>forward_only</code> is set to <code>TRUE</code>, the process
-is then repeated the other way around, and the differences are averaged.</p>
+    <p>The Shapley method is an improvement over the Karmel-Maclachlan method (Deutsch et al. 2006).
+It is based on several margins-adjusted data inputs
+and yields symmetrical results (i.e. <code>data1</code> and <code>data2</code> can be switched).</p>
+<p>The Karmel-Maclachlan method (Karmel and Maclachlan 1988) adjusts
+the margins of <code>data1</code> to be similar to the margins of <code>data2</code>. This process
+is not symmetrical.</p>
+<p>The Shapley and Karmel-Maclachlan methods are based on iterative proportional fitting (IPF),
+first introduced by Deming and Stephan (1940).
+Depending on the size of the dataset, this may take a few seconds (see <a href='ipf.html'>ipf</a> for details).</p>
+<p>The method developed by Mora and Ruiz-Castillo (2009) uses an algebraic approach to estimate the
+size of the components. This will often yield substantively different results from the Shapley
+and Karmel-Machlachlan methods. Note that this method is not symmetric in terms of what is
+defined as <code>group</code> and <code>unit</code> categories. Depending on this, the method may yield
+very different results.</p>
 <p>A problem arises when there are <code>group</code> and/or <code>unit</code> categories in <code>data1</code>
 that are not present in <code>data2</code> (or vice versa).
-The IPF method estimates the difference only
-for categories that are present in both datasets, and reports additionally
+All methods estimate the difference only
+for categories that are present in both datasets, and report additionally
 the change in M that is induced by these cases as
 <code>additions</code> (present in <code>data2</code>, but not in <code>data1</code>) and
-<code>removals</code> (present in <code>data1</code>, but not in <code>data2</code>). For the method developed
-by Mora and Ruiz-Castillo (2009), there are two options provided: When using "mrc", the
-categories not present in the other data source are set 0. When using "mrc_adjusted", the same
-procedure as for the IPF method is used, and <code>additions</code> and <code>removals</code> are reported.</p>
-<p>Note that the IPF method is symmetric, i.e. the reversal of <code>group</code> and <code>unit</code>
-definitions will yield the same results. The method developed by Mora and Ruiz-Castillo (2009)
-is not symmetric, and will yield different results based on what is defined as the <code>group</code>
-and <code>unit</code> categories.</p>
+<code>removals</code> (present in <code>data1</code>, but not in <code>data2</code>).</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>T. Karmel and M. Maclachlan. 1988.
+    <p>W. E. Deming, F. F. Stephan. 1940. "On a Least Squares Adjustment of a Sampled Frequency Table
+   When the Expected Marginal Totals are Known."
+   The Annals of Mathematical Statistics 11(4): 427-444.</p>
+<p>T. Karmel and M. Maclachlan. 1988.
   "Occupational Sex Segregation — Increasing or Decreasing?" Economic Record 64: 187-195.</p>
 <p>R. Mora and J. Ruiz-Castillo. 2009. "The Invariance Properties of the
-  Mutual Information Index of Multigroup Segregation". Research on Economic Inequality 17: 33-53.</p>
+  Mutual Information Index of Multigroup Segregation." Research on Economic Inequality 17: 33-53.</p>
+<p>J. Deutsch, Y. Flückiger, and Jacques Silber. 2009.
+      "Analyzing Changes in Occupational Segregation: The Case of Switzerland (1970–2000)."
+       Research on Economic Inequality 17: 171–202.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># decompose the difference in school segregation between 2000 and 2005</span>
 <span class='fu'>mutual_difference</span>(<span class='no'>schools00</span>, <span class='no'>schools05</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"race"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"school"</span>,
-    <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"ipf"</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>.01</span>)</div><div class='output co'>#&gt; ....
-#&gt; .....</div><div class='output co'>#&gt;                          stat          est
-#&gt; M1                         M1  0.425538976
-#&gt; M2                         M2  0.413385092
-#&gt; diff                     diff -0.012153884
-#&gt; additions           additions -0.003412776
-#&gt; removals             removals -0.011405093
-#&gt; unit_marginal   unit_marginal -0.020197053
-#&gt; group_marginal group_marginal  0.017229147
-#&gt; interaction       interaction  0.001993649
-#&gt; structural         structural  0.003638243</div><div class='input'><span class='co'># =&gt; the structural component is close to zero, thus most change is in the marginals.</span>
-<span class='co'># note that this method gives identical results when we switch the unit and group definitions</span>
-<span class='fu'>mutual_difference</span>(<span class='no'>schools00</span>, <span class='no'>schools05</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"school"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"race"</span>,
-    <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"ipf"</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>.01</span>)</div><div class='output co'>#&gt; ....
+    <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"shapley"</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>.01</span>)</div><div class='output co'>#&gt; .....
+#&gt; ....
+#&gt; ....
+#&gt; .....
+#&gt; ....
 #&gt; ....</div><div class='output co'>#&gt;                          stat          est
 #&gt; M1                         M1  0.425538976
 #&gt; M2                         M2  0.413385092
 #&gt; diff                     diff -0.012153884
 #&gt; additions           additions -0.003412776
 #&gt; removals             removals -0.011405093
-#&gt; unit_marginal   unit_marginal  0.017229147
-#&gt; group_marginal group_marginal -0.020197053
-#&gt; interaction       interaction  0.001993927
-#&gt; structural         structural  0.003637965</div><div class='input'>
+#&gt; group_marginal group_marginal  0.016105394
+#&gt; unit_marginal   unit_marginal -0.016982717
+#&gt; structural         structural  0.003541309</div><div class='input'><span class='co'># =&gt; the structural component is close to zero, thus most change is in the marginals.</span>
+<span class='co'># note that this method gives identical results when we switch the unit and group definitions,</span>
+<span class='co'># and when we switch the data inputs</span>
+<span class='fu'>mutual_difference</span>(<span class='no'>schools00</span>, <span class='no'>schools05</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"school"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"race"</span>,
+    <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"shapley"</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>.01</span>)</div><div class='output co'>#&gt; ....
+#&gt; ....
+#&gt; ....
+#&gt; .....
+#&gt; ....
+#&gt; ...</div><div class='output co'>#&gt;                          stat          est
+#&gt; M1                         M1  0.425538976
+#&gt; M2                         M2  0.413385092
+#&gt; diff                     diff -0.012153884
+#&gt; additions           additions -0.003412776
+#&gt; removals             removals -0.011405093
+#&gt; group_marginal group_marginal -0.016982717
+#&gt; unit_marginal   unit_marginal  0.016105394
+#&gt; structural         structural  0.003541309</div><div class='input'><span class='fu'>mutual_difference</span>(<span class='no'>schools05</span>, <span class='no'>schools00</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"school"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"race"</span>,
+    <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"shapley"</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>.01</span>)</div><div class='output co'>#&gt; ....
+#&gt; ....
+#&gt; ...
+#&gt; ....
+#&gt; ....
+#&gt; ...</div><div class='output co'>#&gt;                          stat          est
+#&gt; M1                         M1  0.413385092
+#&gt; M2                         M2  0.425538976
+#&gt; diff                     diff  0.012153884
+#&gt; additions           additions  0.011405093
+#&gt; removals             removals  0.003412776
+#&gt; group_marginal group_marginal  0.017031133
+#&gt; unit_marginal   unit_marginal -0.016056978
+#&gt; structural         structural -0.003638141</div><div class='input'>
+<span class='co'># the Karmel-Maclachlan method is similar, but only adjust the data in the forward direction -</span>
+<span class='fu'>mutual_difference</span>(<span class='no'>schools00</span>, <span class='no'>schools05</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"school"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"race"</span>,
+    <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"km"</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>.01</span>)</div><div class='output co'>#&gt; ....</div><div class='output co'>#&gt;                          stat          est
+#&gt; M1                         M1  0.425538976
+#&gt; M2                         M2  0.413385092
+#&gt; diff                     diff -0.012153884
+#&gt; additions           additions -0.003412776
+#&gt; removals             removals -0.011405093
+#&gt; group_marginal group_marginal -0.020612028
+#&gt; unit_marginal   unit_marginal  0.017494502
+#&gt; interaction       interaction  0.002778804
+#&gt; structural         structural  0.003002708</div><div class='input'><span class='fu'>mutual_difference</span>(<span class='no'>schools05</span>, <span class='no'>schools00</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"school"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"race"</span>,
+    <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"km"</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>.01</span>)</div><div class='output co'>#&gt; ....</div><div class='output co'>#&gt;                          stat          est
+#&gt; M1                         M1  0.413385092
+#&gt; M2                         M2  0.425538976
+#&gt; diff                     diff  0.012153884
+#&gt; additions           additions  0.011405093
+#&gt; removals             removals  0.003412776
+#&gt; group_marginal group_marginal  0.019781880
+#&gt; unit_marginal   unit_marginal -0.016963444
+#&gt; interaction       interaction -0.001014624
+#&gt; structural         structural -0.004467798</div><div class='input'>
 <span class='co'># the MRC method indicates a much higher structural change</span>
 <span class='fu'>mutual_difference</span>(<span class='no'>schools00</span>, <span class='no'>schools05</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"race"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"school"</span>,
-    <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"mrc_adjusted"</span>)</div><div class='output co'>#&gt;                          stat          est
+    <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"mrc"</span>)</div><div class='output co'>#&gt;                          stat          est
 #&gt; M1                         M1  0.425538976
 #&gt; M2                         M2  0.413385092
 #&gt; diff                     diff -0.012153884
@@ -279,7 +322,7 @@ and <code>unit</code> categories.</p>
 #&gt; group_marginal group_marginal  0.062334448
 #&gt; structural         structural -0.055462706</div><div class='input'><span class='co'># ...and is not symmetric</span>
 <span class='fu'>mutual_difference</span>(<span class='no'>schools00</span>, <span class='no'>schools05</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"school"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"race"</span>,
-    <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"mrc_adjusted"</span>)</div><div class='output co'>#&gt;                          stat          est
+    <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"mrc"</span>)</div><div class='output co'>#&gt;                          stat          est
 #&gt; M1                         M1  0.425538976
 #&gt; M2                         M2  0.413385092
 #&gt; diff                     diff -0.012153884

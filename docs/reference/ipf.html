@@ -203,16 +203,16 @@ Zero values are replaced by a small, non-zero number (1e-4).</p>
 <span class='co'># check that the new "race" marginals are similar to the target marginals</span>
 <span class='co'># (the same could be done for schools)</span>
 <span class='fu'>aggregate</span>(<span class='no'>adj</span>$<span class='no'>n</span>, <span class='fu'>list</span>(<span class='no'>adj</span>$<span class='no'>race</span>), <span class='no'>sum</span>)</div><div class='output co'>#&gt;   Group.1          x
-#&gt; 1   asian  22510.224
-#&gt; 2   black 117453.068
-#&gt; 3    hisp 147040.573
-#&gt; 4  native   6085.647
-#&gt; 5   white 441132.529</div><div class='input'><span class='fu'>aggregate</span>(<span class='no'>adj</span>$<span class='no'>n_target</span>, <span class='fu'>list</span>(<span class='no'>adj</span>$<span class='no'>race</span>), <span class='no'>sum</span>)</div><div class='output co'>#&gt;   Group.1          x
-#&gt; 1   asian  22508.008
-#&gt; 2   black 117527.007
-#&gt; 3    hisp 147052.003
-#&gt; 4  native   6085.021
-#&gt; 5   white 441050.002</div><div class='input'>
+#&gt; 1   asian  22510.251
+#&gt; 2   black 117453.076
+#&gt; 3    hisp 147040.583
+#&gt; 4  native   6085.698
+#&gt; 5   white 441132.531</div><div class='input'><span class='fu'>aggregate</span>(<span class='no'>adj</span>$<span class='no'>n_target</span>, <span class='fu'>list</span>(<span class='no'>adj</span>$<span class='no'>race</span>), <span class='no'>sum</span>)</div><div class='output co'>#&gt;   Group.1          x
+#&gt; 1   asian  22508.034
+#&gt; 2   black 117527.015
+#&gt; 3    hisp 147052.013
+#&gt; 4  native   6085.073
+#&gt; 5   white 441050.005</div><div class='input'>
 <span class='co'># note that the adjusted dataset contains fewer</span>
 <span class='co'># schools than either the source or the target dataset,</span>
 <span class='co'># because the marginals are only defined for the overlap</span>
