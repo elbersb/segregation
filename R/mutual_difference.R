@@ -21,9 +21,8 @@
 #'
 #' The method developed by Mora and Ruiz-Castillo (2009) uses an algebraic approach to estimate the
 #' size of the components. This will often yield substantively different results from the Shapley
-#' and Karmel-Machlachlan methods. Note that this method is not symmetric in terms of what is
-#' defined as \code{group} and \code{unit} categories. Depending on this, the method may yield
-#' very different results.
+#' and Karmel-Maclachlan methods. Note that this method is not symmetric in terms of what is
+#' defined as \code{group} and \code{unit} categories, which may yield contradictory results.
 #'
 #' A problem arises when there are \code{group} and/or \code{unit} categories in \code{data1}
 #' that are not present in \code{data2} (or vice versa).
@@ -69,10 +68,9 @@
 #'   \code{structural} is the contribution unexplained by the marginal changes, i.e. the structural
 #'     difference. Note that the interpretation of these terms depend on the exact method used.
 #'
-#'   When using "km", three additional rows are returned:
+#'   When using "km", one additional row is returned:
 #'    \code{interaction} is the contribution of differences in the joint marginal distribution
-#'      of \code{unit} and \code{group}. The total effect of changes in the margins is the sum
-#'      of \code{unit_marginal}, \code{group_marginal}, and \code{interaction}.
+#'      of \code{unit} and \code{group}.
 #'
 #'   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
 #'   the associated bootstrapped standard errors, and the column \code{est} contains
@@ -92,27 +90,32 @@
 #'       "Analyzing Changes in Occupational Segregation: The Case of Switzerland (1970–2000)."
 #'        Research on Economic Inequality 17: 171–202.
 #' @examples
-#' # decompose the difference in school segregation between 2000 and 2005
+#' # decompose the difference in school segregation between 2000 and 2005,
+#' # using the Shapley method
 #' mutual_difference(schools00, schools05, group = "race", unit = "school",
 #'     weight = "n", method = "shapley", precision = .01)
 #' # => the structural component is close to zero, thus most change is in the marginals.
 #' # note that this method gives identical results when we switch the unit and group definitions,
 #' # and when we switch the data inputs
+#'
 #' mutual_difference(schools00, schools05, group = "school", unit = "race",
 #'     weight = "n", method = "shapley", precision = .01)
+#'
 #' mutual_difference(schools05, schools00, group = "school", unit = "race",
 #'     weight = "n", method = "shapley", precision = .01)
 #'
-#' # the Karmel-Maclachlan method is similar, but only adjust the data in the forward direction -
-#  # this means that the results won't be identical when we switch the data inputs
+#' # the Karmel-Maclachlan method is similar, but only adjust the data in the forward direction...
 #' mutual_difference(schools00, schools05, group = "school", unit = "race",
 #'     weight = "n", method = "km", precision = .01)
+#'
+#' # ...this means that the results won't be identical when we switch the data inputs
 #' mutual_difference(schools05, schools00, group = "school", unit = "race",
 #'     weight = "n", method = "km", precision = .01)
 #'
-#' # the MRC method indicates a much higher structural change
+#' # the MRC method indicates a much higher structural change...
 #' mutual_difference(schools00, schools05, group = "race", unit = "school",
 #'     weight = "n", method = "mrc")
+#'
 #' # ...and is not symmetric
 #' mutual_difference(schools00, schools05, group = "school", unit = "race",
 #'     weight = "n", method = "mrc")

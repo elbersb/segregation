@@ -194,10 +194,9 @@ when <code>method</code> is set to <code>shapley</code> or <code>km</code>. See 
   <code>group_marginal</code> is the contribution of group composition differences.
   <code>structural</code> is the contribution unexplained by the marginal changes, i.e. the structural
     difference. Note that the interpretation of these terms depend on the exact method used.</p>
-<p>When using "km", three additional rows are returned:
+<p>When using "km", one additional row is returned:
    <code>interaction</code> is the contribution of differences in the joint marginal distribution
-     of <code>unit</code> and <code>group</code>. The total effect of changes in the margins is the sum
-     of <code>unit_marginal</code>, <code>group_marginal</code>, and <code>interaction</code>.</p>
+     of <code>unit</code> and <code>group</code>.</p>
 <p>If <code>se</code> is set to <code>TRUE</code>, an additional column <code>se</code> contains
   the associated bootstrapped standard errors, and the column <code>est</code> contains
   bootstrapped estimates.</p>
@@ -215,9 +214,8 @@ first introduced by Deming and Stephan (1940).
 Depending on the size of the dataset, this may take a few seconds (see <a href='ipf.html'>ipf</a> for details).</p>
 <p>The method developed by Mora and Ruiz-Castillo (2009) uses an algebraic approach to estimate the
 size of the components. This will often yield substantively different results from the Shapley
-and Karmel-Machlachlan methods. Note that this method is not symmetric in terms of what is
-defined as <code>group</code> and <code>unit</code> categories. Depending on this, the method may yield
-very different results.</p>
+and Karmel-Maclachlan methods. Note that this method is not symmetric in terms of what is
+defined as <code>group</code> and <code>unit</code> categories, which may yield contradictory results.</p>
 <p>A problem arises when there are <code>group</code> and/or <code>unit</code> categories in <code>data1</code>
 that are not present in <code>data2</code> (or vice versa).
 All methods estimate the difference only
@@ -241,7 +239,8 @@ the change in M that is induced by these cases as
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># decompose the difference in school segregation between 2000 and 2005</span>
+    <pre class="examples"><div class='input'><span class='co'># decompose the difference in school segregation between 2000 and 2005,</span>
+<span class='co'># using the Shapley method</span>
 <span class='fu'>mutual_difference</span>(<span class='no'>schools00</span>, <span class='no'>schools05</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"race"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"school"</span>,
     <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"shapley"</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>.01</span>)</div><div class='output co'>#&gt; .....
 #&gt; ....
@@ -259,6 +258,7 @@ the change in M that is induced by these cases as
 #&gt; structural         structural  0.003541309</div><div class='input'><span class='co'># =&gt; the structural component is close to zero, thus most change is in the marginals.</span>
 <span class='co'># note that this method gives identical results when we switch the unit and group definitions,</span>
 <span class='co'># and when we switch the data inputs</span>
+
 <span class='fu'>mutual_difference</span>(<span class='no'>schools00</span>, <span class='no'>schools05</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"school"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"race"</span>,
     <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"shapley"</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>.01</span>)</div><div class='output co'>#&gt; ....
 #&gt; ....
@@ -273,7 +273,8 @@ the change in M that is induced by these cases as
 #&gt; removals             removals -0.011405093
 #&gt; group_marginal group_marginal -0.016982717
 #&gt; unit_marginal   unit_marginal  0.016105394
-#&gt; structural         structural  0.003541309</div><div class='input'><span class='fu'>mutual_difference</span>(<span class='no'>schools05</span>, <span class='no'>schools00</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"school"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"race"</span>,
+#&gt; structural         structural  0.003541309</div><div class='input'>
+<span class='fu'>mutual_difference</span>(<span class='no'>schools05</span>, <span class='no'>schools00</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"school"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"race"</span>,
     <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"shapley"</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>.01</span>)</div><div class='output co'>#&gt; ....
 #&gt; ....
 #&gt; ...
@@ -288,7 +289,7 @@ the change in M that is induced by these cases as
 #&gt; group_marginal group_marginal  0.017031133
 #&gt; unit_marginal   unit_marginal -0.016056978
 #&gt; structural         structural -0.003638141</div><div class='input'>
-<span class='co'># the Karmel-Maclachlan method is similar, but only adjust the data in the forward direction -</span>
+<span class='co'># the Karmel-Maclachlan method is similar, but only adjust the data in the forward direction...</span>
 <span class='fu'>mutual_difference</span>(<span class='no'>schools00</span>, <span class='no'>schools05</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"school"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"race"</span>,
     <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"km"</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>.01</span>)</div><div class='output co'>#&gt; ....</div><div class='output co'>#&gt;                          stat          est
 #&gt; M1                         M1  0.425538976
@@ -299,7 +300,9 @@ the change in M that is induced by these cases as
 #&gt; group_marginal group_marginal -0.020612028
 #&gt; unit_marginal   unit_marginal  0.017494502
 #&gt; interaction       interaction  0.002778804
-#&gt; structural         structural  0.003002708</div><div class='input'><span class='fu'>mutual_difference</span>(<span class='no'>schools05</span>, <span class='no'>schools00</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"school"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"race"</span>,
+#&gt; structural         structural  0.003002708</div><div class='input'>
+<span class='co'># ...this means that the results won't be identical when we switch the data inputs</span>
+<span class='fu'>mutual_difference</span>(<span class='no'>schools05</span>, <span class='no'>schools00</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"school"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"race"</span>,
     <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"km"</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>.01</span>)</div><div class='output co'>#&gt; ....</div><div class='output co'>#&gt;                          stat          est
 #&gt; M1                         M1  0.413385092
 #&gt; M2                         M2  0.425538976
@@ -310,7 +313,7 @@ the change in M that is induced by these cases as
 #&gt; unit_marginal   unit_marginal -0.016963444
 #&gt; interaction       interaction -0.001014624
 #&gt; structural         structural -0.004467798</div><div class='input'>
-<span class='co'># the MRC method indicates a much higher structural change</span>
+<span class='co'># the MRC method indicates a much higher structural change...</span>
 <span class='fu'>mutual_difference</span>(<span class='no'>schools00</span>, <span class='no'>schools05</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"race"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"school"</span>,
     <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"mrc"</span>)</div><div class='output co'>#&gt;                          stat          est
 #&gt; M1                         M1  0.425538976
@@ -320,7 +323,8 @@ the change in M that is induced by these cases as
 #&gt; removals             removals -0.011405093
 #&gt; unit_marginal   unit_marginal -0.004207757
 #&gt; group_marginal group_marginal  0.062334448
-#&gt; structural         structural -0.055462706</div><div class='input'><span class='co'># ...and is not symmetric</span>
+#&gt; structural         structural -0.055462706</div><div class='input'>
+<span class='co'># ...and is not symmetric</span>
 <span class='fu'>mutual_difference</span>(<span class='no'>schools00</span>, <span class='no'>schools05</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"school"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"race"</span>,
     <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"mrc"</span>)</div><div class='output co'>#&gt;                          stat          est
 #&gt; M1                         M1  0.425538976
