@@ -57,12 +57,12 @@ test_that("example from Karmel & Maclachlan 1988", {
     )
     adj <- ipf(source, target, "occ", "gender", "n", precision = 0)
     adj$n <- round(adj$n, 1)
-    expect_equal(adj[adj$gender == "male" & adj$occ == 1, "n"], 134.7)
-    expect_equal(adj[adj$gender == "male" & adj$occ == 2, "n"], 85.5)
-    expect_equal(adj[adj$gender == "male" & adj$occ == 3, "n"], 104.8)
-    expect_equal(adj[adj$gender == "female" & adj$occ == 1, "n"], 90.3)
-    expect_equal(adj[adj$gender == "female" & adj$occ == 2, "n"], 114.5)
-    expect_equal(adj[adj$gender == "female" & adj$occ == 3, "n"], 70.2)
+    expect_equal(adj[adj$gender == "male" & adj$occ == 1, "n"][[1]], 134.7)
+    expect_equal(adj[adj$gender == "male" & adj$occ == 2, "n"][[1]], 85.5)
+    expect_equal(adj[adj$gender == "male" & adj$occ == 3, "n"][[1]], 104.8)
+    expect_equal(adj[adj$gender == "female" & adj$occ == 1, "n"][[1]], 90.3)
+    expect_equal(adj[adj$gender == "female" & adj$occ == 2, "n"][[1]], 114.5)
+    expect_equal(adj[adj$gender == "female" & adj$occ == 3, "n"][[1]], 70.2)
 
     expect_equal(sum(adj[adj$gender == "male", "n"]),
                  sum(adj[adj$gender == "male", "n_target"]))
