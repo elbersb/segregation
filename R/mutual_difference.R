@@ -1,33 +1,38 @@
 #' Decomposes the difference between two M indices
 #'
-#' Uses either a method based on the IPF algorithm (recommended and the default) or
-#' the method developed by Mora and Ruiz-Castillo (2009).
+#' Uses one of three methods to decompose the difference between two M indices:
+#' (1) "shapley": a method based on the Shapley decomposition with a few advantages over the
+#' Karmel-Maclachlan method (recommended and the default, Deutsch et al. 2006),
+#' (2) "km": the method based on Karmel-Maclachlan (1988),
+#' (3) "mrc": the method developed by Mora and Ruiz-Castillo (2009).
+#' All methods have been extended to account for missing units/groups in either data input.
 #'
-#' The IPF method (Karmel and Maclachlan 1988) adjusts the margins of \code{data2} to be similar
-#' to the margins of \code{data1}.
-#' This is an iterative process, and may take of few seconds depending
-#' on the size of the dataset (see \link{ipf} for details).
-#' The difference in M between \code{data1} and the margins-adjusted \code{data2}
-#' is the structural difference between \code{data1} and \code{data2}.
-#' The remaining, unexplained difference is due to changes in the marginal distribution.
-#' Unless \code{forward_only} is set to \code{TRUE}, the process
-#' is then repeated the other way around, and the differences are averaged.
+#' The Shapley method is an improvement over the Karmel-Maclachlan method (Deutsch et al. 2006).
+#' It is based on several margins-adjusted data inputs
+#' and yields symmetrical results (i.e. \code{data1} and \code{data2} can be switched).
+#'
+#' The Karmel-Maclachlan method (Karmel and Maclachlan 1988) adjusts
+#' the margins of \code{data1} to be similar to the margins of \code{data2}. This process
+#' is not symmetrical.
+#'
+#' The Shapley and Karmel-Maclachlan methods are based on iterative proportional fitting (IPF),
+#' first introduced by Deming and Stephan (1940).
+#' Depending on the size of the dataset, this may take a few seconds (see \link{ipf} for details).
+#'
+#' The method developed by Mora and Ruiz-Castillo (2009) uses an algebraic approach to estimate the
+#' size of the components. This will often yield substantively different results from the Shapley
+#' and Karmel-Machlachlan methods. Note that this method is not symmetric in terms of what is
+#' defined as \code{group} and \code{unit} categories. Depending on this, the method may yield
+#' very different results.
 #'
 #' A problem arises when there are \code{group} and/or \code{unit} categories in \code{data1}
 #' that are not present in \code{data2} (or vice versa).
-#' The IPF method estimates the difference only
-#' for categories that are present in both datasets, and reports additionally
+#' All methods estimate the difference only
+#' for categories that are present in both datasets, and report additionally
 #' the change in M that is induced by these cases as
 #' \code{additions} (present in \code{data2}, but not in \code{data1}) and
-#' \code{removals} (present in \code{data1}, but not in \code{data2}). For the method developed
-#' by Mora and Ruiz-Castillo (2009), there are two options provided: When using "mrc", the
-#' categories not present in the other data source are set 0. When using "mrc_adjusted", the same
-#' procedure as for the IPF method is used, and \code{additions} and \code{removals} are reported.
+#' \code{removals} (present in \code{data1}, but not in \code{data2}).
 #'
-#' Note that the IPF method is symmetric, i.e. the reversal of \code{group} and \code{unit}
-#' definitions will yield the same results. The method developed by Mora and Ruiz-Castillo (2009)
-#' is not symmetric, and will yield different results based on what is defined as the \code{group}
-#' and \code{unit} categories.
 #'
 #' @param data1 A data frame with same structure as \code{data2}.
 #' @param data2 A data frame with same structure as \code{data1}.
@@ -39,17 +44,13 @@
 #'   over which segregation is computed.
 #' @param weight Numeric. Only frequency weights are allowed.
 #'   (Default \code{NULL})
-#' @param method Either "ipf" (the default) (Karmel and Maclachlan 1988), or
-#'   "mrc" / "mrc_adjusted" (Mora and Ruiz-Castillo 2009). See below for an explanation.
-#' @param forward_only Only relevant for "ipf". If set to \code{TRUE}, the decomposition will
-#'   only adjust the margins of \code{data2} to those \code{data1}, and not vice versa. This
-#'   is recommended when \code{data1} and \code{data2} are measurements at different points in time.
-#'   (Default \code{FALSE})
+#' @param method Either "shapley" (the default), "km" (Karmel and Maclachlan method), or
+#'   "mrc" (Mora and Ruiz-Castillo method).
 #' @param se If \code{TRUE}, standard errors are estimated via bootstrap.
 #'   (Default \code{FALSE})
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{50})
 #' @param ... Only used for additional arguments when
-#'  when \code{method} is set to \code{ipf}. See \link{ipf} for details.
+#'  when \code{method} is set to \code{shapley} or \code{km}. See \link{ipf} for details.
 #' @param base Base of the logarithm that is used in the calculation.
 #'   Defaults to the natural logarithm.
 #' @return Returns a data frame with columns \code{stat} and \code{est}. The data frame contains
@@ -57,63 +58,75 @@
 #'   \code{M1} contains the M for \code{data1}.
 #'   \code{M2} contains the M for \code{data2}.
 #'   \code{diff} is the difference between \code{M2} and \code{M1}.
-#'
 #'   The sum of all rows following \code{diff} equal \code{diff}.
 #'
-#'   When using "ipf" or "mrc_adjusted", two additional rows are reported:
-#'   \code{additions} contains the change in M induces by \code{unit} and code{group} categories
+#'   \code{additions} contains the change in M induces by \code{unit} and \code{group} categories
 #'   present in \code{data2} but not \code{data1}, and \code{removals} the reverse.
 #'
-#'   When using "ipf", four additional rows are returned:
+#'   All methods return the following three terms:
 #'   \code{unit_marginal} is the contribution of unit composition differences.
 #'   \code{group_marginal} is the contribution of group composition differences.
-#'   \code{interaction} is the contribution of differences in the joint marginal distribution
+#'   \code{structural} is the contribution unexplained by the marginal changes, i.e. the structural
+#'     difference. Note that the interpretation of these terms depend on the exact method used.
+#'
+#'   When using "km", three additional rows are returned:
+#'    \code{interaction} is the contribution of differences in the joint marginal distribution
 #'      of \code{unit} and \code{group}. The total effect of changes in the margins is the sum
 #'      of \code{unit_marginal}, \code{group_marginal}, and \code{interaction}.
-#'   \code{structural} is the contribution unexplained by the marginal changes, i.e. the structural
-#'     difference.
-#'
-#'   When using "mrc" or "mrc_adjusted", three additional rows are returned:
-#'   \code{unit_marginal} is the contribution of unit composition differences.
-#'   \code{group_marginal} is the difference in group entropy.
-#'   \code{structural} is the contribution of unit composition-invariant differences.
-#'   For details on the interpretation of these terms, see Mora and Ruiz-Castillo (2009).
 #'
 #'   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
 #'   the associated bootstrapped standard errors, and the column \code{est} contains
 #'   bootstrapped estimates.
 #' @references
+#' W. E. Deming, F. F. Stephan. 1940. "On a Least Squares Adjustment of a Sampled Frequency Table
+#'    When the Expected Marginal Totals are Known."
+#'    The Annals of Mathematical Statistics 11(4): 427-444.
+#'
 #' T. Karmel and M. Maclachlan. 1988.
 #'   "Occupational Sex Segregation — Increasing or Decreasing?" Economic Record 64: 187-195.
 #'
 #' R. Mora and J. Ruiz-Castillo. 2009. "The Invariance Properties of the
-#'   Mutual Information Index of Multigroup Segregation". Research on Economic Inequality 17: 33-53.
+#'   Mutual Information Index of Multigroup Segregation." Research on Economic Inequality 17: 33-53.
+#'
+#' J. Deutsch, Y. Flückiger, and J. Silber. 2009.
+#'       "Analyzing Changes in Occupational Segregation: The Case of Switzerland (1970–2000)."
+#'        Research on Economic Inequality 17: 171–202.
 #' @examples
 #' # decompose the difference in school segregation between 2000 and 2005
 #' mutual_difference(schools00, schools05, group = "race", unit = "school",
-#'     weight = "n", method = "ipf", precision = .01)
+#'     weight = "n", method = "shapley", precision = .01)
 #' # => the structural component is close to zero, thus most change is in the marginals.
-#' # note that this method gives identical results when we switch the unit and group definitions
+#' # note that this method gives identical results when we switch the unit and group definitions,
+#' # and when we switch the data inputs
 #' mutual_difference(schools00, schools05, group = "school", unit = "race",
-#'     weight = "n", method = "ipf", precision = .01)
+#'     weight = "n", method = "shapley", precision = .01)
+#' mutual_difference(schools05, schools00, group = "school", unit = "race",
+#'     weight = "n", method = "shapley", precision = .01)
+#'
+#' # the Karmel-Maclachlan method is similar, but only adjust the data in the forward direction -
+#  # this means that the results won't be identical when we switch the data inputs
+#' mutual_difference(schools00, schools05, group = "school", unit = "race",
+#'     weight = "n", method = "km", precision = .01)
+#' mutual_difference(schools05, schools00, group = "school", unit = "race",
+#'     weight = "n", method = "km", precision = .01)
 #'
 #' # the MRC method indicates a much higher structural change
 #' mutual_difference(schools00, schools05, group = "race", unit = "school",
-#'     weight = "n", method = "mrc_adjusted")
+#'     weight = "n", method = "mrc")
 #' # ...and is not symmetric
 #' mutual_difference(schools00, schools05, group = "school", unit = "race",
-#'     weight = "n", method = "mrc_adjusted")
+#'     weight = "n", method = "mrc")
 #' @import data.table
 #' @export
 mutual_difference <- function(data1, data2, group, unit,
-                              weight = NULL, method = "ipf", forward_only = FALSE,
+                              weight = NULL, method = "shapley",
                               se = FALSE, n_bootstrap = 50, base = exp(1), ...) {
-    if (method == "ipf") {
-        method <- function(...) mutual_difference_ipf_compute(...)
+    if (method == "shapley") {
+        method <- function(...) shapley_compute(...)
+    } else if (method == "km") {
+        method <- function(...) km_compute(...)
     } else if (method == "mrc") {
-        method <- function(...) mutual_difference_mrc_compute(adjusted = FALSE, ...)
-    } else if (method == "mrc_adjusted") {
-        method <- function(...) mutual_difference_mrc_compute(adjusted = TRUE, ...)
+        method <- function(...) mrc_compute(...)
     } else {
         stop("unknown decomposition method")
     }
@@ -129,7 +142,7 @@ mutual_difference <- function(data1, data2, group, unit,
     if (nrow_unit == 0) stop("No overlap in unit")
 
     if (se == FALSE) {
-        ret <- method(d1, d2, group, unit, forward_only, base, ...)
+        ret <- method(d1, d2, group, unit, base, ...)
     } else {
         vars <- attr(d1, "vars")
         n_total1 <- sum(d1[, "freq"])
@@ -144,7 +157,7 @@ mutual_difference <- function(data1, data2, group, unit,
             resampled2 <- d2[
                 sample(.N, n_total2, replace = TRUE, prob = freq)][,
                 list(freq = as.double(.N)), by = vars]
-            method(resampled1, resampled2, group, unit, forward_only, base, ...)
+            method(resampled1, resampled2, group, unit, base, ...)
         })
         cat("\n")
         boot_ret <- rbindlist(boot_ret)
@@ -157,7 +170,63 @@ mutual_difference <- function(data1, data2, group, unit,
 }
 
 
-mutual_difference_ipf_compute <- function(d1, d2, group, unit, forward_only, base, ...) {
+shapley_compute <- function(d1, d2, group, unit, base, ...) {
+    m <- function(d, weight) {
+        add_local(d, group, unit, base, weight)
+        sum(d[, list(p = first(p_unit), ls = first(ls_unit)), by = unit][, p * ls])
+    }
+
+    # these are the original datasets containing ALL units and groups
+    M1 <- m(d1, "freq")
+    M2 <- m(d2, "freq")
+    d1[, c("p_unit", "p_group", "p_group_g_unit",
+        "n_unit", "n_group", "ls_unit") := NULL]
+    d2[, c("p_unit", "p_group", "p_group_g_unit",
+        "n_unit", "n_group", "ls_unit") := NULL]
+
+    # group = A, unit = A, structure = A
+    d_AAA <- create_common_data(d1, d2, group, unit)
+    # group = B, unit = B, structure = B
+    d_BBB <- copy(d_AAA)
+    setnames(d_BBB, c("freq1", "freq2"), c("freq2", "freq1"))
+
+    d_BBA <- ipf_compute(d_AAA, group, unit, ...)
+    d_ABA <- ipf_compute(d_AAA, group, unit, only_unit = TRUE, ...)
+    d_BAA <- ipf_compute(d_AAA, group, unit, only_group = TRUE, ...)
+
+    d_AAB <- ipf_compute(d_BBB, group, unit, ...)
+    d_BAB <- ipf_compute(d_BBB, group, unit, only_unit = TRUE, ...)
+    d_ABB <- ipf_compute(d_BBB, group, unit, only_group = TRUE, ...)
+
+    # compute M based on unadjusted counts (where zeros are not replaced by small mumbers)
+    # this is to ensure that M2 - m_BBB is exactly 0 when there are no additions
+    m_AAA <- m(d_AAA, "freq_orig1")
+    m_BBB <- m(d_AAA, "freq_orig2")
+    m_BBA <- m(d_BBA, "n")
+    m_ABA <- m(d_ABA, "n")
+    m_BAA <- m(d_BAA, "n")
+    m_AAB <- m(d_AAB, "n")
+    m_BAB <- m(d_BAB, "n")
+    m_ABB <- m(d_ABB, "n")
+
+    marginal <- .5 * (m_BBA - m_AAA) + .5 * (m_BBB - m_AAB)
+    structural <- .5 * (m_AAB - m_AAA) + .5 * (m_BBB - m_BBA)
+
+    group_marginal <- .25 * ( (m_BAA - m_AAA) + (m_BBA - m_ABA) +
+                                    (m_BBB - m_ABB) + (m_BAB - m_AAB))
+    unit_marginal <- .25 * ( (m_ABA - m_AAA) + (m_BBA - m_BAA) +
+                                   (m_BBB - m_BAB) + (m_ABB - m_AAB))
+    stopifnot(round(group_marginal + unit_marginal, 4) == round(marginal, 4))
+
+    stat <- c("M1", "M2", "diff", "additions", "removals",
+             "group_marginal", "unit_marginal", "structural")
+    est <- c(M1, M2, M2 - M1, M2 - m_BBB, m_AAA - M1,
+             group_marginal, unit_marginal, structural)
+
+    data.table(stat = stat, est = est, stringsAsFactors = FALSE)
+}
+
+km_compute <- function(d1, d2, group, unit, base, ...) {
     m <- function(d, weight) {
         add_local(d, group, unit, base, weight)
         sum(d[, list(p = first(p_unit), ls = first(ls_unit)), by = unit][, p * ls])
@@ -172,7 +241,8 @@ mutual_difference_ipf_compute <- function(d1, d2, group, unit, forward_only, bas
 
     d1_source <- create_common_data(d1, d2, group, unit)
 
-    # compute M based on original counts (where zeros are not replaced)
+    # compute M based on unadjusted counts (where zeros are not replaced by small mumbers)
+    # this is to ensure that M2 - m_BBB is exactly 0 when there are no additions
     M1r <- m(d1_source, "freq_orig1")
     M2r <- m(d1_source, "freq_orig2")
 
@@ -187,43 +257,21 @@ mutual_difference_ipf_compute <- function(d1, d2, group, unit, forward_only, bas
     M_marg2_group <- m(d1_marg_d2, "n_group_adj")
     M_marg2_unit <- m(d1_marg_d2, "n_unit_adj")
 
-    if (forward_only) {
-        mix <- M_marg2 - M1r
-        mix_group <- M_marg2_group - M1r
-        mix_unit <- M_marg2_unit - M1r
-        struct <- M2r - M_marg2
-    } else {
-        # both directions
-        d2_source <- copy(d1_source)
-        setnames(d2_source, c("freq1", "freq2"), c("freq2", "freq1"))
-
-        # compute for dataset 2, but with marginals from dataset 1
-        d2_marg_d1 <- ipf_compute(d2_source, group, unit, ...)
-        d2_marg_d1[, `:=`(n_group = sum(n_source), n_group_target = sum(n_target)), by = group]
-        d2_marg_d1[, `:=`(n_unit = sum(n_source), n_unit_target = sum(n_target)), by = unit]
-        d2_marg_d1[, `:=`(
-                n_group_adj = n_source * n_group_target / n_group,
-                n_unit_adj = n_source * n_unit_target / n_unit)]
-        M_marg1 <- m(d2_marg_d1, "n")
-        M_marg1_group <- m(d2_marg_d1, "n_group_adj")
-        M_marg1_unit <- m(d2_marg_d1, "n_unit_adj")
-
-        mix <- .5 * (M_marg2 - M1r) + .5 * (M2r - M_marg1)
-        mix_group <- .5 * (M_marg2_group - M1r) + .5 * (M2r - M_marg1_group)
-        mix_unit <- .5 * (M_marg2_unit - M1r) + .5 * (M2r - M_marg1_unit)
-        struct <- .5 * (M2r - M_marg2) + .5 * (M_marg1 - M1r)
-    }
+    mix <- M_marg2 - M1r
+    mix_group <- M_marg2_group - M1r
+    mix_unit <- M_marg2_unit - M1r
+    struct <- M2r - M_marg2
 
     stat <- c("M1", "M2", "diff", "additions", "removals",
-             "unit_marginal", "group_marginal", "interaction", "structural")
+              "group_marginal", "unit_marginal", "interaction", "structural")
     est <- c(M1, M2, M2 - M1, M2 - M2r, M1r - M1,
-            mix_unit, mix_group, mix - mix_group - mix_unit, struct)
+             mix_group, mix_unit, mix - mix_group - mix_unit, struct)
     data.table(stat = stat, est = est, stringsAsFactors = FALSE)
 }
 
 
 #' @import data.table
-mutual_difference_mrc_compute <- function(d1, d2, group, unit, forward_only, base, adjusted) {
+mrc_compute <- function(d1, d2, group, unit, base) {
     m <- function(d) {
         sum(d[, list(p = first(p_unit), ls = first(ls_unit)), by = unit][, p * ls])
     }
@@ -235,26 +283,18 @@ mutual_difference_mrc_compute <- function(d1, d2, group, unit, forward_only, bas
     M2 <- m(d2)
 
     # reduce d1 and d2 to the joint set
-    if (adjusted) {
-        joined <- create_common_data(d1, d2, group, unit, fill_na = 0)
+    joined <- create_common_data(d1, d2, group, unit, fill_na = 0)
 
-        # reduce M for d1
-        add_local(joined, group, unit, base, "freq1")
-        M1r <- m(joined)
-        setnames(joined, c("p_unit", "p_group", "p_group_g_unit", "ls_unit"),
-            c("p_unit1", "p_group1", "p_group_g_unit1", "ls_unit1"))
-        # reduce M for d2
-        add_local(joined, group, unit, base, "freq2")
-        M2r <- m(joined)
-        setnames(joined, c("p_unit", "p_group", "p_group_g_unit", "ls_unit"),
-            c("p_unit2", "p_group2", "p_group_g_unit2", "ls_unit2"))
-    } else {
-        setnames(d1, c("freq", "p_unit", "p_group", "p_group_g_unit", "ls_unit"),
-            c("freq1", "p_unit1", "p_group1", "p_group_g_unit1", "ls_unit1"))
-        setnames(d2, c("freq", "p_unit", "p_group", "p_group_g_unit", "ls_unit"),
-            c("freq2", "p_unit2", "p_group2", "p_group_g_unit2", "ls_unit2"))
-        joined <- merge(d1, d2, by = c(group, unit), all = TRUE)
-    }
+    # reduce M for d1
+    add_local(joined, group, unit, base, "freq1")
+    M1r <- m(joined)
+    setnames(joined, c("p_unit", "p_group", "p_group_g_unit", "ls_unit"),
+        c("p_unit1", "p_group1", "p_group_g_unit1", "ls_unit1"))
+    # reduce M for d2
+    add_local(joined, group, unit, base, "freq2")
+    M2r <- m(joined)
+    setnames(joined, c("p_unit", "p_group", "p_group_g_unit", "ls_unit"),
+        c("p_unit2", "p_group2", "p_group_g_unit2", "ls_unit2"))
 
     n_total1 <- sum(joined$freq1, na.rm = TRUE)
     n_total2 <- sum(joined$freq2, na.rm = TRUE)
@@ -286,19 +326,12 @@ mutual_difference_mrc_compute <- function(d1, d2, group, unit, forward_only, bas
     cond <- .5 * sum(joined[, cond1]) + .5 * sum(joined[, cond2])
     unit_marginal <- .5 * sum(joined[, unit1]) + .5 * sum(joined[, unit2])
 
-    if (adjusted) {
-        additions <- M2 - M2r
-        removals <- M1r - M1
-        stat <- c("M1", "M2", "diff", "additions", "removals",
-            "unit_marginal", "group_marginal", "structural")
-        est <- c(M1, M2, M2 - M1, additions, removals,
-            unit_marginal, group_entropy, cond)
-    } else {
-        stat <- c("M1", "M2", "diff",
-            "unit_marginal", "group_marginal", "structural")
-        est <- c(M1, M2, M2 - M1,
-            unit_marginal, group_entropy, cond)
-    }
+    additions <- M2 - M2r
+    removals <- M1r - M1
+    stat <- c("M1", "M2", "diff", "additions", "removals",
+        "unit_marginal", "group_marginal", "structural")
+    est <- c(M1, M2, M2 - M1, additions, removals,
+        unit_marginal, group_entropy, cond)
 
     data.table(stat = stat, est = est, stringsAsFactors = FALSE)
 }

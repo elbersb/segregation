@@ -24,7 +24,7 @@ test_that("warn if iterations are too low", {
 
 test_that("gives sames results as mutual_difference", {
     diff <- mutual_difference(schools00, schools05, group = "race", unit = "school",
-        weight = "n", method = "ipf", precision = .1, forward_only = TRUE)
+        weight = "n", method = "km")
     # what changed from 2000 to 2005?
     # first reduce to overlap sample
     schools00_r <- schools00[schools00$school %in% schools05$school, ]
@@ -33,15 +33,15 @@ test_that("gives sames results as mutual_difference", {
     M_05 <- mutual_total(schools05_r, "race", "school", weight = "n")[["M", "est"]]
     # adjust the 2000 margins to the 2005 margins
     # if only the margins changed, then this would explain all the difference
-    adj_00 <- ipf(schools00_r, schools05_r, "race", "school", weight = "n", precision = .1)
+    adj_00 <- ipf(schools00_r, schools05_r, "race", "school", weight = "n")
     M_margins <- mutual_total(adj_00, "race", "school", weight = "n")[["M", "est"]]
     structural_change <- M_05 - M_margins
     # test
     expect_equal(diff[["M1", "est"]] + diff[["removals", "est"]], M_00)
     expect_equal(diff[["M2", "est"]] - diff[["additions", "est"]], M_05)
-    expect_equal(structural_change, diff[["structural", "est"]])
+    expect_equal(structural_change, diff[["structural", "est"]], tolerance = .001)
     expect_equal(M_05 - M_00 - structural_change,
-        sum(diff[c("unit_marginal", "group_marginal", "interaction"), "est"]))
+        sum(diff[c("unit_marginal", "group_marginal", "interaction"), "est"]), tolerance = .001)
 })
 
 test_that("example from Karmel & Maclachlan 1988", {

@@ -133,7 +133,7 @@ ipf_compute <- function(data, group, unit,
     # IPF algorithm
     precision <- abs(log(1 / (1 + precision)))
     converged <- FALSE
-    start_i <- round(runif(1, 1, 2)) # start randomly with either row or column adjustment
+    start_i <- round(stats::runif(1, 1, 2)) # start randomly with either row or column adjustment
     max_iterations <- max_iterations - 1 + start_i # offset so max_iterations is still the same
     for (i in start_i:(max_iterations * 2)) {
         if (i %% 2 == 0) {

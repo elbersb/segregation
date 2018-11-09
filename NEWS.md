@@ -1,6 +1,8 @@
 # segregation 0.1.0.9000
 
-
+* add "shapley" decomposition method, revisit other difference decomposition methods
+* several small fixes
+* add lintr package
 
 # segregation 0.1.0
 

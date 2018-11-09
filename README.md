@@ -72,7 +72,7 @@ equals
 M:
 
 ``` r
-(local <- mutual_local(schools00, group = "school", unit = "race", weight = "n", 
+(local <- mutual_local(schools00, group = "school", unit = "race", weight = "n",
              se = TRUE, wide = TRUE))
 #> ..........
 #>    race    ls    ls_se       p     p_se
@@ -87,23 +87,26 @@ sum(local$p * local$ls)
 ```
 
 Decompose the difference in M between 2000 and 2005, using iterative
-proportional fitting (IPF), as suggested by Karmel and Maclachlan
-(1988):
+proportional fitting (IPF) and the Shapley decomposition, as suggested
+by Karmel and Maclachlan (1988) and Deutsch et al. (2006):
 
 ``` r
 mutual_difference(schools00, schools05, group = "race", unit = "school",
-                  weight = "n", method = "ipf")
+                  weight = "n", method = "shapley")
 #> ........
+#> ........
+#> ......
 #> .........
+#> ........
+#> .......
 #>            stat      est
 #>              M1  0.42554
 #>              M2  0.41339
 #>            diff -0.01215
 #>       additions -0.00341
 #>        removals -0.01141
-#>   unit_marginal -0.02020
-#>  group_marginal  0.01723
-#>     interaction  0.00245
+#>  group_marginal  0.01623
+#>   unit_marginal -0.01674
 #>      structural  0.00318
 ```
 
@@ -115,13 +118,13 @@ Find more information in the
 To install the package from CRAN, use
 
 ``` r
-install.packages("segregation") 
+install.packages("segregation")
 ```
 
 To install the development version, use
 
 ``` r
-devtools::install_github("elbersb/segregation") 
+devtools::install_github("elbersb/segregation")
 ```
 
 ## Papers using the Mutual information index
@@ -150,7 +153,13 @@ human capital levels in Spain. The Journal of Economic Inequality, 1(2),
 
 ## References on entropy-based segregation indices
 
-Theil, Henri. (1971). Principles of Econometrics. New York: Wiley.
+Deutsch, J., Flückiger, Y. & Silber, J. (2009). Analyzing Changes in
+Occupational Segregation: The Case of Switzerland (1970–2000), in: Yves
+Flückiger, Sean F. Reardon, Jacques Silber (eds.) Occupational and
+Residential Segregation (Research on Economic Inequality, Volume 17),
+171–202.
+
+Theil, H. (1971). Principles of Econometrics. New York: Wiley.
 
 Frankel, D. M., & Volij, O. (2011). Measuring school segregation.
 Journal of Economic Theory, 146(1), 1-38.

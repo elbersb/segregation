@@ -20,7 +20,7 @@ set.seed(69839)
 # segregation
 
 [![CRAN Version](https://www.r-pkg.org/badges/version/segregation)](https://CRAN.R-project.org/package=segregation)
-[![Build Status](https://travis-ci.org/elbersb/segregation.svg?branch=master)](https://travis-ci.org/elbersb/segregation) 
+[![Build Status](https://travis-ci.org/elbersb/segregation.svg?branch=master)](https://travis-ci.org/elbersb/segregation)
 [![codecov](https://codecov.io/gh/elbersb/segregation/branch/master/graph/badge.svg)](https://codecov.io/gh/elbersb/segregation)
 
 
@@ -50,7 +50,7 @@ Standard errors in all functions can be estimated via boostrapping:
 mutual_total(schools00, "race", "school", weight = "n", se = TRUE)
 ```
 
-Decompose segregation into a between-state and a within-state term 
+Decompose segregation into a between-state and a within-state term
 (the sum of these equals total segregation):
 
 ```{r}
@@ -65,18 +65,19 @@ Local segregation (`ls`) is a decomposition by units (here racial groups).
 The sum of the proportion-weighted local segregation scores equals M:
 
 ```{r}
-(local <- mutual_local(schools00, group = "school", unit = "race", weight = "n", 
+(local <- mutual_local(schools00, group = "school", unit = "race", weight = "n",
              se = TRUE, wide = TRUE))
 
 sum(local$p * local$ls)
 ```
 
-Decompose the difference in M between 2000 and 2005, 
-using iterative proportional fitting (IPF), as suggested by Karmel and Maclachlan (1988):
+Decompose the difference in M between 2000 and 2005,
+using iterative proportional fitting (IPF) and the Shapley decomposition,
+as suggested by Karmel and Maclachlan (1988) and Deutsch et al. (2006):
 
 ```{r}
 mutual_difference(schools00, schools05, group = "race", unit = "school",
-                  weight = "n", method = "ipf")
+                  weight = "n", method = "shapley")
 ```
 
 Find more information in the [documentation](https://elbersb.de/segregation).
@@ -86,13 +87,13 @@ Find more information in the [documentation](https://elbersb.de/segregation).
 To install the package from CRAN, use
 
 ```{r eval=FALSE}
-install.packages("segregation") 
+install.packages("segregation")
 ```
 
 To install the development version, use
 
 ```{r eval=FALSE}
-devtools::install_github("elbersb/segregation") 
+devtools::install_github("elbersb/segregation")
 ```
 
 ## Papers using the Mutual information index
@@ -109,7 +110,10 @@ Mora, R., & Ruiz-Castillo, J. (2003). Additively decomposable segregation indexe
 
 ## References on entropy-based segregation indices
 
-Theil, Henri. (1971). Principles of Econometrics. New York: Wiley.
+Deutsch, J., Flückiger, Y. & Silber, J. (2009).
+      Analyzing Changes in Occupational Segregation: The Case of Switzerland (1970–2000), in: Yves Flückiger, Sean F. Reardon, Jacques Silber (eds.) Occupational and Residential Segregation (Research on Economic Inequality, Volume 17), 171–202.
+
+Theil, H. (1971). Principles of Econometrics. New York: Wiley.
 
 Frankel, D. M., & Volij, O. (2011). Measuring school segregation. Journal of Economic Theory, 146(1), 1-38. https://doi.org/10.1016/j.jet.2010.10.008
 
