@@ -104,10 +104,9 @@
 <a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co">#&gt; H    H 0.419</span></a></code></pre></div>
 <p>Standard errors in all functions can be estimated via boostrapping:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="reference/mutual_total.html">mutual_total</a></span>(schools00, <span class="st">"race"</span>, <span class="st">"school"</span>, <span class="dt">weight =</span> <span class="st">"n"</span>, <span class="dt">se =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt; ..........</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt;   stat   est       se</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; M    M 0.429 0.000935</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt; H    H 0.422 0.000985</span></a></code></pre></div>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt;   stat   est       se</span></a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; M    M 0.429 0.000935</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; H    H 0.422 0.000985</span></a></code></pre></div>
 <p>Decompose segregation into a between-state and a within-state term (the sum of these equals total segregation):</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># between states</span></a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="reference/mutual_total.html">mutual_total</a></span>(schools00, <span class="st">"race"</span>, <span class="st">"state"</span>, <span class="dt">weight =</span> <span class="st">"n"</span>)</a>
@@ -123,34 +122,27 @@
 <p>Local segregation (<code>ls</code>) is a decomposition by units (here racial groups). The sum of the proportion-weighted local segregation scores equals M:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">(local &lt;-<span class="st"> </span><span class="kw"><a href="reference/mutual_local.html">mutual_local</a></span>(schools00, <span class="dt">group =</span> <span class="st">"school"</span>, <span class="dt">unit =</span> <span class="st">"race"</span>, <span class="dt">weight =</span> <span class="st">"n"</span>,</a>
 <a class="sourceLine" id="cb4-2" data-line-number="2">             <span class="dt">se =</span> <span class="ot">TRUE</span>, <span class="dt">wide =</span> <span class="ot">TRUE</span>))</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt; ..........</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt;     race    ls    ls_se       p     p_se</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt; 1  asian 0.667 0.006736 0.02261 0.000124</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; 2  black 0.885 0.002595 0.19005 0.000465</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; 3   hisp 0.782 0.002582 0.15179 0.000317</span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; 4  white 0.184 0.000725 0.62810 0.000687</span></a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; 5 native 1.528 0.022868 0.00745 0.000135</span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="kw">sum</span>(local<span class="op">$</span>p <span class="op">*</span><span class="st"> </span>local<span class="op">$</span>ls)</a>
-<a class="sourceLine" id="cb4-12" data-line-number="12"><span class="co">#&gt; [1] 0.429</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt;     race    ls    ls_se       p     p_se</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; 1  asian 0.667 0.006736 0.02261 0.000124</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt; 2  black 0.885 0.002595 0.19005 0.000465</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; 3   hisp 0.782 0.002582 0.15179 0.000317</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; 4  white 0.184 0.000725 0.62810 0.000687</span></a>
+<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; 5 native 1.528 0.022868 0.00745 0.000135</span></a>
+<a class="sourceLine" id="cb4-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="kw">sum</span>(local<span class="op">$</span>p <span class="op">*</span><span class="st"> </span>local<span class="op">$</span>ls)</a>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="co">#&gt; [1] 0.429</span></a></code></pre></div>
 <p>Decompose the difference in M between 2000 and 2005, using iterative proportional fitting (IPF) and the Shapley decomposition, as suggested by Karmel and Maclachlan (1988) and Deutsch et al. (2006):</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="reference/mutual_difference.html">mutual_difference</a></span>(schools00, schools05, <span class="dt">group =</span> <span class="st">"race"</span>, <span class="dt">unit =</span> <span class="st">"school"</span>,</a>
 <a class="sourceLine" id="cb5-2" data-line-number="2">                  <span class="dt">weight =</span> <span class="st">"n"</span>, <span class="dt">method =</span> <span class="st">"shapley"</span>)</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt; ........</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; ........</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; ......</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; .........</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; ........</span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; .......</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt;                          stat      est</span></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt; M1                         M1  0.42554</span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; M2                         M2  0.41339</span></a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; diff                     diff -0.01215</span></a>
-<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; additions           additions -0.00341</span></a>
-<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; removals             removals -0.01141</span></a>
-<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt; group_marginal group_marginal  0.01623</span></a>
-<a class="sourceLine" id="cb5-16" data-line-number="16"><span class="co">#&gt; unit_marginal   unit_marginal -0.01674</span></a>
-<a class="sourceLine" id="cb5-17" data-line-number="17"><span class="co">#&gt; structural         structural  0.00318</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt;                          stat      est</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; M1                         M1  0.42554</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; M2                         M2  0.41339</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; diff                     diff -0.01215</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; additions           additions -0.00341</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; removals             removals -0.01141</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; group_marginal group_marginal  0.01623</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt; unit_marginal   unit_marginal -0.01674</span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt; structural         structural  0.00318</span></a></code></pre></div>
 <p>Find more information in the <a href="https://elbersb.de/segregation">documentation</a>.</p>
 </div>
 <div id="how-to-install" class="section level2">

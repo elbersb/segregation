@@ -151,7 +151,7 @@ mutual_difference <- function(data1, data2, group, unit,
         n_total1 <- sum(d1[, "freq"])
         n_total2 <- sum(d2[, "freq"])
         boot_ret <- lapply(1:n_bootstrap, function(i) {
-            cat(".")
+            update_log(bs_n = i, bs_max = n_bootstrap)
             # resample and collapse by all variables, except "freq"
             # coerce to double here, otherwise data.table complains later
             resampled1 <- d1[
@@ -162,12 +162,12 @@ mutual_difference <- function(data1, data2, group, unit,
                 list(freq = as.double(.N)), by = vars]
             method(resampled1, resampled2, group, unit, base, ...)
         })
-        cat("\n")
         boot_ret <- rbindlist(boot_ret)
         # summarize bootstrapped data frames
         ret <- boot_ret[, list(
             est = mean(est), se = stats::sd(est)), by = c("stat")]
     }
+    close_log()
     rownames(ret) <- ret[["stat"]]
     as_tibble_or_df(ret)
 }
@@ -193,12 +193,18 @@ shapley_compute <- function(d1, d2, group, unit, base, ...) {
     d_BBB <- copy(d_AAA)
     setnames(d_BBB, c("freq1", "freq2"), c("freq2", "freq1"))
 
+    update_log(ipf_n = 1, ipf_max = 6)
     d_BBA <- ipf_compute(d_AAA, group, unit, ...)
+    update_log(ipf_n = 2, ipf_max = 6)
     d_ABA <- ipf_compute(d_AAA, group, unit, only_unit = TRUE, ...)
+    update_log(ipf_n = 3, ipf_max = 6)
     d_BAA <- ipf_compute(d_AAA, group, unit, only_group = TRUE, ...)
 
+    update_log(ipf_n = 4, ipf_max = 6)
     d_AAB <- ipf_compute(d_BBB, group, unit, ...)
+    update_log(ipf_n = 5, ipf_max = 6)
     d_BAB <- ipf_compute(d_BBB, group, unit, only_unit = TRUE, ...)
+    update_log(ipf_n = 6, ipf_max = 6)
     d_ABB <- ipf_compute(d_BBB, group, unit, only_group = TRUE, ...)
 
     # compute M based on unadjusted counts (where zeros are not replaced by small mumbers)
@@ -250,6 +256,7 @@ km_compute <- function(d1, d2, group, unit, base, ...) {
     M2r <- m(d1_source, "freq_orig2")
 
     # compute for dataset 1, but with marginals from dataset 2
+    update_log(ipf_n = 1, ipf_max = 1)
     d1_marg_d2 <- ipf_compute(d1_source, group, unit, ...)
     d1_marg_d2[, `:=`(n_group = sum(n_source), n_group_target = sum(n_target)), by = group]
     d1_marg_d2[, `:=`(n_unit = sum(n_source), n_unit_target = sum(n_target)), by = unit]

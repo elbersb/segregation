@@ -146,8 +146,9 @@ mutual_total <- function(data, group, unit, within = NULL,
     } else {
         vars <- attr(d, "vars")
         n_total <- sum(d[, "freq"])
+
         boot_ret <- lapply(1:n_bootstrap, function(i) {
-            cat(".")
+            update_log(bs_n = i, bs_max = n_bootstrap)
             # resample and collapse by all variables, except "freq"
             resampled <- d[
                 sample(.N, n_total, replace = TRUE, prob = freq)][,
@@ -158,7 +159,7 @@ mutual_total <- function(data, group, unit, within = NULL,
                 mutual_total_within_compute(resampled, group, unit, within, base)
             }
         })
-        cat("\n")
+        close_log()
         boot_ret <- rbindlist(boot_ret)
         # summarize bootstrapped data frames
         ret <- boot_ret[, list(
@@ -238,14 +239,14 @@ mutual_within <- function(data, group, unit, within,
         vars <- attr(d, "vars")
         n_total <- sum(d[, "freq"])
         boot_ret <- lapply(1:n_bootstrap, function(i) {
-            cat(".")
+            update_log(bs_n = i, bs_max = n_bootstrap)
             # resample and collapse by all variables, except "freq"
             resampled <- d[
                 sample(.N, n_total, replace = TRUE, prob = freq)][,
                 list(freq = .N), by = vars]
             mutual_total_within_compute(resampled, group, unit, within, base, components = TRUE)
         })
-        cat("\n")
+        close_log()
         boot_ret <- rbindlist(boot_ret)
         # summarize bootstrapped data frames
         ret <- boot_ret[, list(
@@ -344,14 +345,14 @@ mutual_local <- function(data, group, unit, weight = NULL,
         vars <- attr(d, "vars")
         n_total <- sum(d[, "freq"])
         boot_ret <- lapply(1:n_bootstrap, function(i) {
-            cat(".")
+            update_log(bs_n = i, bs_max = n_bootstrap)
             # resample and collapse by all variables, except "freq"
             resampled <- d[
                 sample(.N, n_total, replace = TRUE, prob = freq)][,
                 list(freq = .N), by = vars]
             mutual_local_compute(resampled, group, unit, base)
         })
-        cat("\n")
+        close_log()
         boot_ret <- rbindlist(boot_ret)
         # summarize bootstrapped data frames
         ret <- boot_ret[, list(

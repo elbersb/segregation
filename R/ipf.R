@@ -74,7 +74,9 @@ ipf <- function(source, target, group, unit, weight = NULL,
     d2 <- prepare_data(target, group, unit, weight)
 
     common_data <- create_common_data(d1, d2, group, unit)
+    update_log(ipf_n = 1, ipf_max = 1)
     ret <- ipf_compute(common_data, group, unit, max_iterations, precision)
+    close_log()
 
     as_tibble_or_df(ret)
 }
@@ -135,13 +137,18 @@ ipf_compute <- function(data, group, unit,
     converged <- FALSE
     start_i <- round(stats::runif(1, 1, 2)) # start randomly with either row or column adjustment
     max_iterations <- max_iterations - 1 + start_i # offset so max_iterations is still the same
+
     for (i in start_i:(max_iterations * 2)) {
         if (i %% 2 == 0) {
             data[, `:=`(freq1 = freq1 * n_unit_t / n_unit_s)]
-            cat(".")
         } else {
             data[, `:=`(freq1 = freq1 * n_group_t / n_group_s)]
         }
+
+        if (i %% 5 == 0) {
+            update_log_progress("#")
+        }
+
         data[, `:=`(n_group_s = sum(freq1)), by = group]
         data[, `:=`(n_unit_s = sum(freq1)), by = unit]
 
@@ -155,8 +162,9 @@ ipf_compute <- function(data, group, unit,
             break
         }
     }
-    cat("\n")
+
     if (!converged) {
+        close_log()
         stop("IPF did not converge; lower precision or increase max_iterations.")
     }
     data[, c("n_unit_t", "n_unit_s", "n_group_t", "n_group_s",

@@ -20,6 +20,62 @@ globalVariables(c(
     "p_group_g_unit2", "p_unit", "p_unit1", "p_unit2", "p_within", "ratio", "sumcond1",
     "sumcond2", "unit1", "unit2"))
 
+# log
+
+log_env <- new.env()
+assign("n_printed", 0, envir = log_env)
+
+update_log <- function(bs_n = NULL, bs_max = NULL, ipf_n = NULL, ipf_max = NULL) {
+    if (!is.null(bs_n))    assign("bs_n", bs_n, envir = log_env)
+    if (!is.null(bs_max))  assign("bs_max", bs_max, envir = log_env)
+    if (!is.null(ipf_n))   assign("ipf_n", ipf_n, envir = log_env)
+    if (!is.null(ipf_max)) assign("ipf_max", ipf_max, envir = log_env)
+
+    if (!is.null(get("bs_n", envir = log_env)) & !is.null(get("ipf_n", envir = log_env))) {
+        text <- paste0("[", "Bootstrap ", get("bs_n", envir = log_env), "/",
+                       get("bs_max", envir = log_env),
+                       " IPF ", get("ipf_n", envir = log_env), "/",
+                       get("ipf_max", envir = log_env), "] ", collapse = "")
+    } else if (!is.null(get("bs_n", envir = log_env))) {
+        text <- paste0("[", "Bootstrap ", get("bs_n", envir = log_env),
+                       "/", get("bs_max", envir = log_env), "] ", collapse = "")
+    } else if (!is.null(get("ipf_n", envir = log_env))) {
+        text <- paste0("[", "IPF ", get("ipf_n", envir = log_env),
+                       "/", get("ipf_max", envir = log_env), "] ", collapse = "")
+    }
+
+    clear_log()
+    assign("n_printed", nchar(text), envir = log_env)
+    cat(text, file = stderr())
+}
+
+update_log_progress <- function(text) {
+    assign("n_printed", get("n_printed", envir = log_env) + nchar(text), envir = log_env)
+    cat(text, file = stderr())
+}
+
+clear_log <- function() {
+    utils::flush.console()
+
+    if (get("n_printed", envir = log_env) > 0) {
+        cat("\r", paste0(rep(" ", times = get("n_printed", envir = log_env)), collapse = ""),
+            "\r", file = stderr())
+
+        assign("n_printed", 0, envir = log_env)
+    }
+}
+
+close_log <- function() {
+    clear_log()
+    assign("bs_n", NULL, envir = log_env)
+    assign("bs_max", NULL, envir = log_env)
+    assign("ipf_n", NULL, envir = log_env)
+    assign("ipf_max", NULL, envir = log_env)
+}
+close_log()
+
+# helpers
+
 as_tibble_or_df <- function(data) {
     if ("package:tibble" %in% search()) {
         tibble::as_tibble(data)

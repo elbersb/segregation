@@ -199,7 +199,8 @@ Zero values are replaced by a small, non-zero number (1e-4).</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># adjusts the marginals of group and unit categories so that</span>
 <span class='co'># schools00 has similar marginals as schools05</span>
-<span class='no'>adj</span> <span class='kw'>&lt;-</span> <span class='fu'>ipf</span>(<span class='no'>schools00</span>, <span class='no'>schools05</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>)</div><div class='output co'>#&gt; ........</div><div class='input'>
+<span class='no'>adj</span> <span class='kw'>&lt;-</span> <span class='fu'>ipf</span>(<span class='no'>schools00</span>, <span class='no'>schools05</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>)
+
 <span class='co'># check that the new "race" marginals are similar to the target marginals</span>
 <span class='co'># (the same could be done for schools)</span>
 <span class='fu'>aggregate</span>(<span class='no'>adj</span>$<span class='no'>n</span>, <span class='fu'>list</span>(<span class='no'>adj</span>$<span class='no'>race</span>), <span class='no'>sum</span>)</div><div class='output co'>#&gt;   Group.1          x

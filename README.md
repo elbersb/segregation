@@ -43,7 +43,6 @@ Standard errors in all functions can be estimated via boostrapping:
 
 ``` r
 mutual_total(schools00, "race", "school", weight = "n", se = TRUE)
-#> ..........
 #>  stat   est       se
 #>     M 0.429 0.000935
 #>     H 0.422 0.000985
@@ -74,7 +73,6 @@ M:
 ``` r
 (local <- mutual_local(schools00, group = "school", unit = "race", weight = "n",
              se = TRUE, wide = TRUE))
-#> ..........
 #>    race    ls    ls_se       p     p_se
 #>   asian 0.667 0.006736 0.02261 0.000124
 #>   black 0.885 0.002595 0.19005 0.000465
@@ -93,12 +91,6 @@ by Karmel and Maclachlan (1988) and Deutsch et al. (2006):
 ``` r
 mutual_difference(schools00, schools05, group = "race", unit = "school",
                   weight = "n", method = "shapley")
-#> ........
-#> ........
-#> ......
-#> .........
-#> ........
-#> .......
 #>            stat      est
 #>              M1  0.42554
 #>              M2  0.41339
