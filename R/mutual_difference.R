@@ -150,6 +150,12 @@ mutual_difference <- function(data1, data2, group, unit,
         vars <- attr(d1, "vars")
         n_total1 <- sum(d1[, "freq"])
         n_total2 <- sum(d2[, "freq"])
+
+        if (!all(d1[["freq"]] == round(d1[["freq"]])) |
+            !all(d2[["freq"]] == round(d2[["freq"]]))) {
+            warning("bootstrap with non-integer weights")
+        }
+
         boot_ret <- lapply(1:n_bootstrap, function(i) {
             update_log(bs_n = i, bs_max = n_bootstrap)
             # resample and collapse by all variables, except "freq"

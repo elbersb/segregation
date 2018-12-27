@@ -4,6 +4,7 @@
 * better logging of bootstrap/IPF
 * several small fixes
 * add lintr package
+* add warning when attempting bootstrap with non-integer weights
 
 # segregation 0.1.0
 

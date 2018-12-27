@@ -147,6 +147,10 @@ mutual_total <- function(data, group, unit, within = NULL,
         vars <- attr(d, "vars")
         n_total <- sum(d[, "freq"])
 
+        if (!all(d[["freq"]] == round(d[["freq"]]))) {
+            warning("bootstrap with non-integer weights")
+        }
+
         boot_ret <- lapply(1:n_bootstrap, function(i) {
             update_log(bs_n = i, bs_max = n_bootstrap)
             # resample and collapse by all variables, except "freq"
@@ -238,6 +242,11 @@ mutual_within <- function(data, group, unit, within,
     } else {
         vars <- attr(d, "vars")
         n_total <- sum(d[, "freq"])
+
+        if (!all(d[["freq"]] == round(d[["freq"]]))) {
+            warning("bootstrap with non-integer weights")
+        }
+
         boot_ret <- lapply(1:n_bootstrap, function(i) {
             update_log(bs_n = i, bs_max = n_bootstrap)
             # resample and collapse by all variables, except "freq"
@@ -344,6 +353,11 @@ mutual_local <- function(data, group, unit, weight = NULL,
     } else {
         vars <- attr(d, "vars")
         n_total <- sum(d[, "freq"])
+
+        if (!all(d[["freq"]] == round(d[["freq"]]))) {
+            warning("bootstrap with non-integer weights")
+        }
+
         boot_ret <- lapply(1:n_bootstrap, function(i) {
             update_log(bs_n = i, bs_max = n_bootstrap)
             # resample and collapse by all variables, except "freq"
