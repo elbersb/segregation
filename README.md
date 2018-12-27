@@ -17,8 +17,7 @@ and Theil’s Information Index (H).
   - decompose differences in total segregation over time
   - estimate standard errors via bootstrapping
   - every method returns a
-    [tidy](http://vita.had.co.nz/papers/tidy-data.html) data frame (or
-    [tibble](http://tibble.tidyverse.org), if the package is loaded) for
+    [tidy](http://vita.had.co.nz/papers/tidy-data.html) data frame for
     easy post-processing and plotting
   - it’s fast, because it uses the
     [`data.table`](https://github.com/Rdatatable/data.table/wiki)
