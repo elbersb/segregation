@@ -1,6 +1,7 @@
 # segregation 0.1.0.9000
 
 * add "shapley" decomposition method, revisit other difference decomposition methods
+* better logging of bootstrap/IPF
 * several small fixes
 * add lintr package
 

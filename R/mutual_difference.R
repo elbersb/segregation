@@ -169,7 +169,7 @@ mutual_difference <- function(data1, data2, group, unit,
     }
     close_log()
     rownames(ret) <- ret[["stat"]]
-    as_tibble_or_df(ret)
+    as_df(ret)
 }
 
 

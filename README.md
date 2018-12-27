@@ -86,7 +86,7 @@ sum(local$p * local$ls)
 
 Decompose the difference in M between 2000 and 2005, using iterative
 proportional fitting (IPF) and the Shapley decomposition, as suggested
-by Karmel and Maclachlan (1988) and Deutsch et al. (2006):
+by Karmel and Maclachlan (1988) and Deutsch et al. (2006):
 
 ``` r
 mutual_difference(schools00, schools05, group = "race", unit = "school",

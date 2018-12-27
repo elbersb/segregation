@@ -76,14 +76,10 @@ close_log()
 
 # helpers
 
-as_tibble_or_df <- function(data) {
-    if ("package:tibble" %in% search()) {
-        tibble::as_tibble(data)
-    } else {
-        df <- as.data.frame(data, stringsAsFactors = FALSE)
-        rownames(df) <- rownames(data)
-        df
-    }
+as_df <- function(data) {
+    df <- as.data.frame(data, stringsAsFactors = FALSE)
+    rownames(df) <- rownames(data)
+    df
 }
 
 logf <- function(v, base) {

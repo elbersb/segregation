@@ -78,7 +78,7 @@ ipf <- function(source, target, group, unit, weight = NULL,
     ret <- ipf_compute(common_data, group, unit, max_iterations, precision)
     close_log()
 
-    as_tibble_or_df(ret)
+    as_df(ret)
 }
 
 #' @import data.table

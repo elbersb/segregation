@@ -166,7 +166,7 @@ mutual_total <- function(data, group, unit, within = NULL,
             est = mean(est), se = stats::sd(est)), by = c("stat")]
     }
     rownames(ret) <- ret[["stat"]]
-    as_tibble_or_df(ret)
+    as_df(ret)
 }
 
 #' Calculate detailed within-category segregation scores for M and H
@@ -270,7 +270,7 @@ mutual_within <- function(data, group, unit, within,
         }
     }
 
-    as_tibble_or_df(ret)
+    as_df(ret)
 }
 
 #' @import data.table
@@ -372,5 +372,5 @@ mutual_local <- function(data, group, unit, weight = NULL,
         }
     }
 
-    as_tibble_or_df(ret)
+    as_df(ret)
 }
