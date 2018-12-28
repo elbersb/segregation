@@ -82,7 +82,7 @@ ipf <- function(source, target, group, unit, weight = NULL,
 }
 
 #' @import data.table
-create_common_data <- function(d1, d2, group, unit, fill_na = 1e-4) {
+create_common_data <- function(d1, d2, group, unit, fill_na = 1e-10) {
     # generate the crossproduct of common groups and units to
     # preserve all possible combinations
     common_group <- fintersect(d1[, group, with = FALSE], d2[, group, with = FALSE])
@@ -91,6 +91,12 @@ create_common_data <- function(d1, d2, group, unit, fill_na = 1e-4) {
     common_unit$key <- 1
     common <- merge(common_unit, common_group, allow.cartesian = TRUE)
     common[, "key" := NULL]
+
+    # make sure that fill_na is much smaller than the smallest frequency
+    min_freq <- min(c(d1[["freq"]], d2[["freq"]]))
+    if (fill_na > min_freq) {
+        fill_na <- min_freq / 1000
+    }
 
     # join original frequencies
     common <- merge(common, d1, by = c(group, unit), all.x = TRUE)

@@ -196,9 +196,9 @@ test_that("difference same as mutual_total (zero weights)", {
     )
 
     shapley <- mutual_difference(test_data1, test_data2,
-                             "g", "u", weight = "n", method = "shapley", precision = .1)
+                             "g", "u", weight = "n", method = "shapley")
     km <- mutual_difference(test_data1, test_data2,
-                             "g", "u", weight = "n", method = "km", precision = .1)
+                             "g", "u", weight = "n", method = "km")
     mrc <- mutual_difference(test_data1, test_data2,
                                  "g", "u", weight = "n", method = "mrc")
     M1 <- mutual_total(test_data1, "g", "u", weight = "n")[["M", "est"]]
@@ -210,6 +210,15 @@ test_that("difference same as mutual_total (zero weights)", {
     expect_equal(km[["M2", "est"]], M2)
     expect_equal(mrc[["M1", "est"]], M1)
     expect_equal(mrc[["M2", "est"]], M2)
+
+    # very small weights
+    test_data1$n2 <- test_data1$n / 1000
+    test_data2$n2 <- test_data2$n
+
+    shapley2 <- mutual_difference(test_data1, test_data2,
+                                  "g", "u", weight = "n2", method = "shapley")
+    expect_equal(shapley[["structural", "est"]], shapley2[["structural", "est"]],
+                 tolerance = .001)
 })
 
 
