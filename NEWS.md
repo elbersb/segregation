@@ -1,3 +1,7 @@
+# segregation 0.2.0.9000
+
+
+
 # segregation 0.2.0
 
 * add "shapley" decomposition method, revisit other difference decomposition methods
