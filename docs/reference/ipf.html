@@ -65,7 +65,7 @@ proportional fitting algorithm (IPF)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">segregation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -206,16 +206,16 @@ Zero values are replaced by a small, non-zero number (1e-4).</p>
 <span class='co'># check that the new "race" marginals are similar to the target marginals</span>
 <span class='co'># (the same could be done for schools)</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a></span>(<span class='no'>adj</span>$<span class='no'>n</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='no'>adj</span>$<span class='no'>race</span>), <span class='no'>sum</span>)</div><div class='output co'>#&gt;   Group.1          x
-#&gt; 1   asian  22510.251
-#&gt; 2   black 117453.076
-#&gt; 3    hisp 147040.583
-#&gt; 4  native   6085.698
-#&gt; 5   white 441132.531</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a></span>(<span class='no'>adj</span>$<span class='no'>n_target</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='no'>adj</span>$<span class='no'>race</span>), <span class='no'>sum</span>)</div><div class='output co'>#&gt;   Group.1          x
-#&gt; 1   asian  22508.034
-#&gt; 2   black 117527.015
-#&gt; 3    hisp 147052.013
-#&gt; 4  native   6085.073
-#&gt; 5   white 441050.005</div><div class='input'>
+#&gt; 1   asian  22510.216
+#&gt; 2   black 117453.061
+#&gt; 3    hisp 147040.570
+#&gt; 4  native   6085.626
+#&gt; 5   white 441132.526</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/aggregate'>aggregate</a></span>(<span class='no'>adj</span>$<span class='no'>n_target</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='no'>adj</span>$<span class='no'>race</span>), <span class='no'>sum</span>)</div><div class='output co'>#&gt;   Group.1      x
+#&gt; 1   asian  22508
+#&gt; 2   black 117527
+#&gt; 3    hisp 147052
+#&gt; 4  native   6085
+#&gt; 5   white 441050</div><div class='input'>
 <span class='co'># note that the adjusted dataset contains fewer</span>
 <span class='co'># schools than either the source or the target dataset,</span>
 <span class='co'># because the marginals are only defined for the overlap</span>
