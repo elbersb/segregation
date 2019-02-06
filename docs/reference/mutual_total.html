@@ -66,7 +66,7 @@ Also see mutual_within for detailed within calculations." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">segregation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0.9000</span>
       </span>
     </div>
 
@@ -207,8 +207,8 @@ Defaults to the natural logarithm.</p></td>
 #&gt; H    H 0.4188083</div><div class='input'>
 <span class='co'># estimate standard errors for M and H</span>
 <span class='fu'>mutual_total</span>(<span class='no'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, <span class='kw'>weight</span><span class='kw'>=</span><span class='st'>"n"</span>, <span class='kw'>se</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;   stat       est           se
-#&gt; M    M 0.4292977 0.0008489586
-#&gt; H    H 0.4225437 0.0007268017</div><div class='input'>
+#&gt; M    M 0.4292972 0.0008483900
+#&gt; H    H 0.4225433 0.0007267075</div><div class='input'>
 <span class='co'># estimate segregation within school districts</span>
 <span class='fu'>mutual_total</span>(<span class='no'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>,
              <span class='kw'>within</span><span class='kw'>=</span><span class='st'>"district"</span>, <span class='kw'>weight</span><span class='kw'>=</span><span class='st'>"n"</span>) <span class='co'># M =&gt; .087</span></div><div class='output co'>#&gt;   stat        est
