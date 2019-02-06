@@ -8,7 +8,7 @@ Version](https://www.r-pkg.org/badges/version/segregation)](https://CRAN.R-proje
 [![Build
 Status](https://travis-ci.org/elbersb/segregation.svg?branch=master)](https://travis-ci.org/elbersb/segregation)
 [![Coverage
-status](https://coveralls.io/repos/github/elbersb/segregation/badge.svg)](https://coveralls.io/r/elbersb/segregation?branch=master)
+status](https://codecov.io/gh/elbersb/segregation/branch/master/graph/badge.svg)](https://codecov.io/github/elbersb/segregation?branch=master)
 
 An R package to calculate and decompose entropy-based, multigroup
 segregation indices, with a focus on the Mutual Information Index (M)
