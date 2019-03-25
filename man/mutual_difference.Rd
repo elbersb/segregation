@@ -44,7 +44,7 @@ Returns a data.table with columns \code{stat} and \code{est}. The data frame con
   \code{M1} contains the M for \code{data1}.
   \code{M2} contains the M for \code{data2}.
   \code{diff} is the difference between \code{M2} and \code{M1}.
-  The sum of all rows following \code{diff} equal \code{diff}.
+  The sum of the five rows following \code{diff} equal \code{diff}.
 
   \code{additions} contains the change in M induces by \code{unit} and \code{group} categories
   present in \code{data2} but not \code{data1}, and \code{removals} the reverse.
@@ -59,14 +59,26 @@ Returns a data.table with columns \code{stat} and \code{est}. The data frame con
    \code{interaction} is the contribution of differences in the joint marginal distribution
      of \code{unit} and \code{group}.
 
+  When "shapley_detailed" is used, an additional column "unit" is returned, along with
+    five additional rows for each unit that is present in both \code{data1} and \code{data2}.
+    The five rows have the following meaning:
+    \code{p1} (\code{p2}) is the proportion of the unit in \code{data1} (\code{data2})
+    once non-intersecting units/groups have been removed. The changes in local linkage are
+    given by \code{ls_diff1} and \code{ls_diff2}. The row named \code{total}
+    summarizes the contribution of
+    the unit towards structural change
+    using the formula \code{.5 * p1 * ls_diff1 + .5 * p2 * ls_diff2}.
+    The sum of all "total" components equals structural change.
+
   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
   the associated bootstrapped standard errors, and the column \code{est} contains
   bootstrapped estimates.
 }
 \description{
 Uses one of three methods to decompose the difference between two M indices:
-(1) "shapley": a method based on the Shapley decomposition with a few advantages over the
-Karmel-Maclachlan method (recommended and the default, Deutsch et al. 2006),
+(1) "shapley" / "shapley_detailed": a method based on the Shapley decomposition
+with a few advantages over the Karmel-Maclachlan method
+(recommended and the default, Deutsch et al. 2006),
 (2) "km": the method based on Karmel-Maclachlan (1988),
 (3) "mrc": the method developed by Mora and Ruiz-Castillo (2009).
 All methods have been extended to account for missing units/groups in either data input.
@@ -75,6 +87,8 @@ All methods have been extended to account for missing units/groups in either dat
 The Shapley method is an improvement over the Karmel-Maclachlan method (Deutsch et al. 2006).
 It is based on several margins-adjusted data inputs
 and yields symmetrical results (i.e. \code{data1} and \code{data2} can be switched).
+When "shapley_detailed" is used, the structural component is further decomposed into
+the contributions of individuals units.
 
 The Karmel-Maclachlan method (Karmel and Maclachlan 1988) adjusts
 the margins of \code{data1} to be similar to the margins of \code{data2}. This process

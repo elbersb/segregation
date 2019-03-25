@@ -33,8 +33,9 @@
 <meta property="og:title" content="Decomposes the difference between two M indices — mutual_difference" />
 
 <meta property="og:description" content="Uses one of three methods to decompose the difference between two M indices:
-(1) &quot;shapley&quot;: a method based on the Shapley decomposition with a few advantages over the
-Karmel-Maclachlan method (recommended and the default, Deutsch et al. 2006),
+(1) &quot;shapley&quot; / &quot;shapley_detailed&quot;: a method based on the Shapley decomposition
+with a few advantages over the Karmel-Maclachlan method
+(recommended and the default, Deutsch et al. 2006),
 (2) &quot;km&quot;: the method based on Karmel-Maclachlan (1988),
 (3) &quot;mrc&quot;: the method developed by Mora and Ruiz-Castillo (2009).
 All methods have been extended to account for missing units/groups in either data input." />
@@ -115,8 +116,9 @@ All methods have been extended to account for missing units/groups in either dat
     <div class="ref-description">
     
     <p>Uses one of three methods to decompose the difference between two M indices:
-(1) "shapley": a method based on the Shapley decomposition with a few advantages over the
-Karmel-Maclachlan method (recommended and the default, Deutsch et al. 2006),
+(1) "shapley" / "shapley_detailed": a method based on the Shapley decomposition
+with a few advantages over the Karmel-Maclachlan method
+(recommended and the default, Deutsch et al. 2006),
 (2) "km": the method based on Karmel-Maclachlan (1988),
 (3) "mrc": the method developed by Mora and Ruiz-Castillo (2009).
 All methods have been extended to account for missing units/groups in either data input.</p>
@@ -183,12 +185,12 @@ when <code>method</code> is set to <code>shapley</code> or <code>km</code>. See 
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a data frame with columns <code>stat</code> and <code>est</code>. The data frame contains
+    <p>Returns a data.table with columns <code>stat</code> and <code>est</code>. The data frame contains
   the following rows defined by <code>stat</code>:
   <code>M1</code> contains the M for <code>data1</code>.
   <code>M2</code> contains the M for <code>data2</code>.
   <code>diff</code> is the difference between <code>M2</code> and <code>M1</code>.
-  The sum of all rows following <code>diff</code> equal <code>diff</code>.</p>
+  The sum of the five rows following <code>diff</code> equal <code>diff</code>.</p>
 <p><code>additions</code> contains the change in M induces by <code>unit</code> and <code>group</code> categories
   present in <code>data2</code> but not <code>data1</code>, and <code>removals</code> the reverse.</p>
 <p>All methods return the following three terms:
@@ -199,6 +201,16 @@ when <code>method</code> is set to <code>shapley</code> or <code>km</code>. See 
 <p>When using "km", one additional row is returned:
    <code>interaction</code> is the contribution of differences in the joint marginal distribution
      of <code>unit</code> and <code>group</code>.</p>
+<p>When "shapley_detailed" is used, an additional column "unit" is returned, along with
+    five additional rows for each unit that is present in both <code>data1</code> and <code>data2</code>.
+    The five rows have the following meaning:
+    <code>p1</code> (<code>p2</code>) is the proportion of the unit in <code>data1</code> (<code>data2</code>)
+    once non-intersecting units/groups have been removed. The changes in local linkage are
+    given by <code>ls_diff1</code> and <code>ls_diff2</code>. The row named <code>total</code>
+    summarizes the contribution of
+    the unit towards structural change
+    using the formula <code>.5 * p1 * ls_diff1 + .5 * p2 * ls_diff2</code>.
+    The sum of all "total" components equals structural change.</p>
 <p>If <code>se</code> is set to <code>TRUE</code>, an additional column <code>se</code> contains
   the associated bootstrapped standard errors, and the column <code>est</code> contains
   bootstrapped estimates.</p>
@@ -207,7 +219,9 @@ when <code>method</code> is set to <code>shapley</code> or <code>km</code>. See 
 
     <p>The Shapley method is an improvement over the Karmel-Maclachlan method (Deutsch et al. 2006).
 It is based on several margins-adjusted data inputs
-and yields symmetrical results (i.e. <code>data1</code> and <code>data2</code> can be switched).</p>
+and yields symmetrical results (i.e. <code>data1</code> and <code>data2</code> can be switched).
+When "shapley_detailed" is used, the structural component is further decomposed into
+the contributions of individuals units.</p>
 <p>The Karmel-Maclachlan method (Karmel and Maclachlan 1988) adjusts
 the margins of <code>data1</code> to be similar to the margins of <code>data2</code>. This process
 is not symmetrical.</p>

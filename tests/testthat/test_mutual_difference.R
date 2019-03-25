@@ -177,6 +177,49 @@ test_that("mutual_difference SE", {
     expect_equal(all(ret[est > 0, se] > 0), TRUE)
 })
 
+test_that("mutual_difference SHAPLEY detailed", {
+    diff_simple <- mutual_difference(schools05, schools00, group = "school", unit = "race",
+        weight = "n", method = "shapley", precision = .00001)
+    # note that the detailed decomposition requires high precision
+    diff <- mutual_difference(schools05, schools00, group = "school", unit = "race",
+        weight = "n", method = "shapley_detailed", precision = .00001)
+
+    expect_equal(nrow(diff_simple), 8)
+    expect_equal(ncol(diff_simple), 2)
+    expect_equal(nrow(diff), 8 + length(unique(schools00$race)) * 5)
+    expect_equal(ncol(diff), 3)
+
+    # same with and without detail
+    expect_equal(diff_simple[, est], diff[1:8, est], tolerance = .00001)
+
+    wide <- dcast(diff[!is.na(race), ], race ~ stat, value.var = "est")
+    expect_equal(wide[, sum(.5 * p1 * ls_diff1 + .5 * p2 * ls_diff2)], wide[, sum(total)])
+    expect_equal(wide[, sum(.5 * p1 * ls_diff1 + .5 * p2 * ls_diff2)],
+        diff[stat == "structural", est], tolerance = .00001)
+
+    # reverse units and groups
+    diff <- mutual_difference(schools05, schools00, group = "race", unit = "school",
+        weight = "n", method = "shapley_detailed", precision = .00001)
+
+    schools_in_common <- intersect(schools00$school, schools05$school)
+    expect_equal(nrow(diff), 8 + length(schools_in_common) * 5)
+    expect_equal(ncol(diff), 3)
+
+    wide <- dcast(diff[!is.na(school), ], school ~ stat, value.var = "est")
+    expect_equal(wide[, sum(.5 * p1 * ls_diff1 + .5 * p2 * ls_diff2)], wide[, sum(total)])
+    expect_equal(wide[, sum(.5 * p1 * ls_diff1 + .5 * p2 * ls_diff2)],
+        diff[stat == "structural", est], tolerance = .00001)
+})
+
+
+test_that("mutual_difference SHAPLEY detailed with SE", {
+    diff <- mutual_difference(schools05, schools00, group = "school", unit = "race",
+        weight = "n", method = "shapley_detailed", precision = .1, se = TRUE, n_bootstrap = 2)
+
+    expect_equal(nrow(diff), 8 + length(unique(schools00$race)) * 5)
+    expect_equal(ncol(diff), 4)
+})
+
 
 test_that("mutual_difference log base", {
     ret <- mutual_difference(test_data1, test_data2, "g", "u",

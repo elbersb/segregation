@@ -1,8 +1,9 @@
 #' Decomposes the difference between two M indices
 #'
 #' Uses one of three methods to decompose the difference between two M indices:
-#' (1) "shapley": a method based on the Shapley decomposition with a few advantages over the
-#' Karmel-Maclachlan method (recommended and the default, Deutsch et al. 2006),
+#' (1) "shapley" / "shapley_detailed": a method based on the Shapley decomposition
+#' with a few advantages over the Karmel-Maclachlan method
+#' (recommended and the default, Deutsch et al. 2006),
 #' (2) "km": the method based on Karmel-Maclachlan (1988),
 #' (3) "mrc": the method developed by Mora and Ruiz-Castillo (2009).
 #' All methods have been extended to account for missing units/groups in either data input.
@@ -10,6 +11,8 @@
 #' The Shapley method is an improvement over the Karmel-Maclachlan method (Deutsch et al. 2006).
 #' It is based on several margins-adjusted data inputs
 #' and yields symmetrical results (i.e. \code{data1} and \code{data2} can be switched).
+#' When "shapley_detailed" is used, the structural component is further decomposed into
+#' the contributions of individuals units.
 #'
 #' The Karmel-Maclachlan method (Karmel and Maclachlan 1988) adjusts
 #' the margins of \code{data1} to be similar to the margins of \code{data2}. This process
@@ -57,7 +60,7 @@
 #'   \code{M1} contains the M for \code{data1}.
 #'   \code{M2} contains the M for \code{data2}.
 #'   \code{diff} is the difference between \code{M2} and \code{M1}.
-#'   The sum of all rows following \code{diff} equal \code{diff}.
+#'   The sum of the five rows following \code{diff} equal \code{diff}.
 #'
 #'   \code{additions} contains the change in M induces by \code{unit} and \code{group} categories
 #'   present in \code{data2} but not \code{data1}, and \code{removals} the reverse.
@@ -71,6 +74,17 @@
 #'   When using "km", one additional row is returned:
 #'    \code{interaction} is the contribution of differences in the joint marginal distribution
 #'      of \code{unit} and \code{group}.
+#'
+#'   When "shapley_detailed" is used, an additional column "unit" is returned, along with
+#'     five additional rows for each unit that is present in both \code{data1} and \code{data2}.
+#'     The five rows have the following meaning:
+#'     \code{p1} (\code{p2}) is the proportion of the unit in \code{data1} (\code{data2})
+#'     once non-intersecting units/groups have been removed. The changes in local linkage are
+#'     given by \code{ls_diff1} and \code{ls_diff2}. The row named \code{total}
+#'     summarizes the contribution of
+#'     the unit towards structural change
+#'     using the formula \code{.5 * p1 * ls_diff1 + .5 * p2 * ls_diff2}.
+#'     The sum of all "total" components equals structural change.
 #'
 #'   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
 #'   the associated bootstrapped standard errors, and the column \code{est} contains
@@ -119,11 +133,17 @@ mutual_difference <- function(data1, data2, group, unit,
                               weight = NULL, method = "shapley",
                               se = FALSE, n_bootstrap = 50, base = exp(1), ...) {
     if (method == "shapley") {
-        fun <- function(...) shapley_compute(...)
+        fun <- function(...) shapley_compute(..., detail = FALSE)
+        cols <- "stat"
+    } else if (method == "shapley_detailed") {
+        fun <- function(...) shapley_compute(..., detail = TRUE)
+        cols <- c("stat", unit)
     } else if (method == "km") {
         fun <- function(...) km_compute(...)
+        cols <- "stat"
     } else if (method == "mrc") {
         fun <- function(...) mrc_compute(...)
+        cols <- "stat"
     } else {
         stop("unknown decomposition method")
     }
@@ -165,14 +185,14 @@ mutual_difference <- function(data1, data2, group, unit,
         boot_ret <- rbindlist(boot_ret)
         # summarize bootstrapped data frames
         ret <- boot_ret[, list(
-            est = mean(est), se = stats::sd(est)), by = c("stat")]
+            est = mean(est), se = stats::sd(est)), by = cols]
     }
     close_log()
     ret
 }
 
 
-shapley_compute <- function(d1, d2, group, unit, base, ...) {
+shapley_compute <- function(d1, d2, group, unit, base, detail, ...) {
     m <- function(d, weight) {
         add_local(d, group, unit, base, weight)
         sum(d[, list(p = first(p_unit), ls = first(ls_unit)), by = unit][, p * ls])
@@ -191,6 +211,7 @@ shapley_compute <- function(d1, d2, group, unit, base, ...) {
     # group = B, unit = B, structure = B
     d_BBB <- copy(d_AAA)
     setnames(d_BBB, c("freq1", "freq2"), c("freq2", "freq1"))
+    setnames(d_BBB, c("freq_orig1", "freq_orig2"), c("freq_orig2", "freq_orig1"))
 
     update_log(ipf_n = 1, ipf_max = 6)
     d_BBA <- ipf_compute(d_AAA, group, unit, ...)
@@ -209,7 +230,7 @@ shapley_compute <- function(d1, d2, group, unit, base, ...) {
     # compute M based on unadjusted counts (where zeros are not replaced by small mumbers)
     # this is to ensure that M2 - m_BBB is exactly 0 when there are no additions
     m_AAA <- m(d_AAA, "freq_orig1")
-    m_BBB <- m(d_AAA, "freq_orig2")
+    m_BBB <- m(d_BBB, "freq_orig1")
     m_BBA <- m(d_BBA, "n")
     m_ABA <- m(d_ABA, "n")
     m_BAA <- m(d_BAA, "n")
@@ -225,13 +246,31 @@ shapley_compute <- function(d1, d2, group, unit, base, ...) {
     unit_marginal <- .25 * (m_ABA - m_AAA + (m_BBA - m_BAA) +
                             m_BBB - m_BAB + (m_ABB - m_AAB))
     stopifnot(round(group_marginal + unit_marginal, 4) == round(marginal, 4))
+    stopifnot(round(M2 - m_BBB + m_AAA - M1 + marginal + structural, 4) == round(M2 - M1, 4))
 
     stat <- c("M1", "M2", "diff", "additions", "removals",
              "group_marginal", "unit_marginal", "structural")
     est <- c(M1, M2, M2 - M1, M2 - m_BBB, m_AAA - M1,
              group_marginal, unit_marginal, structural)
 
-    data.table(stat = stat, est = est, stringsAsFactors = FALSE)
+    ret <- data.table(stat = stat, est = est, stringsAsFactors = FALSE)
+    if (detail == TRUE) {
+        ls_AAB <- d_AAB[, list(ls_AAB = first(ls_unit)), by = unit]
+        ls_AAA <- d_AAA[, list(p1 = first(p_unit), ls_AAA = first(ls_unit)), by = unit]
+        ls_BBB <- d_BBB[, list(p2 = first(p_unit), ls_BBB = first(ls_unit)), by = unit]
+        ls_BBA <- d_BBA[, list(ls_BBA = first(ls_unit)), by = unit]
+        ls <- Reduce(merge, list(ls_AAB, ls_AAA, ls_BBB, ls_BBA))
+        ls[, `:=`(ls_diff1 = ls_AAB - ls_AAA, ls_diff2 = ls_BBB - ls_BBA)]
+        ls[, c("ls_AAB", "ls_AAA", "ls_BBB", "ls_BBA") := NULL]
+        ls[, total := .5 * p1 * ls_diff1 + .5 * p2 * ls_diff2]
+        ls <- melt(ls, unit, variable.name = "stat", value.name = "est")
+        setorderv(ls, unit)
+        ret <- rbindlist(list(ret, ls), fill = TRUE)
+        cols <- c("stat", unit, "est")
+        ret[, cols, with = FALSE]
+    } else {
+        ret
+    }
 }
 
 km_compute <- function(d1, d2, group, unit, base, ...) {
