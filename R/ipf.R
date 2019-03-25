@@ -33,7 +33,7 @@
 #'   the ratio of the source and target marginals are calculated for every category of
 #'   \code{group} and \code{unit}. The algorithm converges when all ratios are smaller
 #'   than \code{1 + precision}.
-#' @return Returns a dataset that retains
+#' @return Returns a data frame that retains
 #'   the association structure of \code{source} while approximating
 #'   the marginal distributions for \code{group} and \code{unit} of \code{target}.
 #'   The dataset identifies each combination of \code{group} and \code{unit},
@@ -78,7 +78,7 @@ ipf <- function(source, target, group, unit, weight = NULL,
     ret <- ipf_compute(common_data, group, unit, max_iterations, precision)
     close_log()
 
-    as_df(ret)
+    as.data.frame(ret)
 }
 
 #' @import data.table

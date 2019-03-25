@@ -195,21 +195,21 @@ Defaults to the natural logarithm.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>(<span class='no'>within</span> <span class='kw'>&lt;-</span> <span class='fu'>mutual_within</span>(<span class='no'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, <span class='kw'>within</span> <span class='kw'>=</span> <span class='st'>"state"</span>,
-                         <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>wide</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='output co'>#&gt;   state         M         p         H  h_weight
-#&gt; 1     A 0.4085965 0.2768819 0.4969216 0.2240667
-#&gt; 2     B 0.2549959 0.4035425 0.2680884 0.3777638
-#&gt; 3     C 0.3450221 0.3195756 0.3611257 0.3004955</div><div class='input'><span class='co'># the M for "AL" is .409</span>
+                         <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>wide</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='output co'>#&gt;    state         M         p         H  h_weight
+#&gt; 1:     A 0.4085965 0.2768819 0.4969216 0.2240667
+#&gt; 2:     B 0.2549959 0.4035425 0.2680884 0.3777638
+#&gt; 3:     C 0.3450221 0.3195756 0.3611257 0.3004955</div><div class='input'><span class='co'># the M for "AL" is .409</span>
 <span class='co'># manual calculation</span>
 <span class='no'>schools_AL</span> <span class='kw'>&lt;-</span> <span class='no'>schools00</span>[<span class='no'>schools00</span>$<span class='no'>state</span><span class='kw'>==</span><span class='st'>"AL"</span>,]
-<span class='fu'><a href='mutual_total.html'>mutual_total</a></span>(<span class='no'>schools_AL</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>) <span class='co'># M =&gt; .409</span></div><div class='output co'>#&gt;   stat est
-#&gt; M    M   0
-#&gt; H    H NaN</div><div class='input'>
+<span class='fu'><a href='mutual_total.html'>mutual_total</a></span>(<span class='no'>schools_AL</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>) <span class='co'># M =&gt; .409</span></div><div class='output co'>#&gt;    stat est
+#&gt; 1:    M   0
+#&gt; 2:    H NaN</div><div class='input'>
 <span class='co'># to recover the within M and H from the output, multiply</span>
 <span class='co'># p * M and h_weight * H, respectively</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>within</span>$<span class='no'>p</span> * <span class='no'>within</span>$<span class='no'>M</span>) <span class='co'># =&gt; .326</span></div><div class='output co'>#&gt; [1] 0.3262953</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>within</span>$<span class='no'>H</span> * <span class='no'>within</span>$<span class='no'>h_weight</span>) <span class='co'># =&gt; .321</span></div><div class='output co'>#&gt; [1] 0.3211343</div><div class='input'><span class='co'># compare with:</span>
-<span class='fu'><a href='mutual_total.html'>mutual_total</a></span>(<span class='no'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, <span class='kw'>within</span> <span class='kw'>=</span> <span class='st'>"state"</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>)</div><div class='output co'>#&gt;   stat       est
-#&gt; M    M 0.3262953
-#&gt; H    H 0.3211343</div></pre>
+<span class='fu'><a href='mutual_total.html'>mutual_total</a></span>(<span class='no'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, <span class='kw'>within</span> <span class='kw'>=</span> <span class='st'>"state"</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>)</div><div class='output co'>#&gt;    stat       est
+#&gt; 1:    M 0.3262953
+#&gt; 2:    H 0.3211343</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -34,7 +34,7 @@ the ratio of the source and target marginals are calculated for every category o
 than \code{1 + precision}.}
 }
 \value{
-Returns a dataset that retains
+Returns a data frame that retains
   the association structure of \code{source} while approximating
   the marginal distributions for \code{group} and \code{unit} of \code{target}.
   The dataset identifies each combination of \code{group} and \code{unit},

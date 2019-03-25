@@ -1,6 +1,6 @@
 # segregation 0.2.0.9000
 
-
+* always return data.table
 
 # segregation 0.2.0
 
@@ -13,7 +13,7 @@
 # segregation 0.1.0
 
 * switch group and unit definitions, to be consistent with the literature
-* add Theil's Information Index (H) 
+* add Theil's Information Index (H)
 * add entropy function
 * add mutual_within function to decompose weighted within indices
 * add "wide" option to mutual_local and mutual_within

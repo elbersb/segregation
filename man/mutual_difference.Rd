@@ -39,7 +39,7 @@ Defaults to the natural logarithm.}
 when \code{method} is set to \code{shapley} or \code{km}. See \link{ipf} for details.}
 }
 \value{
-Returns a data frame with columns \code{stat} and \code{est}. The data frame contains
+Returns a data.table with columns \code{stat} and \code{est}. The data frame contains
   the following rows defined by \code{stat}:
   \code{M1} contains the M for \code{data1}.
   \code{M2} contains the M for \code{data2}.

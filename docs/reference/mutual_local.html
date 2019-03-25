@@ -186,18 +186,18 @@ Defaults to the natural logarithm.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># which racial groups are most segregated?</span>
 (<span class='no'>localseg</span> <span class='kw'>=</span> <span class='fu'>mutual_local</span>(<span class='no'>schools00</span>, <span class='st'>"school"</span>, <span class='st'>"race"</span>,
-                         <span class='kw'>weight</span><span class='kw'>=</span><span class='st'>"n"</span>, <span class='kw'>wide</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='output co'>#&gt;     race        ls           p
-#&gt; 1  asian 0.6287673 0.022553401
-#&gt; 2  black 0.8805413 0.190149919
-#&gt; 3   hisp 0.7766327 0.151696575
-#&gt; 4  white 0.1836393 0.628092178
-#&gt; 5 native 1.4342644 0.007507927</div><div class='input'>
+                         <span class='kw'>weight</span><span class='kw'>=</span><span class='st'>"n"</span>, <span class='kw'>wide</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='output co'>#&gt;      race        ls           p
+#&gt; 1:  asian 0.6287673 0.022553401
+#&gt; 2:  black 0.8805413 0.190149919
+#&gt; 3:   hisp 0.7766327 0.151696575
+#&gt; 4:  white 0.1836393 0.628092178
+#&gt; 5: native 1.4342644 0.007507927</div><div class='input'>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>localseg</span>$<span class='no'>p</span>) <span class='co'># =&gt; 1</span></div><div class='output co'>#&gt; [1] 1</div><div class='input'>
 <span class='co'># the sum of the weighted local segregation scores equals</span>
 <span class='co'># total segregation</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>localseg</span>$<span class='no'>ls</span> * <span class='no'>localseg</span>$<span class='no'>p</span>) <span class='co'># =&gt; .425</span></div><div class='output co'>#&gt; [1] 0.425539</div><div class='input'><span class='fu'><a href='mutual_total.html'>mutual_total</a></span>(<span class='no'>schools00</span>, <span class='st'>"school"</span>, <span class='st'>"race"</span>, <span class='kw'>weight</span><span class='kw'>=</span><span class='st'>"n"</span>) <span class='co'># M =&gt; .425</span></div><div class='output co'>#&gt;   stat        est
-#&gt; M    M 0.42553898
-#&gt; H    H 0.05642991</div></pre>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sum'>sum</a></span>(<span class='no'>localseg</span>$<span class='no'>ls</span> * <span class='no'>localseg</span>$<span class='no'>p</span>) <span class='co'># =&gt; .425</span></div><div class='output co'>#&gt; [1] 0.425539</div><div class='input'><span class='fu'><a href='mutual_total.html'>mutual_total</a></span>(<span class='no'>schools00</span>, <span class='st'>"school"</span>, <span class='st'>"race"</span>, <span class='kw'>weight</span><span class='kw'>=</span><span class='st'>"n"</span>) <span class='co'># M =&gt; .425</span></div><div class='output co'>#&gt;    stat        est
+#&gt; 1:    M 0.42553898
+#&gt; 2:    H 0.05642991</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -37,7 +37,7 @@ computed within the groups defined by the variable, and then averaged.
 Defaults to the natural logarithm.}
 }
 \value{
-Returns a data frame with two rows. The column \code{est} contains
+Returns a data.table with two rows. The column \code{est} contains
   the Mutual Information Index, M, and Theil's Entropy Index, H. The H is the
   the M divided by the \code{group} entropy. If \code{within} was given,
   M and H are weighted averages of the within-category segregation scores.

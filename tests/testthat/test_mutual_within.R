@@ -21,8 +21,8 @@ test_that("dimensions and bootstrapping", {
 
 test_that("between + within = total", {
     total <- mutual_total(test_data, "u", "g", within = "supergroup", weight = "n")
-    m <- total[["M", "est"]]
-    h <- total[["H", "est"]]
+    m <- total[stat == "M", est]
+    h <- total[stat == "H", est]
 
     within <- mutual_within(test_data, "u", "g", within = "supergroup", weight = "n")
     within <- unstack(within, form = est ~ stat)
@@ -58,20 +58,21 @@ test_that("option wide works", {
     expect_equal(nrow(wide), 2)
     expect_equal(nrow(wide), nrow(wide_se))
 
-    expect_equal(nowide[nowide$stat == "M", ][["est"]], wide$M)
-    expect_equal(nowide[nowide$stat == "p", ][["est"]], wide$p)
-    expect_equal(nowide[nowide$stat == "H", ][["est"]], wide$H)
-    expect_equal(nowide[nowide$stat == "h_weight", ][["est"]], wide$h_weight)
+    expect_equal(nowide[stat == "M", est], wide$M)
+    expect_equal(nowide[stat == "p", est], wide$p)
+    expect_equal(nowide[stat == "H", est], wide$H)
+    expect_equal(nowide[stat == "h_weight", est], wide$h_weight)
 
     total <- mutual_total(test_data, "u", "g", within = "supergroup", weight = "n")
-    expect_equal(total[["M", "est"]],
-        sum(nowide[nowide$stat == "M", "est"] * nowide[nowide$stat == "p", "est"]))
-    expect_equal(total[["M", "est"]], sum(wide$M * wide$p))
-    expect_equal(total[["M", "est"]], sum(wide$H * wide$h_weight * entropy(test_data, "u", "n")))
+    expect_equal(total[stat == "M", est],
+        sum(nowide[stat == "M", est] * nowide[stat == "p", est]))
+    expect_equal(total[stat == "M", est], sum(wide$M * wide$p))
+    expect_equal(total[stat == "M", est],
+        sum(wide$H * wide$h_weight * entropy(test_data, "u", "n")))
 
-    expect_equal(total[["H", "est"]],
-        sum(nowide[nowide$stat == "H", "est"] * nowide[nowide$stat == "h_weight", "est"]))
-    expect_equal(total[["H", "est"]], sum(wide$H * wide$h_weight))
+    expect_equal(total[stat == "H", est],
+        sum(nowide[stat == "H", est] * nowide[stat == "h_weight", est]))
+    expect_equal(total[stat == "H", est], sum(wide$H * wide$h_weight))
 
-    expect_equal(all(nowide_se["se"] > 0), TRUE)
+    expect_equal(all(nowide_se[["se"]] > 0), TRUE)
 })

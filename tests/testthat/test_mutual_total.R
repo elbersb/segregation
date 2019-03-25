@@ -11,43 +11,43 @@ test_data <- data.frame(
 
 test_that("mutual M works both ways around", {
     expect_equal(
-        mutual_total(test_data, "u", "g", weight = "n")[["M", "est"]],
-        mutual_total(test_data, "g", "u", weight = "n")[["M", "est"]]
+        mutual_total(test_data, "u", "g", weight = "n")[stat == "M", est],
+        mutual_total(test_data, "g", "u", weight = "n")[stat == "M", est]
     )
 
     expanded <- test_data[rep(seq_len(nrow(test_data)), test_data$n), 1:3]
     expect_equal(
-        mutual_total(test_data, "u", "g", weight = "n")[["M", "est"]],
-        mutual_total(expanded, "u", "g")[["M", "est"]],
-        mutual_total(expanded, "g", "u")[["M", "est"]]
+        mutual_total(test_data, "u", "g", weight = "n")[stat == "M", est],
+        mutual_total(expanded, "u", "g")[stat == "M", est],
+        mutual_total(expanded, "g", "u")[stat == "M", est]
     )
 
     expect_equal(
-        mutual_total(test_data, "u", "g", weight = "n", base = 2)[["M", "est"]],
-        mutual_total(test_data, "g", "u", weight = "n", base = 2)[["M", "est"]]
+        mutual_total(test_data, "u", "g", weight = "n", base = 2)[stat == "M", est],
+        mutual_total(test_data, "g", "u", weight = "n", base = 2)[stat == "M", est]
     )
 
     expect_equal(
-        mutual_total(test_data, "u", c("supergroup", "g"), weight = "n")[["M", "est"]],
-        mutual_total(test_data, "u", "g", weight = "n")[["M", "est"]]
+        mutual_total(test_data, "u", c("supergroup", "g"), weight = "n")[stat == "M", est],
+        mutual_total(test_data, "u", "g", weight = "n")[stat == "M", est]
     )
 
     expect_equal(
-        mutual_total(test_data, "u", c("supergroup", "g"), weight = "n")[["M", "est"]],
-        mutual_total(test_data, c("supergroup", "g"), "u", weight = "n")[["M", "est"]]
+        mutual_total(test_data, "u", c("supergroup", "g"), weight = "n")[stat == "M", est],
+        mutual_total(test_data, c("supergroup", "g"), "u", weight = "n")[stat == "M", est]
     )
 })
 
 test_that("between + within = total", {
     expect_equal(
-        mutual_total(test_data, "u", "g", weight = "n")[["M", "est"]],
-        mutual_total(test_data, "u", "supergroup", weight = "n")[["M", "est"]] +
-            mutual_total(test_data, "u", "g", within = "supergroup", weight = "n")[["M", "est"]]
+        mutual_total(test_data, "u", "g", weight = "n")[stat == "M", est],
+        mutual_total(test_data, "u", "supergroup", weight = "n")[stat == "M", est] +
+            mutual_total(test_data, "u", "g", within = "supergroup", weight = "n")[stat == "M", est]
     )
     expect_equal(
-        mutual_total(test_data, "u", "g", weight = "n")[["H", "est"]],
-        mutual_total(test_data, "u", "supergroup", weight = "n")[["H", "est"]] +
-            mutual_total(test_data, "u", "g", within = "supergroup", weight = "n")[["H", "est"]]
+        mutual_total(test_data, "u", "g", weight = "n")[stat == "H", est],
+        mutual_total(test_data, "u", "supergroup", weight = "n")[stat == "H", est] +
+            mutual_total(test_data, "u", "g", within = "supergroup", weight = "n")[stat == "H", est]
     )
 })
 
@@ -57,16 +57,16 @@ test_that("within estimations are correct", {
     d_12 <- test_data[test_data$supergroup == 12, ]
     d_34 <- test_data[test_data$supergroup == 34, ]
     expect_equal(
-        p_12 * mutual_total(d_12, "u", "g", weight = "n")[["M", "est"]] +
-            p_34 * mutual_total(d_34, "u", "g", weight = "n")[["M", "est"]],
-        mutual_total(test_data, "u", "g", within = "supergroup", weight = "n")[["M", "est"]]
+        p_12 * mutual_total(d_12, "u", "g", weight = "n")[stat == "M", est] +
+            p_34 * mutual_total(d_34, "u", "g", weight = "n")[stat == "M", est],
+        mutual_total(test_data, "u", "g", within = "supergroup", weight = "n")[stat == "M", est]
     )
     # this decomposition does not exist in the same way for H
 })
 
 test_that("H is correct", {
     ret <- mutual_total(test_data, "u", "g", weight = "n")
-    expect_equal(ret[["H", "est"]] >= 0 & ret[["H", "est"]] <= 1, TRUE)
+    expect_equal(ret[stat == "H", est] >= 0 & ret[stat == "H", est] <= 1, TRUE)
 })
 
 test_that("bootstrapping works", {
@@ -89,8 +89,8 @@ test_data <- data.frame(
 test_that("zero weights no problem", {
     expect_equal(dim(mutual_total(test_data, "u", "g", weight = "n", se = TRUE)), c(2, 3))
     expect_equal(dim(mutual_total(test_data, "u", "g", weight = "n")), c(2, 2))
-    expect_equal(mutual_total(test_data, "u", "g", weight = "n")[["M", "est"]], log(2))
-    expect_equal(mutual_total(test_data, "u", "g", weight = "n")[["H", "est"]], 1)
+    expect_equal(mutual_total(test_data, "u", "g", weight = "n")[stat == "M", est], log(2))
+    expect_equal(mutual_total(test_data, "u", "g", weight = "n")[stat == "H", est], 1)
 
     test_data2 <- copy(test_data)
     test_data2$g <- as.factor(test_data2$g)

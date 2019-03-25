@@ -33,7 +33,7 @@ Defaults to the natural logarithm.}
 (Default \code{FALSE})}
 }
 \value{
-Returns a data frame with two rows for each category defined by \code{unit},
+Returns a data.table with two rows for each category defined by \code{unit},
   for a total of \code{2*(number of units)} rows.
   The column \code{est} contains two statistics that
   are provided for each unit: \code{ls}, the local segregation score, and

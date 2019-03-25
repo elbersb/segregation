@@ -52,7 +52,7 @@
 #'  when \code{method} is set to \code{shapley} or \code{km}. See \link{ipf} for details.
 #' @param base Base of the logarithm that is used in the calculation.
 #'   Defaults to the natural logarithm.
-#' @return Returns a data frame with columns \code{stat} and \code{est}. The data frame contains
+#' @return Returns a data.table with columns \code{stat} and \code{est}. The data frame contains
 #'   the following rows defined by \code{stat}:
 #'   \code{M1} contains the M for \code{data1}.
 #'   \code{M2} contains the M for \code{data2}.
@@ -119,11 +119,11 @@ mutual_difference <- function(data1, data2, group, unit,
                               weight = NULL, method = "shapley",
                               se = FALSE, n_bootstrap = 50, base = exp(1), ...) {
     if (method == "shapley") {
-        method <- function(...) shapley_compute(...)
+        fun <- function(...) shapley_compute(...)
     } else if (method == "km") {
-        method <- function(...) km_compute(...)
+        fun <- function(...) km_compute(...)
     } else if (method == "mrc") {
-        method <- function(...) mrc_compute(...)
+        fun <- function(...) mrc_compute(...)
     } else {
         stop("unknown decomposition method")
     }
@@ -139,7 +139,7 @@ mutual_difference <- function(data1, data2, group, unit,
     if (nrow_unit == 0) stop("No overlap in unit")
 
     if (se == FALSE) {
-        ret <- method(d1, d2, group, unit, base, ...)
+        ret <- fun(d1, d2, group, unit, base, ...)
     } else {
         vars <- attr(d1, "vars")
         n_total1 <- sum(d1[, "freq"])
@@ -160,7 +160,7 @@ mutual_difference <- function(data1, data2, group, unit,
             resampled2 <- d2[
                 sample(.N, n_total2, replace = TRUE, prob = freq)][,
                 list(freq = as.double(.N)), by = vars]
-            method(resampled1, resampled2, group, unit, base, ...)
+            fun(resampled1, resampled2, group, unit, base, ...)
         })
         boot_ret <- rbindlist(boot_ret)
         # summarize bootstrapped data frames
@@ -168,8 +168,7 @@ mutual_difference <- function(data1, data2, group, unit,
             est = mean(est), se = stats::sd(est)), by = c("stat")]
     }
     close_log()
-    rownames(ret) <- ret[["stat"]]
-    as_df(ret)
+    ret
 }
 
 

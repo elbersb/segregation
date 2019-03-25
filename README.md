@@ -18,8 +18,9 @@ and Theil’s Information Index (H).
   - decompose differences in total segregation over time
   - estimate standard errors via bootstrapping
   - every method returns a
-    [tidy](http://vita.had.co.nz/papers/tidy-data.html) data frame for
-    easy post-processing and plotting
+    [tidy](http://vita.had.co.nz/papers/tidy-data.html)
+    [data.table](http://r-datatable.com) for easy post-processing and
+    plotting
   - it’s fast, because it uses the
     [`data.table`](https://github.com/Rdatatable/data.table/wiki)
     package internally
@@ -67,8 +68,7 @@ mutual_total(schools00, "race", "school", within = "state", weight = "n")
 
 Local segregation (`ls`) is a decomposition by units (here racial
 groups). The sum of the proportion-weighted local segregation scores
-equals
-M:
+equals M:
 
 ``` r
 (local <- mutual_local(schools00, group = "school", unit = "race", weight = "n",

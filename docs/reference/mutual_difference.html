@@ -244,64 +244,64 @@ the change in M that is induced by these cases as
     <pre class="examples"><div class='input'><span class='co'># decompose the difference in school segregation between 2000 and 2005,</span>
 <span class='co'># using the Shapley method</span>
 <span class='fu'>mutual_difference</span>(<span class='no'>schools00</span>, <span class='no'>schools05</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"race"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"school"</span>,
-    <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"shapley"</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>.1</span>)</div><div class='output co'>#&gt;                          stat          est
-#&gt; M1                         M1  0.425538976
-#&gt; M2                         M2  0.413385092
-#&gt; diff                     diff -0.012153884
-#&gt; additions           additions -0.003412776
-#&gt; removals             removals -0.011405093
-#&gt; group_marginal group_marginal  0.012681251
-#&gt; unit_marginal   unit_marginal -0.018408392
-#&gt; structural         structural  0.008391127</div><div class='input'><span class='co'># =&gt; the structural component is close to zero, thus most change is in the marginals.</span>
+    <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"shapley"</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>.1</span>)</div><div class='output co'>#&gt;              stat          est
+#&gt; 1:             M1  0.425538976
+#&gt; 2:             M2  0.413385092
+#&gt; 3:           diff -0.012153884
+#&gt; 4:      additions -0.003412776
+#&gt; 5:       removals -0.011405093
+#&gt; 6: group_marginal  0.012681251
+#&gt; 7:  unit_marginal -0.018408392
+#&gt; 8:     structural  0.008391127</div><div class='input'><span class='co'># =&gt; the structural component is close to zero, thus most change is in the marginals.</span>
 <span class='co'># This method gives identical results when we switch the unit and group definitions,</span>
 <span class='co'># and when we switch the data inputs.</span>
 
 <span class='co'># the Karmel-Maclachlan method is similar, but only adjust the data in the forward direction...</span>
 <span class='fu'>mutual_difference</span>(<span class='no'>schools00</span>, <span class='no'>schools05</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"school"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"race"</span>,
-    <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"km"</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>.1</span>)</div><div class='output co'>#&gt;                          stat          est
-#&gt; M1                         M1  0.425538976
-#&gt; M2                         M2  0.413385092
-#&gt; diff                     diff -0.012153884
-#&gt; additions           additions -0.003412776
-#&gt; removals             removals -0.011405093
-#&gt; group_marginal group_marginal -0.020609129
-#&gt; unit_marginal   unit_marginal  0.017497722
-#&gt; interaction       interaction -0.003418901
-#&gt; structural         structural  0.009194293</div><div class='input'>
+    <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"km"</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>.1</span>)</div><div class='output co'>#&gt;              stat          est
+#&gt; 1:             M1  0.425538976
+#&gt; 2:             M2  0.413385092
+#&gt; 3:           diff -0.012153884
+#&gt; 4:      additions -0.003412776
+#&gt; 5:       removals -0.011405093
+#&gt; 6: group_marginal -0.020609129
+#&gt; 7:  unit_marginal  0.017497722
+#&gt; 8:    interaction -0.003418901
+#&gt; 9:     structural  0.009194293</div><div class='input'>
 <span class='co'># ...this means that the results won't be identical when we switch the data inputs</span>
 <span class='fu'>mutual_difference</span>(<span class='no'>schools05</span>, <span class='no'>schools00</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"school"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"race"</span>,
-    <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"km"</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>.1</span>)</div><div class='output co'>#&gt;                          stat          est
-#&gt; M1                         M1  0.413385092
-#&gt; M2                         M2  0.425538976
-#&gt; diff                     diff  0.012153884
-#&gt; additions           additions  0.011405093
-#&gt; removals             removals  0.003412776
-#&gt; group_marginal group_marginal  0.019784513
-#&gt; unit_marginal   unit_marginal -0.016961244
-#&gt; interaction       interaction  0.002100706
-#&gt; structural         structural -0.007587961</div><div class='input'>
+    <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"km"</span>, <span class='kw'>precision</span> <span class='kw'>=</span> <span class='fl'>.1</span>)</div><div class='output co'>#&gt;              stat          est
+#&gt; 1:             M1  0.413385092
+#&gt; 2:             M2  0.425538976
+#&gt; 3:           diff  0.012153884
+#&gt; 4:      additions  0.011405093
+#&gt; 5:       removals  0.003412776
+#&gt; 6: group_marginal  0.019784513
+#&gt; 7:  unit_marginal -0.016961244
+#&gt; 8:    interaction  0.002100706
+#&gt; 9:     structural -0.007587961</div><div class='input'>
 <span class='co'># the MRC method indicates a much higher structural change...</span>
 <span class='fu'>mutual_difference</span>(<span class='no'>schools00</span>, <span class='no'>schools05</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"race"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"school"</span>,
-    <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"mrc"</span>)</div><div class='output co'>#&gt;                          stat          est
-#&gt; M1                         M1  0.425538976
-#&gt; M2                         M2  0.413385092
-#&gt; diff                     diff -0.012153884
-#&gt; additions           additions -0.003412776
-#&gt; removals             removals -0.011405093
-#&gt; unit_marginal   unit_marginal -0.004207757
-#&gt; group_marginal group_marginal  0.062334448
-#&gt; structural         structural -0.055462706</div><div class='input'>
+    <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"mrc"</span>)</div><div class='output co'>#&gt;              stat          est
+#&gt; 1:             M1  0.425538976
+#&gt; 2:             M2  0.413385092
+#&gt; 3:           diff -0.012153884
+#&gt; 4:      additions -0.003412776
+#&gt; 5:       removals -0.011405093
+#&gt; 6:  unit_marginal -0.004207757
+#&gt; 7: group_marginal  0.062334448
+#&gt; 8:     structural -0.055462706</div><div class='input'>
 <span class='co'># ...and is not symmetric</span>
 <span class='fu'>mutual_difference</span>(<span class='no'>schools00</span>, <span class='no'>schools05</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='st'>"school"</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"race"</span>,
-    <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"mrc"</span>)</div><div class='output co'>#&gt;                          stat          est
-#&gt; M1                         M1  0.425538976
-#&gt; M2                         M2  0.413385092
-#&gt; diff                     diff -0.012153884
-#&gt; additions           additions -0.003412776
-#&gt; removals             removals -0.011405093
-#&gt; unit_marginal   unit_marginal  0.017236954
-#&gt; group_marginal group_marginal -0.004209936
-#&gt; structural         structural -0.010363032</div></pre>
+    <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"mrc"</span>)</div><div class='output co'>#&gt;              stat          est
+#&gt; 1:             M1  0.425538976
+#&gt; 2:             M2  0.413385092
+#&gt; 3:           diff -0.012153884
+#&gt; 4:      additions -0.003412776
+#&gt; 5:       removals -0.011405093
+#&gt; 6:  unit_marginal  0.017236954
+#&gt; 7: group_marginal -0.004209936
+#&gt; 8:     structural -0.010363032</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

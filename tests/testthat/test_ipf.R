@@ -29,19 +29,21 @@ test_that("gives sames results as mutual_difference", {
     # first reduce to overlap sample
     schools00_r <- schools00[schools00$school %in% schools05$school, ]
     schools05_r <- schools05[schools05$school %in% schools00$school, ]
-    M_00 <- mutual_total(schools00_r, "race", "school", weight = "n")[["M", "est"]]
-    M_05 <- mutual_total(schools05_r, "race", "school", weight = "n")[["M", "est"]]
+    M_00 <- mutual_total(schools00_r, "race", "school", weight = "n")[stat == "M", est]
+    M_05 <- mutual_total(schools05_r, "race", "school", weight = "n")[stat == "M", est]
     # adjust the 2000 margins to the 2005 margins
     # if only the margins changed, then this would explain all the difference
     adj_00 <- ipf(schools00_r, schools05_r, "race", "school", weight = "n")
-    M_margins <- mutual_total(adj_00, "race", "school", weight = "n")[["M", "est"]]
+    M_margins <- mutual_total(adj_00, "race", "school", weight = "n")[stat == "M", est]
     structural_change <- M_05 - M_margins
     # test
-    expect_equal(diff[["M1", "est"]] + diff[["removals", "est"]], M_00)
-    expect_equal(diff[["M2", "est"]] - diff[["additions", "est"]], M_05)
-    expect_equal(structural_change, diff[["structural", "est"]], tolerance = .001)
-    expect_equal(M_05 - M_00 - structural_change,
-        sum(diff[c("unit_marginal", "group_marginal", "interaction"), "est"]), tolerance = .001)
+    expect_equal(diff[stat == "M1", est] + diff[stat == "removals", est], M_00)
+    expect_equal(diff[stat == "M2", est] - diff[stat == "additions", est], M_05)
+    expect_equal(structural_change, diff[stat == "structural", est], tolerance = .001)
+    expect_equal(
+        M_05 - M_00 - structural_change,
+        diff[stat %in% c("unit_marginal", "group_marginal", "interaction"), sum(est)],
+        tolerance = .001)
 })
 
 test_that("example from Karmel & Maclachlan 1988", {

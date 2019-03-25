@@ -93,7 +93,7 @@ mutual_total_within_compute <- function(data, group, unit, within, base,
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{10})
 #' @param base Base of the logarithm that is used in the calculation.
 #'   Defaults to the natural logarithm.
-#' @return Returns a data frame with two rows. The column \code{est} contains
+#' @return Returns a data.table with two rows. The column \code{est} contains
 #'   the Mutual Information Index, M, and Theil's Entropy Index, H. The H is the
 #'   the M divided by the \code{group} entropy. If \code{within} was given,
 #'   M and H are weighted averages of the within-category segregation scores.
@@ -169,8 +169,7 @@ mutual_total <- function(data, group, unit, within = NULL,
         ret <- boot_ret[, list(
             est = mean(est), se = stats::sd(est)), by = c("stat")]
     }
-    rownames(ret) <- ret[["stat"]]
-    as_df(ret)
+    ret
 }
 
 #' Calculate detailed within-category segregation scores for M and H
@@ -196,7 +195,7 @@ mutual_total <- function(data, group, unit, within = NULL,
 #'   Defaults to the natural logarithm.
 #' @param wide Returns a wide dataframe instead of a long dataframe.
 #'   (Default \code{FALSE})
-#' @return Returns a data frame with four rows for each category defined by \code{within}.
+#' @return Returns a data.table with four rows for each category defined by \code{within}.
 #'   The column \code{est} contains four statistics that
 #'   are provided for each unit:
 #'   \code{M} is the within-category M, and \code{p} is the proportion of the category.
@@ -278,8 +277,7 @@ mutual_within <- function(data, group, unit, within,
             ret <- dcast(ret, f, value.var = c("est"))
         }
     }
-
-    as_df(ret)
+    ret
 }
 
 #' @import data.table
@@ -315,7 +313,7 @@ mutual_local_compute <- function(data, group, unit, base = exp(1)) {
 #'   Defaults to the natural logarithm.
 #' @param wide Returns a wide dataframe instead of a long dataframe.
 #'   (Default \code{FALSE})
-#' @return Returns a data frame with two rows for each category defined by \code{unit},
+#' @return Returns a data.table with two rows for each category defined by \code{unit},
 #'   for a total of \code{2*(number of units)} rows.
 #'   The column \code{est} contains two statistics that
 #'   are provided for each unit: \code{ls}, the local segregation score, and
@@ -385,6 +383,5 @@ mutual_local <- function(data, group, unit, weight = NULL,
             ret <- dcast(ret, f, value.var = c("est"))
         }
     }
-
-    as_df(ret)
+    ret
 }

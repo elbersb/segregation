@@ -76,12 +76,6 @@ close_log()
 
 # helpers
 
-as_df <- function(data) {
-    df <- as.data.frame(data, stringsAsFactors = FALSE)
-    rownames(df) <- rownames(data)
-    df
-}
-
 logf <- function(v, base) {
     if (missing(base)) {
         stop("argument base required")

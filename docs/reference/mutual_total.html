@@ -190,34 +190,34 @@ Defaults to the natural logarithm.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># calculate school racial segregation</span>
-<span class='fu'>mutual_total</span>(<span class='no'>schools00</span>, <span class='st'>"school"</span>, <span class='st'>"race"</span>, <span class='kw'>weight</span><span class='kw'>=</span><span class='st'>"n"</span>) <span class='co'># M =&gt; .425</span></div><div class='output co'>#&gt;   stat        est
-#&gt; M    M 0.42553898
-#&gt; H    H 0.05642991</div><div class='input'>
+<span class='fu'>mutual_total</span>(<span class='no'>schools00</span>, <span class='st'>"school"</span>, <span class='st'>"race"</span>, <span class='kw'>weight</span><span class='kw'>=</span><span class='st'>"n"</span>) <span class='co'># M =&gt; .425</span></div><div class='output co'>#&gt;    stat        est
+#&gt; 1:    M 0.42553898
+#&gt; 2:    H 0.05642991</div><div class='input'>
 <span class='co'># note that the definition of groups and units is arbitrary</span>
-<span class='fu'>mutual_total</span>(<span class='no'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, <span class='kw'>weight</span><span class='kw'>=</span><span class='st'>"n"</span>) <span class='co'># M =&gt; .425</span></div><div class='output co'>#&gt;   stat       est
-#&gt; M    M 0.4255390
-#&gt; H    H 0.4188083</div><div class='input'>
+<span class='fu'>mutual_total</span>(<span class='no'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, <span class='kw'>weight</span><span class='kw'>=</span><span class='st'>"n"</span>) <span class='co'># M =&gt; .425</span></div><div class='output co'>#&gt;    stat       est
+#&gt; 1:    M 0.4255390
+#&gt; 2:    H 0.4188083</div><div class='input'>
 <span class='co'># if groups or units are defined by a combination of variables,</span>
 <span class='co'># vectors of variable names can be provided -</span>
 <span class='co'># here there is no difference, because schools</span>
 <span class='co'># are nested within districts</span>
 <span class='fu'>mutual_total</span>(<span class='no'>schools00</span>, <span class='st'>"race"</span>, <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"district"</span>, <span class='st'>"school"</span>),
-             <span class='kw'>weight</span><span class='kw'>=</span><span class='st'>"n"</span>) <span class='co'># M =&gt; .424</span></div><div class='output co'>#&gt;   stat       est
-#&gt; M    M 0.4255390
-#&gt; H    H 0.4188083</div><div class='input'>
+             <span class='kw'>weight</span><span class='kw'>=</span><span class='st'>"n"</span>) <span class='co'># M =&gt; .424</span></div><div class='output co'>#&gt;    stat       est
+#&gt; 1:    M 0.4255390
+#&gt; 2:    H 0.4188083</div><div class='input'>
 <span class='co'># estimate standard errors for M and H</span>
-<span class='fu'>mutual_total</span>(<span class='no'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, <span class='kw'>weight</span><span class='kw'>=</span><span class='st'>"n"</span>, <span class='kw'>se</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;   stat       est           se
-#&gt; M    M 0.4292972 0.0008483900
-#&gt; H    H 0.4225433 0.0007267075</div><div class='input'>
+<span class='fu'>mutual_total</span>(<span class='no'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, <span class='kw'>weight</span><span class='kw'>=</span><span class='st'>"n"</span>, <span class='kw'>se</span><span class='kw'>=</span><span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;    stat       est           se
+#&gt; 1:    M 0.4292972 0.0008483900
+#&gt; 2:    H 0.4225433 0.0007267075</div><div class='input'>
 <span class='co'># estimate segregation within school districts</span>
 <span class='fu'>mutual_total</span>(<span class='no'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>,
-             <span class='kw'>within</span><span class='kw'>=</span><span class='st'>"district"</span>, <span class='kw'>weight</span><span class='kw'>=</span><span class='st'>"n"</span>) <span class='co'># M =&gt; .087</span></div><div class='output co'>#&gt;   stat        est
-#&gt; M    M 0.08758648
-#&gt; H    H 0.08620114</div><div class='input'>
+             <span class='kw'>within</span><span class='kw'>=</span><span class='st'>"district"</span>, <span class='kw'>weight</span><span class='kw'>=</span><span class='st'>"n"</span>) <span class='co'># M =&gt; .087</span></div><div class='output co'>#&gt;    stat        est
+#&gt; 1:    M 0.08758648
+#&gt; 2:    H 0.08620114</div><div class='input'>
 <span class='co'># estimate between-district racial segregation</span>
-<span class='fu'>mutual_total</span>(<span class='no'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"district"</span>, <span class='kw'>weight</span><span class='kw'>=</span><span class='st'>"n"</span>) <span class='co'># M =&gt; .338</span></div><div class='output co'>#&gt;   stat       est
-#&gt; M    M 0.3379525
-#&gt; H    H 0.3326072</div><div class='input'># note that the sum of within-district and between-district
+<span class='fu'>mutual_total</span>(<span class='no'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"district"</span>, <span class='kw'>weight</span><span class='kw'>=</span><span class='st'>"n"</span>) <span class='co'># M =&gt; .338</span></div><div class='output co'>#&gt;    stat       est
+#&gt; 1:    M 0.3379525
+#&gt; 2:    H 0.3326072</div><div class='input'># note that the sum of within-district and between-district
 # segregation equals total school-race segregation;
 # here, most segregation is between school districts
 </div></pre>

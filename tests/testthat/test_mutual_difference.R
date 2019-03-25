@@ -22,78 +22,93 @@ test_that("mutual_difference SHAPLEY", {
     sh3 <- mutual_difference(test_data2, test_data1, "g", "u", weight = "n", method = "shapley")
     sh4 <- mutual_difference(test_data2, test_data1, "u", "g", weight = "n", method = "shapley")
 
-    expect_equal(sh1[["diff", "est"]], sh1[["M2", "est"]] - sh1[["M1", "est"]])
-    expect_equal(sh1[["diff", "est"]], sum(sh1[6:8, "est"]))
-    expect_equal(sh1[["additions", "est"]], 0)
-    expect_equal(sh1[["removals", "est"]], 0)
+    expect_equal(sh1[stat == "diff", est], sh1[stat == "M2", est] - sh1[stat == "M1", est])
+    expect_equal(sh1[stat == "diff", est], sum(sh1[6:8, "est"]))
+    expect_equal(sh1[stat == "additions", est], 0)
+    expect_equal(sh1[stat == "removals", est], 0)
 
-    expect_equal(sh2[["diff", "est"]], sh2[["M2", "est"]] - sh2[["M1", "est"]])
-    expect_equal(sh2[["diff", "est"]], sum(sh2[6:8, "est"]))
-    expect_equal(sh2[["additions", "est"]], 0)
-    expect_equal(sh2[["removals", "est"]], 0)
+    expect_equal(sh2[stat == "diff", est], sh2[stat == "M2", est] - sh2[stat == "M1", est])
+    expect_equal(sh2[stat == "diff", est], sum(sh2[6:8, "est"]))
+    expect_equal(sh2[stat == "additions", est], 0)
+    expect_equal(sh2[stat == "removals", est], 0)
 
-    expect_equal(sh3[["diff", "est"]], sh3[["M2", "est"]] - sh3[["M1", "est"]])
-    expect_equal(sh3[["diff", "est"]], sum(sh3[6:8, "est"]))
-    expect_equal(sh3[["additions", "est"]], 0)
-    expect_equal(sh3[["removals", "est"]], 0)
+    expect_equal(sh3[stat == "diff", est], sh3[stat == "M2", est] - sh3[stat == "M1", est])
+    expect_equal(sh3[stat == "diff", est], sum(sh3[6:8, "est"]))
+    expect_equal(sh3[stat == "additions", est], 0)
+    expect_equal(sh3[stat == "removals", est], 0)
 
-    expect_equal(sh4[["diff", "est"]], sh4[["M2", "est"]] - sh4[["M1", "est"]])
-    expect_equal(sh4[["diff", "est"]], sum(sh4[6:8, "est"]))
-    expect_equal(sh4[["additions", "est"]], 0)
-    expect_equal(sh4[["removals", "est"]], 0)
+    expect_equal(sh4[stat == "diff", est], sh4[stat == "M2", est] - sh4[stat == "M1", est])
+    expect_equal(sh4[stat == "diff", est], sum(sh4[6:8, "est"]))
+    expect_equal(sh4[stat == "additions", est], 0)
+    expect_equal(sh4[stat == "removals", est], 0)
 
     # symmetry by group/unit
-    expect_equal(sh1[["M1", "est"]], sh2[["M1", "est"]])
-    expect_equal(sh1[["M2", "est"]], sh2[["M2", "est"]])
-    expect_equal(sh1[["diff", "est"]], sh2[["diff", "est"]])
-    expect_equal(sh1[["group_marginal", "est"]], sh2[["unit_marginal", "est"]], tolerance = .0001)
-    expect_equal(sh1[["unit_marginal", "est"]], sh2[["group_marginal", "est"]], tolerance = .0001)
-    expect_equal(sh1[["structural", "est"]], sh2[["structural", "est"]], tolerance = .0001)
+    expect_equal(sh1[stat == "M1", est], sh2[stat == "M1", est])
+    expect_equal(sh1[stat == "M2", est], sh2[stat == "M2", est])
+    expect_equal(sh1[stat == "diff", est], sh2[stat == "diff", est])
+    expect_equal(sh1[stat == "group_marginal", est], sh2[stat == "unit_marginal", est],
+        tolerance = .0001)
+    expect_equal(sh1[stat == "unit_marginal", est], sh2[stat == "group_marginal", est],
+        tolerance = .0001)
+    expect_equal(sh1[stat == "structural", est], sh2[stat == "structural", est],
+        tolerance = .0001)
 
-    expect_equal(sh3[["M1", "est"]], sh4[["M1", "est"]])
-    expect_equal(sh3[["M2", "est"]], sh4[["M2", "est"]])
-    expect_equal(sh3[["diff", "est"]], sh4[["diff", "est"]])
-    expect_equal(sh3[["group_marginal", "est"]], sh4[["unit_marginal", "est"]], tolerance = .0001)
-    expect_equal(sh3[["unit_marginal", "est"]], sh4[["group_marginal", "est"]], tolerance = .0001)
-    expect_equal(sh3[["structural", "est"]], sh4[["structural", "est"]], tolerance = .0001)
+    expect_equal(sh3[stat == "M1", est], sh4[stat == "M1", est])
+    expect_equal(sh3[stat == "M2", est], sh4[stat == "M2", est])
+    expect_equal(sh3[stat == "diff", est], sh4[stat == "diff", est])
+    expect_equal(sh3[stat == "group_marginal", est], sh4[stat == "unit_marginal", est],
+        tolerance = .0001)
+    expect_equal(sh3[stat == "unit_marginal", est], sh4[stat == "group_marginal", est],
+        tolerance = .0001)
+    expect_equal(sh3[stat == "structural", est], sh4[stat == "structural", est],
+        tolerance = .0001)
 
     # symmetry by data inputs
-    expect_equal(sh1[["M1", "est"]], sh3[["M2", "est"]])
-    expect_equal(sh1[["M2", "est"]], sh3[["M1", "est"]])
-    expect_equal(sh1[["diff", "est"]], -sh3[["diff", "est"]])
-    expect_equal(sh1[["group_marginal", "est"]], -sh3[["group_marginal", "est"]], tolerance = .0001)
-    expect_equal(sh1[["unit_marginal", "est"]], -sh3[["unit_marginal", "est"]], tolerance = .0001)
-    expect_equal(sh1[["structural", "est"]], -sh3[["structural", "est"]], tolerance = .0001)
+    expect_equal(sh1[stat == "M1", est], sh3[stat == "M2", est])
+    expect_equal(sh1[stat == "M2", est], sh3[stat == "M1", est])
+    expect_equal(sh1[stat == "diff", est], -sh3[stat == "diff", est])
+    expect_equal(sh1[stat == "group_marginal", est], -sh3[stat == "group_marginal", est],
+        tolerance = .0001)
+    expect_equal(sh1[stat == "unit_marginal", est], -sh3[stat == "unit_marginal", est],
+        tolerance = .0001)
+    expect_equal(sh1[stat == "structural", est], -sh3[stat == "structural", est],
+        tolerance = .0001)
 
-    expect_equal(sh2[["M1", "est"]], sh4[["M2", "est"]])
-    expect_equal(sh2[["M2", "est"]], sh4[["M1", "est"]])
-    expect_equal(sh2[["diff", "est"]], -sh4[["diff", "est"]])
-    expect_equal(sh2[["group_marginal", "est"]], -sh4[["group_marginal", "est"]], tolerance = .0001)
-    expect_equal(sh2[["unit_marginal", "est"]], -sh4[["unit_marginal", "est"]], tolerance = .0001)
-    expect_equal(sh2[["structural", "est"]], -sh4[["structural", "est"]], tolerance = .0001)
+    expect_equal(sh2[stat == "M1", est], sh4[stat == "M2", est])
+    expect_equal(sh2[stat == "M2", est], sh4[stat == "M1", est])
+    expect_equal(sh2[stat == "diff", est], -sh4[stat == "diff", est])
+    expect_equal(sh2[stat == "group_marginal", est], -sh4[stat == "group_marginal", est],
+        tolerance = .0001)
+    expect_equal(sh2[stat == "unit_marginal", est], -sh4[stat == "unit_marginal", est],
+        tolerance = .0001)
+    expect_equal(sh2[stat == "structural", est], -sh4[stat == "structural", est],
+        tolerance = .0001)
 })
 
 test_that("mutual_difference KM", {
     ret1 <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n", method = "km",
         precision = .0001)
 
-    expect_equal(ret1[["diff", "est"]], ret1[["M2", "est"]] - ret1[["M1", "est"]])
-    diff <- sum(ret1[c("unit_marginal", "group_marginal", "interaction", "structural"), "est"])
-    expect_equal(ret1[["diff", "est"]], diff)
-    expect_equal(ret1[["additions", "est"]], 0)
-    expect_equal(ret1[["removals", "est"]], 0)
+    expect_equal(ret1[stat == "diff", est], ret1[stat == "M2", est] - ret1[stat == "M1", est])
+    diff <- ret1[stat %in% c("unit_marginal", "group_marginal", "interaction", "structural"),
+        sum(est)]
+    expect_equal(ret1[stat == "diff", est], diff)
+    expect_equal(ret1[stat == "additions", est], 0)
+    expect_equal(ret1[stat == "removals", est], 0)
 
     # other way around
     ret <- mutual_difference(test_data1, test_data2, "u", "g", weight = "n", method = "km",
         precision = .0001)
 
-    expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
-    expect_equal(ret[["diff", "est"]],
-                 sum(ret[c("unit_marginal", "group_marginal", "interaction", "structural"), "est"]))
+    expect_equal(ret[stat == "diff", est], ret[stat == "M2", est] - ret[stat == "M1", est])
+    expect_equal(ret[stat == "diff", est],
+        ret[stat %in% c("unit_marginal", "group_marginal", "interaction", "structural"), sum(est)])
 
     # same as mutual_total
-    expect_equal(ret[["M1", "est"]], mutual_total(test_data1, "u", "g", weight = "n")[["M", "est"]])
-    expect_equal(ret[["M2", "est"]], mutual_total(test_data2, "u", "g", weight = "n")[["M", "est"]])
+    expect_equal(ret[stat == "M1", est],
+        mutual_total(test_data1, "u", "g", weight = "n")[stat == "M", est])
+    expect_equal(ret[stat == "M2", est],
+        mutual_total(test_data2, "u", "g", weight = "n")[stat == "M", est])
 
     expect_equal(nrow(ret), 9)
     expect_equal(ncol(ret), 2)
@@ -101,15 +116,15 @@ test_that("mutual_difference KM", {
     # symmetrical
     ret$est <- round(ret$est, 5)
     ret1$est <- round(ret1$est, 5)
-    expect_equal(ret[["M1", "est"]], ret1[["M1", "est"]])
-    expect_equal(ret[["M2", "est"]], ret1[["M2", "est"]])
-    expect_equal(ret[["diff", "est"]], ret1[["diff", "est"]])
-    expect_equal(ret[["additions", "est"]], ret1[["additions", "est"]])
-    expect_equal(ret[["removals", "est"]], ret1[["removals", "est"]])
-    expect_equal(ret[["unit_marginal", "est"]], ret1[["group_marginal", "est"]])
-    expect_equal(ret[["group_marginal", "est"]], ret1[["unit_marginal", "est"]])
-    expect_equal(ret[["interaction", "est"]], ret1[["interaction", "est"]])
-    expect_equal(ret[["structural", "est"]], ret1[["structural", "est"]])
+    expect_equal(ret[stat == "M1", est], ret1[stat == "M1", est])
+    expect_equal(ret[stat == "M2", est], ret1[stat == "M2", est])
+    expect_equal(ret[stat == "diff", est], ret1[stat == "diff", est])
+    expect_equal(ret[stat == "additions", est], ret1[stat == "additions", est])
+    expect_equal(ret[stat == "removals", est], ret1[stat == "removals", est])
+    expect_equal(ret[stat == "unit_marginal", est], ret1[stat == "group_marginal", est])
+    expect_equal(ret[stat == "group_marginal", est], ret1[stat == "unit_marginal", est])
+    expect_equal(ret[stat == "interaction", est], ret1[stat == "interaction", est])
+    expect_equal(ret[stat == "structural", est], ret1[stat == "structural", est])
 })
 
 
@@ -117,23 +132,25 @@ test_that("mutual_difference MRC", {
     ret <- mutual_difference(test_data1, test_data2,
                              "g", "u", weight = "n", method = "mrc")
 
-    expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
-    expect_equal(ret[["diff", "est"]],
-                 sum(ret[c("unit_marginal", "group_marginal", "structural"), "est"]))
-    expect_equal(ret[["additions", "est"]], 0)
-    expect_equal(ret[["removals", "est"]], 0)
+    expect_equal(ret[stat == "diff", est], ret[stat == "M2", est] - ret[stat == "M1", est])
+    expect_equal(ret[stat == "diff", est],
+                 ret[stat %in% c("unit_marginal", "group_marginal", "structural"), sum(est)])
+    expect_equal(ret[stat == "additions", est], 0)
+    expect_equal(ret[stat == "removals", est], 0)
 
     # other way around
     ret <- mutual_difference(test_data1, test_data2,
                              "u", "g", weight = "n", method = "mrc")
 
-    expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
-    expect_equal(ret[["diff", "est"]],
-                 sum(ret[c("unit_marginal", "group_marginal", "structural"), "est"]))
+    expect_equal(ret[stat == "diff", est], ret[stat == "M2", est] - ret[stat == "M1", est])
+    expect_equal(ret[stat == "diff", est],
+                 ret[stat %in% c("unit_marginal", "group_marginal", "structural"), sum(est)])
 
     # same as mutual_total
-    expect_equal(ret[["M1", "est"]], mutual_total(test_data1, "u", "g", weight = "n")[["M", "est"]])
-    expect_equal(ret[["M2", "est"]], mutual_total(test_data2, "u", "g", weight = "n")[["M", "est"]])
+    expect_equal(ret[stat == "M1", est],
+        mutual_total(test_data1, "u", "g", weight = "n")[stat == "M", est])
+    expect_equal(ret[stat == "M2", est],
+        mutual_total(test_data2, "u", "g", weight = "n")[stat == "M", est])
 
     expect_equal(nrow(ret), 8)
     expect_equal(ncol(ret), 2)
@@ -145,38 +162,38 @@ test_that("mutual_difference SE", {
                              method = "shapley", se = TRUE, n_bootstrap = 5)
     expect_equal(nrow(ret), 8)
     expect_equal(ncol(ret), 3)
-    expect_equal(all(ret[ret$est > 0, "se"] > 0), TRUE)
+    expect_equal(all(ret[est > 0, se] > 0), TRUE)
 
     ret <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n",
                              method = "km", se = TRUE, n_bootstrap = 5)
     expect_equal(nrow(ret), 9)
     expect_equal(ncol(ret), 3)
-    expect_equal(all(ret[ret$est > 0, "se"] > 0), TRUE)
+    expect_equal(all(ret[est > 0, se] > 0), TRUE)
 
     ret <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n",
                              method = "mrc", se = TRUE, n_bootstrap = 5)
     expect_equal(nrow(ret), 8)
     expect_equal(ncol(ret), 3)
-    expect_equal(all(ret[ret$est > 0, "se"] > 0), TRUE)
+    expect_equal(all(ret[est > 0, se] > 0), TRUE)
 })
 
 
 test_that("mutual_difference log base", {
     ret <- mutual_difference(test_data1, test_data2, "g", "u",
                              weight = "n", method = "shapley", base = 2)
-    expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
+    expect_equal(ret[stat == "diff", est], ret[stat == "M2", est] - ret[stat == "M1", est])
     expect_equal(nrow(ret), 8)
     expect_equal(ncol(ret), 2)
 
     ret <- mutual_difference(test_data1, test_data2, "g", "u",
                              weight = "n", method = "km", base = 2)
-    expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
+    expect_equal(ret[stat == "diff", est], ret[stat == "M2", est] - ret[stat == "M1", est])
     expect_equal(nrow(ret), 9)
     expect_equal(ncol(ret), 2)
 
     ret <- mutual_difference(test_data1, test_data2, "g", "u",
                              weight = "n", method = "mrc", base = 2)
-    expect_equal(ret[["diff", "est"]], ret[["M2", "est"]] - ret[["M1", "est"]])
+    expect_equal(ret[stat == "diff", est], ret[stat == "M2", est] - ret[stat == "M1", est])
     expect_equal(nrow(ret), 8)
     expect_equal(ncol(ret), 2)
 })
@@ -201,15 +218,15 @@ test_that("difference same as mutual_total (zero weights)", {
                              "g", "u", weight = "n", method = "km")
     mrc <- mutual_difference(test_data1, test_data2,
                                  "g", "u", weight = "n", method = "mrc")
-    M1 <- mutual_total(test_data1, "g", "u", weight = "n")[["M", "est"]]
-    M2 <- mutual_total(test_data2, "g", "u", weight = "n")[["M", "est"]]
+    M1 <- mutual_total(test_data1, "g", "u", weight = "n")[stat == "M", est]
+    M2 <- mutual_total(test_data2, "g", "u", weight = "n")[stat == "M", est]
 
-    expect_equal(shapley[["M1", "est"]], M1)
-    expect_equal(shapley[["M2", "est"]], M2)
-    expect_equal(km[["M1", "est"]], M1)
-    expect_equal(km[["M2", "est"]], M2)
-    expect_equal(mrc[["M1", "est"]], M1)
-    expect_equal(mrc[["M2", "est"]], M2)
+    expect_equal(shapley[stat == "M1", est], M1)
+    expect_equal(shapley[stat == "M2", est], M2)
+    expect_equal(km[stat == "M1", est], M1)
+    expect_equal(km[stat == "M2", est], M2)
+    expect_equal(mrc[stat == "M1", est], M1)
+    expect_equal(mrc[stat == "M2", est], M2)
 
     # very small weights
     test_data1$n2 <- test_data1$n / 1000
@@ -217,7 +234,7 @@ test_that("difference same as mutual_total (zero weights)", {
 
     shapley2 <- mutual_difference(test_data1, test_data2,
                                   "g", "u", weight = "n2", method = "shapley")
-    expect_equal(shapley[["structural", "est"]], shapley2[["structural", "est"]],
+    expect_equal(shapley[stat == "structural", est], shapley2[stat == "structural", est],
                  tolerance = .001)
 })
 
@@ -241,13 +258,13 @@ test_that("correctly identifies marginal/structural changes", {
 
     shapley_cols <- mutual_difference(test_data, test_data_cols,
                              "g", "u", weight = "n", method = "shapley")
-    expect_equal(max(abs(shapley_cols[6:8, ][["est"]])),
-                 abs(shapley_cols[["unit_marginal", "est"]]))
-    expect_equal(shapley_cols[["structural", "est"]], 0, tolerance = .001)
+    expect_equal(max(abs(shapley_cols[6:8, est])),
+                 abs(shapley_cols[stat == "unit_marginal", est]))
+    expect_equal(shapley_cols[stat == "structural", est], 0, tolerance = .001)
 
     shapley_rows <- mutual_difference(test_data, test_data_rows,
                              "g", "u", weight = "n", method = "shapley")
-    expect_equal(max(abs(shapley_rows[6:8, ][["est"]])),
-                 abs(shapley_rows[["unit_marginal", "est"]]))
-    expect_equal(shapley_rows[["structural", "est"]], 0, tolerance = .001)
+    expect_equal(max(abs(shapley_rows[6:8, est])),
+                 abs(shapley_rows[stat == "unit_marginal", est]))
+    expect_equal(shapley_rows[stat == "structural", est], 0, tolerance = .001)
 })

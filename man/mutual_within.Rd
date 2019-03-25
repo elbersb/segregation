@@ -36,7 +36,7 @@ Defaults to the natural logarithm.}
 (Default \code{FALSE})}
 }
 \value{
-Returns a data frame with four rows for each category defined by \code{within}.
+Returns a data.table with four rows for each category defined by \code{within}.
   The column \code{est} contains four statistics that
   are provided for each unit:
   \code{M} is the within-category M, and \code{p} is the proportion of the category.
