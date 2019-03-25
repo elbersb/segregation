@@ -158,10 +158,10 @@ ipf_compute <- function(data, group, unit,
         data[, `:=`(n_group_s = sum(freq1)), by = group]
         data[, `:=`(n_unit_s = sum(freq1)), by = unit]
 
-        group_ratio <- data[, list(ratio = abs(log(first(n_group_s) / first(n_group_t)))),
-            by = group][, ratio]
-        unit_ratio <- data[, list(ratio = abs(log(first(n_unit_s) / first(n_unit_t)))),
-            by = unit][, ratio]
+        group_ratio <- data[, list(first(n_group_s), first(n_group_t)), by = group][,
+            abs(log(V1 / V2))]
+        unit_ratio <- data[, list(first(n_unit_s), first(n_unit_t)), by = unit][,
+            abs(log(V1 / V2))]
 
         if (all(group_ratio <= precision) & all(unit_ratio <= precision)) {
             converged <- TRUE
