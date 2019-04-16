@@ -123,6 +123,19 @@ entropy <- function(data, group, weight = NULL, base = exp(1)) {
 
 #' @import data.table
 prepare_data <- function(data, group, unit, weight, within = NULL) {
+    if ("data.frame" %in% class(data)) {
+        if (nrow(data) == 0) {
+            stop("data.frame is empty")
+        }
+        test_vars <- c(group, unit, weight, within)
+        test_vars <- test_vars[!test_vars %in% names(data)]
+        if (length(test_vars) > 0) {
+            test_vars <- paste0(test_vars, collapse = ", ")
+            stop(paste0("variable(s) ", test_vars, " not in data.frame"))
+        }
+    } else {
+        stop("not a data.frame")
+    }
     vars <- c(group, unit)
 
     # use provided frequency weight or weight of 1

@@ -98,3 +98,13 @@ test_that("zero weights no problem", {
         mutual_total(test_data, "u", "g", weight = "n")[["est"]],
         mutual_total(test_data2, "u", "g", weight = "n")[["est"]])
 })
+
+test_that("gives errors", {
+    expect_error(mutual_total("test_data", "u", "g", weight = "n"), "not a data.frame")
+    expect_error(mutual_total(test_data[test_data$u == "c", ], "u", "g", weight = "n"),
+        "data.frame is empty")
+
+    expect_error(mutual_total(test_data, "u2", "g", weight = "n"), "u2 not in data.frame")
+    expect_error(mutual_total(test_data, "u2", "g2", weight = "n"), "u2, g2 not in data.frame")
+    expect_error(mutual_total(test_data, "u2", "g2", weight = "n2"), "u2, g2, n2 not in data.frame")
+})
