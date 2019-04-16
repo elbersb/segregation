@@ -59,10 +59,10 @@ within each category defined by \code{within}.
 \examples{
 (within <- mutual_within(schools00, "race", "school", within = "state",
                          weight = "n", wide = TRUE))
-# the M for "AL" is .409
+# the M for state "A" is .409
 # manual calculation
-schools_AL <- schools00[schools00$state=="AL",]
-mutual_total(schools_AL, "race", "school", weight = "n") # M => .409
+schools_A <- schools00[schools00$state=="A",]
+mutual_total(schools_A, "race", "school", weight = "n") # M => .409
 
 # to recover the within M and H from the output, multiply
 # p * M and h_weight * H, respectively
