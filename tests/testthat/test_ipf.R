@@ -1,4 +1,4 @@
-library(segregation)
+library("segregation")
 context("test_ipf")
 
 test_that("different precisions", {

@@ -1,4 +1,4 @@
-library(segregation)
+library("segregation")
 context("test_entropy")
 
 test_that("custom log function", {

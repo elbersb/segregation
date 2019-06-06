@@ -5,7 +5,7 @@
 #' Provides tools to decompose the measures by groups and units, and by within
 #' and between terms. Includes standard error estimation by bootstrapping.
 #'
-#' @seealso \url{https://elbersb.de/segregation}
+#' @seealso \url{https://elbersb.com/segregation}
 #'
 #' @docType package
 #' @name segregation

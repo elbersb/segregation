@@ -1,4 +1,4 @@
-library(segregation)
+library("segregation")
 context("test_mutual_diff")
 
 test_data1 <- data.frame(
