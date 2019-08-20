@@ -49,16 +49,16 @@ Returns local segregation indices for each category defined
 by \code{unit}.
 }
 \examples{
-# which racial groups are most segregated?
-(localseg = mutual_local(schools00, "school", "race",
-                         weight="n", wide = TRUE))
+# which schools are most segregated?
+(localseg = mutual_local(schools00, "race", "school",
+                         weight = "n", wide = TRUE))
 
 sum(localseg$p) # => 1
 
 # the sum of the weighted local segregation scores equals
 # total segregation
 sum(localseg$ls * localseg$p) # => .425
-mutual_total(schools00, "school", "race", weight="n") # M => .425
+mutual_total(schools00, "school", "race", weight = "n") # M => .425
 }
 \references{
 Henri Theil. 1971. Principles of Econometrics. New York: Wiley.

@@ -329,16 +329,16 @@ mutual_local_compute <- function(data, group, unit, base = exp(1)) {
 #' Ricardo Mora and Javier Ruiz-Castillo. 2011.
 #'   "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
 #' @examples
-#' # which racial groups are most segregated?
-#' (localseg = mutual_local(schools00, "school", "race",
-#'                          weight="n", wide = TRUE))
+#' # which schools are most segregated?
+#' (localseg = mutual_local(schools00, "race", "school",
+#'                          weight = "n", wide = TRUE))
 #'
 #' sum(localseg$p) # => 1
 #'
 #' # the sum of the weighted local segregation scores equals
 #' # total segregation
 #' sum(localseg$ls * localseg$p) # => .425
-#' mutual_total(schools00, "school", "race", weight="n") # M => .425
+#' mutual_total(schools00, "school", "race", weight = "n") # M => .425
 #' @import data.table
 #' @export
 mutual_local <- function(data, group, unit, weight = NULL,
