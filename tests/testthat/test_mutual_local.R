@@ -41,6 +41,20 @@ test_that("bootstrapping works", {
     expect_equal(ncol(localse), 4)
 })
 
+test_that("bootstrapping fails when sample size is non-integer", {
+    test_data <- data.frame(
+        u = c(rep("a", 4), rep("b", 4)),
+        g = rep(c(1, 2, 3, 4), 2),
+        n = c(40, 20, 5, 1, 20, 40, 60, 80.3)
+    )
+
+    expect_error(mutual_local(test_data, "u", "g", weight = "n", se = TRUE))
+    # rescale
+    test_data$n2 <- test_data$n / sum(test_data$n) * round(sum(test_data$n))
+    ret <- mutual_local(test_data, "u", "g", weight = "n2", se = TRUE)
+    expect_equal(all(ret$se > 0), TRUE)
+})
+
 test_that("option wide works", {
     nowide <- mutual_local(test_data, "u", "g", weight = "n")
     nowide_se <- mutual_local(test_data, "u", "g", weight = "n", se = T)

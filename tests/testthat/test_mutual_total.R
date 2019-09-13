@@ -80,6 +80,23 @@ test_that("bootstrapping works", {
     expect_equal(all(ret$se > 0), TRUE)
 })
 
+test_that("bootstrapping fails when sample size is non-integer", {
+    test_data <- data.frame(
+        u = c(rep("a", 4), rep("b", 4)),
+        g = rep(c(1, 2, 3, 4), 2),
+        n = c(40, 20, 5, 1.8, 20, 40, 60, 80),
+        stringsAsFactors = FALSE
+    )
+
+    expect_error(mutual_total(test_data, "u", "g", weight = "n", se = TRUE))
+    # rescale
+    test_data$n2 <- test_data$n / sum(test_data$n) * round(sum(test_data$n))
+    ret <- mutual_total(test_data, "u", "g", weight = "n2", se = TRUE)
+    expect_equal(dim(ret), c(2, 3))
+    expect_equal(all(ret$se > 0), TRUE)
+})
+
+
 test_data <- data.frame(
     u = c(rep("a", 4), rep("b", 4)),
     g = rep(c(1, 2, 3, 4), 2),

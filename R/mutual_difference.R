@@ -50,7 +50,7 @@
 #'   "mrc" (Mora and Ruiz-Castillo method).
 #' @param se If \code{TRUE}, standard errors are estimated via bootstrap.
 #'   (Default \code{FALSE})
-#' @param n_bootstrap Number of bootstrap iterations. (Default \code{50})
+#' @param n_bootstrap Number of bootstrap iterations. (Default \code{100})
 #' @param ... Only used for additional arguments when
 #'  when \code{method} is set to \code{shapley} or \code{km}. See \link{ipf} for details.
 #' @param base Base of the logarithm that is used in the calculation.
@@ -131,7 +131,7 @@
 #' @export
 mutual_difference <- function(data1, data2, group, unit,
                               weight = NULL, method = "shapley",
-                              se = FALSE, n_bootstrap = 50, base = exp(1), ...) {
+                              se = FALSE, n_bootstrap = 100, base = exp(1), ...) {
     if (method == "shapley") {
         fun <- function(...) shapley_compute(..., detail = FALSE)
         cols <- "stat"
@@ -165,9 +165,11 @@ mutual_difference <- function(data1, data2, group, unit,
         n_total1 <- sum(d1[, "freq"])
         n_total2 <- sum(d2[, "freq"])
 
-        if (!all(d1[["freq"]] == round(d1[["freq"]])) |
-            !all(d2[["freq"]] == round(d2[["freq"]]))) {
-            warning("bootstrap with non-integer weights")
+        if (all.equal(n_total1, round(n_total1)) != TRUE |
+            all.equal(n_total2, round(n_total2)) != TRUE) {
+            stop(paste0(
+                "bootstrap with a total sample size that is not an integer is not allowed, ",
+                "maybe scale your weights?"))
         }
 
         boot_ret <- lapply(1:n_bootstrap, function(i) {
@@ -207,25 +209,25 @@ shapley_compute <- function(d1, d2, group, unit, base, detail, ...) {
         "n_unit", "n_group", "ls_unit") := NULL]
 
     # group = A, unit = A, structure = A
-    d_AAA <- create_common_data(d1, d2, group, unit)
+    d_AAA <- create_common_data(d1, d2, group, unit, suppress_warnings = TRUE)
     # group = B, unit = B, structure = B
     d_BBB <- copy(d_AAA)
     setnames(d_BBB, c("freq1", "freq2"), c("freq2", "freq1"))
     setnames(d_BBB, c("freq_orig1", "freq_orig2"), c("freq_orig2", "freq_orig1"))
 
     update_log(ipf_n = 1, ipf_max = 6)
-    d_BBA <- ipf_compute(d_AAA, group, unit, ...)
+    d_BBA <- ipf_compute(copy(d_AAA), group, unit, ...)
     update_log(ipf_n = 2, ipf_max = 6)
-    d_ABA <- ipf_compute(d_AAA, group, unit, only_unit = TRUE, ...)
+    d_ABA <- ipf_compute(copy(d_AAA), group, unit, only_unit = TRUE, ...)
     update_log(ipf_n = 3, ipf_max = 6)
-    d_BAA <- ipf_compute(d_AAA, group, unit, only_group = TRUE, ...)
+    d_BAA <- ipf_compute(copy(d_AAA), group, unit, only_group = TRUE, ...)
 
     update_log(ipf_n = 4, ipf_max = 6)
-    d_AAB <- ipf_compute(d_BBB, group, unit, ...)
+    d_AAB <- ipf_compute(copy(d_BBB), group, unit, ...)
     update_log(ipf_n = 5, ipf_max = 6)
-    d_BAB <- ipf_compute(d_BBB, group, unit, only_unit = TRUE, ...)
+    d_BAB <- ipf_compute(copy(d_BBB), group, unit, only_unit = TRUE, ...)
     update_log(ipf_n = 6, ipf_max = 6)
-    d_ABB <- ipf_compute(d_BBB, group, unit, only_group = TRUE, ...)
+    d_ABB <- ipf_compute(copy(d_BBB), group, unit, only_group = TRUE, ...)
 
     # compute M based on unadjusted counts (where zeros are not replaced by small mumbers)
     # this is to ensure that M2 - m_BBB is exactly 0 when there are no additions
@@ -286,7 +288,7 @@ km_compute <- function(d1, d2, group, unit, base, ...) {
     d2[, c("p_unit", "p_group", "p_group_g_unit",
         "n_unit", "n_group", "ls_unit") := NULL]
 
-    d1_source <- create_common_data(d1, d2, group, unit)
+    d1_source <- create_common_data(d1, d2, group, unit, suppress_warnings = TRUE)
 
     # compute M based on unadjusted counts (where zeros are not replaced by small mumbers)
     # this is to ensure that M2 - m_BBB is exactly 0 when there are no additions
@@ -295,7 +297,7 @@ km_compute <- function(d1, d2, group, unit, base, ...) {
 
     # compute for dataset 1, but with marginals from dataset 2
     update_log(ipf_n = 1, ipf_max = 1)
-    d1_marg_d2 <- ipf_compute(d1_source, group, unit, ...)
+    d1_marg_d2 <- ipf_compute(copy(d1_source), group, unit, ...)
     d1_marg_d2[, `:=`(n_group = sum(n_source), n_group_target = sum(n_target)), by = group]
     d1_marg_d2[, `:=`(n_unit = sum(n_source), n_unit_target = sum(n_target)), by = unit]
     d1_marg_d2[, `:=`(
@@ -331,7 +333,7 @@ mrc_compute <- function(d1, d2, group, unit, base) {
     M2 <- m(d2)
 
     # reduce d1 and d2 to the joint set
-    joined <- create_common_data(d1, d2, group, unit, fill_na = 0)
+    joined <- create_common_data(d1, d2, group, unit, suppress_warnings = TRUE, fill_na = 0)
 
     # reduce M for d1
     add_local(joined, group, unit, base, "freq1")

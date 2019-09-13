@@ -5,7 +5,7 @@
 \title{Calculates local segregation indices based on M}
 \usage{
 mutual_local(data, group, unit, weight = NULL, se = FALSE,
-  n_bootstrap = 10, base = exp(1), wide = FALSE)
+  n_bootstrap = 100, base = exp(1), wide = FALSE)
 }
 \arguments{
 \item{data}{A data frame.}
@@ -24,7 +24,7 @@ segregation indices are calculated.}
 \item{se}{If \code{TRUE}, standard errors are estimated via bootstrap.
 (Default \code{FALSE})}
 
-\item{n_bootstrap}{Number of bootstrap iterations. (Default \code{10})}
+\item{n_bootstrap}{Number of bootstrap iterations. (Default \code{100})}
 
 \item{base}{Base of the logarithm that is used in the calculation.
 Defaults to the natural logarithm.}

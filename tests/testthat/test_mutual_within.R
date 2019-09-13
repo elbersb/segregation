@@ -19,6 +19,24 @@ test_that("dimensions and bootstrapping", {
     expect_equal(dim(within_se), c(2 * 4, 4))
 })
 
+test_that("bootstrapping fails when sample size is non-integer", {
+    test_data <- data.frame(
+        u = c(rep("a", 4), rep("b", 4)),
+        g = rep(c(1, 2, 3, 4), 2),
+        supergroup = rep(c(12, 12, 34, 34), 2),
+        n = c(40.7, 20, 5, 1, 20.5, 40, 60, 80),
+        stringsAsFactors = FALSE
+    )
+
+    expect_error(mutual_within(test_data, "u", "g",
+            within = "supergroup", weight = "n", se = TRUE))
+    # rescale
+    test_data$n2 <- test_data$n / sum(test_data$n) * round(sum(test_data$n))
+    ret <- mutual_within(test_data, "u", "g",
+            within = "supergroup", weight = "n2", se = TRUE)
+    expect_equal(dim(ret), c(2 * 4, 4))
+})
+
 test_that("between + within = total", {
     total <- mutual_total(test_data, "u", "g", within = "supergroup", weight = "n")
     m <- total[stat == "M", est]

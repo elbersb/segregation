@@ -179,10 +179,10 @@ test_that("mutual_difference SE", {
 
 test_that("mutual_difference SHAPLEY detailed", {
     diff_simple <- mutual_difference(schools05, schools00, group = "school", unit = "race",
-        weight = "n", method = "shapley", precision = .00001)
+        weight = "n", method = "shapley", precision = .000001)
     # note that the detailed decomposition requires high precision
     diff <- mutual_difference(schools05, schools00, group = "school", unit = "race",
-        weight = "n", method = "shapley_detailed", precision = .00001)
+        weight = "n", method = "shapley_detailed", precision = .000001)
 
     expect_equal(nrow(diff_simple), 8)
     expect_equal(ncol(diff_simple), 2)
@@ -199,7 +199,7 @@ test_that("mutual_difference SHAPLEY detailed", {
 
     # reverse units and groups
     diff <- mutual_difference(schools05, schools00, group = "race", unit = "school",
-        weight = "n", method = "shapley_detailed", precision = .00001)
+        weight = "n", method = "shapley_detailed", precision = .000001)
 
     schools_in_common <- intersect(schools00$school, schools05$school)
     expect_equal(nrow(diff), 8 + length(schools_in_common) * 5)
@@ -208,7 +208,7 @@ test_that("mutual_difference SHAPLEY detailed", {
     wide <- dcast(diff[!is.na(school), ], school ~ stat, value.var = "est")
     expect_equal(wide[, sum(.5 * p1 * ls_diff1 + .5 * p2 * ls_diff2)], wide[, sum(total)])
     expect_equal(wide[, sum(.5 * p1 * ls_diff1 + .5 * p2 * ls_diff2)],
-        diff[stat == "structural", est], tolerance = .00001)
+        diff[stat == "structural", est], tolerance = .001)
 })
 
 

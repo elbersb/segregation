@@ -5,7 +5,7 @@
 \title{Decomposes the difference between two M indices}
 \usage{
 mutual_difference(data1, data2, group, unit, weight = NULL,
-  method = "shapley", se = FALSE, n_bootstrap = 50, base = exp(1),
+  method = "shapley", se = FALSE, n_bootstrap = 100, base = exp(1),
   ...)
 }
 \arguments{
@@ -30,7 +30,7 @@ over which segregation is computed.}
 \item{se}{If \code{TRUE}, standard errors are estimated via bootstrap.
 (Default \code{FALSE})}
 
-\item{n_bootstrap}{Number of bootstrap iterations. (Default \code{50})}
+\item{n_bootstrap}{Number of bootstrap iterations. (Default \code{100})}
 
 \item{base}{Base of the logarithm that is used in the calculation.
 Defaults to the natural logarithm.}

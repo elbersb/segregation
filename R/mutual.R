@@ -90,7 +90,7 @@ mutual_total_within_compute <- function(data, group, unit, within, base,
 #'   (Default \code{NULL})
 #' @param se If \code{TRUE}, standard errors are estimated via bootstrap.
 #'   (Default \code{FALSE})
-#' @param n_bootstrap Number of bootstrap iterations. (Default \code{10})
+#' @param n_bootstrap Number of bootstrap iterations. (Default \code{100})
 #' @param base Base of the logarithm that is used in the calculation.
 #'   Defaults to the natural logarithm.
 #' @return Returns a data.table with two rows. The column \code{est} contains
@@ -107,34 +107,34 @@ mutual_total_within_compute <- function(data, group, unit, within, base,
 #'      "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
 #' @examples
 #' # calculate school racial segregation
-#' mutual_total(schools00, "school", "race", weight="n") # M => .425
+#' mutual_total(schools00, "school", "race", weight = "n") # M => .425
 #'
 #' # note that the definition of groups and units is arbitrary
-#' mutual_total(schools00, "race", "school", weight="n") # M => .425
+#' mutual_total(schools00, "race", "school", weight = "n") # M => .425
 #'
 #' # if groups or units are defined by a combination of variables,
 #' # vectors of variable names can be provided -
 #' # here there is no difference, because schools
 #' # are nested within districts
 #' mutual_total(schools00, "race", c("district", "school"),
-#'              weight="n") # M => .424
+#'              weight = "n") # M => .424
 #'
 #' # estimate standard errors for M and H
-#' mutual_total(schools00, "race", "school", weight="n", se=TRUE)
+#' mutual_total(schools00, "race", "school", weight = "n", se = TRUE, n_bootstrap = 10)
 #'
 #' # estimate segregation within school districts
 #' mutual_total(schools00, "race", "school",
-#'              within="district", weight="n") # M => .087
+#'              within = "district", weight = "n") # M => .087
 #'
 #' # estimate between-district racial segregation
-#' mutual_total(schools00, "race", "district", weight="n") # M => .338
+#' mutual_total(schools00, "race", "district", weight = "n") # M => .338
 #' # note that the sum of within-district and between-district
 #' # segregation equals total school-race segregation;
 #' # here, most segregation is between school districts
 #' @import data.table
 #' @export
 mutual_total <- function(data, group, unit, within = NULL,
-                         weight = NULL, se = FALSE, n_bootstrap = 10, base = exp(1)) {
+                         weight = NULL, se = FALSE, n_bootstrap = 100, base = exp(1)) {
     d <- prepare_data(data, group, unit, weight, within)
 
     if (se == FALSE) {
@@ -147,8 +147,12 @@ mutual_total <- function(data, group, unit, within = NULL,
         vars <- attr(d, "vars")
         n_total <- sum(d[, "freq"])
 
-        if (!all(d[["freq"]] == round(d[["freq"]]))) {
-            warning("bootstrap with non-integer weights")
+        if (all.equal(n_total, round(n_total)) == TRUE) {
+            message(paste0(n_bootstrap, " bootstrap iterations on ", n_total, " observations"))
+        } else {
+            stop(paste0(
+                "bootstrap with a total sample size that is not an integer is not allowed, ",
+                "maybe scale your weights?"))
         }
 
         boot_ret <- lapply(1:n_bootstrap, function(i) {
@@ -190,7 +194,7 @@ mutual_total <- function(data, group, unit, within = NULL,
 #'   (Default \code{NULL})
 #' @param se If \code{TRUE}, standard errors are estimated via bootstrap.
 #'   (Default \code{FALSE})
-#' @param n_bootstrap Number of bootstrap iterations. (Default \code{10})
+#' @param n_bootstrap Number of bootstrap iterations. (Default \code{100})
 #' @param base Base of the logarithm that is used in the calculation.
 #'   Defaults to the natural logarithm.
 #' @param wide Returns a wide dataframe instead of a long dataframe.
@@ -232,7 +236,7 @@ mutual_total <- function(data, group, unit, within = NULL,
 #' @import data.table
 #' @export
 mutual_within <- function(data, group, unit, within,
-                         weight = NULL, se = FALSE, n_bootstrap = 10, base = exp(1),
+                         weight = NULL, se = FALSE, n_bootstrap = 100, base = exp(1),
                          wide = FALSE) {
     d <- prepare_data(data, group, unit, weight, within)
 
@@ -242,8 +246,12 @@ mutual_within <- function(data, group, unit, within,
         vars <- attr(d, "vars")
         n_total <- sum(d[, "freq"])
 
-        if (!all(d[["freq"]] == round(d[["freq"]]))) {
-            warning("bootstrap with non-integer weights")
+        if (all.equal(n_total, round(n_total)) == TRUE) {
+            message(paste0(n_bootstrap, " bootstrap iterations on ", n_total, " observations"))
+        } else {
+            stop(paste0(
+                "bootstrap with a total sample size that is not an integer is not allowed, ",
+                "maybe scale your weights?"))
         }
 
         boot_ret <- lapply(1:n_bootstrap, function(i) {
@@ -308,7 +316,7 @@ mutual_local_compute <- function(data, group, unit, base = exp(1)) {
 #'   (Default \code{NULL})
 #' @param se If \code{TRUE}, standard errors are estimated via bootstrap.
 #'   (Default \code{FALSE})
-#' @param n_bootstrap Number of bootstrap iterations. (Default \code{10})
+#' @param n_bootstrap Number of bootstrap iterations. (Default \code{100})
 #' @param base Base of the logarithm that is used in the calculation.
 #'   Defaults to the natural logarithm.
 #' @param wide Returns a wide dataframe instead of a long dataframe.
@@ -342,7 +350,7 @@ mutual_local_compute <- function(data, group, unit, base = exp(1)) {
 #' @import data.table
 #' @export
 mutual_local <- function(data, group, unit, weight = NULL,
-                         se = FALSE, n_bootstrap = 10, base = exp(1),
+                         se = FALSE, n_bootstrap = 100, base = exp(1),
                          wide = FALSE) {
     d <- prepare_data(data, group, unit, weight)
 
@@ -352,8 +360,12 @@ mutual_local <- function(data, group, unit, weight = NULL,
         vars <- attr(d, "vars")
         n_total <- sum(d[, "freq"])
 
-        if (!all(d[["freq"]] == round(d[["freq"]]))) {
-            warning("bootstrap with non-integer weights")
+        if (all.equal(n_total, round(n_total)) == TRUE) {
+            message(paste0(n_bootstrap, " bootstrap iterations on ", n_total, " observations"))
+        } else {
+            stop(paste0(
+                "bootstrap with a total sample size that is not an integer is not allowed, ",
+                "maybe scale your weights?"))
         }
 
         boot_ret <- lapply(1:n_bootstrap, function(i) {

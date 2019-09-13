@@ -2,24 +2,34 @@ library("segregation")
 context("test_ipf")
 
 test_that("different precisions", {
+    # reduce to overlap sample
+    schools00_r <- schools00[schools00$school %in% schools05$school, ]
+    schools05_r <- schools05[schools05$school %in% schools00$school, ]
+
     for (precision in c(.1, .01, .001)) {
-        adj <- ipf(schools00, schools05, "race", "school", weight = "n", precision = precision)
+        adj <- ipf(schools00_r, schools05_r, "race", "school", weight = "n", precision = precision)
 
         # check that the new "race" marginals are similar to the target marginals
         new <- aggregate(adj$n, list(adj$race), sum)[, "x"]
-        old <- aggregate(adj$n_target, list(adj$race), sum)[, "x"]
+        old <- aggregate(schools05_r$n, list(schools05_r$race), sum)[, "x"]
+        new <- new / sum(new)
+        old <- old / sum(old)
+        expect_true(all(abs(new - old) < precision))
 
-        for (i in 1:length(new)) {
-            sorted <- sort(c(old[i], new[i]), decreasing = TRUE)
-            ratio <- sorted[1] / sorted[2]
-            expect_equal(ratio < (1 + precision), TRUE)
-        }
+        # check that the new "school" marginals are similar to the target marginals
+        new <- aggregate(adj$n, list(adj$school), sum)[, "x"]
+        old <- aggregate(schools05_r$n, list(schools05_r$school), sum)[, "x"]
+        new <- new / sum(new)
+        old <- old / sum(old)
+        expect_true(all(abs(new - old) < precision))
     }
 })
 
 test_that("warn if iterations are too low", {
-    expect_error(ipf(schools00, schools05, "race", "school", weight = "n",
-        precision = .00001, max_iterations = 1))
+    expect_error(
+        suppressWarnings(
+            ipf(schools00, schools05, "race", "school", weight = "n",
+            precision = .00001, max_iterations = 1)))
 })
 
 test_that("gives sames results as mutual_difference", {
@@ -57,8 +67,9 @@ test_that("example from Karmel & Maclachlan 1988", {
         gender = c(rep("male", 3), rep("female", 3)),
         n = c(125, 100, 100, 100, 100, 75)
     )
-    adj <- ipf(source, target, "occ", "gender", "n", precision = 0)
-    adj$n <- round(adj$n, 1)
+    adj <- ipf(source, target, "occ", "gender", "n", precision = 0.0000000001)
+    # K-M report on the scale of the target distribution
+    adj$n <- round(adj$n / sum(adj$n) * sum(adj$n_target), 1)
     expect_equal(adj[adj$gender == "male" & adj$occ == 1, "n"][[1]], 134.7)
     expect_equal(adj[adj$gender == "male" & adj$occ == 2, "n"][[1]], 85.5)
     expect_equal(adj[adj$gender == "male" & adj$occ == 3, "n"][[1]], 104.8)
@@ -73,4 +84,25 @@ test_that("example from Karmel & Maclachlan 1988", {
     expect_equal(sum(adj[adj$occ == 1, "n"]), sum(adj[adj$occ == 1, "n_target"]))
     expect_equal(sum(adj[adj$occ == 2, "n"]), sum(adj[adj$occ == 2, "n_target"]))
     expect_equal(sum(adj[adj$occ == 3, "n"]), sum(adj[adj$occ == 3, "n_target"]))
+})
+
+test_that("warning about units and groups being dropped", {
+    expect_warning(ipfd <- ipf(schools00, schools05, "race", "school", weight = "n"))
+    expect_equal(sum(ipfd$n), sum(ipfd$n_source))
+})
+
+test_that("returns same number of observations as before", {
+    # schools are dropped here
+    suppressWarnings(ipfd <- ipf(schools00, schools05, "race", "school", weight = "n"))
+    expect_equal(sum(ipfd$n), sum(ipfd$n_source))
+
+    # reduce to overlap sample, because then by definition the counts are identical
+    schools00_r <- schools00[schools00$school %in% schools05$school, ]
+    schools05_r <- schools05[schools05$school %in% schools00$school, ]
+
+    ipfd <- ipf(schools00_r, schools05_r, "race", "school", weight = "n")
+    expect_equal(sum(ipfd$n), sum(ipfd$n_source))
+    expect_equal(sum(schools00_r$n), sum(ipfd$n))
+    expect_equal(sum(schools00_r$n), sum(ipfd$n_source))
+    expect_equal(sum(schools05_r$n), sum(ipfd$n_target))
 })

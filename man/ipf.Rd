@@ -59,6 +59,9 @@ the marginal distribution of \code{target}. If the number of \code{unit} and
 \code{group} categories is different in \code{source} and \code{target}, the data frame returns
 the combination of \code{unit} and \code{group} categories that occur in both datasets.
 Zero values are replaced by a small, non-zero number (1e-4).
+Note that the values returned sum to the observations of the source data frame, not the
+target data frame. This is different from other IPF implementations, but ensures that the IPF
+does not change the number of observations.
 }
 \examples{
 # adjusts the marginals of group and unit categories so that
