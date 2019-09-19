@@ -150,7 +150,7 @@ prepare_data <- function(data, group, unit, weight, within = NULL) {
     # collapse on vars, and select only positive weights
     data.table::setDT(data)
     data <- data[freq > 0, list(freq = sum(freq)), by = vars]
-    attr(data, "vars") <- vars
+    setattr(data, "vars", vars)
     setkey(data, NULL)
     data
 }
