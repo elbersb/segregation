@@ -44,8 +44,7 @@
 #' @param unit A categorical variable or a vector of variables
 #'   contained in \code{data}. Defines the second dimension
 #'   over which segregation is computed.
-#' @param weight Numeric. Only frequency weights are allowed.
-#'   (Default \code{NULL})
+#' @param weight Numeric. (Default \code{NULL})
 #' @param method Either "shapley" (the default), "km" (Karmel and Maclachlan method), or
 #'   "mrc" (Mora and Ruiz-Castillo method).
 #' @param se If \code{TRUE}, standard errors are estimated via bootstrap.

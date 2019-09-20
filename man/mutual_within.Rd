@@ -21,8 +21,7 @@ over which segregation is computed.}
 \item{within}{A categorical variable or a vector of variables
 contained in \code{data} that defines the within-segregation categories.}
 
-\item{weight}{Numeric. Only frequency weights are allowed.
-(Default \code{NULL})}
+\item{weight}{Numeric. (Default \code{NULL})}
 
 \item{se}{If \code{TRUE}, standard errors are estimated via bootstrap.
 (Default \code{FALSE})}

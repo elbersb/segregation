@@ -21,8 +21,7 @@ over which segregation is computed.}
 contained in \code{data}. Defines the second dimension
 over which segregation is computed.}
 
-\item{weight}{Numeric. Only frequency weights are allowed.
-(Default \code{NULL})}
+\item{weight}{Numeric. (Default \code{NULL})}
 
 \item{method}{Either "shapley" (the default), "km" (Karmel and Maclachlan method), or
 "mrc" (Mora and Ruiz-Castillo method).}

@@ -23,8 +23,7 @@ for adjustment.}
 contained in \code{source} and \code{target}. Defines the second distribution
 for adjustment.}
 
-\item{weight}{Numeric. Only frequency weights are allowed.
-(Default \code{NULL})}
+\item{weight}{Numeric. (Default \code{NULL})}
 
 \item{max_iterations}{Maximum number of iterations used for the IPF algorithm.}
 

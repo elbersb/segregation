@@ -18,8 +18,7 @@ over which segregation is computed.}
 contained in \code{data}. Defines the group for which local
 segregation indices are calculated.}
 
-\item{weight}{Numeric. Only frequency weights are allowed.
-(Default \code{NULL})}
+\item{weight}{Numeric. (Default \code{NULL})}
 
 \item{se}{If \code{TRUE}, standard errors are estimated via bootstrap.
 (Default \code{FALSE})}

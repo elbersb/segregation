@@ -86,8 +86,7 @@ mutual_total_within_compute <- function(data, group, unit, within, base,
 #'   If provided, segregation is
 #'   computed within the groups defined by the variable, and then averaged.
 #'   (Default \code{NULL})
-#' @param weight Numeric. Only frequency weights are allowed.
-#'   (Default \code{NULL})
+#' @param weight Numeric. (Default \code{NULL})
 #' @param se If \code{TRUE}, standard errors are estimated via bootstrap.
 #'   (Default \code{FALSE})
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{100})
@@ -190,8 +189,7 @@ mutual_total <- function(data, group, unit, within = NULL,
 #'   over which segregation is computed.
 #' @param within A categorical variable or a vector of variables
 #'   contained in \code{data} that defines the within-segregation categories.
-#' @param weight Numeric. Only frequency weights are allowed.
-#'   (Default \code{NULL})
+#' @param weight Numeric. (Default \code{NULL})
 #' @param se If \code{TRUE}, standard errors are estimated via bootstrap.
 #'   (Default \code{FALSE})
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{100})
@@ -312,8 +310,7 @@ mutual_local_compute <- function(data, group, unit, base = exp(1)) {
 #' @param unit A categorical variable or a vector of variables
 #'   contained in \code{data}. Defines the group for which local
 #'   segregation indices are calculated.
-#' @param weight Numeric. Only frequency weights are allowed.
-#'   (Default \code{NULL})
+#' @param weight Numeric. (Default \code{NULL})
 #' @param se If \code{TRUE}, standard errors are estimated via bootstrap.
 #'   (Default \code{FALSE})
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{100})

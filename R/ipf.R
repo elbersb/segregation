@@ -29,8 +29,7 @@
 #' @param unit A categorical variable or a vector of variables
 #'   contained in \code{source} and \code{target}. Defines the second distribution
 #'   for adjustment.
-#' @param weight Numeric. Only frequency weights are allowed.
-#'   (Default \code{NULL})
+#' @param weight Numeric. (Default \code{NULL})
 #' @param max_iterations Maximum number of iterations used for the IPF algorithm.
 #' @param precision Convergence criterion for the IPF algorithm. In every iteration,
 #'   the ratio of the source and target marginals are calculated for every category of

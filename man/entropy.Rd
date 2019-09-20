@@ -12,8 +12,7 @@ entropy(data, group, weight = NULL, base = exp(1))
 \item{group}{A categorical variable or a vector of variables
 contained in \code{data}.}
 
-\item{weight}{Numeric. Only frequency weights are allowed.
-(Default \code{NULL})}
+\item{weight}{Numeric. (Default \code{NULL})}
 
 \item{base}{Base of the logarithm that is used in the entropy
 calculation. Defaults to the natural logarithm.}

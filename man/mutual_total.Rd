@@ -25,8 +25,7 @@ If provided, segregation is
 computed within the groups defined by the variable, and then averaged.
 (Default \code{NULL})}
 
-\item{weight}{Numeric. Only frequency weights are allowed.
-(Default \code{NULL})}
+\item{weight}{Numeric. (Default \code{NULL})}
 
 \item{se}{If \code{TRUE}, standard errors are estimated via bootstrap.
 (Default \code{FALSE})}

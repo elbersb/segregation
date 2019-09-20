@@ -90,8 +90,7 @@ logf <- function(v, base) {
 #' @param data A data frame.
 #' @param group A categorical variable or a vector of variables
 #'   contained in \code{data}.
-#' @param weight Numeric. Only frequency weights are allowed.
-#'   (Default \code{NULL})
+#' @param weight Numeric. (Default \code{NULL})
 #' @param base Base of the logarithm that is used in the entropy
 #'   calculation. Defaults to the natural logarithm.
 #' @return A single number, the entropy.
@@ -106,7 +105,7 @@ logf <- function(v, base) {
 #' @import data.table
 #' @export
 entropy <- function(data, group, weight = NULL, base = exp(1)) {
-    # use provided frequency weight
+    # use provided weight
     if (!is.null(weight)) {
         data[, "freq"] <- data[, weight]
     } else {
@@ -136,7 +135,7 @@ prepare_data <- function(data, group, unit, weight, within = NULL) {
     }
     vars <- c(group, unit)
 
-    # use provided frequency weight or weight of 1
+    # use provided weight or weight of 1
     if (!is.null(weight)) {
         data[, "freq"] <- as.double(data[[weight]])
     } else {
