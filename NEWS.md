@@ -1,4 +1,4 @@
-# segregation 0.2.0.9000
+# segregation 0.3.0
 
 * always return data.table
 * for ipf function, warn when groups/units are dropped
@@ -6,6 +6,7 @@
 * don't allow bootstrap when sample size is not an integer, but allow non-integer sample weights (which are unproblematic)
 * simplify precision parameter for ipf procedure
 * increase default bootstrap to 100
+* fix data.table issue (#3)
 
 # segregation 0.2.0
 
