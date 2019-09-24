@@ -171,22 +171,21 @@ mutual_difference <- function(data1, data2, group, unit,
                 "maybe scale your weights?"))
         }
 
-        boot_ret <- lapply(1:n_bootstrap, function(i) {
+        # draw from a multinomial with weights specified by the cell counts
+        draws1 <- stats::rmultinom(n_bootstrap, n_total1, d1[["freq"]] / n_total1)
+        draws2 <- stats::rmultinom(n_bootstrap, n_total2, d2[["freq"]] / n_total2)
+
+        boot_ret <- lapply(seq_len(n_bootstrap), function(i) {
             update_log(bs_n = i, bs_max = n_bootstrap)
-            # resample and collapse by all variables, except "freq"
-            # coerce to double here, otherwise data.table complains later
-            resampled1 <- d1[
-                sample(.N, n_total1, replace = TRUE, prob = freq)][,
-                list(freq = as.double(.N)), by = vars]
-            resampled2 <- d2[
-                sample(.N, n_total2, replace = TRUE, prob = freq)][,
-                list(freq = as.double(.N)), by = vars]
-            fun(resampled1, resampled2, group, unit, base, ...)
+            d1[, freq := as.double(draws1[, i])]
+            d2[, freq := as.double(draws2[, i])]
+            fun(d1, d2, group, unit, base, ...)
         })
+
         boot_ret <- rbindlist(boot_ret)
-        # summarize bootstrapped data frames
         ret <- boot_ret[, list(
             est = mean(est), se = stats::sd(est)), by = cols]
+        setattr(ret, "bootstrap", boot_ret)
     }
     close_log()
     ret

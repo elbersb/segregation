@@ -1,6 +1,7 @@
 # segregation 0.3.0.9000
 
-
+* faster bootstrap
+* return bootstrap estimates as attr
 
 # segregation 0.3.0
 

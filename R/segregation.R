@@ -135,11 +135,14 @@ prepare_data <- function(data, group, unit, weight, within = NULL) {
     }
     vars <- c(group, unit)
 
+    # create a copy
+    data <- as.data.table(data)
+
     # use provided weight or weight of 1
     if (!is.null(weight)) {
-        data[, "freq"] <- as.double(data[[weight]])
+        data[, freq := as.double(get(weight))]
     } else {
-        data[, "freq"] <- 1
+        data[, freq := 1]
     }
 
     if (!is.null(within)) {
@@ -147,7 +150,6 @@ prepare_data <- function(data, group, unit, weight, within = NULL) {
     }
 
     # collapse on vars, and select only positive weights
-    data.table::setDT(data)
     data <- data[freq > 0, list(freq = sum(freq)), by = vars]
     setattr(data, "vars", vars)
     setkey(data, NULL)

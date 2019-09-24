@@ -144,7 +144,7 @@ mutual_total <- function(data, group, unit, within = NULL,
         }
     } else {
         vars <- attr(d, "vars")
-        n_total <- sum(d[, "freq"])
+        n_total <- sum(d[["freq"]])
 
         if (all.equal(n_total, round(n_total)) == TRUE) {
             message(paste0(n_bootstrap, " bootstrap iterations on ", n_total, " observations"))
@@ -153,24 +153,24 @@ mutual_total <- function(data, group, unit, within = NULL,
                 "bootstrap with a total sample size that is not an integer is not allowed, ",
                 "maybe scale your weights?"))
         }
+        # draw from a multinomial with weights specified by the cell counts
+        draws <- stats::rmultinom(n_bootstrap, n_total, d[["freq"]] / n_total)
 
-        boot_ret <- lapply(1:n_bootstrap, function(i) {
-            update_log(bs_n = i, bs_max = n_bootstrap)
-            # resample and collapse by all variables, except "freq"
-            resampled <- d[
-                sample(.N, n_total, replace = TRUE, prob = freq)][,
-                list(freq = .N), by = vars]
+        boot_ret <- lapply(seq_len(n_bootstrap), function(i) {
+            if (i %% 5 == 0) update_log(bs_n = i, bs_max = n_bootstrap)
+            d[, freq := as.double(draws[, i])]
+
             if (is.null(within)) {
-                mutual_total_compute(resampled, group, unit, base)
+                mutual_total_compute(d, group, unit, base)
             } else {
-                mutual_total_within_compute(resampled, group, unit, within, base)
+                mutual_total_within_compute(d, group, unit, within, base)
             }
         })
         close_log()
         boot_ret <- rbindlist(boot_ret)
-        # summarize bootstrapped data frames
         ret <- boot_ret[, list(
             est = mean(est), se = stats::sd(est)), by = c("stat")]
+        setattr(ret, "bootstrap", boot_ret)
     }
     ret
 }
@@ -252,17 +252,16 @@ mutual_within <- function(data, group, unit, within,
                 "maybe scale your weights?"))
         }
 
-        boot_ret <- lapply(1:n_bootstrap, function(i) {
-            update_log(bs_n = i, bs_max = n_bootstrap)
-            # resample and collapse by all variables, except "freq"
-            resampled <- d[
-                sample(.N, n_total, replace = TRUE, prob = freq)][,
-                list(freq = .N), by = vars]
-            mutual_total_within_compute(resampled, group, unit, within, base, components = TRUE)
+        # draw from a multinomial with weights specified by the cell counts
+        draws <- stats::rmultinom(n_bootstrap, n_total, d[["freq"]] / n_total)
+
+        boot_ret <- lapply(seq_len(n_bootstrap), function(i) {
+            if (i %% 5 == 0) update_log(bs_n = i, bs_max = n_bootstrap)
+            d[, freq := as.double(draws[, i])]
+            mutual_total_within_compute(d, group, unit, within, base, components = TRUE)
         })
         close_log()
         boot_ret <- rbindlist(boot_ret)
-        # summarize bootstrapped data frames
         ret <- boot_ret[, list(
             est = mean(est), se = stats::sd(est)),
             by = c(within, "stat")]
@@ -279,6 +278,7 @@ mutual_within <- function(data, group, unit, within,
             setcolorder(ret, c(within,
                                "M", "M_se", "p", "p_se",
                                "H", "H_se", "h_weight", "h_weight_se"))
+            setattr(ret, "bootstrap", boot_ret)
         } else {
             ret <- dcast(ret, f, value.var = c("est"))
         }
@@ -365,20 +365,19 @@ mutual_local <- function(data, group, unit, weight = NULL,
                 "maybe scale your weights?"))
         }
 
-        boot_ret <- lapply(1:n_bootstrap, function(i) {
-            update_log(bs_n = i, bs_max = n_bootstrap)
-            # resample and collapse by all variables, except "freq"
-            resampled <- d[
-                sample(.N, n_total, replace = TRUE, prob = freq)][,
-                list(freq = .N), by = vars]
-            mutual_local_compute(resampled, group, unit, base)
+        # draw from a multinomial with weights specified by the cell counts
+        draws <- stats::rmultinom(n_bootstrap, n_total, d[["freq"]] / n_total)
+
+        boot_ret <- lapply(seq_len(n_bootstrap), function(i) {
+            if (i %% 5 == 0) update_log(bs_n = i, bs_max = n_bootstrap)
+            d[, freq := as.double(draws[, i])]
+            mutual_local_compute(d, group, unit, base)
         })
         close_log()
         boot_ret <- rbindlist(boot_ret)
-        # summarize bootstrapped data frames
         ret <- boot_ret[, list(
-            est = mean(est), se = stats::sd(est)),
-            by = c(unit, "stat")]
+            est = mean(est), se = stats::sd(est)), by = c(unit, "stat")]
+        setattr(ret, "bootstrap", boot_ret)
     }
 
     if (wide == TRUE) {
@@ -388,6 +387,7 @@ mutual_local <- function(data, group, unit, weight = NULL,
             ret <- dcast(ret, f, value.var = c("est", "se"))
             names(ret) <- c(unit, "ls", "p", "ls_se", "p_se")
             setcolorder(ret, c(unit, "ls", "ls_se", "p", "p_se"))
+            setattr(ret, "bootstrap", boot_ret)
         } else {
             ret <- dcast(ret, f, value.var = c("est"))
         }
