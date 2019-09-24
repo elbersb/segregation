@@ -1,3 +1,7 @@
+# segregation 0.3.0.9000
+
+
+
 # segregation 0.3.0
 
 * always return data.table
