@@ -87,8 +87,14 @@ ipf <- function(source, target, group, unit, weight = NULL,
 create_common_data <- function(d1, d2, group, unit, suppress_warnings = FALSE, fill_na = 1e-10) {
     # generate the crossproduct of common groups and units to
     # preserve all possible combinations
+    # we reselect to make sure that by removing some unit/group, we don't create any new
+    # combinations that don't exist. There might be rare cases where the loop needs to be repeated
+    # even further, but then the table is probably too sparse anyway
     common_group <- fintersect(d1[, group, with = FALSE], d2[, group, with = FALSE])
-    common_unit <- fintersect(d1[, unit, with = FALSE], d2[, unit, with = FALSE])
+    common_unit <- fintersect(d1[get(group) %in% common_group[[group]], unit, with = FALSE],
+                              d2[get(group) %in% common_group[[group]], unit, with = FALSE])
+    common_group <- fintersect(d1[get(unit) %in% common_unit[[unit]], group, with = FALSE],
+                               d2[get(unit) %in% common_unit[[unit]], group, with = FALSE])
     common_group$key <- 1
     common_unit$key <- 1
     common <- merge(common_unit, common_group, allow.cartesian = TRUE)

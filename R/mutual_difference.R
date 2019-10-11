@@ -179,7 +179,7 @@ mutual_difference <- function(data1, data2, group, unit,
             update_log(bs_n = i, bs_max = n_bootstrap)
             d1[, freq := as.double(draws1[, i])]
             d2[, freq := as.double(draws2[, i])]
-            fun(d1, d2, group, unit, base, ...)
+            fun(d1[freq > 0], d2[freq > 0], group, unit, base, ...)
         })
 
         boot_ret <- rbindlist(boot_ret)

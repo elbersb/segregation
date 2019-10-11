@@ -161,9 +161,9 @@ mutual_total <- function(data, group, unit, within = NULL,
             d[, freq := as.double(draws[, i])]
 
             if (is.null(within)) {
-                mutual_total_compute(d, group, unit, base)
+                mutual_total_compute(d[freq > 0], group, unit, base)
             } else {
-                mutual_total_within_compute(d, group, unit, within, base)
+                mutual_total_within_compute(d[freq > 0], group, unit, within, base)
             }
         })
         close_log()
@@ -258,7 +258,7 @@ mutual_within <- function(data, group, unit, within,
         boot_ret <- lapply(seq_len(n_bootstrap), function(i) {
             if (i %% 5 == 0) update_log(bs_n = i, bs_max = n_bootstrap)
             d[, freq := as.double(draws[, i])]
-            mutual_total_within_compute(d, group, unit, within, base, components = TRUE)
+            mutual_total_within_compute(d[freq > 0], group, unit, within, base, components = TRUE)
         })
         close_log()
         boot_ret <- rbindlist(boot_ret)
@@ -371,7 +371,7 @@ mutual_local <- function(data, group, unit, weight = NULL,
         boot_ret <- lapply(seq_len(n_bootstrap), function(i) {
             if (i %% 5 == 0) update_log(bs_n = i, bs_max = n_bootstrap)
             d[, freq := as.double(draws[, i])]
-            mutual_local_compute(d, group, unit, base)
+            mutual_local_compute(d[freq > 0], group, unit, base)
         })
         close_log()
         boot_ret <- rbindlist(boot_ret)
