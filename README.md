@@ -25,6 +25,10 @@ and Theil’s Information Index (H).
     [`data.table`](https://github.com/Rdatatable/data.table/wiki)
     package internally
 
+Most of the procedures implemented in this package are described in more
+detail [in this working
+paper](https://osf.io/preprints/socarxiv/ya7zs/).
+
 ## Usage
 
 The package provides an easy way to calculate segregation measures,
@@ -152,6 +156,10 @@ Occupational Segregation: The Case of Switzerland (1970–2000), in: Yves
 Flückiger, Sean F. Reardon, Jacques Silber (eds.) Occupational and
 Residential Segregation (Research on Economic Inequality, Volume 17),
 171–202.
+
+Elbers, B. (2019). A Method for Studying Difference in Segregation
+Levels Across Time and Space. SocArXiv Working Paper.
+<https://osf.io/preprints/socarxiv/ya7zs/>
 
 Theil, H. (1971). Principles of Econometrics. New York: Wiley.
 

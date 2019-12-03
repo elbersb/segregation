@@ -33,6 +33,8 @@ on the Mutual Information Index (M) and Theil's Information Index (H).
 - every method returns a [tidy](http://vita.had.co.nz/papers/tidy-data.html) [data.table](http://r-datatable.com) for easy post-processing and plotting
 - it's fast, because it uses the [`data.table`](https://github.com/Rdatatable/data.table/wiki) package internally
 
+Most of the procedures implemented in this package are described in more detail [in this working paper](https://osf.io/preprints/socarxiv/ya7zs/).
+
 ## Usage
 
 The package provides an easy way to calculate segregation measures, based on the Mutual Information Index (M) and Theil's Entropy Index (H).
@@ -112,6 +114,8 @@ Mora, R., & Ruiz-Castillo, J. (2003). Additively decomposable segregation indexe
 
 Deutsch, J., Flückiger, Y. & Silber, J. (2009).
       Analyzing Changes in Occupational Segregation: The Case of Switzerland (1970–2000), in: Yves Flückiger, Sean F. Reardon, Jacques Silber (eds.) Occupational and Residential Segregation (Research on Economic Inequality, Volume 17), 171–202.
+
+Elbers, B. (2019). A Method for Studying Difference in Segregation Levels Across Time and Space. SocArXiv Working Paper. https://osf.io/preprints/socarxiv/ya7zs/
 
 Theil, H. (1971). Principles of Econometrics. New York: Wiley.
 
