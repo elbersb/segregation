@@ -19,8 +19,7 @@ Encoding: UTF-8
 LazyData: true
 Suggests:
     testthat,
-    covr,
-    lintr
+    covr
 URL: http://github.com/elbersb/segregation
 BugReports: http://github.com/elbersb/segregation/issues
 RoxygenNote: 7.0.2
