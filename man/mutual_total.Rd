@@ -4,8 +4,16 @@
 \alias{mutual_total}
 \title{Calculate total segregation for M and H}
 \usage{
-mutual_total(data, group, unit, within = NULL, weight = NULL,
-  se = FALSE, n_bootstrap = 100, base = exp(1))
+mutual_total(
+  data,
+  group,
+  unit,
+  within = NULL,
+  weight = NULL,
+  se = FALSE,
+  n_bootstrap = 100,
+  base = exp(1)
+)
 }
 \arguments{
 \item{data}{A data frame.}

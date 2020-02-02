@@ -4,9 +4,18 @@
 \alias{mutual_difference}
 \title{Decomposes the difference between two M indices}
 \usage{
-mutual_difference(data1, data2, group, unit, weight = NULL,
-  method = "shapley", se = FALSE, n_bootstrap = 100, base = exp(1),
-  ...)
+mutual_difference(
+  data1,
+  data2,
+  group,
+  unit,
+  weight = NULL,
+  method = "shapley",
+  se = FALSE,
+  n_bootstrap = 100,
+  base = exp(1),
+  ...
+)
 }
 \arguments{
 \item{data1}{A data frame with same structure as \code{data2}.}

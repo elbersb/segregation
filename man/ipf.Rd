@@ -4,8 +4,15 @@
 \alias{ipf}
 \title{Adjustment of marginal distributions using iterative proportional fitting}
 \usage{
-ipf(source, target, group, unit, weight = NULL, max_iterations = 100,
-  precision = 0.001)
+ipf(
+  source,
+  target,
+  group,
+  unit,
+  weight = NULL,
+  max_iterations = 100,
+  precision = 0.001
+)
 }
 \arguments{
 \item{source}{A "source" data frame. The marginals of this

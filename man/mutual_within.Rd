@@ -4,8 +4,17 @@
 \alias{mutual_within}
 \title{Calculate detailed within-category segregation scores for M and H}
 \usage{
-mutual_within(data, group, unit, within, weight = NULL, se = FALSE,
-  n_bootstrap = 100, base = exp(1), wide = FALSE)
+mutual_within(
+  data,
+  group,
+  unit,
+  within,
+  weight = NULL,
+  se = FALSE,
+  n_bootstrap = 100,
+  base = exp(1),
+  wide = FALSE
+)
 }
 \arguments{
 \item{data}{A data frame.}

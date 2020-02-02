@@ -4,8 +4,16 @@
 \alias{mutual_local}
 \title{Calculates local segregation indices based on M}
 \usage{
-mutual_local(data, group, unit, weight = NULL, se = FALSE,
-  n_bootstrap = 100, base = exp(1), wide = FALSE)
+mutual_local(
+  data,
+  group,
+  unit,
+  weight = NULL,
+  se = FALSE,
+  n_bootstrap = 100,
+  base = exp(1),
+  wide = FALSE
+)
 }
 \arguments{
 \item{data}{A data frame.}

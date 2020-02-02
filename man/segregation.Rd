@@ -3,7 +3,6 @@
 \docType{package}
 \name{segregation}
 \alias{segregation}
-\alias{segregation-package}
 \title{segregation: Entropy-based segregation indices}
 \description{
 Calculate and decompose entropy-based, multigroup segregation indices, with a focus
