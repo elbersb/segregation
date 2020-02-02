@@ -2,6 +2,7 @@
 
 * faster bootstrap
 * return bootstrap estimates as attr
+* add mutual_expected
 
 # segregation 0.3.0
 

@@ -3,6 +3,7 @@
 export(entropy)
 export(ipf)
 export(mutual_difference)
+export(mutual_expected)
 export(mutual_local)
 export(mutual_total)
 export(mutual_within)
