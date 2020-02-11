@@ -75,11 +75,12 @@
 #'      of \code{unit} and \code{group}.
 #'
 #'   When "shapley_detailed" is used, an additional column "unit" is returned, along with
-#'     five additional rows for each unit that is present in both \code{data1} and \code{data2}.
+#'     six additional rows for each unit that is present in both \code{data1} and \code{data2}.
 #'     The five rows have the following meaning:
 #'     \code{p1} (\code{p2}) is the proportion of the unit in \code{data1} (\code{data2})
 #'     once non-intersecting units/groups have been removed. The changes in local linkage are
-#'     given by \code{ls_diff1} and \code{ls_diff2}. The row named \code{total}
+#'     given by \code{ls_diff1} and \code{ls_diff2}, and their average is given by
+#'     \code{ls_diff_mean}. The row named \code{total}
 #'     summarizes the contribution of
 #'     the unit towards structural change
 #'     using the formula \code{.5 * p1 * ls_diff1 + .5 * p2 * ls_diff2}.
@@ -262,6 +263,7 @@ shapley_compute <- function(d1, d2, group, unit, base, detail, ...) {
         ls <- Reduce(merge, list(ls_AAB, ls_AAA, ls_BBB, ls_BBA))
         ls[, `:=`(ls_diff1 = ls_AAB - ls_AAA, ls_diff2 = ls_BBB - ls_BBA)]
         ls[, c("ls_AAB", "ls_AAA", "ls_BBB", "ls_BBA") := NULL]
+        ls[, ls_diff_mean := .5 * ls_diff1 + .5 * ls_diff2]
         ls[, total := .5 * p1 * ls_diff1 + .5 * p2 * ls_diff2]
         ls <- melt(ls, unit, variable.name = "stat", value.name = "est")
         setorderv(ls, unit)

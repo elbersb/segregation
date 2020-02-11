@@ -68,11 +68,12 @@ Returns a data.table with columns \code{stat} and \code{est}. The data frame con
      of \code{unit} and \code{group}.
 
   When "shapley_detailed" is used, an additional column "unit" is returned, along with
-    five additional rows for each unit that is present in both \code{data1} and \code{data2}.
+    six additional rows for each unit that is present in both \code{data1} and \code{data2}.
     The five rows have the following meaning:
     \code{p1} (\code{p2}) is the proportion of the unit in \code{data1} (\code{data2})
     once non-intersecting units/groups have been removed. The changes in local linkage are
-    given by \code{ls_diff1} and \code{ls_diff2}. The row named \code{total}
+    given by \code{ls_diff1} and \code{ls_diff2}, and their average is given by
+    \code{ls_diff_mean}. The row named \code{total}
     summarizes the contribution of
     the unit towards structural change
     using the formula \code{.5 * p1 * ls_diff1 + .5 * p2 * ls_diff2}.
