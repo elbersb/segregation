@@ -71,7 +71,7 @@
 #' @import data.table
 #' @export
 ipf <- function(source, target, group, unit, weight = NULL,
-                max_iterations = 100, precision = .001) {
+                max_iterations = 100, precision = .0001) {
     d1 <- prepare_data(source, group, unit, weight)
     d2 <- prepare_data(target, group, unit, weight)
 
@@ -91,10 +91,10 @@ create_common_data <- function(d1, d2, group, unit, suppress_warnings = FALSE, f
     # combinations that don't exist. There might be rare cases where the loop needs to be repeated
     # even further, but then the table is probably too sparse anyway
     common_group <- fintersect(d1[, group, with = FALSE], d2[, group, with = FALSE])
-    common_unit <- fintersect(d1[get(group) %in% common_group[[group]], unit, with = FALSE],
-                              d2[get(group) %in% common_group[[group]], unit, with = FALSE])
-    common_group <- fintersect(d1[get(unit) %in% common_unit[[unit]], group, with = FALSE],
-                               d2[get(unit) %in% common_unit[[unit]], group, with = FALSE])
+    common_unit <- fintersect(merge(d1, common_group)[, unit, with = FALSE],
+                              merge(d2, common_group)[, unit, with = FALSE])
+    common_group <- fintersect(merge(d1, common_unit)[, group, with = FALSE],
+                               merge(d2, common_unit)[, group, with = FALSE])
     common_group$key <- 1
     common_unit$key <- 1
     common <- merge(common_unit, common_group, allow.cartesian = TRUE)
