@@ -24,3 +24,10 @@ test_that("works both ways around", {
         mutual_expected(data2, "g", "u", weight = "n")[stat == "M under 0", est],
             tolerance = 0.05)
 })
+
+test_that("fixed margins = FALSE", {
+    expect_equal(
+        mutual_expected(data1, "u", "g", weight = "n", fixed_margins = FALSE)[stat == "M under 0", est],
+        mutual_expected(data1, "g", "u", weight = "n", fixed_margins = FALSE)[stat == "M under 0", est],
+        tolerance = 0.01)
+})

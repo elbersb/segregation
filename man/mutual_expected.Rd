@@ -9,6 +9,7 @@ mutual_expected(
   group,
   unit,
   weight = NULL,
+  fixed_margins = TRUE,
   n_bootstrap = 100,
   base = exp(1)
 )
@@ -25,6 +26,8 @@ contained in \code{data}. Defines the second dimension
 over which segregation is computed.}
 
 \item{weight}{Numeric. (Default \code{NULL})}
+
+\item{fixed_margins}{Should the margins be fixed or simulated? (Default \code{TRUE})}
 
 \item{n_bootstrap}{Number of bootstrap iterations. (Default \code{100})}
 
