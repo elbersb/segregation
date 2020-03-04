@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculates local segregation indices based on M — mutual_local • segregation</title>
+<title>Calculate expected values when true segregation is zero — mutual_expected • segregation</title>
 
 
 <!-- jquery -->
@@ -35,9 +35,13 @@
 
 
 
-<meta property="og:title" content="Calculates local segregation indices based on M — mutual_local" />
-<meta property="og:description" content="Returns local segregation indices for each category defined
-by unit." />
+<meta property="og:title" content="Calculate expected values when true segregation is zero — mutual_expected" />
+<meta property="og:description" content="When sample sizes are small, one group has a small proportion, or
+when there are many units, segregation indices are typically upwardly
+biased, even when true segregation is zero. This function simulates
+tables with zero segregation, given the marginals of the dataset,
+and calculates segregation. If the expected values are large,
+the interpretation of index scores might have to be adjusted." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -109,25 +113,28 @@ by unit." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculates local segregation indices based on M</h1>
-    <small class="dont-index">Source: <a href='https://github.com/elbersb/segregation/blob/master/R/mutual.R'><code>R/mutual.R</code></a></small>
-    <div class="hidden name"><code>mutual_local.Rd</code></div>
+    <h1>Calculate expected values when true segregation is zero</h1>
+    <small class="dont-index">Source: <a href='https://github.com/elbersb/segregation/blob/master/R/mutual_expected.R'><code>R/mutual_expected.R</code></a></small>
+    <div class="hidden name"><code>mutual_expected.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Returns local segregation indices for each category defined
-by <code>unit</code>.</p>
+    <p>When sample sizes are small, one group has a small proportion, or
+when there are many units, segregation indices are typically upwardly
+biased, even when true segregation is zero. This function simulates
+tables with zero segregation, given the marginals of the dataset,
+and calculates segregation. If the expected values are large,
+the interpretation of index scores might have to be adjusted.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mutual_local</span>(
+    <pre class="usage"><span class='fu'>mutual_expected</span>(
   <span class='no'>data</span>,
   <span class='no'>group</span>,
   <span class='no'>unit</span>,
   <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>se</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>fixed_margins</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>n_bootstrap</span> <span class='kw'>=</span> <span class='fl'>100</span>,
-  <span class='kw'>base</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span>(<span class='fl'>1</span>),
-  <span class='kw'>wide</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+  <span class='kw'>base</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span>(<span class='fl'>1</span>)
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -140,23 +147,22 @@ by <code>unit</code>.</p>
     <tr>
       <th>group</th>
       <td><p>A categorical variable or a vector of variables
-contained in <code>data</code>. Defines the dimension
+contained in <code>data</code>. Defines the first dimension
 over which segregation is computed.</p></td>
     </tr>
     <tr>
       <th>unit</th>
       <td><p>A categorical variable or a vector of variables
-contained in <code>data</code>. Defines the group for which local
-segregation indices are calculated.</p></td>
+contained in <code>data</code>. Defines the second dimension
+over which segregation is computed.</p></td>
     </tr>
     <tr>
       <th>weight</th>
       <td><p>Numeric. (Default <code>NULL</code>)</p></td>
     </tr>
     <tr>
-      <th>se</th>
-      <td><p>If <code>TRUE</code>, standard errors are estimated via bootstrap.
-(Default <code>FALSE</code>)</p></td>
+      <th>fixed_margins</th>
+      <td><p>Should the margins be fixed or simulated? (Default <code>TRUE</code>)</p></td>
     </tr>
     <tr>
       <th>n_bootstrap</th>
@@ -167,59 +173,37 @@ segregation indices are calculated.</p></td>
       <td><p>Base of the logarithm that is used in the calculation.
 Defaults to the natural logarithm.</p></td>
     </tr>
-    <tr>
-      <th>wide</th>
-      <td><p>Returns a wide dataframe instead of a long dataframe.
-(Default <code>FALSE</code>)</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns a data.table with two rows for each category defined by <code>unit</code>,
-  for a total of <code>2*(number of units)</code> rows.
-  The column <code>est</code> contains two statistics that
-  are provided for each unit: <code>ls</code>, the local segregation score, and
-  <code>p</code>, the proportion of the unit from the total number of cases.
-  If <code>se</code> is set to <code>TRUE</code>, an additional column <code>se</code> contains
-  the associated bootstrapped standard errors, and the column <code>est</code> contains
-  bootstrapped estimates.
-  If <code>wide</code> is set to <code>TRUE</code>, returns instead a wide dataframe, with one
-  row for each <code>unit</code>, and the associated statistics in separate columns.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
-
-    <p>Henri Theil. 1971. Principles of Econometrics. New York: Wiley.</p>
-<p>Ricardo Mora and Javier Ruiz-Castillo. 2011.
-  "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.</p>
+    <p>A data.table with two rows, corresponding to the expected values of
+   segregation when true segregation is zero.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># which schools are most segregated?</span>
-(<span class='no'>localseg</span> <span class='kw'>=</span> <span class='fu'>mutual_local</span>(<span class='no'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>,
-                         <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>wide</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='output co'>#&gt;       school        ls            p
-#&gt;    1:   A1_1 0.1826710 0.0004522985
-#&gt;    2:   A1_2 0.1825592 0.0004978701
-#&gt;    3:   A1_3 0.2756157 0.0006642066
-#&gt;    4:   A1_4 0.1368034 0.0005685061
-#&gt;    5:   A2_1 0.3585546 0.0004260948
-#&gt;   ---                              
-#&gt; 2041: C165_1 0.3174930 0.0004568556
-#&gt; 2042: C165_2 0.3835477 0.0005297702
-#&gt; 2043: C165_3 0.2972550 0.0005650883
-#&gt; 2044: C166_1 0.3072281 0.0011586588
-#&gt; 2045: C167_1 0.3166498 0.0005354667</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>localseg</span>$<span class='no'>p</span>) <span class='co'># =&gt; 1</span></div><div class='output co'>#&gt; [1] 1</div><div class='input'>
-<span class='co'># the sum of the weighted local segregation scores equals</span>
-<span class='co'># total segregation</span>
-<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>localseg</span>$<span class='no'>ls</span> * <span class='no'>localseg</span>$<span class='no'>p</span>) <span class='co'># =&gt; .425</span></div><div class='output co'>#&gt; [1] 0.425539</div><div class='input'><span class='fu'><a href='mutual_total.html'>mutual_total</a></span>(<span class='no'>schools00</span>, <span class='st'>"school"</span>, <span class='st'>"race"</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>) <span class='co'># M =&gt; .425</span></div><div class='output co'>#&gt;    stat        est
-#&gt; 1:    M 0.42553898
-#&gt; 2:    H 0.05642991</div></pre>
+    <pre class="examples"><div class='input'><span class='co'># the schools00 dataset has a large sample size, so expected segregation is close to zero</span>
+<span class='fu'>mutual_expected</span>(<span class='no'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>)</div><div class='output co'>#&gt;         stat         est           se
+#&gt; 1: M under 0 0.004805749 5.965502e-05
+#&gt; 2: H under 0 0.004729737 5.871147e-05</div><div class='input'>
+<span class='co'># but we can build a smaller table, with 100 students distributed across</span>
+<span class='co'># 10 schools, where one racial group has 10% of the students</span>
+<span class='no'>small</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
+          <span class='kw'>school</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='fl'>1</span>:<span class='fl'>10</span>),
+          <span class='kw'>race</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"r1"</span>, <span class='fl'>10</span>), <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='st'>"r2"</span>, <span class='fl'>10</span>)),
+          <span class='kw'>n</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>1</span>, <span class='fl'>10</span>), <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='fl'>9</span>, <span class='fl'>10</span>)))
+<span class='fu'>mutual_expected</span>(<span class='no'>small</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, <span class='kw'>weight</span><span class='kw'>=</span> <span class='st'>"n"</span>)</div><div class='output co'>#&gt;         stat        est         se
+#&gt; 1: M under 0 0.05351007 0.02049280
+#&gt; 2: H under 0 0.16460435 0.06303867</div><div class='input'><span class='co'># with an increase in sample size (n=1000), the values improve</span>
+<span class='no'>small</span>$<span class='no'>n</span> <span class='kw'>&lt;-</span> <span class='no'>small</span>$<span class='no'>n</span> * <span class='fl'>10</span>
+<span class='fu'>mutual_expected</span>(<span class='no'>small</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, <span class='kw'>weight</span><span class='kw'>=</span> <span class='st'>"n"</span>)</div><div class='output co'>#&gt;         stat         est          se
+#&gt; 1: M under 0 0.004474672 0.001994135
+#&gt; 2: H under 0 0.013764708 0.006134235</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
-      <li><a href="#references">References</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 

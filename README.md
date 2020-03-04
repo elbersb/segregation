@@ -14,6 +14,9 @@ An R package to calculate and decompose entropy-based, multigroup
 segregation indices, with a focus on the Mutual Information Index (M)
 and Theil’s Information Index (H).
 
+Find more information in the
+[documentation](https://elbersb.de/segregation).
+
   - calculate total, between, within, and local segregation
   - decompose differences in total segregation over time
   - estimate standard errors via bootstrapping
@@ -50,8 +53,8 @@ Standard errors in all functions can be estimated via boostrapping:
 mutual_total(schools00, "race", "school", weight = "n", se = TRUE)
 #> 100 bootstrap iterations on 877739 observations
 #>  stat   est       se
-#>     M 0.429 0.000724
-#>     H 0.422 0.000637
+#>     M 0.429 0.000796
+#>     H 0.422 0.000689
 ```
 
 Decompose segregation into a between-state and a within-state term (the
@@ -79,12 +82,12 @@ equals M:
 (local <- mutual_local(schools00, group = "school", unit = "race", weight = "n",
              se = TRUE, wide = TRUE))
 #> 100 bootstrap iterations on 877739 observations
-#>    race    ls   ls_se       p     p_se
-#>   asian 0.667 0.00598 0.02257 0.000163
-#>   black 0.885 0.00222 0.19017 0.000408
-#>    hisp 0.782 0.00234 0.15167 0.000399
-#>   white 0.184 0.00056 0.62807 0.000511
-#>  native 1.519 0.01649 0.00751 0.000101
+#>    race    ls    ls_se      p      p_se
+#>   asian 0.666 0.005636 0.0226 0.0001459
+#>   black 0.885 0.002080 0.1901 0.0003918
+#>    hisp 0.782 0.002116 0.1517 0.0004028
+#>   white 0.184 0.000518 0.6281 0.0005175
+#>  native 1.519 0.016045 0.0075 0.0000854
 
 sum(local$p * local$ls)
 #> [1] 0.429
@@ -103,8 +106,8 @@ mutual_difference(schools00, schools05, group = "race", unit = "school",
 #>            diff -0.01215
 #>       additions -0.00341
 #>        removals -0.01141
-#>  group_marginal  0.01855
-#>   unit_marginal -0.01239
+#>  group_marginal  0.01787
+#>   unit_marginal -0.01171
 #>      structural -0.00349
 ```
 

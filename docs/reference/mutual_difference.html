@@ -129,9 +129,18 @@ with a few advantages over the Karmel-Maclachlan method
 All methods have been extended to account for missing units/groups in either data input.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mutual_difference</span>(<span class='no'>data1</span>, <span class='no'>data2</span>, <span class='no'>group</span>, <span class='no'>unit</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"shapley"</span>, <span class='kw'>se</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>n_bootstrap</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>base</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span>(<span class='fl'>1</span>),
-  <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>mutual_difference</span>(
+  <span class='no'>data1</span>,
+  <span class='no'>data2</span>,
+  <span class='no'>group</span>,
+  <span class='no'>unit</span>,
+  <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"shapley"</span>,
+  <span class='kw'>se</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>n_bootstrap</span> <span class='kw'>=</span> <span class='fl'>100</span>,
+  <span class='kw'>base</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span>(<span class='fl'>1</span>),
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -205,11 +214,12 @@ when <code>method</code> is set to <code>shapley</code> or <code>km</code>. See 
    <code>interaction</code> is the contribution of differences in the joint marginal distribution
      of <code>unit</code> and <code>group</code>.</p>
 <p>When "shapley_detailed" is used, an additional column "unit" is returned, along with
-    five additional rows for each unit that is present in both <code>data1</code> and <code>data2</code>.
+    six additional rows for each unit that is present in both <code>data1</code> and <code>data2</code>.
     The five rows have the following meaning:
     <code>p1</code> (<code>p2</code>) is the proportion of the unit in <code>data1</code> (<code>data2</code>)
     once non-intersecting units/groups have been removed. The changes in local linkage are
-    given by <code>ls_diff1</code> and <code>ls_diff2</code>. The row named <code>total</code>
+    given by <code>ls_diff1</code> and <code>ls_diff2</code>, and their average is given by
+    <code>ls_diff_mean</code>. The row named <code>total</code>
     summarizes the contribution of
     the unit towards structural change
     using the formula <code>.5 * p1 * ls_diff1 + .5 * p2 * ls_diff2</code>.
