@@ -34,7 +34,7 @@ test_that("warn if iterations are too low", {
 
 test_that("gives sames results as mutual_difference", {
     diff <- mutual_difference(schools00, schools05, group = "race", unit = "school",
-        weight = "n", method = "km")
+        weight = "n", method = "km", precision = 0.000001)
     # what changed from 2000 to 2005?
     # first reduce to overlap sample
     schools00_r <- schools00[schools00$school %in% schools05$school, ]
@@ -43,7 +43,7 @@ test_that("gives sames results as mutual_difference", {
     M_05 <- mutual_total(schools05_r, "race", "school", weight = "n")[stat == "M", est]
     # adjust the 2000 margins to the 2005 margins
     # if only the margins changed, then this would explain all the difference
-    adj_00 <- ipf(schools00_r, schools05_r, "race", "school", weight = "n")
+    adj_00 <- ipf(schools00_r, schools05_r, "race", "school", weight = "n", precision = 0.00001)
     M_margins <- mutual_total(adj_00, "race", "school", weight = "n")[stat == "M", est]
     structural_change <- M_05 - M_margins
     # test

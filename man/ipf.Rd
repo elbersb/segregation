@@ -11,7 +11,7 @@ ipf(
   unit,
   weight = NULL,
   max_iterations = 100,
-  precision = 0.001
+  precision = 1e-04
 )
 }
 \arguments{
