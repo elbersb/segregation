@@ -18,6 +18,10 @@ test_that("mutual M works both ways around", {
     expanded <- test_data[rep(seq_len(nrow(test_data)), test_data$n), 1:3]
     expect_equal(
         mutual_total(test_data, "u", "g", weight = "n")[stat == "M", est],
+        mutual_total(expanded, "u", "g")[stat == "M", est]
+    )
+
+    expect_equal(
         mutual_total(expanded, "u", "g")[stat == "M", est],
         mutual_total(expanded, "g", "u")[stat == "M", est]
     )
