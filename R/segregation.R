@@ -80,7 +80,9 @@ logf <- function(v, base) {
     if (missing(base)) {
         stop("argument base required")
     }
-    ifelse(v > 0 & is.finite(v), log(v, base = base), 0)
+    logged <- log(v, base = base)
+    logged[!is.finite(logged)] <- 0
+    logged
 }
 
 #' Calculates the entropy of a distribution
