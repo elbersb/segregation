@@ -1,11 +1,15 @@
 #' @import data.table
 mutual_total_compute <- function(data, group, unit, base) {
+    n_total <- sum(data[, freq])
+    data[, n_unit := sum(freq), by = unit]
+    data[, n_group := sum(freq), by = group]
+    data[, `:=`(p = freq / n_total, p_exp = n_group * n_unit / (n_total^2))]
+
     # calculate M
-    add_local(data, group, unit, base)
-    M <- sum(data[, list(p = first(p_unit), ls = first(ls_unit)), by = unit][, p * ls])
+    M <- data[p > 0, sum(p * log(p / p_exp, base = base))]
 
     # calculate H
-    p <- data[, list(p = first(p_group)), by = group][["p"]]
+    p <- data[, list(p = first(n_group / n_total)), by = group][["p"]]
     entropy_group <- sum(p * logf(1 / p, base))
     H <- M / entropy_group
 
