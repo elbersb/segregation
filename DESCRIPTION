@@ -22,4 +22,4 @@ Suggests:
     covr
 URL: http://github.com/elbersb/segregation
 BugReports: http://github.com/elbersb/segregation/issues
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
