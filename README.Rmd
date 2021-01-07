@@ -20,7 +20,7 @@ set.seed(69839)
 # segregation
 
 [![CRAN Version](https://www.r-pkg.org/badges/version/segregation)](https://CRAN.R-project.org/package=segregation)
-[![Build Status](https://travis-ci.org/elbersb/segregation.svg?branch=master)](https://travis-ci.org/elbersb/segregation)
+[![R build status](https://github.com/elbersb/segregation/workflows/R-CMD-check/badge.svg)](https://github.com/elbersb/segregation/actions)
 [![Coverage status](https://codecov.io/gh/elbersb/segregation/branch/master/graph/badge.svg)](https://codecov.io/github/elbersb/segregation?branch=master)
 
 
