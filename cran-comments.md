@@ -1,8 +1,11 @@
 ## Test environments
 
-* local OS X, R 3.6.1
-* R-hub (Windows R-devel, Ubuntu 16.04 R-release, Fedora R-devel)
-* ubuntu 14.04 (on travis-ci), R 3.5.1
+* local macOS 11.1, R 4.0.2
+* windows-latest (release, on Github Actions)
+* macOS-latest (release, on Github Actions)
+* ubuntu-20.04 (release, on Github Actions)
+* ubuntu-20.04 (devel, on Github Actions)
+* rhub (windows, ubuntu 16.04, fedora linux)
 
 ## R CMD check results
 
