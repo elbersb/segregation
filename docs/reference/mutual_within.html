@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -38,7 +42,6 @@
 <meta property="og:title" content="Calculate detailed within-category segregation scores for M and H — mutual_within" />
 <meta property="og:description" content="Calculates the segregation between group and unit
 within each category defined by within." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -56,7 +59,7 @@ within each category defined by within." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -91,7 +94,7 @@ within each category defined by within." />
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/elbersb/segregation">
+  <a href="http://github.com/elbersb/segregation/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -110,7 +113,7 @@ within each category defined by within." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Calculate detailed within-category segregation scores for M and H</h1>
-    <small class="dont-index">Source: <a href='https://github.com/elbersb/segregation/blob/master/R/mutual.R'><code>R/mutual.R</code></a></small>
+    <small class="dont-index">Source: <a href='http://github.com/elbersb/segregation/blob/master/R/mutual.R'><code>R/mutual.R</code></a></small>
     <div class="hidden name"><code>mutual_within.Rd</code></div>
     </div>
 
@@ -119,17 +122,17 @@ within each category defined by within." />
 within each category defined by <code>within</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>mutual_within</span>(
-  <span class='no'>data</span>,
-  <span class='no'>group</span>,
-  <span class='no'>unit</span>,
-  <span class='no'>within</span>,
-  <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>se</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>n_bootstrap</span> <span class='kw'>=</span> <span class='fl'>100</span>,
-  <span class='kw'>base</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span>(<span class='fl'>1</span>),
-  <span class='kw'>wide</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>mutual_within</span><span class='op'>(</span>
+  <span class='va'>data</span>,
+  <span class='va'>group</span>,
+  <span class='va'>unit</span>,
+  <span class='va'>within</span>,
+  weight <span class='op'>=</span> <span class='cn'>NULL</span>,
+  se <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  n_bootstrap <span class='op'>=</span> <span class='fl'>100</span>,
+  base <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>,
+  wide <span class='op'>=</span> <span class='cn'>FALSE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -161,7 +164,9 @@ contained in <code>data</code> that defines the within-segregation categories.</
     </tr>
     <tr>
       <th>se</th>
-      <td><p>If <code>TRUE</code>, standard errors are estimated via bootstrap.
+      <td><p>If <code>TRUE</code>, the segregation estimates are bootstrapped to provide
+standard errors and to apply bias correction. The bias that is reported
+has already been applied to the estimates (i.e. the reported estimates are "debiased")
 (Default <code>FALSE</code>)</p></td>
     </tr>
     <tr>
@@ -193,8 +198,8 @@ Defaults to the natural logarithm.</p></td>
   towards the total H. <code>h_weight</code> is defined as <code>p * EW/E</code>, where <code>EW</code> is the
   within-category entropy, and <code>E</code> is the overall entropy.
   If <code>se</code> is set to <code>TRUE</code>, an additional column <code>se</code> contains
-  the associated bootstrapped standard errors, and the column <code>est</code> contains
-  bootstrapped estimates.
+  the associated bootstrapped standard errors, an additional column <code>bias</code> contains
+  the estimated bias, and the column <code>est</code> contains the bias-corrected estimates.
   If <code>wide</code> is set to <code>TRUE</code>, returns instead a wide dataframe, with one
   row for each <code>within</code> category, and the associated statistics in separate columns.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
@@ -204,32 +209,32 @@ Defaults to the natural logarithm.</p></td>
      "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>(<span class='no'>within</span> <span class='kw'>&lt;-</span> <span class='fu'>mutual_within</span>(<span class='no'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, <span class='kw'>within</span> <span class='kw'>=</span> <span class='st'>"state"</span>,
-                         <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>, <span class='kw'>wide</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>))</div><div class='output co'>#&gt;    state         M         p         H  h_weight
+    <pre class="examples"><div class='input'><span class='op'>(</span><span class='va'>within</span> <span class='op'>&lt;-</span> <span class='fu'>mutual_within</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, within <span class='op'>=</span> <span class='st'>"state"</span>,
+                         weight <span class='op'>=</span> <span class='st'>"n"</span>, wide <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    state         M         p         H  h_weight
 #&gt; 1:     A 0.4085965 0.2768819 0.4969216 0.2240667
 #&gt; 2:     B 0.2549959 0.4035425 0.2680884 0.3777638
 #&gt; 3:     C 0.3450221 0.3195756 0.3611257 0.3004955</div><div class='input'><span class='co'># the M for state "A" is .409</span>
 <span class='co'># manual calculation</span>
-<span class='no'>schools_A</span> <span class='kw'>&lt;-</span> <span class='no'>schools00</span>[<span class='no'>schools00</span>$<span class='no'>state</span><span class='kw'>==</span><span class='st'>"A"</span>,]
-<span class='fu'><a href='mutual_total.html'>mutual_total</a></span>(<span class='no'>schools_A</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>) <span class='co'># M =&gt; .409</span></div><div class='output co'>#&gt;    stat       est
+<span class='va'>schools_A</span> <span class='op'>&lt;-</span> <span class='va'>schools00</span><span class='op'>[</span><span class='va'>schools00</span><span class='op'>$</span><span class='va'>state</span><span class='op'>==</span><span class='st'>"A"</span>,<span class='op'>]</span>
+<span class='fu'><a href='mutual_total.html'>mutual_total</a></span><span class='op'>(</span><span class='va'>schools_A</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span><span class='op'>)</span> <span class='co'># M =&gt; .409</span>
+</div><div class='output co'>#&gt;    stat       est
 #&gt; 1:    M 0.4085965
 #&gt; 2:    H 0.4969216</div><div class='input'>
 <span class='co'># to recover the within M and H from the output, multiply</span>
 <span class='co'># p * M and h_weight * H, respectively</span>
-<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>within</span>$<span class='no'>p</span> * <span class='no'>within</span>$<span class='no'>M</span>) <span class='co'># =&gt; .326</span></div><div class='output co'>#&gt; [1] 0.3262953</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span>(<span class='no'>within</span>$<span class='no'>H</span> * <span class='no'>within</span>$<span class='no'>h_weight</span>) <span class='co'># =&gt; .321</span></div><div class='output co'>#&gt; [1] 0.3211343</div><div class='input'><span class='co'># compare with:</span>
-<span class='fu'><a href='mutual_total.html'>mutual_total</a></span>(<span class='no'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, <span class='kw'>within</span> <span class='kw'>=</span> <span class='st'>"state"</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"n"</span>)</div><div class='output co'>#&gt;    stat       est
+<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>within</span><span class='op'>$</span><span class='va'>p</span> <span class='op'>*</span> <span class='va'>within</span><span class='op'>$</span><span class='va'>M</span><span class='op'>)</span> <span class='co'># =&gt; .326</span>
+</div><div class='output co'>#&gt; [1] 0.3262953</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>within</span><span class='op'>$</span><span class='va'>H</span> <span class='op'>*</span> <span class='va'>within</span><span class='op'>$</span><span class='va'>h_weight</span><span class='op'>)</span> <span class='co'># =&gt; .321</span>
+</div><div class='output co'>#&gt; [1] 0.3211343</div><div class='input'><span class='co'># compare with:</span>
+<span class='fu'><a href='mutual_total.html'>mutual_total</a></span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, within <span class='op'>=</span> <span class='st'>"state"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;    stat       est
 #&gt; 1:    M 0.3262953
 #&gt; 2:    H 0.3211343</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -240,7 +245,7 @@ Defaults to the natural logarithm.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
