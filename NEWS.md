@@ -3,6 +3,7 @@
 * faster bootstrap
 * return bootstrap estimates as attr
 * add mutual_expected
+* apply bias-correction via bootstrap by default when se=TRUE
 
 # segregation 0.3.0
 

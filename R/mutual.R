@@ -91,7 +91,9 @@ mutual_total_within_compute <- function(data, group, unit, within, base,
 #'   computed within the groups defined by the variable, and then averaged.
 #'   (Default \code{NULL})
 #' @param weight Numeric. (Default \code{NULL})
-#' @param se If \code{TRUE}, standard errors are estimated via bootstrap.
+#' @param se If \code{TRUE}, the segregation estimates are bootstrapped to provide
+#'   standard errors and to apply bias correction. The bias that is reported
+#'   has already been applied to the estimates (i.e. the reported estimates are "debiased")
 #'   (Default \code{FALSE})
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{100})
 #' @param base Base of the logarithm that is used in the calculation.
@@ -101,8 +103,8 @@ mutual_total_within_compute <- function(data, group, unit, within, base,
 #'   the M divided by the \code{group} entropy. If \code{within} was given,
 #'   M and H are weighted averages of the within-category segregation scores.
 #'   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
-#'   the associated bootstrapped standard errors, and the column \code{est} contains
-#'   bootstrapped estimates.
+#'   the associated bootstrapped standard errors, an additional column \code{bias} contains
+#'   the estimated bias, and the column \code{est} contains the bias-corrected estimates.
 #' @references
 #' Henri Theil. 1971. Principles of Econometrics. New York: Wiley.
 #'
@@ -136,17 +138,17 @@ mutual_total_within_compute <- function(data, group, unit, within, base,
 #' # here, most segregation is between school districts
 #' @import data.table
 #' @export
-mutual_total <- function(data, group, unit, within = NULL,
-                         weight = NULL, se = FALSE, n_bootstrap = 100, base = exp(1)) {
+mutual_total <- function(data, group, unit, within = NULL, weight = NULL,
+                         se = FALSE, n_bootstrap = 100, base = exp(1)) {
     d <- prepare_data(data, group, unit, weight, within)
 
-    if (se == FALSE) {
-        if (is.null(within)) {
-            ret <- mutual_total_compute(d, group, unit, base)
-        } else {
-            ret <- mutual_total_within_compute(d, group, unit, within, base)
-        }
+    if (is.null(within)) {
+        ret <- mutual_total_compute(d, group, unit, base)
     } else {
+        ret <- mutual_total_within_compute(d, group, unit, within, base)
+    }
+
+    if (se == TRUE) {
         vars <- attr(d, "vars")
         n_total <- sum(d[["freq"]])
 
@@ -172,11 +174,17 @@ mutual_total <- function(data, group, unit, within = NULL,
         })
         close_log()
         boot_ret <- rbindlist(boot_ret)
-        ret <- boot_ret[, list(
-            est = mean(est), se = stats::sd(est)), by = c("stat")]
+        ret_boot <- boot_ret[, list(
+            mean_boot = mean(est), se = stats::sd(est)), by = c("stat")]
+        ret <- merge(ret, ret_boot, by = "stat", sort = FALSE)
+        # debias
+        ret[, bias := mean_boot - est]
+        ret[, est := est - bias]
+        ret[, mean_boot := NULL]
         setattr(ret, "bootstrap", boot_ret)
     }
-    ret
+
+    data.table(ret)
 }
 
 #' Calculate detailed within-category segregation scores for M and H
@@ -194,7 +202,9 @@ mutual_total <- function(data, group, unit, within = NULL,
 #' @param within A categorical variable or a vector of variables
 #'   contained in \code{data} that defines the within-segregation categories.
 #' @param weight Numeric. (Default \code{NULL})
-#' @param se If \code{TRUE}, standard errors are estimated via bootstrap.
+#' @param se If \code{TRUE}, the segregation estimates are bootstrapped to provide
+#'   standard errors and to apply bias correction. The bias that is reported
+#'   has already been applied to the estimates (i.e. the reported estimates are "debiased")
 #'   (Default \code{FALSE})
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{100})
 #' @param base Base of the logarithm that is used in the calculation.
@@ -212,8 +222,8 @@ mutual_total <- function(data, group, unit, within = NULL,
 #'   towards the total H. \code{h_weight} is defined as \code{p * EW/E}, where \code{EW} is the
 #'   within-category entropy, and \code{E} is the overall entropy.
 #'   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
-#'   the associated bootstrapped standard errors, and the column \code{est} contains
-#'   bootstrapped estimates.
+#'   the associated bootstrapped standard errors, an additional column \code{bias} contains
+#'   the estimated bias, and the column \code{est} contains the bias-corrected estimates.
 #'   If \code{wide} is set to \code{TRUE}, returns instead a wide dataframe, with one
 #'   row for each \code{within} category, and the associated statistics in separate columns.
 #' @references
@@ -242,9 +252,9 @@ mutual_within <- function(data, group, unit, within,
                          wide = FALSE) {
     d <- prepare_data(data, group, unit, weight, within)
 
-    if (se == FALSE) {
-        ret <- mutual_total_within_compute(d, group, unit, within, base, components = TRUE)
-    } else {
+    ret <- mutual_total_within_compute(d, group, unit, within, base, components = TRUE)
+
+    if (se == TRUE) {
         vars <- attr(d, "vars")
         n_total <- sum(d[, "freq"])
 
@@ -266,28 +276,38 @@ mutual_within <- function(data, group, unit, within,
         })
         close_log()
         boot_ret <- rbindlist(boot_ret)
-        ret <- boot_ret[, list(
-            est = mean(est), se = stats::sd(est)),
+        ret_boot <- boot_ret[, list(mean_boot = mean(est), se = stats::sd(est)),
             by = c(within, "stat")]
+        ret <- merge(ret, ret_boot, by = c(within, "stat"), sort = FALSE)
+        # debias
+        ret[, bias := mean_boot - est]
+        ret[, est := est - bias]
+        ret[, mean_boot := NULL]
+        setattr(ret, "bootstrap", boot_ret)
     }
 
     if (wide == TRUE) {
         f <- stats::as.formula(paste(paste(within, collapse = "+"),
                                      "~ factor(stat, levels=c('M', 'p', 'H', 'h_weight'))"))
         if (se == TRUE) {
-            ret <- dcast(ret, f, value.var = c("est", "se"))
+            ret <- dcast(ret, f, value.var = c("est", "se", "bias"))
             names(ret) <- c(within,
                             "M", "p", "H", "h_weight",
-                            "M_se", "p_se", "H_se", "h_weight_se")
+                            "M_se", "p_se", "H_se", "h_weight_se",
+                            "M_bias", "p_bias", "H_bias", "h_weight_bias")
             setcolorder(ret, c(within,
-                               "M", "M_se", "p", "p_se",
-                               "H", "H_se", "h_weight", "h_weight_se"))
+                               "M", "M_se", "M_bias",
+                               "p", "p_se", "p_bias",
+                               "H", "H_se", "H_bias",
+                               "h_weight", "h_weight_se",
+                               "h_weight_bias"))
             setattr(ret, "bootstrap", boot_ret)
         } else {
             ret <- dcast(ret, f, value.var = c("est"))
         }
     }
-    ret
+
+    data.table(ret)
 }
 
 #' @import data.table
@@ -315,7 +335,9 @@ mutual_local_compute <- function(data, group, unit, base = exp(1)) {
 #'   contained in \code{data}. Defines the group for which local
 #'   segregation indices are calculated.
 #' @param weight Numeric. (Default \code{NULL})
-#' @param se If \code{TRUE}, standard errors are estimated via bootstrap.
+#' @param se If \code{TRUE}, the segregation estimates are bootstrapped to provide
+#'   standard errors and to apply bias correction. The bias that is reported
+#'   has already been applied to the estimates (i.e. the reported estimates are "debiased")
 #'   (Default \code{FALSE})
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{100})
 #' @param base Base of the logarithm that is used in the calculation.
@@ -328,8 +350,8 @@ mutual_local_compute <- function(data, group, unit, base = exp(1)) {
 #'   are provided for each unit: \code{ls}, the local segregation score, and
 #'   \code{p}, the proportion of the unit from the total number of cases.
 #'   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
-#'   the associated bootstrapped standard errors, and the column \code{est} contains
-#'   bootstrapped estimates.
+#'   the associated bootstrapped standard errors, an additional column \code{bias} contains
+#'   the estimated bias, and the column \code{est} contains the bias-corrected estimates.
 #'   If \code{wide} is set to \code{TRUE}, returns instead a wide dataframe, with one
 #'   row for each \code{unit}, and the associated statistics in separate columns.
 #' @references
@@ -355,9 +377,9 @@ mutual_local <- function(data, group, unit, weight = NULL,
                          wide = FALSE) {
     d <- prepare_data(data, group, unit, weight)
 
-    if (se == FALSE) {
-        ret <- mutual_local_compute(d, group, unit, base)
-    } else {
+    ret <- mutual_local_compute(d, group, unit, base)
+
+    if (se == TRUE) {
         vars <- attr(d, "vars")
         n_total <- sum(d[, "freq"])
 
@@ -379,8 +401,13 @@ mutual_local <- function(data, group, unit, weight = NULL,
         })
         close_log()
         boot_ret <- rbindlist(boot_ret)
-        ret <- boot_ret[, list(
-            est = mean(est), se = stats::sd(est)), by = c(unit, "stat")]
+        ret_boot <- boot_ret[, list(mean_boot = mean(est), se = stats::sd(est)),
+            by = c(unit, "stat")]
+        ret <- merge(ret, ret_boot, by = c(unit, "stat"), sort = FALSE)
+        # debias
+        ret[, bias := mean_boot - est]
+        ret[, est := est - bias]
+        ret[, mean_boot := NULL]
         setattr(ret, "bootstrap", boot_ret)
     }
 
@@ -388,13 +415,14 @@ mutual_local <- function(data, group, unit, weight = NULL,
         f <- stats::as.formula(paste(paste(unit, collapse = "+"),
                                      "~ factor(stat, levels=c('ls', 'p'))"))
         if (se == TRUE) {
-            ret <- dcast(ret, f, value.var = c("est", "se"))
-            names(ret) <- c(unit, "ls", "p", "ls_se", "p_se")
-            setcolorder(ret, c(unit, "ls", "ls_se", "p", "p_se"))
+            ret <- dcast(ret, f, value.var = c("est", "se", "bias"))
+            names(ret) <- c(unit, "ls", "p", "ls_se", "p_se", "ls_bias", "p_bias")
+            setcolorder(ret, c(unit, "ls", "ls_se", "ls_bias", "p", "p_se", "p_bias"))
             setattr(ret, "bootstrap", boot_ret)
         } else {
             ret <- dcast(ret, f, value.var = c("est"))
         }
     }
-    ret
+
+    data.table(ret)
 }

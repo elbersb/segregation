@@ -32,7 +32,9 @@ contained in \code{data} that defines the within-segregation categories.}
 
 \item{weight}{Numeric. (Default \code{NULL})}
 
-\item{se}{If \code{TRUE}, standard errors are estimated via bootstrap.
+\item{se}{If \code{TRUE}, the segregation estimates are bootstrapped to provide
+standard errors and to apply bias correction. The bias that is reported
+has already been applied to the estimates (i.e. the reported estimates are "debiased")
 (Default \code{FALSE})}
 
 \item{n_bootstrap}{Number of bootstrap iterations. (Default \code{100})}
@@ -55,8 +57,8 @@ Returns a data.table with four rows for each category defined by \code{within}.
   towards the total H. \code{h_weight} is defined as \code{p * EW/E}, where \code{EW} is the
   within-category entropy, and \code{E} is the overall entropy.
   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
-  the associated bootstrapped standard errors, and the column \code{est} contains
-  bootstrapped estimates.
+  the associated bootstrapped standard errors, an additional column \code{bias} contains
+  the estimated bias, and the column \code{est} contains the bias-corrected estimates.
   If \code{wide} is set to \code{TRUE}, returns instead a wide dataframe, with one
   row for each \code{within} category, and the associated statistics in separate columns.
 }

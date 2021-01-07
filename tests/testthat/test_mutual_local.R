@@ -38,7 +38,7 @@ test_that("return works", {
 
 test_that("bootstrapping works", {
     expect_equal(nrow(localse), 8)
-    expect_equal(ncol(localse), 4)
+    expect_equal(ncol(localse), 5)
 })
 
 test_that("bootstrapping fails when sample size is non-integer", {
@@ -57,15 +57,15 @@ test_that("bootstrapping fails when sample size is non-integer", {
 
 test_that("option wide works", {
     nowide <- mutual_local(test_data, "u", "g", weight = "n")
-    nowide_se <- mutual_local(test_data, "u", "g", weight = "n", se = T)
-    wide <- mutual_local(test_data, "u", "g", weight = "n", wide = T)
-    wide_se <- mutual_local(test_data, "u", "g", weight = "n", wide = T, se = T)
+    nowide_se <- mutual_local(test_data, "u", "g", weight = "n", se = TRUE)
+    wide <- mutual_local(test_data, "u", "g", weight = "n", wide = TRUE)
+    wide_se <- mutual_local(test_data, "u", "g", weight = "n", wide = TRUE, se = TRUE)
 
-    expect_equal(ncol(nowide) + 1, ncol(nowide_se))
+    expect_equal(ncol(nowide) + 2, ncol(nowide_se))
     expect_equal(nrow(nowide), 8)
     expect_equal(nrow(nowide), nrow(nowide_se))
     expect_equal(nrow(nowide), nrow(wide) * 2)
-    expect_equal(ncol(wide) + 2, ncol(wide_se))
+    expect_equal(ncol(wide) + 4, ncol(wide_se))
     expect_equal(nrow(wide), nrow(wide_se))
 
     expect_equal(nowide[stat == "ls", est], wide$ls)

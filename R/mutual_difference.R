@@ -47,7 +47,9 @@
 #' @param weight Numeric. (Default \code{NULL})
 #' @param method Either "shapley" (the default), "km" (Karmel and Maclachlan method), or
 #'   "mrc" (Mora and Ruiz-Castillo method).
-#' @param se If \code{TRUE}, standard errors are estimated via bootstrap.
+#' @param se If \code{TRUE}, the segregation estimates are bootstrapped to provide
+#'   standard errors and to apply bias correction. The bias that is reported
+#'   has already been applied to the estimates (i.e. the reported estimates are "debiased")
 #'   (Default \code{FALSE})
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{100})
 #' @param ... Only used for additional arguments when
@@ -87,8 +89,8 @@
 #'     The sum of all "total" components equals structural change.
 #'
 #'   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
-#'   the associated bootstrapped standard errors, and the column \code{est} contains
-#'   bootstrapped estimates.
+#'   the associated bootstrapped standard errors, an additional column \code{bias} contains
+#'   the estimated bias, and the column \code{est} contains the bias-corrected estimates.
 #' @references
 #' W. E. Deming, F. F. Stephan. 1940. "On a Least Squares Adjustment of a Sampled Frequency Table
 #'    When the Expected Marginal Totals are Known."
@@ -158,9 +160,9 @@ mutual_difference <- function(data1, data2, group, unit,
         unique(d2[, unit, with = FALSE])))
     if (nrow_unit == 0) stop("No overlap in unit")
 
-    if (se == FALSE) {
-        ret <- fun(d1, d2, group, unit, base, ...)
-    } else {
+    ret <- fun(d1, d2, group, unit, base, ...)
+
+    if (se == TRUE) {
         vars <- attr(d1, "vars")
         n_total1 <- sum(d1[, "freq"])
         n_total2 <- sum(d2[, "freq"])
@@ -184,12 +186,17 @@ mutual_difference <- function(data1, data2, group, unit,
         })
 
         boot_ret <- rbindlist(boot_ret)
-        ret <- boot_ret[, list(
-            est = mean(est), se = stats::sd(est)), by = cols]
+        ret_boot <- boot_ret[, list(
+            mean_boot = mean(est), se = stats::sd(est)), by = cols]
+        ret <- merge(ret, ret_boot, by = cols, sort = FALSE)
+        # debias
+        ret[, bias := mean_boot - est]
+        ret[, est := est - bias]
+        ret[, mean_boot := NULL]
         setattr(ret, "bootstrap", boot_ret)
     }
     close_log()
-    ret
+    data.table(ret)
 }
 
 

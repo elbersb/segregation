@@ -75,12 +75,12 @@ test_that("H is correct", {
 
 test_that("bootstrapping works", {
     ret <- mutual_total(test_data, "u", "g", weight = "n", se = TRUE)
-    expect_equal(dim(ret), c(2, 3))
+    expect_equal(dim(ret), c(2, 4))
     expect_equal(all(ret$se > 0), TRUE)
 
     ret <- mutual_total(test_data, "u", "g", weight = "n", se = TRUE,
                         within = "supergroup")
-    expect_equal(dim(ret), c(2, 3))
+    expect_equal(dim(ret), c(2, 4))
     expect_equal(all(ret$se > 0), TRUE)
 })
 
@@ -96,7 +96,7 @@ test_that("bootstrapping fails when sample size is non-integer", {
     # rescale
     test_data$n2 <- test_data$n / sum(test_data$n) * round(sum(test_data$n))
     ret <- mutual_total(test_data, "u", "g", weight = "n2", se = TRUE)
-    expect_equal(dim(ret), c(2, 3))
+    expect_equal(dim(ret), c(2, 4))
     expect_equal(all(ret$se > 0), TRUE)
 })
 
@@ -108,7 +108,7 @@ test_data <- data.frame(
 )
 
 test_that("zero weights no problem", {
-    expect_equal(dim(mutual_total(test_data, "u", "g", weight = "n", se = TRUE)), c(2, 3))
+    expect_equal(dim(mutual_total(test_data, "u", "g", weight = "n", se = TRUE)), c(2, 4))
     expect_equal(dim(mutual_total(test_data, "u", "g", weight = "n")), c(2, 2))
     expect_equal(mutual_total(test_data, "u", "g", weight = "n")[stat == "M", est], log(2))
     expect_equal(mutual_total(test_data, "u", "g", weight = "n")[stat == "H", est], 1)
@@ -128,4 +128,10 @@ test_that("gives errors", {
     expect_error(mutual_total(test_data, "u2", "g", weight = "n"), "u2 not in data.frame")
     expect_error(mutual_total(test_data, "u2", "g2", weight = "n"), "u2, g2 not in data.frame")
     expect_error(mutual_total(test_data, "u2", "g2", weight = "n2"), "u2, g2, n2 not in data.frame")
+})
+
+test_that("debiasing works correctly", {
+    nose <- mutual_total(test_data, "u", "g", weight = "n")
+    withse <- mutual_total(test_data, "u", "g", weight = "n", se = TRUE)
+    expect_equal(nose$est, withse$est + withse$bias)
 })

@@ -48,7 +48,8 @@ library(segregation)
 mutual_total(schools00, "race", "school", weight = "n")
 ```
 
-Standard errors in all functions can be estimated via boostrapping:
+Standard errors in all functions can be estimated via boostrapping. This will also
+apply bias-correction to the estimates:
 
 ```{r}
 mutual_total(schools00, "race", "school", weight = "n", se = TRUE)

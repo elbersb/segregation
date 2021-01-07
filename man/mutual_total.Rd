@@ -35,7 +35,9 @@ computed within the groups defined by the variable, and then averaged.
 
 \item{weight}{Numeric. (Default \code{NULL})}
 
-\item{se}{If \code{TRUE}, standard errors are estimated via bootstrap.
+\item{se}{If \code{TRUE}, the segregation estimates are bootstrapped to provide
+standard errors and to apply bias correction. The bias that is reported
+has already been applied to the estimates (i.e. the reported estimates are "debiased")
 (Default \code{FALSE})}
 
 \item{n_bootstrap}{Number of bootstrap iterations. (Default \code{100})}
@@ -49,8 +51,8 @@ Returns a data.table with two rows. The column \code{est} contains
   the M divided by the \code{group} entropy. If \code{within} was given,
   M and H are weighted averages of the within-category segregation scores.
   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
-  the associated bootstrapped standard errors, and the column \code{est} contains
-  bootstrapped estimates.
+  the associated bootstrapped standard errors, an additional column \code{bias} contains
+  the estimated bias, and the column \code{est} contains the bias-corrected estimates.
 }
 \description{
 Returns the total segregation between \code{group} and \code{unit}.
