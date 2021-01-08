@@ -1,3 +1,5 @@
+Resubmit, fix URL 
+
 ## Test environments
 
 * local macOS 11.1, R 4.0.2

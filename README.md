@@ -21,12 +21,12 @@ Find more information in the
 -   decompose differences in total segregation over time
 -   estimate standard errors via bootstrapping
 -   every method returns a
-    [tidy](http://vita.had.co.nz/papers/tidy-data.html)
-    [data.table](http://r-datatable.com) for easy post-processing and
-    plotting
+    [tidy](https://vita.had.co.nz/papers/tidy-data.html)
+    [data.table](https://rdatatable.gitlab.io/data.table/) for easy
+    post-processing and plotting
 -   it’s fast, because it uses the
-    [`data.table`](https://github.com/Rdatatable/data.table/wiki)
-    package internally
+    [`data.table`](https://rdatatable.gitlab.io/data.table/) package
+    internally
 
 Most of the procedures implemented in this package are described in more
 detail [in this working
