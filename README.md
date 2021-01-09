@@ -19,7 +19,7 @@ Find more information in the
 
 -   calculate total, between, within, and local segregation
 -   decompose differences in total segregation over time
--   estimate standard errors via bootstrapping
+-   estimate standard errors and confidence intervals via bootstrapping
 -   every method returns a
     [tidy](https://vita.had.co.nz/papers/tidy-data.html)
     [data.table](https://rdatatable.gitlab.io/data.table/) for easy

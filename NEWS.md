@@ -1,6 +1,7 @@
 # segregation 0.4.0.9000
 
 * add CI argument for confidence intervals
+* mutual_within: report ent_ratio instead of h_weight
 
 # segregation 0.4.0
 

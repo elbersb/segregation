@@ -53,12 +53,13 @@ test_that("between + within = total", {
     within <- unstack(within, form = est ~ stat)
 
     expect_equal(m, sum(within$p * within$M))
-    expect_equal(h, sum(within$h_weight * within$H))
+    expect_equal(h, sum(within$p * within$ent_ratio * within$H))
 
     within_wide <- mutual_within(test_data, "u", "g", within = "supergroup",
                                  weight = "n", wide = T)
     expect_equal(sum(within$p * within$M), sum(within_wide$p * within_wide$M))
-    expect_equal(sum(within$h_weight * within$H), sum(within_wide$h_weight * within_wide$H))
+    expect_equal(sum(within$p * within$ent_ratio * within$H),
+                 sum(within_wide$p * within_wide$ent_ratio * within_wide$H))
 
     # H is between 0 and 1
     expect_equal(all(within$H >= 0 & within$H <= 1), TRUE)
@@ -86,18 +87,20 @@ test_that("option wide works", {
     expect_equal(nowide[stat == "M", est], wide$M)
     expect_equal(nowide[stat == "p", est], wide$p)
     expect_equal(nowide[stat == "H", est], wide$H)
-    expect_equal(nowide[stat == "h_weight", est], wide$h_weight)
+    expect_equal(nowide[stat == "ent_ratio", est], wide$ent_ratio)
 
     total <- mutual_total(test_data, "u", "g", within = "supergroup", weight = "n")
     expect_equal(total[stat == "M", est],
         sum(nowide[stat == "M", est] * nowide[stat == "p", est]))
     expect_equal(total[stat == "M", est], sum(wide$M * wide$p))
     expect_equal(total[stat == "M", est],
-        sum(wide$H * wide$h_weight * entropy(test_data, "u", "n")))
+        sum(wide$H * wide$p * wide$ent_ratio * entropy(test_data, "u", "n")))
 
     expect_equal(total[stat == "H", est],
-        sum(nowide[stat == "H", est] * nowide[stat == "h_weight", est]))
-    expect_equal(total[stat == "H", est], sum(wide$H * wide$h_weight))
+        sum(nowide[stat == "H", est] *
+            nowide[stat == "p", est] *
+            nowide[stat == "ent_ratio", est]))
+    expect_equal(total[stat == "H", est], sum(wide$H * wide$p * wide$ent_ratio))
 
     expect_equal(all(nowide_se[["se"]] > 0), TRUE)
 })
