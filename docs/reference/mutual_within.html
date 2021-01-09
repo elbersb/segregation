@@ -73,7 +73,7 @@ within each category defined by within." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">segregation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.9000</span>
       </span>
     </div>
 
@@ -81,7 +81,7 @@ within each category defined by within." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -95,7 +95,7 @@ within each category defined by within." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/elbersb/segregation/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -129,6 +129,7 @@ within each category defined by <code>within</code>.</p>
   <span class='va'>within</span>,
   weight <span class='op'>=</span> <span class='cn'>NULL</span>,
   se <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  CI <span class='op'>=</span> <span class='fl'>0.95</span>,
   n_bootstrap <span class='op'>=</span> <span class='fl'>100</span>,
   base <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>,
   wide <span class='op'>=</span> <span class='cn'>FALSE</span>
@@ -170,6 +171,13 @@ has already been applied to the estimates (i.e. the reported estimates are "debi
 (Default <code>FALSE</code>)</p></td>
     </tr>
     <tr>
+      <th>CI</th>
+      <td><p>If <code>se = TRUE</code>, compute the confidence (CI*100)<!-- % confidence interval -->
+in addition to the bootstrap standard error.
+This is based on percentiles of the bootstrap distribution, and a valid interpretation
+relies on a larger number of bootstrap iterations. (Default <code>0.95</code>)</p></td>
+    </tr>
+    <tr>
       <th>n_bootstrap</th>
       <td><p>Number of bootstrap iterations. (Default <code>100</code>)</p></td>
     </tr>
@@ -198,7 +206,8 @@ Defaults to the natural logarithm.</p></td>
   towards the total H. <code>h_weight</code> is defined as <code>p * EW/E</code>, where <code>EW</code> is the
   within-category entropy, and <code>E</code> is the overall entropy.
   If <code>se</code> is set to <code>TRUE</code>, an additional column <code>se</code> contains
-  the associated bootstrapped standard errors, an additional column <code>bias</code> contains
+  the associated bootstrapped standard errors, an additional column <code>CI</code> contains
+  the estimate confidence interval as a list column, an additional column <code>bias</code> contains
   the estimated bias, and the column <code>est</code> contains the bias-corrected estimates.
   If <code>wide</code> is set to <code>TRUE</code>, returns instead a wide dataframe, with one
   row for each <code>within</code> category, and the associated statistics in separate columns.</p>

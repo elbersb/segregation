@@ -51,6 +51,10 @@
 #'   standard errors and to apply bias correction. The bias that is reported
 #'   has already been applied to the estimates (i.e. the reported estimates are "debiased")
 #'   (Default \code{FALSE})
+#' @param CI If \code{se = TRUE}, compute the confidence (CI*100)% confidence interval
+#'   in addition to the bootstrap standard error.
+#'   This is based on percentiles of the bootstrap distribution, and a valid interpretation
+#'   relies on a larger number of bootstrap iterations. (Default \code{0.95})
 #' @param n_bootstrap Number of bootstrap iterations. (Default \code{100})
 #' @param ... Only used for additional arguments when
 #'  when \code{method} is set to \code{shapley} or \code{km}. See \link{ipf} for details.
@@ -89,7 +93,8 @@
 #'     The sum of all "total" components equals structural change.
 #'
 #'   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
-#'   the associated bootstrapped standard errors, an additional column \code{bias} contains
+#'   the associated bootstrapped standard errors, an additional column \code{CI} contains
+#'   the estimate confidence interval as a list column, an additional column \code{bias} contains
 #'   the estimated bias, and the column \code{est} contains the bias-corrected estimates.
 #' @references
 #' W. E. Deming, F. F. Stephan. 1940. "On a Least Squares Adjustment of a Sampled Frequency Table
@@ -133,7 +138,9 @@
 #' @export
 mutual_difference <- function(data1, data2, group, unit,
                               weight = NULL, method = "shapley",
-                              se = FALSE, n_bootstrap = 100, base = exp(1), ...) {
+                              se = FALSE, CI = 0.95, n_bootstrap = 100, base = exp(1), ...) {
+    stopifnot(CI > 0 & CI < 1)
+
     if (method == "shapley") {
         fun <- function(...) shapley_compute(..., detail = FALSE)
         cols <- "stat"
@@ -186,17 +193,11 @@ mutual_difference <- function(data1, data2, group, unit,
         })
 
         boot_ret <- rbindlist(boot_ret)
-        ret_boot <- boot_ret[, list(
-            mean_boot = mean(est), se = stats::sd(est)), by = cols]
-        ret <- merge(ret, ret_boot, by = cols, sort = FALSE)
-        # debias
-        ret[, bias := mean_boot - est]
-        ret[, est := est - bias]
-        ret[, mean_boot := NULL]
+        ret <- bootstrap_summary(ret, boot_ret, cols, CI)
         setattr(ret, "bootstrap", boot_ret)
     }
     close_log()
-    data.table(ret)
+    ret
 }
 
 

@@ -11,6 +11,7 @@ mutual_within(
   within,
   weight = NULL,
   se = FALSE,
+  CI = 0.95,
   n_bootstrap = 100,
   base = exp(1),
   wide = FALSE
@@ -37,6 +38,11 @@ standard errors and to apply bias correction. The bias that is reported
 has already been applied to the estimates (i.e. the reported estimates are "debiased")
 (Default \code{FALSE})}
 
+\item{CI}{If \code{se = TRUE}, compute the confidence (CI*100)% confidence interval
+in addition to the bootstrap standard error.
+This is based on percentiles of the bootstrap distribution, and a valid interpretation
+relies on a larger number of bootstrap iterations. (Default \code{0.95})}
+
 \item{n_bootstrap}{Number of bootstrap iterations. (Default \code{100})}
 
 \item{base}{Base of the logarithm that is used in the calculation.
@@ -57,7 +63,8 @@ Returns a data.table with four rows for each category defined by \code{within}.
   towards the total H. \code{h_weight} is defined as \code{p * EW/E}, where \code{EW} is the
   within-category entropy, and \code{E} is the overall entropy.
   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
-  the associated bootstrapped standard errors, an additional column \code{bias} contains
+  the associated bootstrapped standard errors, an additional column \code{CI} contains
+  the estimate confidence interval as a list column, an additional column \code{bias} contains
   the estimated bias, and the column \code{est} contains the bias-corrected estimates.
   If \code{wide} is set to \code{TRUE}, returns instead a wide dataframe, with one
   row for each \code{within} category, and the associated statistics in separate columns.

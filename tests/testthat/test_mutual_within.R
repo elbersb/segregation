@@ -11,12 +11,19 @@ test_data <- data.frame(
 
 test_that("dimensions and bootstrapping", {
     within <- mutual_within(test_data, "u", "g",
-                            within = "supergroup", weight = "n")
+        within = "supergroup", weight = "n")
     expect_equal(dim(within), c(2 * 4, 3))
 
     within_se <- mutual_within(test_data, "u", "g",
-                               within = "supergroup", weight = "n", se = TRUE)
-    expect_equal(dim(within_se), c(2 * 4, 5))
+        within = "supergroup", weight = "n", se = TRUE, n_bootstrap = 10)
+    expect_equal(dim(within_se), c(2 * 4, 6))
+})
+
+test_that("bootstrap attributes exists", {
+    within_se <- mutual_within(test_data, "u", "g",
+        within = "supergroup", weight = "n", se = TRUE, n_bootstrap = 10)
+
+    expect_equal(dim(attr(within_se, "bootstrap")), c(10 * length(unique(test_data$supergroup)) * 4, 3))
 })
 
 test_that("bootstrapping fails when sample size is non-integer", {
@@ -29,12 +36,12 @@ test_that("bootstrapping fails when sample size is non-integer", {
     )
 
     expect_error(mutual_within(test_data, "u", "g",
-            within = "supergroup", weight = "n", se = TRUE))
+            within = "supergroup", weight = "n", se = TRUE, n_bootstrap = 10))
     # rescale
     test_data$n2 <- test_data$n / sum(test_data$n) * round(sum(test_data$n))
     ret <- mutual_within(test_data, "u", "g",
-            within = "supergroup", weight = "n2", se = TRUE)
-    expect_equal(dim(ret), c(2 * 4, 5))
+            within = "supergroup", weight = "n2", se = TRUE, n_bootstrap = 10)
+    expect_equal(dim(ret), c(2 * 4, 6))
 })
 
 test_that("between + within = total", {
@@ -60,19 +67,19 @@ test_that("between + within = total", {
 
 test_that("option wide works", {
     nowide <- mutual_within(test_data, "u", "g",
-                            within = "supergroup", weight = "n")
+        within = "supergroup", weight = "n")
     nowide_se <- mutual_within(test_data, "u", "g",
-                            within = "supergroup", weight = "n", se = TRUE)
+        within = "supergroup", weight = "n", se = TRUE, n_bootstrap = 10)
     wide <- mutual_within(test_data, "u", "g",
-                            within = "supergroup", weight = "n", wide = TRUE)
+        within = "supergroup", weight = "n", wide = TRUE)
     wide_se <- mutual_within(test_data, "u", "g",
-                            within = "supergroup", weight = "n", wide = TRUE, se = TRUE)
+        within = "supergroup", weight = "n", wide = TRUE, se = TRUE, n_bootstrap = 10)
 
-    expect_equal(ncol(nowide) + 2, ncol(nowide_se))
+    expect_equal(ncol(nowide) + 3, ncol(nowide_se))
     expect_equal(nrow(nowide), 2 * 4)
     expect_equal(nrow(nowide), nrow(nowide_se))
 
-    expect_equal(ncol(wide) + 8, ncol(wide_se))
+    expect_equal(ncol(wide) + 3 * 4, ncol(wide_se))
     expect_equal(nrow(wide), 2)
     expect_equal(nrow(wide), nrow(wide_se))
 

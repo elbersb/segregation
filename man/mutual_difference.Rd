@@ -12,6 +12,7 @@ mutual_difference(
   weight = NULL,
   method = "shapley",
   se = FALSE,
+  CI = 0.95,
   n_bootstrap = 100,
   base = exp(1),
   ...
@@ -39,6 +40,11 @@ over which segregation is computed.}
 standard errors and to apply bias correction. The bias that is reported
 has already been applied to the estimates (i.e. the reported estimates are "debiased")
 (Default \code{FALSE})}
+
+\item{CI}{If \code{se = TRUE}, compute the confidence (CI*100)% confidence interval
+in addition to the bootstrap standard error.
+This is based on percentiles of the bootstrap distribution, and a valid interpretation
+relies on a larger number of bootstrap iterations. (Default \code{0.95})}
 
 \item{n_bootstrap}{Number of bootstrap iterations. (Default \code{100})}
 
@@ -82,7 +88,8 @@ Returns a data.table with columns \code{stat} and \code{est}. The data frame con
     The sum of all "total" components equals structural change.
 
   If \code{se} is set to \code{TRUE}, an additional column \code{se} contains
-  the associated bootstrapped standard errors, an additional column \code{bias} contains
+  the associated bootstrapped standard errors, an additional column \code{CI} contains
+  the estimate confidence interval as a list column, an additional column \code{bias} contains
   the estimated bias, and the column \code{est} contains the bias-corrected estimates.
 }
 \description{

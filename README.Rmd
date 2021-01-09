@@ -52,7 +52,8 @@ Standard errors in all functions can be estimated via boostrapping. This will al
 apply bias-correction to the estimates:
 
 ```{r}
-mutual_total(schools00, "race", "school", weight = "n", se = TRUE)
+mutual_total(schools00, "race", "school", weight = "n",
+             se = TRUE, CI = 0.90, n_bootstrap = 500)
 ```
 
 Decompose segregation into a between-state and a within-state term
@@ -67,12 +68,13 @@ mutual_total(schools00, "race", "school", within = "state", weight = "n")
 ```
 
 Local segregation (`ls`) is a decomposition by units (here racial groups).
+This function also support standard error and CI estimation.
 The sum of the proportion-weighted local segregation scores equals M:
 
 ```{r}
-(local <- mutual_local(schools00, group = "school", unit = "race", weight = "n",
-             se = TRUE, wide = TRUE))
-
+local <- mutual_local(schools00, group = "school", unit = "race", weight = "n",
+             se = TRUE, CI = 0.90, n_bootstrap = 500, wide = TRUE)
+local[, c("race", "ls", "p", "ls_CI")]
 sum(local$p * local$ls)
 ```
 

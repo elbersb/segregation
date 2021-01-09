@@ -75,7 +75,7 @@ Also see mutual_within for detailed within calculations." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">segregation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.9000</span>
       </span>
     </div>
 
@@ -83,7 +83,7 @@ Also see mutual_within for detailed within calculations." />
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,7 +97,7 @@ Also see mutual_within for detailed within calculations." />
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/elbersb/segregation/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -133,6 +133,7 @@ Also see <code><a href='mutual_within.html'>mutual_within</a></code> for detaile
   within <span class='op'>=</span> <span class='cn'>NULL</span>,
   weight <span class='op'>=</span> <span class='cn'>NULL</span>,
   se <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  CI <span class='op'>=</span> <span class='fl'>0.95</span>,
   n_bootstrap <span class='op'>=</span> <span class='fl'>100</span>,
   base <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
 <span class='op'>)</span></pre>
@@ -177,6 +178,13 @@ has already been applied to the estimates (i.e. the reported estimates are "debi
 (Default <code>FALSE</code>)</p></td>
     </tr>
     <tr>
+      <th>CI</th>
+      <td><p>If <code>se = TRUE</code>, compute the confidence (CI*100)<!-- % confidence interval -->
+in addition to the bootstrap standard error.
+This is based on percentiles of the bootstrap distribution, and a valid interpretation
+relies on a larger number of bootstrap iterations. (Default <code>0.95</code>)</p></td>
+    </tr>
+    <tr>
       <th>n_bootstrap</th>
       <td><p>Number of bootstrap iterations. (Default <code>100</code>)</p></td>
     </tr>
@@ -194,7 +202,8 @@ Defaults to the natural logarithm.</p></td>
   the M divided by the <code>group</code> entropy. If <code>within</code> was given,
   M and H are weighted averages of the within-category segregation scores.
   If <code>se</code> is set to <code>TRUE</code>, an additional column <code>se</code> contains
-  the associated bootstrapped standard errors, an additional column <code>bias</code> contains
+  the associated bootstrapped standard errors, an additional column <code>CI</code> contains
+  the estimate confidence interval as a list column, an additional column <code>bias</code> contains
   the estimated bias, and the column <code>est</code> contains the bias-corrected estimates.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
@@ -222,11 +231,12 @@ Defaults to the natural logarithm.</p></td>
 </div><div class='output co'>#&gt;    stat       est
 #&gt; 1:    M 0.4255390
 #&gt; 2:    H 0.4188083</div><div class='input'>
-<span class='co'># estimate standard errors for M and H</span>
-<span class='fu'>mutual_total</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span>, se <span class='op'>=</span> <span class='cn'>TRUE</span>, n_bootstrap <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>10 bootstrap iterations on 877739 observations</span></div><div class='output co'>#&gt;    stat       est           se        bias
-#&gt; 1:    M 0.4221447 0.0006424241 0.003394249
-#&gt; 2:    H 0.4154577 0.0005687971 0.003350661</div><div class='input'>
+<span class='co'># estimate standard errors and 95% CI for M and H</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='fu'>mutual_total</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span>,
+             se <span class='op'>=</span> <span class='cn'>TRUE</span>, n_bootstrap <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span>
+<span class='op'>}</span>
+
 <span class='co'># estimate segregation within school districts</span>
 <span class='fu'>mutual_total</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>,
              within <span class='op'>=</span> <span class='st'>"district"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span><span class='op'>)</span> <span class='co'># M =&gt; .087</span>

@@ -161,19 +161,22 @@ test_that("mutual_difference SE", {
     ret <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n",
                              method = "shapley", se = TRUE, n_bootstrap = 5)
     expect_equal(nrow(ret), 8)
-    expect_equal(ncol(ret), 4)
+    expect_equal(ncol(ret), 5)
     expect_equal(all(ret[est > 0, se] > 0), TRUE)
+
+    # attributes exist
+    expect_equal(dim(attr(ret, "bootstrap")), c(8 * 5, 2))
 
     ret <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n",
                              method = "km", se = TRUE, n_bootstrap = 5)
     expect_equal(nrow(ret), 9)
-    expect_equal(ncol(ret), 4)
+    expect_equal(ncol(ret), 5)
     expect_equal(all(ret[est > 0, se] > 0), TRUE)
 
     ret <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n",
                              method = "mrc", se = TRUE, n_bootstrap = 5)
     expect_equal(nrow(ret), 8)
-    expect_equal(ncol(ret), 4)
+    expect_equal(ncol(ret), 5)
     expect_equal(all(ret[est > 0, se] > 0), TRUE)
 })
 
@@ -217,7 +220,7 @@ test_that("mutual_difference shapley_detailed with SE", {
         weight = "n", method = "shapley_detailed", precision = .1, se = TRUE, n_bootstrap = 2)
 
     expect_equal(nrow(diff), 8 + length(unique(schools00$race)) * 6)
-    expect_equal(ncol(diff), 5)
+    expect_equal(ncol(diff), 6)
 })
 
 

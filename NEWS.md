@@ -1,5 +1,7 @@
 # segregation 0.4.0.9000
 
+* add CI argument for confidence intervals
+
 # segregation 0.4.0
 
 * faster bootstrap

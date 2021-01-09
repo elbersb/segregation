@@ -38,7 +38,11 @@ test_that("return works", {
 
 test_that("bootstrapping works", {
     expect_equal(nrow(localse), 8)
-    expect_equal(ncol(localse), 5)
+    expect_equal(ncol(localse), 6)
+})
+
+test_that("bootstrap attributes exists", {
+    expect_equal(dim(attr(localse, "bootstrap")), c(10 * length(unique(test_data$g)) * 2, 3))
 })
 
 test_that("bootstrapping fails when sample size is non-integer", {
@@ -57,15 +61,17 @@ test_that("bootstrapping fails when sample size is non-integer", {
 
 test_that("option wide works", {
     nowide <- mutual_local(test_data, "u", "g", weight = "n")
-    nowide_se <- mutual_local(test_data, "u", "g", weight = "n", se = TRUE)
+    nowide_se <- mutual_local(test_data, "u", "g", weight = "n",
+        se = TRUE, n_bootstrap = 10)
     wide <- mutual_local(test_data, "u", "g", weight = "n", wide = TRUE)
-    wide_se <- mutual_local(test_data, "u", "g", weight = "n", wide = TRUE, se = TRUE)
+    wide_se <- mutual_local(test_data, "u", "g", weight = "n", wide = TRUE,
+        se = TRUE, n_bootstrap = 10)
 
-    expect_equal(ncol(nowide) + 2, ncol(nowide_se))
+    expect_equal(ncol(nowide) + 3, ncol(nowide_se))
     expect_equal(nrow(nowide), 8)
     expect_equal(nrow(nowide), nrow(nowide_se))
     expect_equal(nrow(nowide), nrow(wide) * 2)
-    expect_equal(ncol(wide) + 4, ncol(wide_se))
+    expect_equal(ncol(wide) + 6, ncol(wide_se))
     expect_equal(nrow(wide), nrow(wide_se))
 
     expect_equal(nowide[stat == "ls", est], wide$ls)

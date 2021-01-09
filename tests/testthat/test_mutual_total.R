@@ -74,14 +74,19 @@ test_that("H is correct", {
 })
 
 test_that("bootstrapping works", {
-    ret <- mutual_total(test_data, "u", "g", weight = "n", se = TRUE)
-    expect_equal(dim(ret), c(2, 4))
+    ret <- mutual_total(test_data, "u", "g", weight = "n", se = TRUE, n_bootstrap = 10)
+    expect_equal(dim(ret), c(2, 5))
     expect_equal(all(ret$se > 0), TRUE)
 
-    ret <- mutual_total(test_data, "u", "g", weight = "n", se = TRUE,
+    ret <- mutual_total(test_data, "u", "g", weight = "n", se = TRUE, n_bootstrap = 10,
                         within = "supergroup")
-    expect_equal(dim(ret), c(2, 4))
+    expect_equal(dim(ret), c(2, 5))
     expect_equal(all(ret$se > 0), TRUE)
+})
+
+test_that("bootstrap attributes exists", {
+    ret <- mutual_total(test_data, "u", "g", weight = "n", se = TRUE, n_bootstrap = 10)
+    expect_equal(dim(attr(ret, "bootstrap")), c(2 * 10, 2))
 })
 
 test_that("bootstrapping fails when sample size is non-integer", {
@@ -92,11 +97,11 @@ test_that("bootstrapping fails when sample size is non-integer", {
         stringsAsFactors = FALSE
     )
 
-    expect_error(mutual_total(test_data, "u", "g", weight = "n", se = TRUE))
+    expect_error(mutual_total(test_data, "u", "g", weight = "n", se = TRUE, n_bootstrap = 10))
     # rescale
     test_data$n2 <- test_data$n / sum(test_data$n) * round(sum(test_data$n))
-    ret <- mutual_total(test_data, "u", "g", weight = "n2", se = TRUE)
-    expect_equal(dim(ret), c(2, 4))
+    ret <- mutual_total(test_data, "u", "g", weight = "n2", se = TRUE, n_bootstrap = 10)
+    expect_equal(dim(ret), c(2, 5))
     expect_equal(all(ret$se > 0), TRUE)
 })
 
@@ -108,7 +113,8 @@ test_data <- data.frame(
 )
 
 test_that("zero weights no problem", {
-    expect_equal(dim(mutual_total(test_data, "u", "g", weight = "n", se = TRUE)), c(2, 4))
+    expect_equal(dim(mutual_total(test_data, "u", "g", weight = "n",
+        se = TRUE, n_bootstrap = 10)), c(2, 5))
     expect_equal(dim(mutual_total(test_data, "u", "g", weight = "n")), c(2, 2))
     expect_equal(mutual_total(test_data, "u", "g", weight = "n")[stat == "M", est], log(2))
     expect_equal(mutual_total(test_data, "u", "g", weight = "n")[stat == "H", est], 1)

@@ -14,7 +14,7 @@ NULL
 globalVariables(c(
     "V1", "V2", "cond1", "cond2", "entropy_cond", "entropy_cond1", "entropy_cond2", "entropyw",
     "est", "freq", "freq1", "freq2", "freq_orig1", "freq_orig2",
-    "ls_diff_mean", "ls_diff1", "ls_diff2", "ls_unit", "bias", "mean_boot",
+    "ls_diff_mean", "ls_diff1", "ls_diff2", "ls_unit", "bias", "boot_est", "est_debiased",
     "n", "n_group", "n_group_target", "n_source", "n_target", "n_unit", "n_unit_target",
     "n_within_group", "p", "p_exp", "p1", "p2", "p_group", "p_group_g_unit", "p_group_g_unit1",
     "p_group_g_unit2", "p_group_s", "p_group_t", "p_unit", "p_unit1", "p_unit2", "p_unit_s",
@@ -176,4 +176,20 @@ add_local <- function(data, group, unit, base, weight = "freq") {
     # calculate local linkage, i.e. log(cond.) * log(cond./marginal)
     data[, ls_unit := sum(p_group_g_unit * logf(p_group_g_unit / p_group, base)),
            by = unit]
+}
+
+#' @import data.table
+bootstrap_summary <- function(ret, boot_ret, cols, CI) {
+    setnames(boot_ret, "est", "boot_est")
+    ret <- merge(ret, boot_ret, by = cols, sort = FALSE)
+    # create a "debiased" version of bootstrap estimates
+    ret[, est_debiased := 2 * est - boot_est, by = cols]
+    pct <- c((1 - CI) / 2, 1 - (1 - CI) / 2)
+    # estimate the "debiased" mean, standard error, CI, and quantify bias
+    ret <- ret[, list(
+        est = mean(est_debiased),
+        se = stats::sd(est_debiased),
+        CI = list(stats::quantile(est_debiased, pct)),
+        bias = first(est) - mean(est_debiased)), by = cols]
+    ret[]
 }

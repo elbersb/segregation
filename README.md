@@ -51,11 +51,12 @@ Standard errors in all functions can be estimated via boostrapping. This
 will also apply bias-correction to the estimates:
 
 ``` r
-mutual_total(schools00, "race", "school", weight = "n", se = TRUE)
-#> 100 bootstrap iterations on 877739 observations
-#>  stat   est       se    bias
-#>     M 0.422 0.000796 0.00352
-#>     H 0.415 0.000689 0.00356
+mutual_total(schools00, "race", "school", weight = "n",
+             se = TRUE, CI = 0.90, n_bootstrap = 500)
+#> 500 bootstrap iterations on 877739 observations
+#>  stat   est       se          CI    bias
+#>     M 0.422 0.000788 0.421,0.423 0.00362
+#>     H 0.415 0.000719 0.414,0.416 0.00357
 ```
 
 Decompose segregation into a between-state and a within-state term (the
@@ -76,20 +77,20 @@ mutual_total(schools00, "race", "school", within = "state", weight = "n")
 ```
 
 Local segregation (`ls`) is a decomposition by units (here racial
-groups). The sum of the proportion-weighted local segregation scores
-equals M:
+groups). This function also support standard error and CI estimation.
+The sum of the proportion-weighted local segregation scores equals M:
 
 ``` r
-(local <- mutual_local(schools00, group = "school", unit = "race", weight = "n",
-             se = TRUE, wide = TRUE))
-#> 100 bootstrap iterations on 877739 observations
-#>    race    ls    ls_se  ls_bias       p      p_se      p_bias
-#>   asian 0.591 0.005636 0.037269 0.02253 0.0001459  0.00002652
-#>   black 0.876 0.002080 0.004634 0.19019 0.0003918 -0.00004009
-#>    hisp 0.771 0.002116 0.005306 0.15165 0.0004028  0.00004914
-#>   white 0.183 0.000518 0.000607 0.62812 0.0005175 -0.00003223
-#>  native 1.350 0.016045 0.084480 0.00751 0.0000854 -0.00000334
-
+local <- mutual_local(schools00, group = "school", unit = "race", weight = "n",
+             se = TRUE, CI = 0.90, n_bootstrap = 500, wide = TRUE)
+#> 500 bootstrap iterations on 877739 observations
+local[, c("race", "ls", "p", "ls_CI")]
+#>    race    ls       p       ls_CI
+#>   asian 0.591 0.02255 0.581,0.600
+#>   black 0.876 0.19015 0.872,0.879
+#>    hisp 0.771 0.15171 0.767,0.775
+#>   white 0.183 0.62808 0.182,0.184
+#>  native 1.351 0.00751   1.32,1.38
 sum(local$p * local$ls)
 #> [1] 0.422
 ```
