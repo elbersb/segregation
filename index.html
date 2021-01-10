@@ -52,19 +52,10 @@
   </a>
 </li>
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="articles/segregation.html">Get started</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/walkthrough.html">A walkthrough of the segregation package</a>
-    </li>
-  </ul>
+  <a href="reference/index.html">Reference</a>
 </li>
 <li>
   <a href="news/index.html">Changelog</a>
@@ -94,7 +85,7 @@
 <a href="#segregation" class="anchor"></a>segregation</h1></div>
 
 <p>An R package to calculate and decompose entropy-based, multigroup segregation indices, with a focus on the Mutual Information Index (M) and Theil’s Information Index (H).</p>
-<p>Find more information in the <a href="https://elbersb.github.io/segregation/articles/walkthrough.html">vignette</a> and the <a href="https://elbersb.de/segregation">documentation</a>.</p>
+<p>Find more information in the <a href="https://elbersb.github.io/segregation/articles/segregation.html">vignette</a> and the <a href="https://elbersb.de/segregation">documentation</a>.</p>
 <ul>
 <li>calculate total, between, within, and local segregation</li>
 <li>decompose differences in total segregation over time</li>
@@ -136,7 +127,7 @@
 <span class="co">#&gt;    stat   est</span>
 <span class="co">#&gt; 1:    M 0.326</span>
 <span class="co">#&gt; 2:    H 0.321</span></code></pre></div>
-<p>Local segregation (<code>ls</code>) is a decomposition by units (here racial groups). This function also support standard error and CI estimation. The sum of the proportion-weighted local segregation scores equals M:</p>
+<p>Local segregation (<code>ls</code>) is a decomposition by units or groups (here racial groups). This function also support standard error and CI estimation. The sum of the proportion-weighted local segregation scores equals M:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">local</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mutual_local.html">mutual_local</a></span><span class="op">(</span><span class="va">schools00</span>, group <span class="op">=</span> <span class="st">"school"</span>, unit <span class="op">=</span> <span class="st">"race"</span>, weight <span class="op">=</span> <span class="st">"n"</span>,
              se <span class="op">=</span> <span class="cn">TRUE</span>, CI <span class="op">=</span> <span class="fl">0.90</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
@@ -163,7 +154,7 @@
 <span class="co">#&gt; 6: group_marginal  0.01787</span>
 <span class="co">#&gt; 7:  unit_marginal -0.01171</span>
 <span class="co">#&gt; 8:     structural -0.00349</span></code></pre></div>
-<p>Find more information in the <a href="https://elbersb.de/segregation">documentation</a>.</p>
+<p>Find more information in the <a href="https://elbersb.github.io/segregation/articles/segregation.html">vignette</a>.</p>
 </div>
 <div id="how-to-install" class="section level2">
 <h2 class="hasAnchor">
