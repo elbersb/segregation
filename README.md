@@ -1,4 +1,3 @@
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # segregation
@@ -42,9 +41,9 @@ library(segregation)
 
 # example dataset with fake data provided by the package
 mutual_total(schools00, "race", "school", weight = "n")
-#>  stat   est
-#>     M 0.426
-#>     H 0.419
+#>    stat   est
+#> 1:    M 0.426
+#> 2:    H 0.419
 ```
 
 Standard errors in all functions can be estimated via boostrapping. This
@@ -54,9 +53,9 @@ will also apply bias-correction to the estimates:
 mutual_total(schools00, "race", "school", weight = "n",
              se = TRUE, CI = 0.90, n_bootstrap = 500)
 #> 500 bootstrap iterations on 877739 observations
-#>  stat   est       se          CI    bias
-#>     M 0.422 0.000788 0.421,0.423 0.00362
-#>     H 0.415 0.000719 0.414,0.416 0.00357
+#>    stat   est       se          CI    bias
+#> 1:    M 0.422 0.000788 0.421,0.423 0.00362
+#> 2:    H 0.415 0.000719 0.414,0.416 0.00357
 ```
 
 Decompose segregation into a between-state and a within-state term (the
@@ -65,15 +64,15 @@ sum of these equals total segregation):
 ``` r
 # between states
 mutual_total(schools00, "race", "state", weight = "n")
-#>  stat    est
-#>     M 0.0992
-#>     H 0.0977
+#>    stat    est
+#> 1:    M 0.0992
+#> 2:    H 0.0977
 
 # within states
 mutual_total(schools00, "race", "school", within = "state", weight = "n")
-#>  stat   est
-#>     M 0.326
-#>     H 0.321
+#>    stat   est
+#> 1:    M 0.326
+#> 2:    H 0.321
 ```
 
 Local segregation (`ls`) is a decomposition by units (here racial
@@ -85,12 +84,12 @@ local <- mutual_local(schools00, group = "school", unit = "race", weight = "n",
              se = TRUE, CI = 0.90, n_bootstrap = 500, wide = TRUE)
 #> 500 bootstrap iterations on 877739 observations
 local[, c("race", "ls", "p", "ls_CI")]
-#>    race    ls       p       ls_CI
-#>   asian 0.591 0.02255 0.581,0.600
-#>   black 0.876 0.19015 0.872,0.879
-#>    hisp 0.771 0.15171 0.767,0.775
-#>   white 0.183 0.62808 0.182,0.184
-#>  native 1.351 0.00751   1.32,1.38
+#>      race    ls       p       ls_CI
+#> 1:  asian 0.591 0.02255 0.581,0.600
+#> 2:  black 0.876 0.19015 0.872,0.879
+#> 3:   hisp 0.771 0.15171 0.767,0.775
+#> 4:  white 0.183 0.62808 0.182,0.184
+#> 5: native 1.351 0.00751   1.32,1.38
 sum(local$p * local$ls)
 #> [1] 0.422
 ```
@@ -102,15 +101,15 @@ by Karmel and Maclachlan (1988) and Deutsch et al. (2006):
 ``` r
 mutual_difference(schools00, schools05, group = "race", unit = "school",
                   weight = "n", method = "shapley")
-#>            stat      est
-#>              M1  0.42554
-#>              M2  0.41339
-#>            diff -0.01215
-#>       additions -0.00341
-#>        removals -0.01141
-#>  group_marginal  0.01787
-#>   unit_marginal -0.01171
-#>      structural -0.00349
+#>              stat      est
+#> 1:             M1  0.42554
+#> 2:             M2  0.41339
+#> 3:           diff -0.01215
+#> 4:      additions -0.00341
+#> 5:       removals -0.01141
+#> 6: group_marginal  0.01787
+#> 7:  unit_marginal -0.01171
+#> 8:     structural -0.00349
 ```
 
 Find more information in the
