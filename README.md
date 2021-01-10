@@ -76,9 +76,10 @@ mutual_total(schools00, "race", "school", within = "state", weight = "n")
 #> 2:    H 0.321
 ```
 
-Local segregation (`ls`) is a decomposition by units (here racial
-groups). This function also support standard error and CI estimation.
-The sum of the proportion-weighted local segregation scores equals M:
+Local segregation (`ls`) is a decomposition by units or groups (here
+racial groups). This function also support standard error and CI
+estimation. The sum of the proportion-weighted local segregation scores
+equals M:
 
 ``` r
 local <- mutual_local(schools00, group = "school", unit = "race", weight = "n",
@@ -114,7 +115,7 @@ mutual_difference(schools00, schools05, group = "race", unit = "school",
 ```
 
 Find more information in the
-[documentation](https://elbersb.de/segregation).
+[vignette](https://elbersb.github.io/segregation/articles/walkthrough.html).
 
 ## How to install
 
