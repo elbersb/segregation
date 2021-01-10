@@ -14,7 +14,8 @@ segregation indices, with a focus on the Mutual Information Index (M)
 and Theil’s Information Index (H).
 
 Find more information in the
-[documentation](https://elbersb.de/segregation).
+[vignette](https://elbersb.github.io/segregation/articles/walkthrough.html)
+and the [documentation](https://elbersb.de/segregation).
 
 -   calculate total, between, within, and local segregation
 -   decompose differences in total segregation over time

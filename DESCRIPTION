@@ -22,7 +22,7 @@ Suggests:
     covr,
     knitr,
     rmarkdown
-URL: https://github.com/elbersb/segregation
+URL: https://elbersb.github.io/segregation/
 BugReports: https://github.com/elbersb/segregation/issues
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
