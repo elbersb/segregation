@@ -27,7 +27,7 @@ set.seed(69839)
 An R package to calculate and decompose entropy-based, multigroup segregation indices, with a focus
 on the Mutual Information Index (M) and Theil's Information Index (H).
 
-Find more information in the [vignette](https://elbersb.github.io/segregation/articles/walkthrough.html) and the [documentation](https://elbersb.de/segregation).
+Find more information in the [vignette](https://elbersb.github.io/segregation/articles/segregation.html) and the [documentation](https://elbersb.de/segregation).
 
 - calculate total, between, within, and local segregation
 - decompose differences in total segregation over time
@@ -87,7 +87,7 @@ mutual_difference(schools00, schools05, group = "race", unit = "school",
                   weight = "n", method = "shapley")
 ```
 
-Find more information in the [vignette](https://elbersb.github.io/segregation/articles/walkthrough.html).
+Find more information in the [vignette](https://elbersb.github.io/segregation/articles/segregation.html).
 
 ## How to install
 

@@ -11,3 +11,4 @@
 ^docs$
 ^\.lintr$
 ^\.github$
+^_pkgdown.yml$

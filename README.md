@@ -14,7 +14,7 @@ segregation indices, with a focus on the Mutual Information Index (M)
 and Theil’s Information Index (H).
 
 Find more information in the
-[vignette](https://elbersb.github.io/segregation/articles/walkthrough.html)
+[vignette](https://elbersb.github.io/segregation/articles/segregation.html)
 and the [documentation](https://elbersb.de/segregation).
 
 -   calculate total, between, within, and local segregation
@@ -115,7 +115,7 @@ mutual_difference(schools00, schools05, group = "race", unit = "school",
 ```
 
 Find more information in the
-[vignette](https://elbersb.github.io/segregation/articles/walkthrough.html).
+[vignette](https://elbersb.github.io/segregation/articles/segregation.html).
 
 ## How to install
 

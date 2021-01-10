@@ -193,3 +193,41 @@ bootstrap_summary <- function(ret, boot_ret, cols, CI) {
         bias = first(est) - mean(est_debiased)), by = cols]
     ret[]
 }
+
+#' Turns a contingency table into long format
+#'
+#' Returns a data.table in long form, such that it is suitable
+#' for use in \link{mutual_total}, etc. Colnames and rownames of
+#' the matrix will be respected.
+#'
+#' @param matrix A matrix, where the rows represent the units, and the
+#'    column represent the groups.
+#' @param group Variable name for group. (Default \code{group})
+#' @param unit Variable name for unit. (Default \code{unit})
+#' @param weight Variable name for frequency weight. (Default \code{weight})
+#' @param drop_zero Drop unit-group combinations with zero weight. (Default \code{TRUE})
+#' @return A data.table.
+#' @examples
+#' m = matrix(c(10, 20, 30, 30, 20, 10), nrow = 3)
+#' colnames(m) <- c("Black", "White")
+#' long = matrix_to_long(m, group = "race", unit = "school")
+#' mutual_total(long, "race", "school", weight = "n")
+#' @import data.table
+#' @export
+matrix_to_long <- function(matrix, group = "group", unit = "unit",
+                           weight = "n", drop_zero = TRUE) {
+    if (!is.matrix(matrix)) stop("matrix needs be a matrix object")
+    if (is.null(rownames(matrix))) rownames(matrix) <- 1:nrow(matrix)
+    if (is.null(colnames(matrix))) colnames(matrix) <- 1:ncol(matrix)
+    d <- as.data.table(matrix, keep.rownames = unit)
+    long <- melt(d, id.vars = unit,
+                 variable.name = group,
+                 variable.factor = FALSE,
+                 value.name = weight)
+    if (drop_zero == TRUE) {
+        ind <- long[[weight]] > 0
+        long[ind]
+    } else {
+        long
+    }
+}

@@ -2,6 +2,7 @@
 
 * add CI argument for confidence intervals
 * mutual_within: report ent_ratio instead of h_weight
+* matrix_to_long: convert contingency tables into long form
 * add vignette
 
 # segregation 0.4.0

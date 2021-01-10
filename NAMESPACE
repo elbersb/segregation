@@ -2,6 +2,7 @@
 
 export(entropy)
 export(ipf)
+export(matrix_to_long)
 export(mutual_difference)
 export(mutual_expected)
 export(mutual_local)
