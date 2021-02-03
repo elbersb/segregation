@@ -1,5 +1,6 @@
 # segregation 0.4.0.9000
 
+* dissimilarity: support for the index of dissimilarity
 * add CI argument for confidence intervals
 * mutual_within: report ent_ratio instead of h_weight
 * matrix_to_long: convert contingency tables into long form
