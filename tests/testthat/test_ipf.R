@@ -10,17 +10,19 @@ test_that("different precisions", {
         adj <- ipf(schools00_r, schools05_r, "race", "school", weight = "n", precision = precision)
 
         # check that the new "race" marginals are similar to the target marginals
-        new <- aggregate(adj$n, list(adj$race), sum)[, "x"]
-        old <- aggregate(schools05_r$n, list(schools05_r$race), sum)[, "x"]
-        new <- new / sum(new)
-        old <- old / sum(old)
+        new <- aggregate(adj$n, list(adj$race), sum)
+        old <- aggregate(schools05_r$n, list(schools05_r$race), sum)
+        old <- old[match(new$Group.1, old$Group.1), ]
+        new <- new$x / sum(new$x)
+        old <- old$x / sum(old$x)
         expect_true(all(abs(new - old) < precision))
 
         # check that the new "school" marginals are similar to the target marginals
-        new <- aggregate(adj$n, list(adj$school), sum)[, "x"]
-        old <- aggregate(schools05_r$n, list(schools05_r$school), sum)[, "x"]
-        new <- new / sum(new)
-        old <- old / sum(old)
+        new <- aggregate(adj$n, list(adj$school), sum)
+        old <- aggregate(schools05_r$n, list(schools05_r$school), sum)
+        old <- old[match(new$Group.1, old$Group.1), ]
+        new <- new$x / sum(new$x)
+        old <- old$x / sum(old$x)
         expect_true(all(abs(new - old) < precision))
     }
 })
