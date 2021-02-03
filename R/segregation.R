@@ -143,7 +143,11 @@ prepare_data <- function(data, group, unit, weight, within = NULL) {
 
     # use provided weight or weight of 1
     if (!is.null(weight)) {
-        data[, freq := as.double(get(weight))]
+        if (weight == "weight") {
+            data[, freq := as.double(weight)]
+        } else {
+            data[, freq := as.double(get(weight))]
+        }
     } else {
         data[, freq := 1]
     }
