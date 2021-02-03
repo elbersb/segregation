@@ -11,7 +11,8 @@ status](https://codecov.io/gh/elbersb/segregation/branch/master/graph/badge.svg)
 
 An R package to calculate and decompose entropy-based, multigroup
 segregation indices, with a focus on the Mutual Information Index (M)
-and Theil’s Information Index (H).
+and Theil’s Information Index (H). The index of Dissimilarity (D) is
+also supported.
 
 Find more information in the
 [vignette](https://elbersb.github.io/segregation/articles/segregation.html)
