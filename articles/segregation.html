@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">segregation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0.9000</span>
       </span>
     </div>
 
@@ -200,8 +200,8 @@ H(\mathbf{T})=\frac{M(\mathbf{T})}{E(\mathbf{T})},
              se <span class="op">=</span> <span class="cn">TRUE</span>, CI <span class="op">=</span> <span class="fl">.95</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span><span class="op">)</span>
 <span class="co">#&gt; 500 bootstrap iterations on 877739 observations</span>
 <span class="co">#&gt;    stat       est           se                  CI        bias</span>
-<span class="co">#&gt; 1:    M 0.4219365 0.0006977839 0.4206342,0.4233518 0.003602471</span>
-<span class="co">#&gt; 2:    H 0.4152808 0.0006828101 0.4139336,0.4165652 0.003527523</span></code></pre></div>
+<span class="co">#&gt; 1:    M 0.4219249 0.0008215082 0.4204301,0.4236512 0.003614054</span>
+<span class="co">#&gt; 2:    H 0.4152776 0.0007232846 0.4138235,0.4166678 0.003530706</span></code></pre></div>
 <p>As there a large number of observations, the standard errors are very small.</p>
 </div>
 <div id="between-within-decomposition" class="section level2">
@@ -325,17 +325,17 @@ H(\mathbf{T})=H(\mathbf{S}) + \sum_{s=1}^S \frac{E(\mathbf{T}_s)}{E(\mathbf{T})}
                     se <span class="op">=</span> <span class="cn">TRUE</span>, CI <span class="op">=</span> <span class="fl">.95</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; 500 bootstrap iterations on 877739 observations</span>
 <span class="co">#&gt;    stat       est           se                  CI        bias</span>
-<span class="co">#&gt; 1:    M 0.4219181 0.0007757262 0.4204209,0.4236163 0.003620909</span>
-<span class="co">#&gt; 2:    H 0.4152506 0.0007125006 0.4137738,0.4167469 0.003557678</span></code></pre></div>
+<span class="co">#&gt; 1:    M 0.4218982 0.0007436137 0.4202751,0.4233543 0.003640781</span>
+<span class="co">#&gt; 2:    H 0.4152451 0.0006923664 0.4139878,0.4166317 0.003563223</span></code></pre></div>
 <p>The confidence intervals are based on the percentiles from the bootstrap distribution, and hence require a large number of bootstrap iterations for valid interpretation. The estimate <code>est</code> that is reported in the results has already been “debiased”, i.e. the bias that has been estimated from the bootstrap distribution (which is reported in <code>bias</code>) has been subtracted from the usual maximum-likelihood estimate that we would obtain from <code>mutual_total</code> with <code>se = FALSE</code>. The confidence interval is centered around the debiased estimate.</p>
 <p>On balance, confidence intervals are preferred over the standard error because the bootstrap distribution can be skewed, especially when segregation is very low or very high. For this example, we can see that the standard errors provide almost identical coverage to the confidence intervals, as</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># M</span>
 <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">se</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">est</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">est</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.4203976 0.4234385</span>
+<span class="co">#&gt; [1] 0.4204407 0.4233557</span>
 <span class="co"># H</span>
 <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">se</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">est</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">est</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.4138541 0.4166471</span></code></pre></div>
+<span class="co">#&gt; [1] 0.4138881 0.4166021</span></code></pre></div>
 <p>provide effectively the same coverage as the confidence intervals obtained from the percentile bootstrap.</p>
 <p>Whenever the bootstrap is used, the bootstrap distributions for each parameter are reported in an attribute <code>bootstrap</code> of the returned object. This can be used, for instance, to check whether the bootstrap distribution is skewed. The following code computes local segregation scores for all schools, and then shows a histogram of the bootstrap distribution for school C137_9, which has a very low local segregation score:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
@@ -360,8 +360,8 @@ H(\mathbf{T})=H(\mathbf{S}) + \sum_{s=1}^S \frac{E(\mathbf{T}_s)}{E(\mathbf{T})}
 <span class="co">#&gt; 3:           diff -0.012153884</span>
 <span class="co">#&gt; 4:      additions -0.003412776</span>
 <span class="co">#&gt; 5:       removals -0.011405093</span>
-<span class="co">#&gt; 6: group_marginal  0.018550238</span>
-<span class="co">#&gt; 7:  unit_marginal -0.012391915</span>
+<span class="co">#&gt; 6: group_marginal  0.017871051</span>
+<span class="co">#&gt; 7:  unit_marginal -0.011712727</span>
 <span class="co">#&gt; 8:     structural -0.003494338</span></code></pre></div>
 <p>This method also supports inference by setting <code>se = TRUE</code>.</p>
 </div>
