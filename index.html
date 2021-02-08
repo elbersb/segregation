@@ -19,7 +19,8 @@
     and Frankel and Volij (2011) &lt;doi:10.1016/j.jet.2010.10.008&gt;,
     is a measure of segregation that is highly decomposable. The package provides
     tools to decompose the index by units and groups (local segregation),
-    and by within and between terms.
+    and by within and between terms. The package also provides a method to decompose
+    differences in segregation as described by Elbers (2021) &lt;doi:10.1177/0049124121986204&gt;
     Includes standard error estimation by bootstrapping.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -39,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">segregation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.4.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
       </span>
     </div>
 
@@ -88,12 +89,12 @@
 <p>Find more information in the <a href="https://elbersb.github.io/segregation/articles/segregation.html">vignette</a> and the <a href="https://elbersb.de/segregation">documentation</a>.</p>
 <ul>
 <li>calculate total, between, within, and local segregation</li>
-<li>decompose differences in total segregation over time</li>
+<li>decompose differences in total segregation over time (Elbers 2020)</li>
 <li>estimate standard errors and confidence intervals via bootstrapping</li>
 <li>every method returns a <a href="https://vita.had.co.nz/papers/tidy-data.html">tidy</a> <a href="https://rdatatable.gitlab.io/data.table/">data.table</a> for easy post-processing and plotting</li>
 <li>it’s fast, because it uses the <a href="https://rdatatable.gitlab.io/data.table/"><code>data.table</code></a> package internally</li>
 </ul>
-<p>Most of the procedures implemented in this package are described in more detail <a href="https://osf.io/preprints/socarxiv/ya7zs/">in this working paper</a>.</p>
+<p>Most of the procedures implemented in this package are described in more detail <a href="https://journals.sagepub.com/doi/full/10.1177/0049124121986204">in this SMR paper</a> (<a href="https://osf.io/preprints/socarxiv/ya7zs/">Preprint</a>).</p>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
@@ -179,7 +180,7 @@
 <h2 class="hasAnchor">
 <a href="#references-on-entropy-based-segregation-indices" class="anchor"></a>References on entropy-based segregation indices</h2>
 <p>Deutsch, J., Flückiger, Y. &amp; Silber, J. (2009). Analyzing Changes in Occupational Segregation: The Case of Switzerland (1970–2000), in: Yves Flückiger, Sean F. Reardon, Jacques Silber (eds.) Occupational and Residential Segregation (Research on Economic Inequality, Volume 17), 171–202.</p>
-<p>Elbers, B. (2019). A Method for Studying Difference in Segregation Levels Across Time and Space. SocArXiv Working Paper. <a href="https://osf.io/preprints/socarxiv/ya7zs/" class="uri">https://osf.io/preprints/socarxiv/ya7zs/</a></p>
+<p>Elbers, B. (2021). A Method for Studying Differences in Segregation Across Time and Space. Sociological Methods &amp; Research. <a href="https://doi.org/10.1177/0049124121986204" class="uri">https://doi.org/10.1177/0049124121986204</a></p>
 <p>Theil, H. (1971). Principles of Econometrics. New York: Wiley.</p>
 <p>Frankel, D. M., &amp; Volij, O. (2011). Measuring school segregation. Journal of Economic Theory, 146(1), 1-38. <a href="https://doi.org/10.1016/j.jet.2010.10.008" class="uri">https://doi.org/10.1016/j.jet.2010.10.008</a></p>
 <p>Mora, R., &amp; Ruiz-Castillo, J. (2009). The Invariance Properties of the Mutual Information Index of Multigroup Segregation, in: Yves Flückiger, Sean F. Reardon, Jacques Silber (eds.) Occupational and Residential Segregation (Research on Economic Inequality, Volume 17), 33-53.</p>
