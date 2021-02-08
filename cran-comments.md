@@ -1,4 +1,5 @@
-Resubmit, fix URL 
+This release is necessitated by an upcoming change in data.table that
+breaks one of the tests of this package.
 
 ## Test environments
 

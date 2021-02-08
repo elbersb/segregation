@@ -19,7 +19,7 @@ Find more information in the
 and the [documentation](https://elbersb.de/segregation).
 
 -   calculate total, between, within, and local segregation
--   decompose differences in total segregation over time
+-   decompose differences in total segregation over time (Elbers 2020)
 -   estimate standard errors and confidence intervals via bootstrapping
 -   every method returns a
     [tidy](https://vita.had.co.nz/papers/tidy-data.html)
@@ -30,8 +30,9 @@ and the [documentation](https://elbersb.de/segregation).
     internally
 
 Most of the procedures implemented in this package are described in more
-detail [in this working
-paper](https://osf.io/preprints/socarxiv/ya7zs/).
+detail [in this SMR
+paper](https://journals.sagepub.com/doi/full/10.1177/0049124121986204)
+([Preprint](https://osf.io/preprints/socarxiv/ya7zs/)).
 
 ## Usage
 
@@ -164,9 +165,9 @@ Flückiger, Sean F. Reardon, Jacques Silber (eds.) Occupational and
 Residential Segregation (Research on Economic Inequality, Volume 17),
 171–202.
 
-Elbers, B. (2019). A Method for Studying Difference in Segregation
-Levels Across Time and Space. SocArXiv Working Paper.
-<https://osf.io/preprints/socarxiv/ya7zs/>
+Elbers, B. (2021). A Method for Studying Differences in Segregation
+Across Time and Space. Sociological Methods & Research.
+<https://doi.org/10.1177/0049124121986204>
 
 Theil, H. (1971). Principles of Econometrics. New York: Wiley.
 
