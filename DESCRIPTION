@@ -1,7 +1,7 @@
 Package: segregation
 Type: Package
 Title: Entropy-Based Segregation Indices
-Version: 0.5.0
+Version: 0.5.0.9000
 Authors@R: person("Benjamin", "Elbers", email = "be2239@columbia.edu",
   role = c("aut", "cre"), comment = c(ORCID = "0000-0001-5392-3448"))
 Description: Computes entropy-based segregation indices, as developed by
@@ -12,7 +12,7 @@ Description: Computes entropy-based segregation indices, as developed by
     is a measure of segregation that is highly decomposable. The package provides
     tools to decompose the index by units and groups (local segregation),
     and by within and between terms. The package also provides a method to decompose
-    differences in segregation as described by Elbers (2021) <doi:10.1177/0049124121986204>
+    differences in segregation as described by Elbers (2021) <doi:10.1177/0049124121986204>.
     Includes standard error estimation by bootstrapping.
 License: MIT + file LICENSE
 Imports: data.table

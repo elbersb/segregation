@@ -1,3 +1,6 @@
+# segregation 0.5.0.9000
+
+
 # segregation 0.5.0
 
 * dissimilarity: support for the index of dissimilarity
