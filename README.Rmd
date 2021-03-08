@@ -103,6 +103,13 @@ To install the development version, use
 devtools::install_github("elbersb/segregation")
 ```
 
+## Citation
+
+If you use this package for your research, please cite:
+
+  Elbers, B. (2021). A Method for Studying Differences in Segregation Across Time and Space. 
+  Sociological Methods & Research. https://doi.org/10.1177/0049124121986204
+
 ## Papers using the Mutual information index
 
 (list incomplete)

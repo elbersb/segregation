@@ -1,0 +1,18 @@
+citHeader("To cite 'segregation' in publications use:")
+
+citEntry(
+  entry    = "Article",
+  title    = "A Method for Studying Differences in Segregation Across Time and Space",
+  author   = as.person("Benjamin Elbers"),
+  journal  = "Sociological Methods & Research",
+  year     = "2021",
+  volume   = "",
+  number   = "",
+  pages    = "",
+  url      = "https://journals.sagepub.com/doi/full/10.1177/0049124121986204",
+  textVersion = paste(
+    "Benjamin Elbers. 2021.",
+    "A Method for Studying Differences in Segregation Across Time and Space",
+    "Sociological Methods & Research. doi: 10.1177/0049124121986204"
+  )
+)
