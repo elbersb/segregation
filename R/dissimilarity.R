@@ -9,7 +9,7 @@ abs_diff <- function(x) {
 #' @import data.table
 dissimilarity_compute <- function(data, group, unit) {
     data[, n_group := sum(freq), by = group]
-    est <- 1/2 * data[, abs_diff(freq / n_group), by = "unit"][, sum(V1)]
+    est <- 1/2 * data[, abs_diff(freq / n_group), by = unit][, sum(V1)]
     data.table(stat = "D", est = est, stringsAsFactors = FALSE)
 }
 
