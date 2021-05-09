@@ -199,9 +199,9 @@ H(\mathbf{T})=\frac{M(\mathbf{T})}{E(\mathbf{T})},
 <code class="sourceCode R"><span class="fu"><a href="../reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>,
              se <span class="op">=</span> <span class="cn">TRUE</span>, CI <span class="op">=</span> <span class="fl">.95</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span><span class="op">)</span>
 <span class="co">#&gt; 500 bootstrap iterations on 877739 observations</span>
-<span class="co">#&gt;    stat       est           se                  CI       bias</span>
-<span class="co">#&gt; 1:    M 0.4219624 0.0007567454 0.4205137,0.4233626 0.00357661</span>
-<span class="co">#&gt; 2:    H 0.4152780 0.0006925583 0.4140263,0.4166336 0.00353031</span></code></pre></div>
+<span class="co">#&gt;    stat       est           se                  CI        bias</span>
+<span class="co">#&gt; 1:    M 0.4219083 0.0008005310 0.4202551,0.4233920 0.003630724</span>
+<span class="co">#&gt; 2:    H 0.4152339 0.0007232878 0.4137796,0.4165625 0.003574374</span></code></pre></div>
 <p>As there a large number of observations, the standard errors are very small.</p>
 </div>
 <div id="between-within-decomposition" class="section level2">
@@ -325,17 +325,17 @@ H(\mathbf{T})=H(\mathbf{S}) + \sum_{s=1}^S \frac{E(\mathbf{T}_s)}{E(\mathbf{T})}
                     se <span class="op">=</span> <span class="cn">TRUE</span>, CI <span class="op">=</span> <span class="fl">.95</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; 500 bootstrap iterations on 877739 observations</span>
 <span class="co">#&gt;    stat       est           se                  CI        bias</span>
-<span class="co">#&gt; 1:    M 0.4218581 0.0008100201 0.4202880,0.4234348 0.003680874</span>
-<span class="co">#&gt; 2:    H 0.4152018 0.0007406098 0.4137038,0.4166439 0.003606549</span></code></pre></div>
+<span class="co">#&gt; 1:    M 0.4218822 0.0008180539 0.4202410,0.4234554 0.003656825</span>
+<span class="co">#&gt; 2:    H 0.4152206 0.0007559344 0.4138141,0.4166850 0.003587707</span></code></pre></div>
 <p>The confidence intervals are based on the percentiles from the bootstrap distribution, and hence require a large number of bootstrap iterations for valid interpretation. The estimate <code>est</code> that is reported in the results has already been “debiased”, i.e. the bias that has been estimated from the bootstrap distribution (which is reported in <code>bias</code>) has been subtracted from the usual maximum-likelihood estimate that we would obtain from <code>mutual_total</code> with <code>se = FALSE</code>. The confidence interval is centered around the debiased estimate.</p>
 <p>On balance, confidence intervals are preferred over the standard error because the bootstrap distribution can be skewed, especially when segregation is very low or very high. For this example, we can see that the standard errors provide almost identical coverage to the confidence intervals, as</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># M</span>
 <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">se</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">est</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">est</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.4202705 0.4234457</span>
+<span class="co">#&gt; [1] 0.4202788 0.4234855</span>
 <span class="co"># H</span>
 <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">se</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">est</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">est</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.4137502 0.4166534</span></code></pre></div>
+<span class="co">#&gt; [1] 0.4137390 0.4167022</span></code></pre></div>
 <p>provide effectively the same coverage as the confidence intervals obtained from the percentile bootstrap.</p>
 <p>Whenever the bootstrap is used, the bootstrap distributions for each parameter are reported in an attribute <code>bootstrap</code> of the returned object. This can be used, for instance, to check whether the bootstrap distribution is skewed. The following code computes local segregation scores for all schools, and then shows a histogram of the bootstrap distribution for school C137_9, which has a very low local segregation score:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
@@ -347,12 +347,19 @@ H(\mathbf{T})=H(\mathbf{S}) + \sum_{s=1}^S \frac{E(\mathbf{T}_s)}{E(\mathbf{T})}
 <span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">ls_school</span>, main <span class="op">=</span> <span class="st">"Bootstrap distribution for school C137_9"</span><span class="op">)</span></code></pre></div>
 <p><img src="segregation_files/figure-html/unnamed-chunk-18-1.png" width="700"></p>
 <p>For this school, the bootstrap distribution is skewed. If precise inference about this specific school is needed, the standard error should not be interpreted, and the confidence interval should only be interpreted when the number of bootstrap iterations is large.</p>
+<p>If you are concerned that your contingency table is too small to provide reliable segregation estimates, the package also provides a function <code><a href="../reference/mutual_expected.html">mutual_expected()</a></code> that simulates random cell counts under independence from the marginal distributions of your table. For the <code>schools00</code> dataset:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/mutual_expected.html">mutual_expected</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span><span class="op">)</span>
+<span class="co">#&gt;         stat         est           se</span>
+<span class="co">#&gt; 1: M under 0 0.004800779 7.825319e-05</span>
+<span class="co">#&gt; 2: H under 0 0.004724846 7.701547e-05</span></code></pre></div>
+<p>Here, there is no concern about bias due to a small sample size.</p>
 </div>
 <div id="decomposing-differences-in-indices" class="section level2">
 <h2 class="hasAnchor">
 <a href="#decomposing-differences-in-indices" class="anchor"></a>Decomposing differences in indices</h2>
 <p>The command <code><a href="../reference/mutual_difference.html">mutual_difference()</a></code> can be used to decompose differences in segregation, as described in Elbers (2021). The default, and recommended method, is to use <code>method = shapley</code> (or <code>method = shapley_detailed</code>). The other methods (<code>mrc</code>, <code>km</code>) exist mostly for testing purposes, and are not recommended. Details on the procedure and how to interpret the terms of the decomposition are found in Elbers (2021).</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/mutual_difference.html">mutual_difference</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span>
 <span class="co">#&gt;              stat          est</span>
 <span class="co">#&gt; 1:             M1  0.425538976</span>
@@ -360,8 +367,8 @@ H(\mathbf{T})=H(\mathbf{S}) + \sum_{s=1}^S \frac{E(\mathbf{T}_s)}{E(\mathbf{T})}
 <span class="co">#&gt; 3:           diff -0.012153884</span>
 <span class="co">#&gt; 4:      additions -0.003412776</span>
 <span class="co">#&gt; 5:       removals -0.011405093</span>
-<span class="co">#&gt; 6: group_marginal  0.018550238</span>
-<span class="co">#&gt; 7:  unit_marginal -0.012391915</span>
+<span class="co">#&gt; 6: group_marginal  0.017865684</span>
+<span class="co">#&gt; 7:  unit_marginal -0.011707361</span>
 <span class="co">#&gt; 8:     structural -0.003494338</span></code></pre></div>
 <p>This method also supports inference by setting <code>se = TRUE</code>.</p>
 </div>
