@@ -235,6 +235,16 @@ hist(ls_school, main = "Bootstrap distribution for school C137_9")
 
 For this school, the bootstrap distribution is skewed. If precise inference about this specific school is needed, the standard error should not be interpreted, and the confidence interval should only be interpreted when the number of bootstrap iterations is large.
 
+If you are concerned that your contingency table is too small to provide reliable segregation estimates,
+the package also provides a function `mutual_expected()` that simulates random cell counts under independence
+from the marginal distributions of your table. For the `schools00` dataset:
+
+```{r}
+mutual_expected(schools00, "race", "school", weight = "n", n_bootstrap = 500)
+```
+
+Here, there is no concern about bias due to a small sample size.
+
 ## Decomposing differences in indices
 
 The command `mutual_difference()` can be used to decompose differences in segregation, as described in Elbers (2021). The default, and recommended method, is to use `method = shapley` (or `method = shapley_detailed`). The other methods (`mrc`, `km`) exist mostly for testing purposes, and are not recommended. Details on the procedure and how to interpret the terms of the decomposition are found in Elbers (2021).
@@ -246,7 +256,7 @@ This method also supports inference by setting `se = TRUE`.
 
 ## References
 
-Elbers, B. (2021). A Method for Studying Differences in Segregation Across Time and Space. 
+Elbers, B. (2021). A Method for Studying Differences in Segregation Across Time and Space.
 Sociological Methods & Research. https://doi.org/10.1177/0049124121986204
 
 Mora, R., & Ruiz-Castillo, J. (2011). Entropy-based Segregation Indices. Sociological Methodology, 41(1), 159–194. https://doi.org/10.1111/j.1467-9531.2011.01237.x
