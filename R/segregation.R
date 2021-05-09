@@ -141,6 +141,12 @@ prepare_data <- function(data, group, unit, weight, within = NULL) {
     # create a copy
     data <- as.data.table(data)
 
+    # check whether there is variation
+    n_groups <- nrow(data[, .N, by = group])
+    n_units <- nrow(data[, .N, by = unit])
+    if (n_groups == 1) stop("Cannot compute segregation: the group variable is constant")
+    if (n_units == 1) stop("Cannot compute segregation: the unit variable is constant")
+
     # use provided weight or weight of 1
     if (!is.null(weight)) {
         if (weight == "weight") {

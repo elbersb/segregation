@@ -134,6 +134,11 @@ test_that("gives errors", {
     expect_error(mutual_total(test_data, "u2", "g", weight = "n"), "u2 not in data.frame")
     expect_error(mutual_total(test_data, "u2", "g2", weight = "n"), "u2, g2 not in data.frame")
     expect_error(mutual_total(test_data, "u2", "g2", weight = "n2"), "u2, g2, n2 not in data.frame")
+
+    test_data_constant1 <- data.frame(u = c(rep("a", 4), rep("b", 4)), g = 1)
+    expect_error(mutual_total(test_data_constant1, "g", "u"), "group variable is constant")
+    test_data_constant2 <- data.frame(g = c(rep("a", 4), rep("b", 4)), u = 1)
+    expect_error(mutual_total(test_data_constant2, "g", "u"), "unit variable is constant")
 })
 
 test_that("debiasing works correctly", {
