@@ -1,5 +1,7 @@
 # segregation 0.5.0.9000
 
+* faster mutual_total(..., within)
+* some improved error messages
 
 # segregation 0.5.0
 

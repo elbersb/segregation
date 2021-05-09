@@ -20,6 +20,18 @@ mutual_total_compute <- function(data, group, unit, base) {
 #' @import data.table
 mutual_total_within_compute <- function(data, group, unit, within, base,
                                         components = FALSE) {
+
+    if (components == FALSE) {
+        total <- mutual_total_compute(data, group, unit, base)
+        within_data <- data[, list(freq = sum(freq)), by = c(group, within)]
+        between <- mutual_total_compute(within_data, group, within, base)
+        res <- data.table(stat = c("M", "H"),
+            est = c(total[[1, "est"]] - between[[1, "est"]],
+                total[[2, "est"]] - between[[2, "est"]]),
+            stringsAsFactors = FALSE)
+        return(res)
+    }
+
     # calculate totals
     n_total <- sum(data[, "freq"])
     n_within <- data[, list(n_within_group = sum(freq)), by = c(within, group)]
@@ -57,17 +69,10 @@ mutual_total_within_compute <- function(data, group, unit, within, base,
     ), by = within]
     by_within$H <- ifelse(is.finite(by_within$H), by_within$H, 0)
 
-    if (components == TRUE) {
-        melt(by_within,
-             id.vars = within, measure.vars = c("M", "p", "H", "ent_ratio"),
-             variable.name = "stat", value.name = "est",
-             variable.factor = FALSE)
-    } else {
-        # total M is the sum of weighted within-group partial M
-        M <- sum(by_within$M * by_within$p)
-        H <- sum(by_within$H * by_within$p * by_within$ent_ratio)
-        data.table(stat = c("M", "H"), est = c(M, H), stringsAsFactors = FALSE)
-    }
+    melt(by_within,
+         id.vars = within, measure.vars = c("M", "p", "H", "ent_ratio"),
+         variable.name = "stat", value.name = "est",
+         variable.factor = FALSE)
 }
 
 #' Calculate total segregation for M and H
