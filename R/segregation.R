@@ -148,11 +148,12 @@ prepare_data <- function(data, group, unit, weight, within = NULL) {
     if (n_units == 1) stop("Cannot compute segregation: the unit variable is constant")
 
     # use provided weight or weight of 1
-    if (!is.null(weight)) {
-        if (weight == "weight") {
+    weight_no_conflict <- weight
+    if (!is.null(weight_no_conflict)) {
+        if (weight_no_conflict == "weight") {
             data[, freq := as.double(weight)]
         } else {
-            data[, freq := as.double(get(weight))]
+            data[, freq := as.double(get(weight_no_conflict))]
         }
     } else {
         data[, freq := 1]
