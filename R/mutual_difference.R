@@ -142,10 +142,13 @@ mutual_difference <- function(data1, data2, group, unit,
     stopifnot(CI > 0 & CI < 1)
 
     if (method == "shapley") {
-        fun <- function(...) shapley_compute(..., detail = FALSE)
+        fun <- function(...) shapley_compute(..., detail = NULL)
         cols <- "stat"
+    } else if (method == "shapley_detailed_marginal") {
+        fun <- function(...) shapley_compute(..., detail = "marginal")
+        cols <- c("stat", unit)
     } else if (method == "shapley_detailed") {
-        fun <- function(...) shapley_compute(..., detail = TRUE)
+        fun <- function(...) shapley_compute(..., detail = "structural")
         cols <- c("stat", unit)
     } else if (method == "km") {
         fun <- function(...) km_compute(...)
@@ -254,6 +257,7 @@ shapley_compute <- function(d1, d2, group, unit, base, detail, ...) {
                              m_BBB - m_ABB + (m_BAB - m_AAB))
     unit_marginal <- .25 * (m_ABA - m_AAA + (m_BBA - m_BAA) +
                             m_BBB - m_BAB + (m_ABB - m_AAB))
+
     stopifnot(round(group_marginal + unit_marginal, 4) == round(marginal, 4))
     stopifnot(round(M2 - m_BBB + m_AAA - M1 + marginal + structural, 4) == round(M2 - M1, 4))
 
@@ -261,9 +265,30 @@ shapley_compute <- function(d1, d2, group, unit, base, detail, ...) {
              "group_marginal", "unit_marginal", "structural")
     est <- c(M1, M2, M2 - M1, M2 - m_BBB, m_AAA - M1,
              group_marginal, unit_marginal, structural)
-
     ret <- data.table(stat = stat, est = est, stringsAsFactors = FALSE)
-    if (detail == TRUE) {
+
+    if (is.null(detail)) {
+        ret
+    } else if (detail == "marginal") {
+        dfs <- list(
+            d_ABA[, list(m_ABA = first(p_unit * ls_unit)), by = unit],
+            d_AAA[, list(m_AAA = first(p_unit * ls_unit)), by = unit],
+            d_BBA[, list(m_BBA = first(p_unit * ls_unit)), by = unit],
+            d_BAA[, list(m_BAA = first(p_unit * ls_unit)), by = unit],
+            d_BBB[, list(m_BBB = first(p_unit * ls_unit)), by = unit],
+            d_BAB[, list(m_BAB = first(p_unit * ls_unit)), by = unit],
+            d_ABB[, list(m_ABB = first(p_unit * ls_unit)), by = unit],
+            d_AAB[, list(m_AAB = first(p_unit * ls_unit)), by = unit])
+        by_unit <- Reduce(merge, dfs)
+        by_unit[, est := .25 * (m_ABA - m_AAA + (m_BBA - m_BAA) +
+                   m_BBB - m_BAB + (m_ABB - m_AAB))]
+        by_unit <- by_unit[, c(unit, "est"), with = FALSE]
+        by_unit[, stat := "unit_marginal"]
+        stopifnot(all.equal(by_unit[, sum(est)], unit_marginal))
+        ret <- rbindlist(list(ret, by_unit), fill = TRUE)
+        cols <- c("stat", unit, "est")
+        ret[, cols, with = FALSE]
+    } else if (detail == "structural") {
         ls_AAB <- d_AAB[, list(ls_AAB = first(ls_unit)), by = unit]
         ls_AAA <- d_AAA[, list(p1 = first(p_unit), ls_AAA = first(ls_unit)), by = unit]
         ls_BBB <- d_BBB[, list(p2 = first(p_unit), ls_BBB = first(ls_unit)), by = unit]
@@ -278,8 +303,6 @@ shapley_compute <- function(d1, d2, group, unit, base, detail, ...) {
         ret <- rbindlist(list(ret, ls), fill = TRUE)
         cols <- c("stat", unit, "est")
         ret[, cols, with = FALSE]
-    } else {
-        ret
     }
 }
 
