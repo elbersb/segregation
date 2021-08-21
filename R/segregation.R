@@ -110,7 +110,7 @@ logf <- function(v, base) {
 entropy <- function(data, group, weight = NULL, base = exp(1)) {
     # use provided weight
     if (!is.null(weight)) {
-        data[, "freq"] <- data[, weight]
+        data[, "freq"] <- data[[weight]]
     } else {
         data[, "freq"] <- 1
     }

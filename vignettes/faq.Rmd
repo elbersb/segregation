@@ -1,0 +1,155 @@
+---
+title: "FAQ"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{FAQ}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library("dplyr")
+library("data.table")
+library("tigris")
+library("segregation")
+options(tigris_use_cache = TRUE)
+schools00 = schools00
+```
+
+## Can index X be added to the package?
+
+Adding new segregation indices is not a big trouble. Please
+[open an issue](https://github.com/elbersb/segregation/issues) on GitHub
+to request an index to be added.
+
+## How can I compute indices for different areas at once?
+
+If you use the `dplyr` package, one pattern that works well is
+to use `group_modify`. Here, we compute the pairwise Black-White
+dissimilarity index for each state separately:
+
+```{r}
+library("segregation")
+library("dplyr")
+
+schools00 %>%
+  filter(race %in% c("black", "white")) %>%
+  group_by(state) %>%
+  group_modify(~dissimilarity(data = .x,
+    group = "race",
+    unit = "school",
+    weight = "n"))
+```
+
+A similar pattern works also well with `data.table`:
+
+```{r}
+library("data.table")
+
+schools00 = as.data.table(schools00)
+schools00[
+  race %in% c("black", "white"),
+  dissimilarity(data = .SD, group = "race", unit = "school", weight = "n"),
+  by = .(state)]
+```
+
+To compute many decompositions at once, it's easiest
+to combine the data for the two time points. For instance,
+here's a `dplyr` solution to decompose the state-specific
+M indices between 2000 and 2005:
+
+```{r}
+# helper function for decomposition
+diff = function(df, group) {
+  data1 = filter(df, year == 2000)
+  data2 = filter(df, year == 2005)
+  mutual_difference(data1, data2, group = "race", unit = "school", weight = "n")
+}
+
+# add year indicators
+schools00$year = 2000
+schools05$year = 2005
+combine = bind_rows(schools00, schools05)
+
+combine %>%
+ group_by(state) %>%
+ group_modify(diff) %>%
+ head(5)
+```
+
+Again, here's also a `data.table` solution:
+
+```{r}
+setDT(combine)
+combine[, diff(.SD), by = .(state)] %>% head(5)
+```
+
+## How can I use Census data from `tidycensus` to compute segregation indices?
+
+Here are a few examples thanks to [Kyle Walker](https://twitter.com/kyle_e_walker/status/1392188844724809728), the author of the [tidycensus](https://walker-data.com/tidycensus/articles/basic-usage.html) package.
+
+First, download the data:
+
+```{r}
+library("tidycensus")
+
+cook_data = get_acs(
+  geography = "tract",
+  variables = c(
+    white = "B03002_003",
+    black = "B03002_004",
+    asian = "B03002_006",
+    hispanic = "B03002_012"),
+  state = "IL",
+  county = "Cook")
+```
+
+Because this data is in "long" format, it's easy to compute segregation indices:
+
+```{r}
+# compute index of dissimilarity
+cook_data %>%
+  filter(variable %in% c("black", "white")) %>%
+  dissimilarity(
+    group = "variable",
+    unit = "GEOID",
+    weight = "estimate")
+
+# compute multigroup M/H indices
+cook_data %>%
+  mutual_total(
+    group = "variable",
+    unit = "GEOID",
+    weight = "estimate")
+
+```
+
+Producing a map of local segregation scores is also not hard:
+
+```{r fig.width=7, fig.height=7}
+library("tigris")
+library("ggplot2")
+
+local_seg = mutual_local(cook_data,
+  group = "variable",
+  unit = "GEOID",
+  weight = "estimate",
+  wide = TRUE)
+
+# download shapefile
+seg_geom = tracts("IL", "Cook", cb = TRUE, progress_bar = FALSE) %>%
+  left_join(local_seg, by = "GEOID")
+
+ggplot(seg_geom, aes(fill = ls)) +
+  geom_sf(color = NA) +
+  coord_sf(crs = 3435) +
+  scale_fill_viridis_c() +
+  theme_void() +
+  labs(title = "Local segregation scores for Cook County, IL",
+    fill = NULL)
+```

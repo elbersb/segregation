@@ -22,7 +22,11 @@ Suggests:
     testthat,
     covr,
     knitr,
-    rmarkdown
+    rmarkdown,
+    dplyr,
+    ggplot2, 
+    tidycensus,
+    tigris
 URL: https://elbersb.github.io/segregation/
 BugReports: https://github.com/elbersb/segregation/issues
 RoxygenNote: 7.1.1

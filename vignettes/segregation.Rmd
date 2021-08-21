@@ -181,7 +181,7 @@ Local segregation scores are based on much less data than the full M index, so i
 ```{r}
 localse <- mutual_local(schools00, "race", "school", weight = "n",
                         se = TRUE, wide = TRUE, n_bootstrap = 1000)
-localse$lengthCI <- sapply(localse$ls_CI, diff)
+localse$lengthCI <- sapply(localse$ls_CI, base::diff)
 with(localse, plot(x = p, y = lengthCI, pch = 16, cex = 0.3))
 ```
 
