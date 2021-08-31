@@ -13,6 +13,10 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
+# skip this vignette on CRAN
+library("testthat")
+knitr::opts_chunk$set(eval = identical(devtools::r_env_vars()[["NOT_CRAN"]], "true"))
+
 library("dplyr")
 library("data.table")
 library("tigris")
