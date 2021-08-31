@@ -15,7 +15,8 @@ knitr::opts_chunk$set(
 
 # skip this vignette on CRAN
 library("testthat")
-knitr::opts_chunk$set(eval = identical(devtools::r_env_vars()[["NOT_CRAN"]], "true"))
+BUILD_VIGNETTE <- identical(Sys.getenv("BUILD_VIGNETTE"), "true")
+knitr::opts_chunk$set(eval = BUILD_VIGNETTE)
 
 library("dplyr")
 library("data.table")

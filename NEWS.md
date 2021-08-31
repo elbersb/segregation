@@ -1,6 +1,8 @@
-# segregation 0.5.0.9000
+# segregation 0.6.0
 
 * faster mutual_total(..., within)
+* updated docs
+* some minor bug fixes
 * some improved error messages
 
 # segregation 0.5.0

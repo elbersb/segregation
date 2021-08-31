@@ -1,11 +1,12 @@
 Package: segregation
 Type: Package
 Title: Entropy-Based Segregation Indices
-Version: 0.5.0.9000
+Version: 0.6.0
 Authors@R: person("Benjamin", "Elbers", email = "be2239@columbia.edu",
   role = c("aut", "cre"), comment = c(ORCID = "0000-0001-5392-3448"))
-Description: Computes entropy-based segregation indices, as developed by
-    Theil (1971) <isbn:978-0471858454>, with a focus on
+Description: Computes segregation indices, including the Index of Dissimilarity,
+    as well as the information-theoretic indices developed by
+    Theil (1971) <isbn:978-0471858454>, namely
     the Mutual Information Index (M) and Theil's Information Index (H).
     The M, further described by Mora and Ruiz-Castillo (2011) <doi:10.1111/j.1467-9531.2011.01237.x>
     and Frankel and Volij (2011) <doi:10.1016/j.jet.2010.10.008>,
@@ -13,7 +14,8 @@ Description: Computes entropy-based segregation indices, as developed by
     tools to decompose the index by units and groups (local segregation),
     and by within and between terms. The package also provides a method to decompose
     differences in segregation as described by Elbers (2021) <doi:10.1177/0049124121986204>.
-    Includes standard error estimation by bootstrapping.
+    The package includes standard error estimation by bootstrapping, which also corrects for
+    small sample bias.
 License: MIT + file LICENSE
 Imports: data.table
 Encoding: UTF-8

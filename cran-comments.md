@@ -1,9 +1,6 @@
-This release is necessitated by an upcoming change in data.table that
-breaks one of the tests of this package.
-
 ## Test environments
 
-* local macOS 11.1, R 4.0.2
+* local macOS 11.4, R 4.1.0
 * windows-latest (release, on Github Actions)
 * macOS-latest (release, on Github Actions)
 * ubuntu-20.04 (release, on Github Actions)
