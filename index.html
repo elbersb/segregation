@@ -12,8 +12,9 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><meta property="og:title" content="Entropy-Based Segregation Indices">
-<meta property="og:description" content="Computes entropy-based segregation indices, as developed by
-    Theil (1971) &lt;isbn:978-0471858454&gt;, with a focus on
+<meta property="og:description" content="Computes segregation indices, including the Index of Dissimilarity,
+    as well as the information-theoretic indices developed by
+    Theil (1971) &lt;isbn:978-0471858454&gt;, namely
     the Mutual Information Index (M) and Theil's Information Index (H).
     The M, further described by Mora and Ruiz-Castillo (2011) &lt;doi:10.1111/j.1467-9531.2011.01237.x&gt;
     and Frankel and Volij (2011) &lt;doi:10.1016/j.jet.2010.10.008&gt;,
@@ -21,7 +22,8 @@
     tools to decompose the index by units and groups (local segregation),
     and by within and between terms. The package also provides a method to decompose
     differences in segregation as described by Elbers (2021) &lt;doi:10.1177/0049124121986204&gt;.
-    Includes standard error estimation by bootstrapping.">
+    The package includes standard error estimation by bootstrapping, which also corrects for
+    small sample bias.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -40,7 +42,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">segregation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -102,9 +104,9 @@
 <ul>
 <li>calculate total, between, within, and local segregation</li>
 <li>decompose differences in total segregation over time (Elbers 2020)</li>
-<li>estimate standard errors and confidence intervals via bootstrapping</li>
+<li>estimate standard errors and confidence intervals via bootstrapping, which also corrects for small sample bias</li>
 <li>every method returns a <a href="https://vita.had.co.nz/papers/tidy-data.html">tidy</a> <a href="https://rdatatable.gitlab.io/data.table/">data.table</a> for easy post-processing and plotting</li>
-<li>it’s fast, because it uses the <a href="https://rdatatable.gitlab.io/data.table/"><code>data.table</code></a> package internally</li>
+<li>uses the <a href="https://rdatatable.gitlab.io/data.table/"><code>data.table</code></a> package internally, so it’s relatively fast</li>
 </ul>
 <p>Most of the procedures implemented in this package are described in more detail <a href="https://journals.sagepub.com/doi/full/10.1177/0049124121986204">in this SMR paper</a> (<a href="https://osf.io/preprints/socarxiv/ya7zs/">Preprint</a>).</p>
 <div id="usage" class="section level2">
@@ -125,8 +127,8 @@
              se <span class="op">=</span> <span class="cn">TRUE</span>, CI <span class="op">=</span> <span class="fl">0.90</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span><span class="op">)</span>
 <span class="co">#&gt; 500 bootstrap iterations on 877739 observations</span>
 <span class="co">#&gt;    stat   est       se          CI    bias</span>
-<span class="co">#&gt; 1:    M 0.422 0.000788 0.421,0.423 0.00362</span>
-<span class="co">#&gt; 2:    H 0.415 0.000719 0.414,0.416 0.00357</span></code></pre></div>
+<span class="co">#&gt; 1:    M 0.422 0.000775 0.421,0.423 0.00361</span>
+<span class="co">#&gt; 2:    H 0.415 0.000712 0.414,0.416 0.00356</span></code></pre></div>
 <p>Decompose segregation into a between-state and a within-state term (the sum of these equals total segregation):</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># between states</span>
@@ -147,14 +149,14 @@
 <span class="co">#&gt; 500 bootstrap iterations on 877739 observations</span>
 <span class="va">local</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"race"</span>, <span class="st">"ls"</span>, <span class="st">"p"</span>, <span class="st">"ls_CI"</span><span class="op">)</span><span class="op">]</span>
 <span class="co">#&gt;      race    ls       p       ls_CI</span>
-<span class="co">#&gt; 1:  asian 0.591 0.02255 0.581,0.600</span>
-<span class="co">#&gt; 2:  black 0.876 0.19015 0.872,0.879</span>
-<span class="co">#&gt; 3:   hisp 0.771 0.15171 0.767,0.775</span>
-<span class="co">#&gt; 4:  white 0.183 0.62808 0.182,0.184</span>
-<span class="co">#&gt; 5: native 1.351 0.00751   1.32,1.38</span>
+<span class="co">#&gt; 1:  asian 0.591 0.02255 0.582,0.601</span>
+<span class="co">#&gt; 2:  black 0.876 0.19017 0.873,0.879</span>
+<span class="co">#&gt; 3:   hisp 0.771 0.15167 0.767,0.775</span>
+<span class="co">#&gt; 4:  white 0.183 0.62810 0.182,0.184</span>
+<span class="co">#&gt; 5: native 1.352 0.00751   1.32,1.38</span>
 <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">local</span><span class="op">$</span><span class="va">p</span> <span class="op">*</span> <span class="va">local</span><span class="op">$</span><span class="va">ls</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0.422</span></code></pre></div>
-<p>Decompose the difference in M between 2000 and 2005, using iterative proportional fitting (IPF) and the Shapley decomposition, as suggested by Karmel and Maclachlan (1988) and Deutsch et al. (2006):</p>
+<p>Decompose the difference in M between 2000 and 2005, using iterative proportional fitting (IPF) and the Shapley decomposition (see Elbers 2021 for details):</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="reference/mutual_difference.html">mutual_difference</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>, group <span class="op">=</span> <span class="st">"race"</span>, unit <span class="op">=</span> <span class="st">"school"</span>,
                   weight <span class="op">=</span> <span class="st">"n"</span>, method <span class="op">=</span> <span class="st">"shapley"</span><span class="op">)</span>
@@ -185,25 +187,28 @@
 <p>If you use this package for your research, please cite:</p>
 <p>Elbers, B. (2021). A Method for Studying Differences in Segregation Across Time and Space. Sociological Methods &amp; Research. <a href="https://doi.org/10.1177/0049124121986204" class="uri">https://doi.org/10.1177/0049124121986204</a></p>
 </div>
-<div id="papers-using-the-mutual-information-index" class="section level2">
+<div id="some-additional-resources" class="section level2">
 <h2 class="hasAnchor">
-<a href="#papers-using-the-mutual-information-index" class="anchor"></a>Papers using the Mutual information index</h2>
-<p>(list incomplete)</p>
-<p>DiPrete, T. A., Eller, C. C., Bol, T., &amp; van de Werfhorst, H. G. (2017). School-to-Work Linkages in the United States, Germany, and France. American Journal of Sociology, 122(6), 1869-1938. <a href="https://doi.org/10.1086/691327" class="uri">https://doi.org/10.1086/691327</a></p>
-<p>Forster, A. G., &amp; Bol, T. (2017). Vocational education and employment over the life course using a new measure of occupational specificity. Social Science Research, 70, 176-197. <a href="https://doi.org/10.1016/j.ssresearch.2017.11.004" class="uri">https://doi.org/10.1016/j.ssresearch.2017.11.004</a></p>
-<p>Van Puyenbroeck, T., De Bruyne, K., &amp; Sels, L. (2012). More than ‘Mutual Information’: Educational and sectoral gender segregation and their interaction on the Flemish labor market. Labour Economics, 19(1), 1-8. <a href="https://doi.org/10.1016/j.labeco.2011.05.002" class="uri">https://doi.org/10.1016/j.labeco.2011.05.002</a></p>
-<p>Mora, R., &amp; Ruiz-Castillo, J. (2003). Additively decomposable segregation indexes. The case of gender segregation by occupations and human capital levels in Spain. The Journal of Economic Inequality, 1(2), 147-179. <a href="https://doi.org/10.1023/A:1026198429377" class="uri">https://doi.org/10.1023/A:1026198429377</a></p>
+<a href="#some-additional-resources" class="anchor"></a>Some additional resources</h2>
+<ul>
+<li>The book <em>Analyzing US Census Data: Methods, Maps, and Models in R</em> by Kyle E. Walker contains <a href="https://walker-data.com/census-r/modeling-us-census-data.html#indices-of-segregation-and-diversity">a discussion of this package</a>, and is a great resource for anyone working with spatial data, especially U.S. Census data.</li>
+<li>A paper that makes use of this package: <a href="https://elbersb.com/public/posts/segregation-increase/">Did Residential Racial Segregation in the U.S. Really Increase? An Analysis Accounting for Changes in Racial Diversity</a> (<a href="https://osf.io/mg9q4/">Code and Data</a>)</li>
+<li>Some of the analyses <a href="https://multimedia.tijd.be/diversiteit/">in this article</a> by the Belgian newspaper <em>De Tijd</em> used the package.</li>
+</ul>
 </div>
 <div id="references-on-entropy-based-segregation-indices" class="section level2">
 <h2 class="hasAnchor">
 <a href="#references-on-entropy-based-segregation-indices" class="anchor"></a>References on entropy-based segregation indices</h2>
 <p>Deutsch, J., Flückiger, Y. &amp; Silber, J. (2009). Analyzing Changes in Occupational Segregation: The Case of Switzerland (1970–2000), in: Yves Flückiger, Sean F. Reardon, Jacques Silber (eds.) Occupational and Residential Segregation (Research on Economic Inequality, Volume 17), 171–202.</p>
+<p>DiPrete, T. A., Eller, C. C., Bol, T., &amp; van de Werfhorst, H. G. (2017). School-to-Work Linkages in the United States, Germany, and France. American Journal of Sociology, 122(6), 1869-1938. <a href="https://doi.org/10.1086/691327" class="uri">https://doi.org/10.1086/691327</a></p>
 <p>Elbers, B. (2021). A Method for Studying Differences in Segregation Across Time and Space. Sociological Methods &amp; Research. <a href="https://doi.org/10.1177/0049124121986204" class="uri">https://doi.org/10.1177/0049124121986204</a></p>
+<p>Forster, A. G., &amp; Bol, T. (2017). Vocational education and employment over the life course using a new measure of occupational specificity. Social Science Research, 70, 176-197. <a href="https://doi.org/10.1016/j.ssresearch.2017.11.004" class="uri">https://doi.org/10.1016/j.ssresearch.2017.11.004</a></p>
 <p>Theil, H. (1971). Principles of Econometrics. New York: Wiley.</p>
 <p>Frankel, D. M., &amp; Volij, O. (2011). Measuring school segregation. Journal of Economic Theory, 146(1), 1-38. <a href="https://doi.org/10.1016/j.jet.2010.10.008" class="uri">https://doi.org/10.1016/j.jet.2010.10.008</a></p>
+<p>Mora, R., &amp; Ruiz-Castillo, J. (2003). Additively decomposable segregation indexes. The case of gender segregation by occupations and human capital levels in Spain. The Journal of Economic Inequality, 1(2), 147-179. <a href="https://doi.org/10.1023/A:1026198429377" class="uri">https://doi.org/10.1023/A:1026198429377</a></p>
 <p>Mora, R., &amp; Ruiz-Castillo, J. (2009). The Invariance Properties of the Mutual Information Index of Multigroup Segregation, in: Yves Flückiger, Sean F. Reardon, Jacques Silber (eds.) Occupational and Residential Segregation (Research on Economic Inequality, Volume 17), 33-53.</p>
 <p>Mora, R., &amp; Ruiz-Castillo, J. (2011). Entropy-based Segregation Indices. Sociological Methodology, 41(1), 159–194. <a href="https://doi.org/10.1111/j.1467-9531.2011.01237.x" class="uri">https://doi.org/10.1111/j.1467-9531.2011.01237.x</a></p>
-<p>Karmel, T. &amp; Maclachlan, M. (1988). Occupational Sex Segregation — Increasing or Decreasing? Economic Record 64: 187-195. <a href="https://doi.org/10.1111/j.1475-4932.1988.tb02057.x" class="uri">https://doi.org/10.1111/j.1475-4932.1988.tb02057.x</a></p>
+<p>Van Puyenbroeck, T., De Bruyne, K., &amp; Sels, L. (2012). More than ‘Mutual Information’: Educational and sectoral gender segregation and their interaction on the Flemish labor market. Labour Economics, 19(1), 1-8. <a href="https://doi.org/10.1016/j.labeco.2011.05.002" class="uri">https://doi.org/10.1016/j.labeco.2011.05.002</a></p>
 <p>Watts, M. The Use and Abuse of Entropy Based Segregation Indices. Working Paper. URL: <a href="http://www.ecineq.org/ecineq_lux15/FILESx2015/CR2/p217.pdf" class="uri">http://www.ecineq.org/ecineq_lux15/FILESx2015/CR2/p217.pdf</a></p>
 </div>
 </div>
