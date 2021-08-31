@@ -12,6 +12,7 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       CENSUS_API_KEY: ${{ secrets.CENSUS_API_KEY }}
+      BUILD_VIGNETTE: ${{ secrets.BUILD_VIGNETTE }}
     steps:
       - uses: actions/checkout@v2
 

@@ -13,8 +13,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-# skip this vignette on CRAN
-library("testthat")
+# skip this vignette on CRAN etc.
 BUILD_VIGNETTE <- identical(Sys.getenv("BUILD_VIGNETTE"), "true")
 knitr::opts_chunk$set(eval = BUILD_VIGNETTE)
 
