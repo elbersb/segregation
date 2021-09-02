@@ -1,3 +1,7 @@
+# segregation 0.6.0.9000
+
+
+
 # segregation 0.6.0
 
 * faster mutual_total(..., within)
