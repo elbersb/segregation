@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+preferred-citation:
+  type: article
+  message: "If you use {segregation} in your research, please cite the following paper."
+  authors:
+  - family-names: "Elbers"
+    given-names: "Benjamin"
+    orcid: "https://orcid.org/0000-0001-5392-3448"
+  title: "A Method for Studying Differences in Segregation Across Time and Space"
+  doi: "10.1177/0049124121986204"
+  journal: "Sociological Methods & Research"
+  year: 2021

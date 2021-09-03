@@ -12,3 +12,4 @@
 ^\.lintr$
 ^\.github$
 ^_pkgdown.yml$
+^CITATION.cff$
