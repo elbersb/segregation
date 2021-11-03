@@ -172,11 +172,11 @@ prepare_data <- function(data, group, unit, weight, within = NULL) {
 
 
 #' @import data.table
-add_local <- function(data, group, unit, base, weight = "freq") {
+add_local <- function(data, group_var, unit_var, base, weight = "freq") {
     n_total <- sum(data[, get(weight)])
     # generate unit and group totals
-    data[, n_unit := sum(get(weight)), by = unit]
-    data[, n_group := sum(get(weight)), by = group]
+    data[, n_unit := sum(get(weight)), by = unit_var]
+    data[, n_group := sum(get(weight)), by = group_var]
     # generate unit and group proportions and the
     # conditional probability of being in any group given the unit
     data[, `:=`(
@@ -186,7 +186,7 @@ add_local <- function(data, group, unit, base, weight = "freq") {
     )]
     # calculate local linkage, i.e. log(cond.) * log(cond./marginal)
     data[, ls_unit := sum(p_group_g_unit * logf(p_group_g_unit / p_group, base)),
-           by = unit]
+           by = unit_var]
 }
 
 #' @import data.table
