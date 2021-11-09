@@ -22,7 +22,7 @@ mutual_total_within_compute <- function(data, group, unit, within, base,
                                         components = FALSE) {
 
     if (components == FALSE) {
-        total <- mutual_total_compute(data, group, unit, base)
+        total <- mutual_total_compute(data, group, c(within, unit), base)
         within_data <- data[, list(freq = sum(freq)), by = c(group, within)]
         between <- mutual_total_compute(within_data, group, within, base)
         res <- data.table(stat = c("M", "H"),
