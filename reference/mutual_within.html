@@ -234,27 +234,32 @@ Defaults to the natural logarithm.</p></td>
      "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='op'>(</span><span class='va'>within</span> <span class='op'>&lt;-</span> <span class='fu'>mutual_within</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, within <span class='op'>=</span> <span class='st'>"state"</span>,
-                         weight <span class='op'>=</span> <span class='st'>"n"</span>, wide <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    state         M         p         H ent_ratio
-#&gt; 1:     A 0.4085965 0.2768819 0.4969216 0.8092501
-#&gt; 2:     B 0.2549959 0.4035425 0.2680884 0.9361190
-#&gt; 3:     C 0.3450221 0.3195756 0.3611257 0.9402955</div><div class='input'><span class='co'># the M for state "A" is .409</span>
-<span class='co'># manual calculation</span>
-<span class='va'>schools_A</span> <span class='op'>&lt;-</span> <span class='va'>schools00</span><span class='op'>[</span><span class='va'>schools00</span><span class='op'>$</span><span class='va'>state</span><span class='op'>==</span><span class='st'>"A"</span>,<span class='op'>]</span>
-<span class='fu'><a href='mutual_total.html'>mutual_total</a></span><span class='op'>(</span><span class='va'>schools_A</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span><span class='op'>)</span> <span class='co'># M =&gt; .409</span>
-</div><div class='output co'>#&gt;    stat       est
-#&gt; 1:    M 0.4085965
-#&gt; 2:    H 0.4969216</div><div class='input'>
-<span class='co'># to recover the within M and H from the output, multiply</span>
-<span class='co'># p * M and p * ent_ratio * H, respectively</span>
-<span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>within</span><span class='op'>$</span><span class='va'>p</span> <span class='op'>*</span> <span class='va'>within</span><span class='op'>$</span><span class='va'>M</span><span class='op'>)</span> <span class='co'># =&gt; .326</span>
-</div><div class='output co'>#&gt; [1] 0.3262953</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>within</span><span class='op'>$</span><span class='va'>p</span> <span class='op'>*</span> <span class='va'>within</span><span class='op'>$</span><span class='va'>ent_ratio</span> <span class='op'>*</span> <span class='va'>within</span><span class='op'>$</span><span class='va'>H</span><span class='op'>)</span> <span class='co'># =&gt; .321</span>
-</div><div class='output co'>#&gt; [1] 0.3211343</div><div class='input'><span class='co'># compare with:</span>
-<span class='fu'><a href='mutual_total.html'>mutual_total</a></span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, within <span class='op'>=</span> <span class='st'>"state"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;    stat       est
-#&gt; 1:    M 0.3262953
-#&gt; 2:    H 0.3211343</div></pre>
+    <pre class="examples"><span class='r-in'><span class='op'>(</span><span class='va'>within</span> <span class='op'>&lt;-</span> <span class='fu'>mutual_within</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, within <span class='op'>=</span> <span class='st'>"state"</span>,</span>
+<span class='r-in'>                         weight <span class='op'>=</span> <span class='st'>"n"</span>, wide <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    state         M         p         H ent_ratio</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:     A 0.4085965 0.2768819 0.4969216 0.8092501</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:     B 0.2549959 0.4035425 0.2680884 0.9361190</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:     C 0.3450221 0.3195756 0.3611257 0.9402955</span>
+<span class='r-in'><span class='co'># the M for state "A" is .409</span></span>
+<span class='r-in'><span class='co'># manual calculation</span></span>
+<span class='r-in'><span class='va'>schools_A</span> <span class='op'>&lt;-</span> <span class='va'>schools00</span><span class='op'>[</span><span class='va'>schools00</span><span class='op'>$</span><span class='va'>state</span><span class='op'>==</span><span class='st'>"A"</span>,<span class='op'>]</span></span>
+<span class='r-in'><span class='fu'><a href='mutual_total.html'>mutual_total</a></span><span class='op'>(</span><span class='va'>schools_A</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span><span class='op'>)</span> <span class='co'># M =&gt; .409</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    stat       est</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    M 0.4085965</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:    H 0.4969216</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># to recover the within M and H from the output, multiply</span></span>
+<span class='r-in'><span class='co'># p * M and p * ent_ratio * H, respectively</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>within</span><span class='op'>$</span><span class='va'>p</span> <span class='op'>*</span> <span class='va'>within</span><span class='op'>$</span><span class='va'>M</span><span class='op'>)</span> <span class='co'># =&gt; .326</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.3262953</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>within</span><span class='op'>$</span><span class='va'>p</span> <span class='op'>*</span> <span class='va'>within</span><span class='op'>$</span><span class='va'>ent_ratio</span> <span class='op'>*</span> <span class='va'>within</span><span class='op'>$</span><span class='va'>H</span><span class='op'>)</span> <span class='co'># =&gt; .321</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.3211343</span>
+<span class='r-in'><span class='co'># compare with:</span></span>
+<span class='r-in'><span class='fu'><a href='mutual_total.html'>mutual_total</a></span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, within <span class='op'>=</span> <span class='st'>"state"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    stat       est</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    M 0.3262953</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:    H 0.3211343</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

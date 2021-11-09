@@ -294,72 +294,77 @@ the change in M that is induced by these cases as
        Research on Economic Inequality 17: 171–202.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># decompose the difference in school segregation between 2000 and 2005,</span>
-<span class='co'># using the Shapley method</span>
-<span class='fu'>mutual_difference</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='va'>schools05</span>, group <span class='op'>=</span> <span class='st'>"race"</span>, unit <span class='op'>=</span> <span class='st'>"school"</span>,
-    weight <span class='op'>=</span> <span class='st'>"n"</span>, method <span class='op'>=</span> <span class='st'>"shapley"</span>, precision <span class='op'>=</span> <span class='fl'>.1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;              stat           est
-#&gt; 1:             M1  4.255390e-01
-#&gt; 2:             M2  4.133851e-01
-#&gt; 3:           diff -1.215388e-02
-#&gt; 4:      additions -3.412776e-03
-#&gt; 5:       removals -1.140509e-02
-#&gt; 6: group_marginal  1.722948e-02
-#&gt; 7:  unit_marginal -2.347844e-13
-#&gt; 8:     structural -1.456550e-02</div><div class='input'><span class='co'># =&gt; the structural component is close to zero, thus most change is in the marginals.</span>
-<span class='co'># This method gives identical results when we switch the unit and group definitions,</span>
-<span class='co'># and when we switch the data inputs.</span>
-
-<span class='co'># the Karmel-Maclachlan method is similar, but only adjust the data in the forward direction...</span>
-<span class='fu'>mutual_difference</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='va'>schools05</span>, group <span class='op'>=</span> <span class='st'>"school"</span>, unit <span class='op'>=</span> <span class='st'>"race"</span>,
-    weight <span class='op'>=</span> <span class='st'>"n"</span>, method <span class='op'>=</span> <span class='st'>"km"</span>, precision <span class='op'>=</span> <span class='fl'>.1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;              stat          est
-#&gt; 1:             M1  0.425538976
-#&gt; 2:             M2  0.413385092
-#&gt; 3:           diff -0.012153884
-#&gt; 4:      additions -0.003412776
-#&gt; 5:       removals -0.011405093
-#&gt; 6: group_marginal -0.020609129
-#&gt; 7:  unit_marginal  0.017497722
-#&gt; 8:    interaction -0.017497722
-#&gt; 9:     structural  0.023273114</div><div class='input'>
-<span class='co'># ...this means that the results won't be identical when we switch the data inputs</span>
-<span class='fu'>mutual_difference</span><span class='op'>(</span><span class='va'>schools05</span>, <span class='va'>schools00</span>, group <span class='op'>=</span> <span class='st'>"school"</span>, unit <span class='op'>=</span> <span class='st'>"race"</span>,
-    weight <span class='op'>=</span> <span class='st'>"n"</span>, method <span class='op'>=</span> <span class='st'>"km"</span>, precision <span class='op'>=</span> <span class='fl'>.1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;              stat          est
-#&gt; 1:             M1  0.413385092
-#&gt; 2:             M2  0.425538976
-#&gt; 3:           diff  0.012153884
-#&gt; 4:      additions  0.011405093
-#&gt; 5:       removals  0.003412776
-#&gt; 6: group_marginal  0.019784513
-#&gt; 7:  unit_marginal -0.016961244
-#&gt; 8:    interaction  0.016961244
-#&gt; 9:     structural -0.022448498</div><div class='input'>
-<span class='co'># the MRC method indicates a much higher structural change...</span>
-<span class='fu'>mutual_difference</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='va'>schools05</span>, group <span class='op'>=</span> <span class='st'>"race"</span>, unit <span class='op'>=</span> <span class='st'>"school"</span>,
-    weight <span class='op'>=</span> <span class='st'>"n"</span>, method <span class='op'>=</span> <span class='st'>"mrc"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;              stat          est
-#&gt; 1:             M1  0.425538976
-#&gt; 2:             M2  0.413385092
-#&gt; 3:           diff -0.012153884
-#&gt; 4:      additions -0.003412776
-#&gt; 5:       removals -0.011405093
-#&gt; 6:  unit_marginal -0.004207757
-#&gt; 7: group_marginal  0.062334448
-#&gt; 8:     structural -0.055462706</div><div class='input'>
-<span class='co'># ...and is not symmetric</span>
-<span class='fu'>mutual_difference</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='va'>schools05</span>, group <span class='op'>=</span> <span class='st'>"school"</span>, unit <span class='op'>=</span> <span class='st'>"race"</span>,
-    weight <span class='op'>=</span> <span class='st'>"n"</span>, method <span class='op'>=</span> <span class='st'>"mrc"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;              stat          est
-#&gt; 1:             M1  0.425538976
-#&gt; 2:             M2  0.413385092
-#&gt; 3:           diff -0.012153884
-#&gt; 4:      additions -0.003412776
-#&gt; 5:       removals -0.011405093
-#&gt; 6:  unit_marginal  0.017236954
-#&gt; 7: group_marginal -0.004209936
-#&gt; 8:     structural -0.010363032</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># decompose the difference in school segregation between 2000 and 2005,</span></span>
+<span class='r-in'><span class='co'># using the Shapley method</span></span>
+<span class='r-in'><span class='fu'>mutual_difference</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='va'>schools05</span>, group <span class='op'>=</span> <span class='st'>"race"</span>, unit <span class='op'>=</span> <span class='st'>"school"</span>,</span>
+<span class='r-in'>    weight <span class='op'>=</span> <span class='st'>"n"</span>, method <span class='op'>=</span> <span class='st'>"shapley"</span>, precision <span class='op'>=</span> <span class='fl'>.1</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              stat           est</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:             M1  4.255390e-01</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:             M2  4.133851e-01</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:           diff -1.215388e-02</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:      additions -3.412776e-03</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:       removals -1.140509e-02</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6: group_marginal  1.722948e-02</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7:  unit_marginal -2.347844e-13</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8:     structural -1.456550e-02</span>
+<span class='r-in'><span class='co'># =&gt; the structural component is close to zero, thus most change is in the marginals.</span></span>
+<span class='r-in'><span class='co'># This method gives identical results when we switch the unit and group definitions,</span></span>
+<span class='r-in'><span class='co'># and when we switch the data inputs.</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># the Karmel-Maclachlan method is similar, but only adjust the data in the forward direction...</span></span>
+<span class='r-in'><span class='fu'>mutual_difference</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='va'>schools05</span>, group <span class='op'>=</span> <span class='st'>"school"</span>, unit <span class='op'>=</span> <span class='st'>"race"</span>,</span>
+<span class='r-in'>    weight <span class='op'>=</span> <span class='st'>"n"</span>, method <span class='op'>=</span> <span class='st'>"km"</span>, precision <span class='op'>=</span> <span class='fl'>.1</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              stat          est</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:             M1  0.425538976</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:             M2  0.413385092</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:           diff -0.012153884</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:      additions -0.003412776</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:       removals -0.011405093</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6: group_marginal -0.020609129</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7:  unit_marginal  0.017497722</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8:    interaction -0.017497722</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9:     structural  0.023273114</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># ...this means that the results won't be identical when we switch the data inputs</span></span>
+<span class='r-in'><span class='fu'>mutual_difference</span><span class='op'>(</span><span class='va'>schools05</span>, <span class='va'>schools00</span>, group <span class='op'>=</span> <span class='st'>"school"</span>, unit <span class='op'>=</span> <span class='st'>"race"</span>,</span>
+<span class='r-in'>    weight <span class='op'>=</span> <span class='st'>"n"</span>, method <span class='op'>=</span> <span class='st'>"km"</span>, precision <span class='op'>=</span> <span class='fl'>.1</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              stat          est</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:             M1  0.413385092</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:             M2  0.425538976</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:           diff  0.012153884</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:      additions  0.011405093</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:       removals  0.003412776</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6: group_marginal  0.019784513</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7:  unit_marginal -0.016961244</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8:    interaction  0.016961244</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9:     structural -0.022448498</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># the MRC method indicates a much higher structural change...</span></span>
+<span class='r-in'><span class='fu'>mutual_difference</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='va'>schools05</span>, group <span class='op'>=</span> <span class='st'>"race"</span>, unit <span class='op'>=</span> <span class='st'>"school"</span>,</span>
+<span class='r-in'>    weight <span class='op'>=</span> <span class='st'>"n"</span>, method <span class='op'>=</span> <span class='st'>"mrc"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              stat          est</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:             M1  0.425538976</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:             M2  0.413385092</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:           diff -0.012153884</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:      additions -0.003412776</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:       removals -0.011405093</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6:  unit_marginal -0.004207757</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7: group_marginal  0.062334448</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8:     structural -0.055462706</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># ...and is not symmetric</span></span>
+<span class='r-in'><span class='fu'>mutual_difference</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='va'>schools05</span>, group <span class='op'>=</span> <span class='st'>"school"</span>, unit <span class='op'>=</span> <span class='st'>"race"</span>,</span>
+<span class='r-in'>    weight <span class='op'>=</span> <span class='st'>"n"</span>, method <span class='op'>=</span> <span class='st'>"mrc"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              stat          est</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:             M1  0.425538976</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:             M2  0.413385092</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:           diff -0.012153884</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:      additions -0.003412776</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:       removals -0.011405093</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6:  unit_marginal  0.017236954</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7: group_marginal -0.004209936</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8:     structural -0.010363032</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

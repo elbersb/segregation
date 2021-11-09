@@ -227,45 +227,50 @@ Defaults to the natural logarithm.</p></td>
      "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># calculate school racial segregation</span>
-<span class='fu'>mutual_total</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"school"</span>, <span class='st'>"race"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span><span class='op'>)</span> <span class='co'># M =&gt; .425</span>
-</div><div class='output co'>#&gt;    stat        est
-#&gt; 1:    M 0.42553898
-#&gt; 2:    H 0.05642991</div><div class='input'>
-<span class='co'># note that the definition of groups and units is arbitrary</span>
-<span class='fu'>mutual_total</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span><span class='op'>)</span> <span class='co'># M =&gt; .425</span>
-</div><div class='output co'>#&gt;    stat       est
-#&gt; 1:    M 0.4255390
-#&gt; 2:    H 0.4188083</div><div class='input'>
-<span class='co'># if groups or units are defined by a combination of variables,</span>
-<span class='co'># vectors of variable names can be provided -</span>
-<span class='co'># here there is no difference, because schools</span>
-<span class='co'># are nested within districts</span>
-<span class='fu'>mutual_total</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"race"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"district"</span>, <span class='st'>"school"</span><span class='op'>)</span>,
-             weight <span class='op'>=</span> <span class='st'>"n"</span><span class='op'>)</span> <span class='co'># M =&gt; .424</span>
-</div><div class='output co'>#&gt;    stat       est
-#&gt; 1:    M 0.4255390
-#&gt; 2:    H 0.4188083</div><div class='input'>
-<span class='co'># estimate standard errors and 95% CI for M and H</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='fu'>mutual_total</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span>,
-             se <span class='op'>=</span> <span class='cn'>TRUE</span>, n_bootstrap <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='co'># estimate segregation within school districts</span>
-<span class='fu'>mutual_total</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>,
-             within <span class='op'>=</span> <span class='st'>"district"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span><span class='op'>)</span> <span class='co'># M =&gt; .087</span>
-</div><div class='output co'>#&gt;    stat        est
-#&gt; 1:    M 0.08758648
-#&gt; 2:    H 0.08620114</div><div class='input'>
-<span class='co'># estimate between-district racial segregation</span>
-<span class='fu'>mutual_total</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"district"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span><span class='op'>)</span> <span class='co'># M =&gt; .338</span>
-</div><div class='output co'>#&gt;    stat       est
-#&gt; 1:    M 0.3379525
-#&gt; 2:    H 0.3326072</div><div class='input'><span class='co'># note that the sum of within-district and between-district</span>
-<span class='co'># segregation equals total school-race segregation;</span>
-<span class='co'># here, most segregation is between school districts</span>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># calculate school racial segregation</span></span>
+<span class='r-in'><span class='fu'>mutual_total</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"school"</span>, <span class='st'>"race"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span><span class='op'>)</span> <span class='co'># M =&gt; .425</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    stat        est</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    M 0.42553898</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:    H 0.05642991</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># note that the definition of groups and units is arbitrary</span></span>
+<span class='r-in'><span class='fu'>mutual_total</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span><span class='op'>)</span> <span class='co'># M =&gt; .425</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    stat       est</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    M 0.4255390</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:    H 0.4188083</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># if groups or units are defined by a combination of variables,</span></span>
+<span class='r-in'><span class='co'># vectors of variable names can be provided -</span></span>
+<span class='r-in'><span class='co'># here there is no difference, because schools</span></span>
+<span class='r-in'><span class='co'># are nested within districts</span></span>
+<span class='r-in'><span class='fu'>mutual_total</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"race"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"district"</span>, <span class='st'>"school"</span><span class='op'>)</span>,</span>
+<span class='r-in'>             weight <span class='op'>=</span> <span class='st'>"n"</span><span class='op'>)</span> <span class='co'># M =&gt; .424</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    stat       est</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    M 0.4255390</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:    H 0.4188083</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># estimate standard errors and 95% CI for M and H</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='fu'>mutual_total</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span>,</span>
+<span class='r-in'>             se <span class='op'>=</span> <span class='cn'>TRUE</span>, n_bootstrap <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># estimate segregation within school districts</span></span>
+<span class='r-in'><span class='fu'>mutual_total</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"school"</span>,</span>
+<span class='r-in'>             within <span class='op'>=</span> <span class='st'>"district"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span><span class='op'>)</span> <span class='co'># M =&gt; .087</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    stat        est</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    M 0.08758648</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:    H 0.08620114</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># estimate between-district racial segregation</span></span>
+<span class='r-in'><span class='fu'>mutual_total</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"race"</span>, <span class='st'>"district"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span><span class='op'>)</span> <span class='co'># M =&gt; .338</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    stat       est</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    M 0.3379525</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:    H 0.3326072</span>
+<span class='r-in'><span class='co'># note that the sum of within-district and between-district</span></span>
+<span class='r-in'><span class='co'># segregation equals total school-race segregation;</span></span>
+<span class='r-in'><span class='co'># here, most segregation is between school districts</span></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

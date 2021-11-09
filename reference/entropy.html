@@ -167,14 +167,16 @@ calculation. Defaults to the natural logarithm.</p></td>
     <p>A single number, the entropy.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>cat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span><span class='op'>)</span>, n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>25</span>, <span class='fl'>75</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>entropy</span><span class='op'>(</span><span class='va'>d</span>, <span class='st'>"cat"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span><span class='op'>)</span> <span class='co'># =&gt; .56</span>
-</div><div class='output co'>#&gt; [1] 0.5623351</div><div class='input'><span class='co'># this is equivalent to -.25*log(.25)-.75*log(.75)</span>
-
-<span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>cat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span><span class='op'>)</span>, n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>50</span>, <span class='fl'>50</span><span class='op'>)</span><span class='op'>)</span>
-<span class='co'># use base 2 for the logarithm, then entropy is maximized at 1</span>
-<span class='fu'>entropy</span><span class='op'>(</span><span class='va'>d</span>, <span class='st'>"cat"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span>, base <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span> <span class='co'># =&gt; 1</span>
-</div><div class='output co'>#&gt; [1] 1</div></pre>
+    <pre class="examples"><span class='r-in'><span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>cat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span><span class='op'>)</span>, n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>25</span>, <span class='fl'>75</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>entropy</span><span class='op'>(</span><span class='va'>d</span>, <span class='st'>"cat"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span><span class='op'>)</span> <span class='co'># =&gt; .56</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.5623351</span>
+<span class='r-in'><span class='co'># this is equivalent to -.25*log(.25)-.75*log(.75)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>d</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>cat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span><span class='op'>)</span>, n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>50</span>, <span class='fl'>50</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># use base 2 for the logarithm, then entropy is maximized at 1</span></span>
+<span class='r-in'><span class='fu'>entropy</span><span class='op'>(</span><span class='va'>d</span>, <span class='st'>"cat"</span>, weight <span class='op'>=</span> <span class='st'>"n"</span>, base <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span> <span class='co'># =&gt; 1</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 1</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
