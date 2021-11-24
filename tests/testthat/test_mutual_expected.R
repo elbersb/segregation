@@ -44,3 +44,35 @@ test_that("within argument", {
     expect_equal(compare$est, compare$est_manual, tolerance = 0.01)
 })
 
+
+test_that("dissimilarity", {
+    expect_error(dissimilarity_expected(data1, "u", "g", weight = "n"))
+    expect_equal(dissimilarity_expected(data1, "g", "u", n_bootstrap = 500, weight = "n")$est,
+                 0.098, tolerance = 0.1)
+    expect_equal(dissimilarity_expected(data1, "g", "u", n_bootstrap = 500, weight = "n",
+                                        fixed_margins = FALSE)$est,
+                 0.1003, tolerance = 0.1)
+})
+
+test_that("dissimilarity - Winship 1977", {
+    # see table 2
+    mat <- matrix(c(rep(1, 1000), rep(9, 1000)), ncol = 2)
+    d <- matrix_to_long(mat)
+    expect_equal(
+        dissimilarity_expected(d, "group", "unit", weight = "n")$est,
+        0.387, tolerance = 0.1)
+
+    mat <- matrix(c(rep(5, 1000), rep(5, 1000)), ncol = 2)
+    d <- matrix_to_long(mat)
+    expect_equal(
+        dissimilarity_expected(d, "group", "unit", weight = "n")$est,
+        0.246, tolerance = 0.1)
+
+    mat <- matrix(c(rep(10, 1000), rep(90, 1000)), ncol = 2)
+    d <- matrix_to_long(mat)
+    expect_equal(
+        dissimilarity_expected(d, "group", "unit", weight = "n")$est,
+        0.131, tolerance = 0.1)
+})
+
+
