@@ -150,6 +150,7 @@ the interpretation of index scores might have to be adjusted.</p>
   <span class='va'>group</span>,
   <span class='va'>unit</span>,
   weight <span class='op'>=</span> <span class='cn'>NULL</span>,
+  within <span class='op'>=</span> <span class='cn'>NULL</span>,
   fixed_margins <span class='op'>=</span> <span class='cn'>TRUE</span>,
   n_bootstrap <span class='op'>=</span> <span class='fl'>100</span>,
   base <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
@@ -177,6 +178,11 @@ over which segregation is computed.</p></td>
     <tr>
       <th>weight</th>
       <td><p>Numeric. (Default <code>NULL</code>)</p></td>
+    </tr>
+    <tr>
+      <th>within</th>
+      <td><p>Apply algorithm within each group defined by this variable,
+and report the weighted average. (Default <code>NULL</code>)</p></td>
     </tr>
     <tr>
       <th>fixed_margins</th>

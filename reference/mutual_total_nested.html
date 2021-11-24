@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • segregation</title>
+<title>Calculate a nested decomposition of segregation for M and H — mutual_total_nested • segregation</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,9 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Calculate a nested decomposition of segregation for M and H — mutual_total_nested" />
+<meta property="og:description" content="Returns the between-within decomposition defined by
+the sequence of variables in unit." />
 
 
 
@@ -58,7 +60,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -125,108 +127,75 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1 data-toc-skip>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/elbersb/segregation/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+    <h1>Calculate a nested decomposition of segregation for M and H</h1>
+    <small class="dont-index">Source: <a href='https://github.com/elbersb/segregation/blob/master/R/mutual.R'><code>R/mutual.R</code></a></small>
+    <div class="hidden name"><code>mutual_total_nested.Rd</code></div>
     </div>
 
-    <div id="segregation-0609000" class="section level1">
-<h1 class="page-header" data-toc-text="0.6.0.9000">
-<a href="#segregation-0609000" class="anchor"></a>segregation 0.6.0.9000<small> Unreleased </small>
-</h1>
-<ul>
-<li>add mutual_total_nested</li>
-<li>add within argument to mutual_expected</li>
-</ul>
-</div>
-    <div id="segregation-060" class="section level1">
-<h1 class="page-header" data-toc-text="0.6.0">
-<a href="#segregation-060" class="anchor"></a>segregation 0.6.0<small> 2021-09-02 </small>
-</h1>
-<ul>
-<li>faster mutual_total(…, within)</li>
-<li>updated docs</li>
-<li>some minor bug fixes</li>
-<li>some improved error messages</li>
-</ul>
-</div>
-    <div id="segregation-050" class="section level1">
-<h1 class="page-header" data-toc-text="0.5.0">
-<a href="#segregation-050" class="anchor"></a>segregation 0.5.0<small> 2021-02-08 </small>
-</h1>
-<ul>
-<li>dissimilarity: support for the index of dissimilarity</li>
-<li>add CI argument for confidence intervals</li>
-<li>mutual_within: report ent_ratio instead of h_weight</li>
-<li>matrix_to_long: convert contingency tables into long form</li>
-<li>add introductory vignette</li>
-</ul>
-</div>
-    <div id="segregation-040" class="section level1">
-<h1 class="page-header" data-toc-text="0.4.0">
-<a href="#segregation-040" class="anchor"></a>segregation 0.4.0<small> 2021-01-08 </small>
-</h1>
-<ul>
-<li>faster bootstrap</li>
-<li>return bootstrap estimates as attr</li>
-<li>add mutual_expected</li>
-<li>apply bias-correction via bootstrap by default when se=TRUE</li>
-</ul>
-</div>
-    <div id="segregation-030" class="section level1">
-<h1 class="page-header" data-toc-text="0.3.0">
-<a href="#segregation-030" class="anchor"></a>segregation 0.3.0<small> 2019-09-20 </small>
-</h1>
-<ul>
-<li>always return data.table</li>
-<li>for ipf function, warn when groups/units are dropped</li>
-<li>return sample size of source dataset for IPF</li>
-<li>don’t allow bootstrap when sample size is not an integer, but allow non-integer sample weights (which are unproblematic)</li>
-<li>simplify precision parameter for ipf procedure</li>
-<li>increase default bootstrap to 100</li>
-<li>fix data.table issue (<a href='https://github.com/elbersb/segregation/issues/3'>#3</a>)</li>
-</ul>
-</div>
-    <div id="segregation-020" class="section level1">
-<h1 class="page-header" data-toc-text="0.2.0">
-<a href="#segregation-020" class="anchor"></a>segregation 0.2.0<small> 2019-01-14 </small>
-</h1>
-<ul>
-<li>add “shapley” decomposition method, revisit other difference decomposition methods</li>
-<li>better logging of bootstrap/IPF</li>
-<li>several small fixes</li>
-<li>add lintr package</li>
-<li>add warning when attempting bootstrap with non-integer weights</li>
-</ul>
-</div>
-    <div id="segregation-010" class="section level1">
-<h1 class="page-header" data-toc-text="0.1.0">
-<a href="#segregation-010" class="anchor"></a>segregation 0.1.0<small> 2018-06-15 </small>
-</h1>
-<ul>
-<li>switch group and unit definitions, to be consistent with the literature</li>
-<li>add Theil’s Information Index (H)</li>
-<li>add entropy function</li>
-<li>add mutual_within function to decompose weighted within indices</li>
-<li>add “wide” option to mutual_local and mutual_within</li>
-<li>add “ipf” (iterative proportional fitting) function and a difference decomposition based on IPF</li>
-<li>“mrc_adjusted” difference decomposition is defined only on overlap sample of units and groups</li>
-<li>internal refactoring</li>
-</ul>
-</div>
-    <div id="segregation-001" class="section level1">
-<h1 class="page-header" data-toc-text="0.0.1">
-<a href="#segregation-001" class="anchor"></a>segregation 0.0.1<small> 2018-04-17 </small>
-</h1>
-<p>Initial release.</p>
-</div>
-  </div>
+    <div class="ref-description">
+    <p>Returns the between-within decomposition defined by
+the sequence of variables in <code>unit</code>.</p>
+    </div>
 
+    <pre class="usage"><span class='fu'>mutual_total_nested</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>group</span>, <span class='va'>unit</span>, weight <span class='op'>=</span> <span class='cn'>NULL</span>, base <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>exp</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>data</th>
+      <td><p>A data frame.</p></td>
+    </tr>
+    <tr>
+      <th>group</th>
+      <td><p>A categorical variable or a vector of variables
+contained in <code>data</code>. Defines the first dimension
+over which segregation is computed.</p></td>
+    </tr>
+    <tr>
+      <th>unit</th>
+      <td><p>A vector of variables
+contained in <code>data</code>. Defines the levels at which
+the decomposition should be computed.</p></td>
+    </tr>
+    <tr>
+      <th>weight</th>
+      <td><p>Numeric. (Default <code>NULL</code>)</p></td>
+    </tr>
+    <tr>
+      <th>base</th>
+      <td><p>Base of the logarithm that is used in the calculation.
+Defaults to the natural logarithm.</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>Returns a data.table similar to <code><a href='mutual_total.html'>mutual_total</a></code>,
+  but with column <code>between</code> and <code>within</code> that define
+  the levels of nesting.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><span class='r-in'><span class='fu'>mutual_total_nested</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='st'>"race"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"state"</span>, <span class='st'>"district"</span>, <span class='st'>"school"</span><span class='op'>)</span>,</span>
+<span class='r-in'>                    weight <span class='op'>=</span> <span class='st'>"n"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     between          within stat        est</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:    state                    M 0.09924370</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:    state                    H 0.09767398</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3: district           state    M 0.23870880</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4: district           state    H 0.23493319</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:   school state, district    M 0.08758648</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6:   school state, district    H 0.08620114</span>
+<span class='r-in'><span class='co'># This is a simpler way to run the following manually:</span></span>
+<span class='r-in'><span class='co'># mutual_total(schools00, "race", "state", weight = "n")</span></span>
+<span class='r-in'><span class='co'># mutual_total(schools00, "race", "district", within = "state", weight = "n")</span></span>
+<span class='r-in'><span class='co'># mutual_total(schools00, "race", "school", within = c("state", "district"), weight = "n")</span></span>
+</pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
-
 </div>
 
 
