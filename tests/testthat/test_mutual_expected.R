@@ -31,3 +31,16 @@ test_that("fixed margins = FALSE", {
         mutual_expected(data1, "g", "u", weight = "n", fixed_margins = FALSE)[stat == "M under 0", est],
         tolerance = 0.01)
 })
+
+test_that("within argument", {
+    within <- mutual_expected(school_ses, "ethnic_group", "school_id", within = "ses_quintile")
+    # manually
+    d <- data.table::as.data.table(school_ses)
+    manually <- d[, mutual_expected(.SD, "ethnic_group", "school_id"), by = .(ses_quintile)]
+    p <- d[, .(p = .N), by = .(ses_quintile)][, .(ses_quintile, p = p / sum(p))]
+    manually <- merge(manually, p)
+    manually <- manually[, .(est_manual = sum(est * p)), by = .(stat)]
+    compare <- merge(within, manually)
+    expect_equal(compare$est, compare$est_manual, tolerance = 0.01)
+})
+

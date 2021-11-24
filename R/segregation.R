@@ -18,7 +18,8 @@ globalVariables(c(
     "n", "n_group", "n_group_target", "n_source", "n_target", "n_unit", "n_unit_target",
     "n_within_group", "p", "p_exp", "p1", "p2", "p_group", "p_group_g_unit", "p_group_g_unit1",
     "p_group_g_unit2", "p_group_s", "p_group_t", "p_unit", "p_unit1", "p_unit2", "p_unit_s",
-    "p_unit_t", "p_within", "sumcond1", "sumcond2", "total", "unit1", "unit2"))
+    "p_unit_t", "p_within", "sumcond1", "sumcond2", "total", "unit1", "unit2",
+    ".", "..base", "..fixed_margins", "..group", "..n_bootstrap", "..unit", "se", "stat"))
 
 # log
 

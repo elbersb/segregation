@@ -439,3 +439,55 @@ mutual_local <- function(data, group, unit, weight = NULL,
 
     ret
 }
+
+
+#' Calculate a nested decomposition of segregation for M and H
+#'
+#' Returns the between-within decomposition defined by
+#' the sequence of variables in \code{unit}.
+#'
+#' @param data A data frame.
+#' @param group A categorical variable or a vector of variables
+#'   contained in \code{data}. Defines the first dimension
+#'   over which segregation is computed.
+#' @param unit A vector of variables
+#'   contained in \code{data}. Defines the levels at which
+#'   the decomposition should be computed.
+#' @param weight Numeric. (Default \code{NULL})
+#' @param base Base of the logarithm that is used in the calculation.
+#'   Defaults to the natural logarithm.
+#' @return Returns a data.table similar to \code{\link{mutual_total}},
+#'   but with column \code{between} and \code{within} that define
+#'   the levels of nesting.
+#' @examples
+#' mutual_total_nested(schools00, "race", c("state", "district", "school"),
+#'                     weight = "n")
+#' # This is a simpler way to run the following manually:
+#' # mutual_total(schools00, "race", "state", weight = "n")
+#' # mutual_total(schools00, "race", "district", within = "state", weight = "n")
+#' # mutual_total(schools00, "race", "school", within = c("state", "district"), weight = "n")
+#' @import data.table
+#' @export
+mutual_total_nested <- function(data, group, unit, weight = NULL, base = exp(1)) {
+    stopifnot(length(unit) >= 2)
+    d <- prepare_data(data, group, unit, weight)
+
+    decomp <- list()
+    for (u in seq_along(unit)) {
+        if (u == 1) {
+            collapsed <- d[, .(freq = sum(freq)), by = c(group, unit[1])]
+            seg <- mutual_total_compute(collapsed, group, unit[1], base)
+            seg[, between := unit[1]]
+            seg[, within := ""]
+        } else {
+            within <- unit[1:(u - 1)]
+            collapsed <- d[, .(freq = sum(freq)), by = c(group, within, unit[u])]
+            seg <- mutual_total_within_compute(collapsed, group, unit[u], within, base)
+            seg[, between := unit[u]]
+            seg[, within := paste0(within, collapse = ", ")]
+        }
+        decomp[[u]] <- seg
+    }
+    res <- data.table::rbindlist(decomp)
+    res[, .(between, within, stat, est)]
+}
