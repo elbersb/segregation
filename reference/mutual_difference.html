@@ -298,15 +298,15 @@ the change in M that is induced by these cases as
 <span class='r-in'><span class='co'># using the Shapley method</span></span>
 <span class='r-in'><span class='fu'>mutual_difference</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='va'>schools05</span>, group <span class='op'>=</span> <span class='st'>"race"</span>, unit <span class='op'>=</span> <span class='st'>"school"</span>,</span>
 <span class='r-in'>    weight <span class='op'>=</span> <span class='st'>"n"</span>, method <span class='op'>=</span> <span class='st'>"shapley"</span>, precision <span class='op'>=</span> <span class='fl'>.1</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>              stat           est</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:             M1  4.255390e-01</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:             M2  4.133851e-01</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:           diff -1.215388e-02</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:      additions -3.412776e-03</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:       removals -1.140509e-02</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 6: group_marginal  1.722948e-02</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 7:  unit_marginal -2.347844e-13</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 8:     structural -1.456550e-02</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>              stat          est</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1:             M1  0.425538976</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2:             M2  0.413385092</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3:           diff -0.012153884</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4:      additions -0.003412776</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5:       removals -0.011405093</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6: group_marginal  0.019107348</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7:  unit_marginal -0.001877865</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8:     structural -0.014565497</span>
 <span class='r-in'><span class='co'># =&gt; the structural component is close to zero, thus most change is in the marginals.</span></span>
 <span class='r-in'><span class='co'># This method gives identical results when we switch the unit and group definitions,</span></span>
 <span class='r-in'><span class='co'># and when we switch the data inputs.</span></span>
@@ -322,8 +322,8 @@ the change in M that is induced by these cases as
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 5:       removals -0.011405093</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 6: group_marginal -0.020609129</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 7:  unit_marginal  0.017497722</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 8:    interaction -0.017497722</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 9:     structural  0.023273114</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8:    interaction  0.003111406</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9:     structural  0.002663986</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># ...this means that the results won't be identical when we switch the data inputs</span></span>
 <span class='r-in'><span class='fu'>mutual_difference</span><span class='op'>(</span><span class='va'>schools05</span>, <span class='va'>schools00</span>, group <span class='op'>=</span> <span class='st'>"school"</span>, unit <span class='op'>=</span> <span class='st'>"race"</span>,</span>
@@ -336,8 +336,8 @@ the change in M that is induced by these cases as
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 5:       removals  0.003412776</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 6: group_marginal  0.019784513</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 7:  unit_marginal -0.016961244</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 8:    interaction  0.016961244</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> 9:     structural -0.022448498</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8:    interaction -0.002823269</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9:     structural -0.002663986</span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># the MRC method indicates a much higher structural change...</span></span>
 <span class='r-in'><span class='fu'>mutual_difference</span><span class='op'>(</span><span class='va'>schools00</span>, <span class='va'>schools05</span>, group <span class='op'>=</span> <span class='st'>"race"</span>, unit <span class='op'>=</span> <span class='st'>"school"</span>,</span>
