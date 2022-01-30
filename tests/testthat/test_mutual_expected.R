@@ -75,4 +75,26 @@ test_that("dissimilarity - Winship 1977", {
         0.131, tolerance = 0.1)
 })
 
+test_that("errors", {
+    dat <- data.frame(
+        u = rep(c(1, 2, 3, 4), 2),
+        g = c(rep("a", 4), rep("b", 4)),
+        n = c(40.2, 20, 5, 1, 20, 40, 60, 80),
+        stringsAsFactors = FALSE)
 
+    expect_error(mutual_expected(dat, "g", "u", weight = "n"),
+        "bootstrap with a total sample size")
+    expect_error(dissimilarity_expected(dat, "g", "u", weight = "n"),
+        "bootstrap with a total sample size")
+
+    dat_within <- data.frame(
+        u = c(rep("a", 4), rep("b", 4)),
+        g = rep(c(1, 2), 4),
+        supergroup = rep(c(12, 12, 34, 34), 2),
+        n = c(40, 20, 5, 1, 20, 40, 60, 80),
+        stringsAsFactors = FALSE
+    )
+
+    expect_message(mutual_expected(schools00, "race", "school", within = "district", weight = "n",
+        n_bootstrap = 10), "singleton items")
+})

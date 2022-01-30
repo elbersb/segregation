@@ -116,7 +116,7 @@ mutual_expected <- function(data, group, unit, weight = NULL,
                             n_bootstrap = 100, base = exp(1)) {
     d <- prepare_data(data, group, unit, weight, within)
     n_total <- d[, sum(freq)]
-    if (all.equal(n_total, round(n_total)) == FALSE) {
+    if (all.equal(n_total, round(n_total)) != TRUE) {
         stop(paste0(
             "bootstrap with a total sample size that is not an integer is not allowed, ",
             "maybe scale your weights?"))
@@ -185,7 +185,7 @@ dissimilarity_expected <- function(data, group, unit, weight = NULL,
     d <- prepare_data(data, group, unit, weight)
 
     n_total <- d[, sum(freq)]
-    if (all.equal(n_total, round(n_total)) == FALSE) {
+    if (all.equal(n_total, round(n_total)) != TRUE) {
         stop(paste0(
             "bootstrap with a total sample size that is not an integer is not allowed, ",
             "maybe scale your weights?"))
