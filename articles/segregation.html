@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">segregation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/segregation.html">Get started</a>
 </li>
@@ -67,7 +63,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/elbersb/segregation/">
+  <a href="https://github.com/elbersb/segregation/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -88,7 +84,7 @@
       <h1 data-toc-skip>A walkthrough of the segregation package</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/elbersb/segregation/blob/master/vignettes/segregation.Rmd"><code>vignettes/segregation.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/elbersb/segregation/blob/HEAD/vignettes/segregation.Rmd" class="external-link"><code>vignettes/segregation.Rmd</code></a></small>
       <div class="hidden name"><code>segregation.Rmd</code></div>
 
     </div>
@@ -97,9 +93,9 @@
     
 <p>The <code>segregation</code> package includes functionality to calculate entropy-based segregation measures, namely the Mutual Information Index (M) and the Theil Index (H), which is a normalized version of the M index. The package also includes several methods for decomposing the index into between/within components and into local segregation scores, as well as methods to decompose differences in segregation indices. All of these methods have arguments to obtain standard errors and confidence intervals through bootstrapping.</p>
 <p>Detailed information on these indices can be found in the references at the end of this vignette.</p>
-<div id="the-basic-mathematics" class="section level2">
-<h2 class="hasAnchor">
-<a href="#the-basic-mathematics" class="anchor"></a>The basic mathematics</h2>
+<div class="section level2">
+<h2 id="the-basic-mathematics">The basic mathematics<a class="anchor" aria-label="anchor" href="#the-basic-mathematics"></a>
+</h2>
 <p>The idea of a segregation index is to summarize a contingency table to a single number. For instance, we may have a table with <span class="math inline">\(U\)</span> units, say schools or occupations, and <span class="math inline">\(G\)</span> groups, say gender or racial groups. For each combination of unit and group we have a count, <span class="math inline">\(t_{ug}\)</span>. Arranged in a <span class="math inline">\(U\times G\)</span> matrix <span class="math inline">\(\mathbf{T}\)</span>, this is what the structure of the data looks like:</p>
 <table class="table">
 <thead><tr class="header">
@@ -150,13 +146,13 @@ H(\mathbf{T})=\frac{M(\mathbf{T})}{E(\mathbf{T})},
 \]</span></p>
 <p>where <span class="math inline">\(E(\mathbf{T})\)</span> denotes the entropy of the group marginal distribution of <span class="math inline">\(\mathbf{T}\)</span>, i.e. <span class="math inline">\(E(\mathbf{T})=-\sum_{g=1}^{G}p_{\cdot g}\log p_{\cdot g}\)</span>. Dividing through the group entropy has the effect of constraining H to be between 0 and 1.</p>
 </div>
-<div id="data-format" class="section level2">
-<h2 class="hasAnchor">
-<a href="#data-format" class="anchor"></a>Data format</h2>
+<div class="section level2">
+<h2 id="data-format">Data format<a class="anchor" aria-label="anchor" href="#data-format"></a>
+</h2>
 <p>For the examples, we will use a dataset built into the <code>segregation</code> package, <code>schools00</code>. This dataset contains data on 2,045 schools across 429 school districts in three U.S. states. For each school, the dataset records the number of Asian, Black, Hispanic, White, and Native American students. The <code>segregation</code> package requires data in long form (because most segregation data comes in this form), not in the form of contingency tables. Hence, each row of the <code>schools00</code> dataset is a unique combination of a given school and a racial group, and the column <code>n</code> records the number of students for this combination:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://elbersb.github.io/segregation/">"segregation"</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">schools00</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"school"</span>, <span class="st">"race"</span>, <span class="st">"n"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://elbersb.github.io/segregation/" class="external-link">"segregation"</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">schools00</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"school"</span>, <span class="st">"race"</span>, <span class="st">"n"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
 <span class="co">#&gt;   school  race   n</span>
 <span class="co">#&gt; 1   A1_1 asian   2</span>
 <span class="co">#&gt; 2   A1_1 black  14</span>
@@ -167,12 +163,12 @@ H(\mathbf{T})=\frac{M(\mathbf{T})}{E(\mathbf{T})},
 <p>Note that in the first school, <code>A1_1</code>, there are no Native American students. Hence, that row is missing.</p>
 <p>If you have data in the form of contingency tables, you can use <code><a href="../reference/matrix_to_long.html">matrix_to_long()</a></code> to convert them to the long format required for the package. As an example:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="op">(</span><span class="va">m</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">30</span>, <span class="fl">20</span>, <span class="fl">10</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="op">(</span><span class="va">m</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">30</span>, <span class="fl">20</span>, <span class="fl">10</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt;      [,1] [,2]</span>
 <span class="co">#&gt; [1,]   10   30</span>
 <span class="co">#&gt; [2,]   20   20</span>
 <span class="co">#&gt; [3,]   30   10</span>
-<span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Black"</span>, <span class="st">"White"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Black"</span>, <span class="st">"White"</span><span class="op">)</span>
 <span class="fu"><a href="../reference/matrix_to_long.html">matrix_to_long</a></span><span class="op">(</span><span class="va">m</span>, group <span class="op">=</span> <span class="st">"race"</span>, unit <span class="op">=</span> <span class="st">"school"</span><span class="op">)</span>
 <span class="co">#&gt;    school  race  n</span>
 <span class="co">#&gt; 1:      1 Black 10</span>
@@ -183,9 +179,9 @@ H(\mathbf{T})=\frac{M(\mathbf{T})}{E(\mathbf{T})},
 <span class="co">#&gt; 6:      3 White 10</span></code></pre></div>
 <p>The <code>group</code> and <code>unit</code> arguments are optional.</p>
 </div>
-<div id="computing-the-m-and-h-indices" class="section level2">
-<h2 class="hasAnchor">
-<a href="#computing-the-m-and-h-indices" class="anchor"></a>Computing the M and H indices</h2>
+<div class="section level2">
+<h2 id="computing-the-m-and-h-indices">Computing the M and H indices<a class="anchor" aria-label="anchor" href="#computing-the-m-and-h-indices"></a>
+</h2>
 <p>Compute the M and H indices using <code><a href="../reference/mutual_total.html">mutual_total()</a></code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span>
@@ -212,16 +208,16 @@ H(\mathbf{T})=\frac{M(\mathbf{T})}{E(\mathbf{T})},
              se <span class="op">=</span> <span class="cn">TRUE</span>, CI <span class="op">=</span> <span class="fl">.95</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span><span class="op">)</span>
 <span class="co">#&gt; 500 bootstrap iterations on 877739 observations</span>
 <span class="co">#&gt;    stat       est           se                  CI        bias</span>
-<span class="co">#&gt; 1:    M 0.4219162 0.0007779599 0.4204004,0.4234395 0.003622785</span>
-<span class="co">#&gt; 2:    H 0.4152224 0.0007102552 0.4138020,0.4165196 0.003585882</span></code></pre></div>
+<span class="co">#&gt; 1:    M 0.4219065 0.0008235094 0.4202302,0.4234365 0.003632467</span>
+<span class="co">#&gt; 2:    H 0.4152393 0.0007400931 0.4137330,0.4166498 0.003569043</span></code></pre></div>
 <p>As there a large number of observations, the standard errors are very small.</p>
 </div>
-<div id="between-within-decomposition" class="section level2">
-<h2 class="hasAnchor">
-<a href="#between-within-decomposition" class="anchor"></a>Between-Within decomposition</h2>
+<div class="section level2">
+<h2 id="between-within-decomposition">Between-Within decomposition<a class="anchor" aria-label="anchor" href="#between-within-decomposition"></a>
+</h2>
 <p>We might wonder whether segregation is different across the three different states. We can compute their segregation indices manually (just showing the M for simplicity):</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">split_schools</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/split.html">split</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools00</span><span class="op">$</span><span class="va">state</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">split_schools</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools00</span><span class="op">$</span><span class="va">state</span><span class="op">)</span>
 <span class="fu"><a href="../reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">split_schools</span><span class="op">$</span><span class="va">A</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>
 <span class="co">#&gt;    stat       est</span>
 <span class="co">#&gt; 1:    M 0.4085965</span>
@@ -270,22 +266,22 @@ H(\mathbf{T})=H(\mathbf{S}) + \sum_{s=1}^S \frac{E(\mathbf{T}_s)}{E(\mathbf{T})}
 <span class="co">#&gt; 3:     C 0.3450221 0.3195756 0.3611257 0.9402955</span></code></pre></div>
 <p>This is a much simpler way to obtain state-specific segregation scores compared to subsetting manually, as shown in the beginning of this section. In addition to the M and H indices, we also obtain <code>p</code>, the population proportion of the state (<span class="math inline">\(p_s\)</span> above), and <code>ent_ratio</code>, which is <span class="math inline">\(E(\mathbf{T}_s)/E(\mathbf{T})\)</span> from above. Hence, we can recover the total within-component using</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">within</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">M</span> <span class="op">*</span> <span class="va">p</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">within</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">M</span> <span class="op">*</span> <span class="va">p</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0.3262953</span>
-<span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">within</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">H</span> <span class="op">*</span> <span class="va">p</span> <span class="op">*</span> <span class="va">ent_ratio</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">within</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">H</span> <span class="op">*</span> <span class="va">p</span> <span class="op">*</span> <span class="va">ent_ratio</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0.3211343</span></code></pre></div>
 <p>which is exactly the same as before. The quantity <span class="math inline">\(p_s M(\mathbf{T}_s)\)</span> is itself of interest, because it shows how much the states contribute to the segregation total, when taking into account their size. By adding the between component, we can calculate the contribution of the four components:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># merge into a vector</span>
-<span class="va">components</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">between</span><span class="op">$</span><span class="va">est</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">within</span><span class="op">$</span><span class="va">M</span> <span class="op">*</span> <span class="va">within</span><span class="op">$</span><span class="va">p</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">components</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Between"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Round.html">signif</a></span><span class="op">(</span><span class="fl">100</span> <span class="op">*</span> <span class="va">components</span> <span class="op">/</span> <span class="va">total</span><span class="op">$</span><span class="va">est</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="fl">3</span><span class="op">)</span>
+<span class="va">components</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">between</span><span class="op">$</span><span class="va">est</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">within</span><span class="op">$</span><span class="va">M</span> <span class="op">*</span> <span class="va">within</span><span class="op">$</span><span class="va">p</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">components</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Between"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif</a></span><span class="op">(</span><span class="fl">100</span> <span class="op">*</span> <span class="va">components</span> <span class="op">/</span> <span class="va">total</span><span class="op">$</span><span class="va">est</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="fl">3</span><span class="op">)</span>
 <span class="co">#&gt; Between       A       B       C </span>
 <span class="co">#&gt;    23.3    26.6    24.2    25.9</span></code></pre></div>
 <p>Each of the four components contributes about a quarter to the total segregation of 0.426. Note that state A is the smallest state (27.7% of the population), but contributes the largest percentage (26.6%) to total segregation. Hence, the decomposition shows that it is important to look at both <span class="math inline">\(p_s\)</span>, the state sizes, as well as <span class="math inline">\(M(\mathbf{T}_s)\)</span>, within-state segregation.</p>
 <p>The between-within decomposition can also be applied repeatedly in a hierarchical setting. For instance, in the <code>schools00</code> dataset, schools are nested within districts, and districts are nested within states. Therefore, we can ask: How much segregation is due to segregation between states, how much segregation is due to between-district segregation within states, and how much segregation is due to between-school segregation within districts? The package provides a convenience function for this use case:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/mutual_total_nested.html">mutual_total_nested</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"state"</span>, <span class="st">"district"</span>, <span class="st">"school"</span><span class="op">)</span>,
+<code class="sourceCode R"><span class="fu"><a href="../reference/mutual_total_nested.html">mutual_total_nested</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"state"</span>, <span class="st">"district"</span>, <span class="st">"school"</span><span class="op">)</span>,
                     weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span>
 <span class="co">#&gt;     between          within stat        est</span>
 <span class="co">#&gt; 1:    state                    M 0.09924370</span>
@@ -299,9 +295,9 @@ H(\mathbf{T})=H(\mathbf{S}) + \sum_{s=1}^S \frac{E(\mathbf{T}_s)}{E(\mathbf{T})}
 <span class="co"># mutual_total(schools00, "race", "district", within = "state", weight = "n")</span>
 <span class="co"># mutual_total(schools00, "race", "school", within = c("state", "district"), weight = "n")</span></code></pre></div>
 </div>
-<div id="local-segregation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#local-segregation" class="anchor"></a>Local segregation</h2>
+<div class="section level2">
+<h2 id="local-segregation">Local segregation<a class="anchor" aria-label="anchor" href="#local-segregation"></a>
+</h2>
 <p>The M index (but not the H index) allows for another decomposition, into local segregation scores. To define this decomposition, let <span class="math inline">\(p_{g|u} = t_{ug} / t_{u \cdot}\)</span> be the conditional probability of being in group <span class="math inline">\(g\)</span>, given that one is in unit <span class="math inline">\(u\)</span>. We can then define the <em>local segregation score of unit <span class="math inline">\(u\)</span></em> as</p>
 <p><span class="math display">\[L_u = \sum_{g=1}^G p_{g|u}\log\frac{p_{g|u}}{p_{\cdot g}}\]</span> The weighted average of the <span class="math inline">\(L_u\)</span> is again <span class="math inline">\(M(\mathbf{T})\)</span>, i.e. <span class="math inline">\(M(\mathbf{T}) = \sum_{u=1}^U p_{u\cdot}L_u\)</span>.</p>
 <p>To obtain the local segregation scores <span class="math inline">\(L_u\)</span>, along with the marginal weights <span class="math inline">\(p_{u\cdot}\)</span>, use <code><a href="../reference/mutual_local.html">mutual_local()</a></code>:</p>
@@ -324,8 +320,8 @@ H(\mathbf{T})=H(\mathbf{S}) + \sum_{s=1}^S \frac{E(\mathbf{T}_s)}{E(\mathbf{T})}
 <code class="sourceCode R"><span class="va">localse</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutual_local.html">mutual_local</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>,
                         se <span class="op">=</span> <span class="cn">TRUE</span>, wide <span class="op">=</span> <span class="cn">TRUE</span>, n_bootstrap <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span>
 <span class="co">#&gt; 1000 bootstrap iterations on 877739 observations</span>
-<span class="va">localse</span><span class="op">$</span><span class="va">lengthCI</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">sapply</a></span><span class="op">(</span><span class="va">localse</span><span class="op">$</span><span class="va">ls_CI</span>, <span class="fu">base</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">localse</span>, <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">p</span>, y <span class="op">=</span> <span class="va">lengthCI</span>, pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="va">localse</span><span class="op">$</span><span class="va">lengthCI</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">localse</span><span class="op">$</span><span class="va">ls_CI</span>, <span class="fu">base</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">localse</span>, <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">p</span>, y <span class="op">=</span> <span class="va">lengthCI</span>, pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="segregation_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
 <p>Although the relationship is not deterministic, larger schools have shorter confidence intervals.</p>
 <p>Because the M is symmetric, local segregation scores can also be obtained for groups. The equivalent definition for the <em>local segregation score of group <span class="math inline">\(g\)</span></em> is then</p>
@@ -342,9 +338,9 @@ H(\mathbf{T})=H(\mathbf{S}) + \sum_{s=1}^S \frac{E(\mathbf{T}_s)}{E(\mathbf{T})}
 <span class="co">#&gt; 5: native 1.4342644 0.007507927</span></code></pre></div>
 <p>These results show that the racial groups experience very different levels of segregation: White students are less segregated than Asian, Black, Hispanic, and, especially, Native American students.</p>
 </div>
-<div id="inference" class="section level2">
-<h2 class="hasAnchor">
-<a href="#inference" class="anchor"></a>Inference</h2>
+<div class="section level2">
+<h2 id="inference">Inference<a class="anchor" aria-label="anchor" href="#inference"></a>
+</h2>
 <p>The four main functions of the packages, <code><a href="../reference/mutual_total.html">mutual_total()</a></code>, <code><a href="../reference/mutual_within.html">mutual_within()</a></code>, <code><a href="../reference/mutual_local.html">mutual_local()</a></code>, and <code><a href="../reference/mutual_difference.html">mutual_difference()</a></code> all support inference through bootstrapping. Inference for segregation indices is tricky, and the standard error estimates and confidence intervals should not be trusted too much when there is little data, and especially when the segregation index is very close to either 0 or maximum segregation.</p>
 <p>To estimate standard errors and confidence intervals, use <code>se = TRUE</code>. The coverage of the confidence interval can be specified in the <code>CI</code> argument. The number of bootstrap iterations can be specified as well:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
@@ -352,17 +348,17 @@ H(\mathbf{T})=H(\mathbf{S}) + \sum_{s=1}^S \frac{E(\mathbf{T}_s)}{E(\mathbf{T})}
                     se <span class="op">=</span> <span class="cn">TRUE</span>, CI <span class="op">=</span> <span class="fl">.95</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; 500 bootstrap iterations on 877739 observations</span>
 <span class="co">#&gt;    stat       est           se                  CI        bias</span>
-<span class="co">#&gt; 1:    M 0.4219298 0.0007706401 0.4203741,0.4233866 0.003609181</span>
-<span class="co">#&gt; 2:    H 0.4152583 0.0006989156 0.4138569,0.4165652 0.003550059</span></code></pre></div>
+<span class="co">#&gt; 1:    M 0.4218862 0.0007829959 0.4204319,0.4233968 0.003652818</span>
+<span class="co">#&gt; 2:    H 0.4152393 0.0006920870 0.4138147,0.4164951 0.003568983</span></code></pre></div>
 <p>The confidence intervals are based on the percentiles from the bootstrap distribution, and hence require a large number of bootstrap iterations for valid interpretation. The estimate <code>est</code> that is reported in the results has already been “debiased”, i.e. the bias that has been estimated from the bootstrap distribution (which is reported in <code>bias</code>) has been subtracted from the usual maximum-likelihood estimate that we would obtain from <code>mutual_total</code> with <code>se = FALSE</code>. The confidence interval is centered around the debiased estimate.</p>
 <p>On balance, confidence intervals are preferred over the standard error because the bootstrap distribution can be skewed, especially when segregation is very low or very high. For this example, we can see that the standard errors provide almost identical coverage to the confidence intervals, as</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># M</span>
-<span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">se</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">est</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">est</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.4204193 0.4234402</span>
+<span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">se</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">est</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">est</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.4203515 0.4234208</span>
 <span class="co"># H</span>
-<span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">se</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">est</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">est</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.4138884 0.4166281</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">se</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">est</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">est</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.4138828 0.4165958</span></code></pre></div>
 <p>provide effectively the same coverage as the confidence intervals obtained from the percentile bootstrap.</p>
 <p>Whenever the bootstrap is used, the bootstrap distributions for each parameter are reported in an attribute <code>bootstrap</code> of the returned object. This can be used, for instance, to check whether the bootstrap distribution is skewed. The following code computes local segregation scores for all schools, and then shows a histogram of the bootstrap distribution for school C137_9, which has a very low local segregation score:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
@@ -370,21 +366,21 @@ H(\mathbf{T})=H(\mathbf{S}) + \sum_{s=1}^S \frac{E(\mathbf{T}_s)}{E(\mathbf{T})}
                       se <span class="op">=</span> <span class="cn">TRUE</span>, CI <span class="op">=</span> <span class="fl">.95</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span><span class="op">)</span>
 <span class="co">#&gt; 500 bootstrap iterations on 877739 observations</span>
 <span class="co"># pick bootstrap distribution of local segregation scores for school C137_9</span>
-<span class="va">ls_school</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html">attr</a></span><span class="op">(</span><span class="va">local</span>, <span class="st">"bootstrap"</span><span class="op">)</span><span class="op">[</span><span class="va">school</span> <span class="op">==</span> <span class="st">"C137_9"</span> <span class="op">&amp;</span> <span class="va">stat</span> <span class="op">==</span> <span class="st">"ls"</span>, <span class="va">boot_est</span><span class="op">]</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">ls_school</span>, main <span class="op">=</span> <span class="st">"Bootstrap distribution for school C137_9"</span><span class="op">)</span></code></pre></div>
+<span class="va">ls_school</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">local</span>, <span class="st">"bootstrap"</span><span class="op">)</span><span class="op">[</span><span class="va">school</span> <span class="op">==</span> <span class="st">"C137_9"</span> <span class="op">&amp;</span> <span class="va">stat</span> <span class="op">==</span> <span class="st">"ls"</span>, <span class="va">boot_est</span><span class="op">]</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">ls_school</span>, main <span class="op">=</span> <span class="st">"Bootstrap distribution for school C137_9"</span><span class="op">)</span></code></pre></div>
 <p><img src="segregation_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
 <p>For this school, the bootstrap distribution is skewed. If precise inference about this specific school is needed, the standard error should not be interpreted, and the confidence interval should only be interpreted when the number of bootstrap iterations is large.</p>
 <p>If you are concerned that your contingency table is too small to provide reliable segregation estimates, the package also provides a function <code><a href="../reference/mutual_expected.html">mutual_expected()</a></code> that simulates random cell counts under independence from the marginal distributions of your table. For the <code>schools00</code> dataset:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/mutual_expected.html">mutual_expected</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span><span class="op">)</span>
 <span class="co">#&gt;         stat         est           se</span>
-<span class="co">#&gt; 1: M under 0 0.004813523 7.579477e-05</span>
-<span class="co">#&gt; 2: H under 0 0.004737389 7.459594e-05</span></code></pre></div>
+<span class="co">#&gt; 1: M under 0 0.004808142 7.867425e-05</span>
+<span class="co">#&gt; 2: H under 0 0.004732093 7.742987e-05</span></code></pre></div>
 <p>Here, there is no concern about bias due to a small sample size.</p>
 </div>
-<div id="decomposing-differences-in-indices" class="section level2">
-<h2 class="hasAnchor">
-<a href="#decomposing-differences-in-indices" class="anchor"></a>Decomposing differences in indices</h2>
+<div class="section level2">
+<h2 id="decomposing-differences-in-indices">Decomposing differences in indices<a class="anchor" aria-label="anchor" href="#decomposing-differences-in-indices"></a>
+</h2>
 <p>The command <code><a href="../reference/mutual_difference.html">mutual_difference()</a></code> can be used to decompose differences in segregation, as described in Elbers (2021). The default, and recommended method, is to use <code>method = shapley</code> (or <code>method = shapley_detailed</code>). The other methods (<code>mrc</code>, <code>km</code>) exist mostly for testing purposes, and are not recommended. Details on the procedure and how to interpret the terms of the decomposition are found in Elbers (2021).</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/mutual_difference.html">mutual_difference</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span>
@@ -394,16 +390,16 @@ H(\mathbf{T})=H(\mathbf{S}) + \sum_{s=1}^S \frac{E(\mathbf{T}_s)}{E(\mathbf{T})}
 <span class="co">#&gt; 3:           diff -0.012153884</span>
 <span class="co">#&gt; 4:      additions -0.003412776</span>
 <span class="co">#&gt; 5:       removals -0.011405093</span>
-<span class="co">#&gt; 6: group_marginal  0.017186497</span>
-<span class="co">#&gt; 7:  unit_marginal -0.011028174</span>
+<span class="co">#&gt; 6: group_marginal  0.017871051</span>
+<span class="co">#&gt; 7:  unit_marginal -0.011712727</span>
 <span class="co">#&gt; 8:     structural -0.003494338</span></code></pre></div>
 <p>This method also supports inference by setting <code>se = TRUE</code>.</p>
 </div>
-<div id="references" class="section level2">
-<h2 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h2>
-<p>Elbers, B. (2021). A Method for Studying Differences in Segregation Across Time and Space. Sociological Methods &amp; Research. <a href="https://doi.org/10.1177/0049124121986204" class="uri">https://doi.org/10.1177/0049124121986204</a></p>
-<p>Mora, R., &amp; Ruiz-Castillo, J. (2011). Entropy-based Segregation Indices. Sociological Methodology, 41(1), 159–194. <a href="https://doi.org/10.1111/j.1467-9531.2011.01237.x" class="uri">https://doi.org/10.1111/j.1467-9531.2011.01237.x</a></p>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<p>Elbers, B. (2021). A Method for Studying Differences in Segregation Across Time and Space. Sociological Methods &amp; Research. <a href="https://doi.org/10.1177/0049124121986204" class="external-link uri">https://doi.org/10.1177/0049124121986204</a></p>
+<p>Mora, R., &amp; Ruiz-Castillo, J. (2011). Entropy-based Segregation Indices. Sociological Methodology, 41(1), 159–194. <a href="https://doi.org/10.1111/j.1467-9531.2011.01237.x" class="external-link uri">https://doi.org/10.1111/j.1467-9531.2011.01237.x</a></p>
 <p>Theil, H. (1971). Principles of Econometrics. New York: Wiley</p>
 </div>
   </div>
@@ -419,11 +415,13 @@ H(\mathbf{T})=H(\mathbf{S}) + \sum_{s=1}^S \frac{E(\mathbf{T}_s)}{E(\mathbf{T})}
 
 
       <footer><div class="copyright">
-  <p>Developed by Benjamin Elbers.</p>
+  <p></p>
+<p>Developed by Benjamin Elbers.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -431,6 +429,8 @@ H(\mathbf{T})=H(\mathbf{S}) + \sum_{s=1}^S \frac{E(\mathbf{T}_s)}{E(\mathbf{T})}
 
   
 
+
+  
 
   </body>
 </html>

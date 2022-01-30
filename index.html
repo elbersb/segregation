@@ -30,6 +30,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -42,18 +44,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">segregation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9000</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="articles/segregation.html">Get started</a>
 </li>
@@ -78,7 +74,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/elbersb/segregation/">
+  <a href="https://github.com/elbersb/segregation/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -95,26 +91,26 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="segregation" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#segregation" class="anchor"></a>segregation</h1></div>
+<div class="section level1">
+<div class="page-header"><h1 id="segregation">segregation<a class="anchor" aria-label="anchor" href="#segregation"></a>
+</h1></div>
 
 <p>An R package to calculate and decompose entropy-based, multigroup segregation indices, with a focus on the Mutual Information Index (M) and Theil’s Information Index (H). The index of Dissimilarity (D) is also supported.</p>
-<p>Find more information in the <a href="https://elbersb.github.io/segregation/articles/segregation.html">vignette</a> and the <a href="https://elbersb.de/segregation">documentation</a>.</p>
+<p>Find more information in the <a href="https://elbersb.github.io/segregation/articles/segregation.html" class="external-link">vignette</a> and the <a href="https://elbersb.de/segregation" class="external-link">documentation</a>.</p>
 <ul>
 <li>calculate total, between, within, and local segregation</li>
 <li>decompose differences in total segregation over time (Elbers 2020)</li>
 <li>estimate standard errors and confidence intervals via bootstrapping, which also corrects for small sample bias</li>
-<li>every method returns a <a href="https://vita.had.co.nz/papers/tidy-data.html">tidy</a> <a href="https://rdatatable.gitlab.io/data.table/">data.table</a> for easy post-processing and plotting</li>
-<li>uses the <a href="https://rdatatable.gitlab.io/data.table/"><code>data.table</code></a> package internally, so it’s relatively fast</li>
+<li>every method returns a <a href="https://vita.had.co.nz/papers/tidy-data.html" class="external-link">tidy</a> <a href="https://rdatatable.gitlab.io/data.table/" class="external-link">data.table</a> for easy post-processing and plotting</li>
+<li>uses the <a href="https://rdatatable.gitlab.io/data.table/" class="external-link"><code>data.table</code></a> package internally, so it’s relatively fast</li>
 </ul>
-<p>Most of the procedures implemented in this package are described in more detail <a href="https://journals.sagepub.com/doi/full/10.1177/0049124121986204">in this SMR paper</a> (<a href="https://osf.io/preprints/socarxiv/ya7zs/">Preprint</a>).</p>
-<div id="usage" class="section level2">
-<h2 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h2>
+<p>Most of the procedures implemented in this package are described in more detail <a href="https://journals.sagepub.com/doi/full/10.1177/0049124121986204" class="external-link">in this SMR paper</a> (<a href="https://osf.io/preprints/socarxiv/ya7zs/" class="external-link">Preprint</a>).</p>
+<div class="section level2">
+<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
+</h2>
 <p>The package provides an easy way to calculate segregation measures, based on the Mutual Information Index (M) and Theil’s Entropy Index (H).</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://elbersb.github.io/segregation/">segregation</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://elbersb.github.io/segregation/" class="external-link">segregation</a></span><span class="op">)</span>
 
 <span class="co"># example dataset with fake data provided by the package</span>
 <span class="fu"><a href="reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span>
@@ -147,14 +143,14 @@
 <code class="sourceCode R"><span class="va">local</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mutual_local.html">mutual_local</a></span><span class="op">(</span><span class="va">schools00</span>, group <span class="op">=</span> <span class="st">"school"</span>, unit <span class="op">=</span> <span class="st">"race"</span>, weight <span class="op">=</span> <span class="st">"n"</span>,
              se <span class="op">=</span> <span class="cn">TRUE</span>, CI <span class="op">=</span> <span class="fl">0.90</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; 500 bootstrap iterations on 877739 observations</span>
-<span class="va">local</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"race"</span>, <span class="st">"ls"</span>, <span class="st">"p"</span>, <span class="st">"ls_CI"</span><span class="op">)</span><span class="op">]</span>
+<span class="va">local</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"race"</span>, <span class="st">"ls"</span>, <span class="st">"p"</span>, <span class="st">"ls_CI"</span><span class="op">)</span><span class="op">]</span>
 <span class="co">#&gt;      race    ls       p       ls_CI</span>
 <span class="co">#&gt; 1:  asian 0.591 0.02255 0.582,0.601</span>
 <span class="co">#&gt; 2:  black 0.876 0.19017 0.873,0.879</span>
 <span class="co">#&gt; 3:   hisp 0.771 0.15167 0.767,0.775</span>
 <span class="co">#&gt; 4:  white 0.183 0.62810 0.182,0.184</span>
 <span class="co">#&gt; 5: native 1.352 0.00751   1.32,1.38</span>
-<span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">local</span><span class="op">$</span><span class="va">p</span> <span class="op">*</span> <span class="va">local</span><span class="op">$</span><span class="va">ls</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">local</span><span class="op">$</span><span class="va">p</span> <span class="op">*</span> <span class="va">local</span><span class="op">$</span><span class="va">ls</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0.422</span></code></pre></div>
 <p>Decompose the difference in M between 2000 and 2005, using iterative proportional fitting (IPF) and the Shapley decomposition (see Elbers 2021 for details):</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -169,102 +165,106 @@
 <span class="co">#&gt; 6: group_marginal  0.01787</span>
 <span class="co">#&gt; 7:  unit_marginal -0.01171</span>
 <span class="co">#&gt; 8:     structural -0.00349</span></code></pre></div>
-<p>Find more information in the <a href="https://elbersb.github.io/segregation/articles/segregation.html">vignette</a>.</p>
+<p>Find more information in the <a href="https://elbersb.github.io/segregation/articles/segregation.html" class="external-link">vignette</a>.</p>
 </div>
-<div id="how-to-install" class="section level2">
-<h2 class="hasAnchor">
-<a href="#how-to-install" class="anchor"></a>How to install</h2>
+<div class="section level2">
+<h2 id="how-to-install">How to install<a class="anchor" aria-label="anchor" href="#how-to-install"></a>
+</h2>
 <p>To install the package from CRAN, use</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"segregation"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"segregation"</span><span class="op">)</span></code></pre></div>
 <p>To install the development version, use</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"elbersb/segregation"</span><span class="op">)</span></code></pre></div>
 </div>
-<div id="citation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#citation" class="anchor"></a>Citation</h2>
+<div class="section level2">
+<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+</h2>
 <p>If you use this package for your research, please cite:</p>
-<p>Elbers, B. (2021). A Method for Studying Differences in Segregation Across Time and Space. Sociological Methods &amp; Research. <a href="https://doi.org/10.1177/0049124121986204" class="uri">https://doi.org/10.1177/0049124121986204</a></p>
+<p>Elbers, B. (2021). A Method for Studying Differences in Segregation Across Time and Space. Sociological Methods &amp; Research. <a href="https://doi.org/10.1177/0049124121986204" class="external-link uri">https://doi.org/10.1177/0049124121986204</a></p>
 </div>
-<div id="some-additional-resources" class="section level2">
-<h2 class="hasAnchor">
-<a href="#some-additional-resources" class="anchor"></a>Some additional resources</h2>
+<div class="section level2">
+<h2 id="some-additional-resources">Some additional resources<a class="anchor" aria-label="anchor" href="#some-additional-resources"></a>
+</h2>
 <ul>
-<li>The book <em>Analyzing US Census Data: Methods, Maps, and Models in R</em> by Kyle E. Walker contains <a href="https://walker-data.com/census-r/modeling-us-census-data.html#indices-of-segregation-and-diversity">a discussion of this package</a>, and is a great resource for anyone working with spatial data, especially U.S. Census data.</li>
-<li>A paper that makes use of this package: <a href="https://elbersb.com/public/posts/segregation-increase/">Did Residential Racial Segregation in the U.S. Really Increase? An Analysis Accounting for Changes in Racial Diversity</a> (<a href="https://osf.io/mg9q4/">Code and Data</a>)</li>
-<li>Some of the analyses <a href="https://multimedia.tijd.be/diversiteit/">in this article</a> by the Belgian newspaper <em>De Tijd</em> used the package.</li>
+<li>The book <em>Analyzing US Census Data: Methods, Maps, and Models in R</em> by Kyle E. Walker contains <a href="https://walker-data.com/census-r/modeling-us-census-data.html#indices-of-segregation-and-diversity" class="external-link">a discussion of this package</a>, and is a great resource for anyone working with spatial data, especially U.S. Census data.</li>
+<li>A paper that makes use of this package: <a href="https://elbersb.com/public/posts/segregation-increase/" class="external-link">Did Residential Racial Segregation in the U.S. Really Increase? An Analysis Accounting for Changes in Racial Diversity</a> (<a href="https://osf.io/mg9q4/" class="external-link">Code and Data</a>)</li>
+<li>Some of the analyses <a href="https://multimedia.tijd.be/diversiteit/" class="external-link">in this article</a> by the Belgian newspaper <em>De Tijd</em> used the package.</li>
 </ul>
 </div>
-<div id="references-on-entropy-based-segregation-indices" class="section level2">
-<h2 class="hasAnchor">
-<a href="#references-on-entropy-based-segregation-indices" class="anchor"></a>References on entropy-based segregation indices</h2>
+<div class="section level2">
+<h2 id="references-on-entropy-based-segregation-indices">References on entropy-based segregation indices<a class="anchor" aria-label="anchor" href="#references-on-entropy-based-segregation-indices"></a>
+</h2>
 <p>Deutsch, J., Flückiger, Y. &amp; Silber, J. (2009). Analyzing Changes in Occupational Segregation: The Case of Switzerland (1970–2000), in: Yves Flückiger, Sean F. Reardon, Jacques Silber (eds.) Occupational and Residential Segregation (Research on Economic Inequality, Volume 17), 171–202.</p>
-<p>DiPrete, T. A., Eller, C. C., Bol, T., &amp; van de Werfhorst, H. G. (2017). School-to-Work Linkages in the United States, Germany, and France. American Journal of Sociology, 122(6), 1869-1938. <a href="https://doi.org/10.1086/691327" class="uri">https://doi.org/10.1086/691327</a></p>
-<p>Elbers, B. (2021). A Method for Studying Differences in Segregation Across Time and Space. Sociological Methods &amp; Research. <a href="https://doi.org/10.1177/0049124121986204" class="uri">https://doi.org/10.1177/0049124121986204</a></p>
-<p>Forster, A. G., &amp; Bol, T. (2017). Vocational education and employment over the life course using a new measure of occupational specificity. Social Science Research, 70, 176-197. <a href="https://doi.org/10.1016/j.ssresearch.2017.11.004" class="uri">https://doi.org/10.1016/j.ssresearch.2017.11.004</a></p>
+<p>DiPrete, T. A., Eller, C. C., Bol, T., &amp; van de Werfhorst, H. G. (2017). School-to-Work Linkages in the United States, Germany, and France. American Journal of Sociology, 122(6), 1869-1938. <a href="https://doi.org/10.1086/691327" class="external-link uri">https://doi.org/10.1086/691327</a></p>
+<p>Elbers, B. (2021). A Method for Studying Differences in Segregation Across Time and Space. Sociological Methods &amp; Research. <a href="https://doi.org/10.1177/0049124121986204" class="external-link uri">https://doi.org/10.1177/0049124121986204</a></p>
+<p>Forster, A. G., &amp; Bol, T. (2017). Vocational education and employment over the life course using a new measure of occupational specificity. Social Science Research, 70, 176-197. <a href="https://doi.org/10.1016/j.ssresearch.2017.11.004" class="external-link uri">https://doi.org/10.1016/j.ssresearch.2017.11.004</a></p>
 <p>Theil, H. (1971). Principles of Econometrics. New York: Wiley.</p>
-<p>Frankel, D. M., &amp; Volij, O. (2011). Measuring school segregation. Journal of Economic Theory, 146(1), 1-38. <a href="https://doi.org/10.1016/j.jet.2010.10.008" class="uri">https://doi.org/10.1016/j.jet.2010.10.008</a></p>
-<p>Mora, R., &amp; Ruiz-Castillo, J. (2003). Additively decomposable segregation indexes. The case of gender segregation by occupations and human capital levels in Spain. The Journal of Economic Inequality, 1(2), 147-179. <a href="https://doi.org/10.1023/A:1026198429377" class="uri">https://doi.org/10.1023/A:1026198429377</a></p>
+<p>Frankel, D. M., &amp; Volij, O. (2011). Measuring school segregation. Journal of Economic Theory, 146(1), 1-38. <a href="https://doi.org/10.1016/j.jet.2010.10.008" class="external-link uri">https://doi.org/10.1016/j.jet.2010.10.008</a></p>
+<p>Mora, R., &amp; Ruiz-Castillo, J. (2003). Additively decomposable segregation indexes. The case of gender segregation by occupations and human capital levels in Spain. The Journal of Economic Inequality, 1(2), 147-179. <a href="https://doi.org/10.1023/A:1026198429377" class="external-link uri">https://doi.org/10.1023/A:1026198429377</a></p>
 <p>Mora, R., &amp; Ruiz-Castillo, J. (2009). The Invariance Properties of the Mutual Information Index of Multigroup Segregation, in: Yves Flückiger, Sean F. Reardon, Jacques Silber (eds.) Occupational and Residential Segregation (Research on Economic Inequality, Volume 17), 33-53.</p>
-<p>Mora, R., &amp; Ruiz-Castillo, J. (2011). Entropy-based Segregation Indices. Sociological Methodology, 41(1), 159–194. <a href="https://doi.org/10.1111/j.1467-9531.2011.01237.x" class="uri">https://doi.org/10.1111/j.1467-9531.2011.01237.x</a></p>
-<p>Van Puyenbroeck, T., De Bruyne, K., &amp; Sels, L. (2012). More than ‘Mutual Information’: Educational and sectoral gender segregation and their interaction on the Flemish labor market. Labour Economics, 19(1), 1-8. <a href="https://doi.org/10.1016/j.labeco.2011.05.002" class="uri">https://doi.org/10.1016/j.labeco.2011.05.002</a></p>
-<p>Watts, M. The Use and Abuse of Entropy Based Segregation Indices. Working Paper. URL: <a href="http://www.ecineq.org/ecineq_lux15/FILESx2015/CR2/p217.pdf" class="uri">http://www.ecineq.org/ecineq_lux15/FILESx2015/CR2/p217.pdf</a></p>
+<p>Mora, R., &amp; Ruiz-Castillo, J. (2011). Entropy-based Segregation Indices. Sociological Methodology, 41(1), 159–194. <a href="https://doi.org/10.1111/j.1467-9531.2011.01237.x" class="external-link uri">https://doi.org/10.1111/j.1467-9531.2011.01237.x</a></p>
+<p>Van Puyenbroeck, T., De Bruyne, K., &amp; Sels, L. (2012). More than ‘Mutual Information’: Educational and sectoral gender segregation and their interaction on the Flemish labor market. Labour Economics, 19(1), 1-8. <a href="https://doi.org/10.1016/j.labeco.2011.05.002" class="external-link uri">https://doi.org/10.1016/j.labeco.2011.05.002</a></p>
+<p>Watts, M. The Use and Abuse of Entropy Based Segregation Indices. Working Paper. URL: <a href="http://www.ecineq.org/ecineq_lux15/FILESx2015/CR2/p217.pdf" class="external-link uri">http://www.ecineq.org/ecineq_lux15/FILESx2015/CR2/p217.pdf</a></p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=segregation">https://​cloud.r-project.org/​package=segregation</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/elbersb/segregation/">https://​github.com/​elbersb/​segregation/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/elbersb/segregation/issues">https://​github.com/​elbersb/​segregation/​issues</a>
-</li>
-</ul>
-</div>
-<div class="license">
-<h2>License</h2>
-<ul class="list-unstyled">
-<li>
-<a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a>
-</li>
-</ul>
-</div>
-<div class="citation">
-<h2>Citation</h2>
-<ul class="list-unstyled">
-<li><a href="authors.html">Citing segregation</a></li>
-</ul>
-</div>
-<div class="developers">
-<h2>Developers</h2>
-<ul class="list-unstyled">
-<li>Benjamin Elbers <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-5392-3448" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li><a href="https://cloud.r-project.org/package=segregation" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/elbersb/segregation/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/elbersb/segregation/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
+<div class="license">
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://CRAN.R-project.org/package=segregation"><img src="https://www.r-pkg.org/badges/version/segregation" alt="CRAN Version"></a></li>
-<li><a href="https://github.com/elbersb/segregation/actions"><img src="https://github.com/elbersb/segregation/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
-<li><a href="https://codecov.io/github/elbersb/segregation?branch=master"><img src="https://codecov.io/gh/elbersb/segregation/branch/master/graph/badge.svg" alt="Coverage status"></a></li>
+<li>
+<a href="https://opensource.org/licenses/mit-license.php" class="external-link">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a>
+</li>
 </ul>
 </div>
+
+
+<div class="citation">
+<h2 data-toc-skip>Citation</h2>
+<ul class="list-unstyled">
+<li><a href="authors.html#citation">Citing segregation</a></li>
+</ul>
 </div>
+
+<div class="developers">
+<h2 data-toc-skip>Developers</h2>
+<ul class="list-unstyled">
+<li>Benjamin Elbers <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-5392-3448" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+</ul>
+</div>
+
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://CRAN.R-project.org/package=segregation" class="external-link"><img src="https://www.r-pkg.org/badges/version/segregation" alt="CRAN Version"></a></li>
+<li><a href="https://github.com/elbersb/segregation/actions" class="external-link"><img src="https://github.com/elbersb/segregation/workflows/R-CMD-check/badge.svg" alt="R build status"></a></li>
+<li><a href="https://codecov.io/github/elbersb/segregation?branch=master" class="external-link"><img src="https://codecov.io/gh/elbersb/segregation/branch/master/graph/badge.svg" alt="Coverage status"></a></li>
+</ul>
+</div>
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Benjamin Elbers.</p>
+  <p></p>
+<p>Developed by Benjamin Elbers.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
 </div>
 
       </footer>
@@ -272,6 +272,8 @@
 
   
 
+
+  
 
   </body>
 </html>
