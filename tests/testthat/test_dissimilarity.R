@@ -14,6 +14,14 @@ test_that("correct calculations", {
     expect_equal(dissimilarity(m3, "group", "unit", weight = "n")$est[[1]], 1)
 })
 
+test_that("alternative calculation", {
+    tab <- t(matrix(c(100, 60, 40, 0, 0, 40, 60, 100), ncol = 2))
+    div <- sweep(tab, 1, rowSums(tab), "/")
+    d <- 1/2 * sum(apply(div, 2, segregation:::abs_diff))
+    m1 <- matrix_to_long(t(tab))
+    expect_equal(dissimilarity(m1, "group", "unit", weight = "n")$est[[1]], d)
+})
+
 test_that("SE works", {
     m0 <- matrix_to_long(matrix(c(100, 60, 40, 0, 0, 40, 60, 100), ncol = 2))
     d <- dissimilarity(m0, "group", "unit", weight = "n", se = TRUE)

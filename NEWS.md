@@ -1,6 +1,8 @@
 # segregation 0.6.0.9000
 
-
+* add mutual_total_nested
+* add within argument to mutual_expected
+* add dissimilarity_expected
 
 # segregation 0.6.0
 

@@ -31,3 +31,16 @@
 #'   \item{n}{n of students by school and race}
 #' }
 "schools05"
+
+#' Student-level data including SES status
+#'
+#' Fake dataset used for examples. This is an individual-level
+#' dataset of students in schools.
+#'
+#' @format A data frame with 5,153 rows and 3 variables:
+#' \describe{
+#'   \item{school_id}{school ID}
+#'   \item{ethnic_group}{one of A, B, or C}
+#'   \item{ses_quintile}{SES of the student (1 = lowest, 5 = highest)}
+#' }
+"school_ses"
