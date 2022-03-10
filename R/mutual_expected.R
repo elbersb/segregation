@@ -1,14 +1,18 @@
 expected_compute <- function(index, d, group_var, unit_var,
-                                    fixed_margins, n_bootstrap, base) {
+                             fixed_margins, n_bootstrap, base) {
     n_group <- d[, sum(freq), by = get(group_var)][, V1]
     n_unit <- d[, sum(freq), by = get(unit_var)][, V1]
     if (length(n_group) == 1 | length(n_unit) == 1) {
         if (index == "mh") {
-            return(data.table(stat = c("M under 0", "H under 0"),
-                              est = c(NA_real_, NA_real_), se = c(NA_real_, NA_real_)))
+            return(data.table(
+                stat = c("M under 0", "H under 0"),
+                est = c(NA_real_, NA_real_), se = c(NA_real_, NA_real_)
+            ))
         } else {
-            return(data.table(stat = "D under 0",
-                              est = NA_real_, se = NA_real_))
+            return(data.table(
+                stat = "D under 0",
+                est = NA_real_, se = NA_real_
+            ))
         }
     }
     p_group <- n_group / sum(n_group)
@@ -34,7 +38,7 @@ expected_compute <- function(index, d, group_var, unit_var,
             if (fixed_margins == TRUE) {
                 p <- sim_fixed[[i]] / sum(sim_fixed[[i]])
             } else {
-                sim <- stats::r2dtable(1, group_margins[,i], unit_margins[,i])[[1]]
+                sim <- stats::r2dtable(1, group_margins[, i], unit_margins[, i])[[1]]
                 p <- sim / sum(sim)
                 p_group_sim <- apply(p, 1, sum)
                 p_unit_sim <- apply(p, 2, sum)
@@ -49,11 +53,11 @@ expected_compute <- function(index, d, group_var, unit_var,
             if (fixed_margins == TRUE) {
                 tab <- sim_fixed[[i]]
             } else {
-                tab <- stats::r2dtable(1, group_margins[,i], unit_margins[,i])[[1]]
+                tab <- stats::r2dtable(1, group_margins[, i], unit_margins[, i])[[1]]
             }
 
             div <- sweep(tab, 1, rowSums(tab), "/")
-            d <- 1/2 * sum(apply(div, 2, abs_diff))
+            d <- 1 / 2 * sum(apply(div, 2, abs_diff))
             return(d)
         }
     })
@@ -102,9 +106,10 @@ expected_compute <- function(index, d, group_var, unit_var,
 #' # but we can build a smaller table, with 100 students distributed across
 #' # 10 schools, where one racial group has 10% of the students
 #' small <- data.frame(
-#'           school = c(1:10, 1:10),
-#'           race = c(rep("r1", 10), rep("r2", 10)),
-#'           n = c(rep(1, 10), rep(9, 10)))
+#'     school = c(1:10, 1:10),
+#'     race = c(rep("r1", 10), rep("r2", 10)),
+#'     n = c(rep(1, 10), rep(9, 10))
+#' )
 #' mutual_expected(small, "race", "school", weight = "n")
 #' # with an increase in sample size (n=1000), the values improve
 #' small$n <- small$n * 10
@@ -119,16 +124,22 @@ mutual_expected <- function(data, group, unit, weight = NULL,
     if (all.equal(n_total, round(n_total)) != TRUE) {
         stop(paste0(
             "bootstrap with a total sample size that is not an integer is not allowed, ",
-            "maybe scale your weights?"))
+            "maybe scale your weights?"
+        ))
     }
 
     if (is.null(within)) {
-        res <- expected_compute("mh", d, group, unit,
-                                      fixed_margins, n_bootstrap, base)
+        res <- expected_compute(
+            "mh", d, group, unit,
+            fixed_margins, n_bootstrap, base
+        )
     } else {
-        res <- d[, expected_compute("mh", .SD, ..group, ..unit,
-                                          ..fixed_margins, ..n_bootstrap, ..base),
-                 by = within]
+        res <- d[, expected_compute(
+            "mh", .SD, ..group, ..unit,
+            ..fixed_margins, ..n_bootstrap, ..base
+        ),
+        by = within
+        ]
         n_na <- sum(is.na(res$se)) / 2
         if (n_na > 0) {
             message(paste0("Removed ", n_na, " singleton items"))
@@ -167,9 +178,10 @@ mutual_expected <- function(data, group, unit, weight = NULL,
 #' # build a smaller table, with 100 students distributed across
 #' # 10 schools, where one racial group has 10% of the students
 #' small <- data.frame(
-#'           school = c(1:10, 1:10),
-#'           race = c(rep("r1", 10), rep("r2", 10)),
-#'           n = c(rep(1, 10), rep(9, 10)))
+#'     school = c(1:10, 1:10),
+#'     race = c(rep("r1", 10), rep("r2", 10)),
+#'     n = c(rep(1, 10), rep(9, 10))
+#' )
 #' dissimilarity_expected(small, "race", "school", weight = "n")
 #' # with an increase in sample size (n=1000), the values improve
 #' small$n <- small$n * 10
@@ -188,9 +200,12 @@ dissimilarity_expected <- function(data, group, unit, weight = NULL,
     if (all.equal(n_total, round(n_total)) != TRUE) {
         stop(paste0(
             "bootstrap with a total sample size that is not an integer is not allowed, ",
-            "maybe scale your weights?"))
+            "maybe scale your weights?"
+        ))
     }
 
-    expected_compute("d", d, group, unit,
-                          fixed_margins, n_bootstrap, exp(1))
+    expected_compute(
+        "d", d, group, unit,
+        fixed_margins, n_bootstrap, exp(1)
+    )
 }
