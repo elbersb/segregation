@@ -23,8 +23,11 @@ seg_plot <- function(data, group, unit, weight, order = "segregation") {
     stopifnot(length(group) == 1)
     stopifnot(order %in% c("segregation", "majority"))
     d <- prepare_data(data, group, unit, weight)
-    if (is.factor(d[[group]])) {
-        d[, (group) := as.character(get(group))]
+    # easier if renamed
+    setnames(d, group, "group")
+
+    if (is.factor(d[["group"]])) {
+        d[, group := as.character(group)]
     }
 
     d[, p := freq / sum(freq), by = unit]
@@ -33,16 +36,16 @@ seg_plot <- function(data, group, unit, weight, order = "segregation") {
     d[, p_unit := p_unit / N]
 
     # overall
-    overall <- d[, .(freq = sum(freq)), by = group]
+    overall <- d[, .(freq = sum(freq)), by = .(group)]
     overall[, p := freq / sum(freq)]
     setorder(overall, -p)
-    group_order <- overall[[group]]
+    group_order <- overall[["group"]]
 
-    form <- paste("p_unit +", paste(unit, collapse = "+"), "~", group)
+    form <- paste("p_unit +", paste(unit, collapse = "+"), "~ group")
     wide <- data.table::dcast(d[, -"freq"], form, value.var = "p", fill = 0)
 
     if (order == "segregation") {
-        ls <- mutual_local(d, group, unit, weight = "freq", wide = TRUE)
+        ls <- mutual_local(d, "group", unit, weight = "freq", wide = TRUE)
         wide <- merge(ls, wide, by = unit)
         setorder(wide, -ls)
     } else if (order == "majority") {
@@ -57,14 +60,14 @@ seg_plot <- function(data, group, unit, weight, order = "segregation") {
     wide[, xmax := cumsum(p_unit)]
     cols <- c(unit, "xmin", "xmax")
     d <- merge(d, wide[, ..cols], by = unit)
-    d[, (group) := factor(get(group), levels = group_order)]
-    setorderv(d, c("xmin", group))
+    d[, group := factor(group, levels = group_order)]
+    setorderv(d, c("xmin", "group"))
     d[, ymin := cumsum(p) - p, by = unit]
     d[, ymax := cumsum(p), by = unit]
     breaks <- c(wide[["xmin"]], 1)
 
     # format overall
-    overall[, (group) := factor(get(group), levels = group_order)]
+    overall[, group := factor(group, levels = group_order)]
     overall[, ymin := cumsum(p) - p]
     overall[, ymax := cumsum(p)]
     overall[, xmin := 1.05]
@@ -75,7 +78,7 @@ seg_plot <- function(data, group, unit, weight, order = "segregation") {
         combine,
         ggplot2::aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax)
     ) +
-        ggplot2::geom_rect(ggplot2::aes_string(fill = group)) +
+        ggplot2::geom_rect(ggplot2::aes_string(fill = "group")) +
         ggplot2::scale_y_continuous(labels = scales::percent_format(), expand = c(0, 0)) +
         ggplot2::scale_x_continuous(breaks = breaks, expand = c(0, 0)) +
         ggplot2::guides(fill = ggplot2::guide_legend(reverse = TRUE)) +
