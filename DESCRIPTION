@@ -17,6 +17,7 @@ Description: Computes segregation indices, including the Index of Dissimilarity,
     The package includes standard error estimation by bootstrapping, which also corrects for
     small sample bias.
 License: MIT + file LICENSE
+Depends: R (>= 3.5.0)
 Imports: data.table
 Encoding: UTF-8
 LazyData: true
@@ -26,7 +27,8 @@ Suggests:
     knitr,
     rmarkdown,
     dplyr,
-    ggplot2, 
+    ggplot2,
+    scales,
     tidycensus,
     tigris
 URL: https://elbersb.github.io/segregation/

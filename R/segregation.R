@@ -19,7 +19,10 @@ globalVariables(c(
     "n_within_group", "p", "p_exp", "p1", "p2", "p_group", "p_group_g_unit", "p_group_g_unit1",
     "p_group_g_unit2", "p_group_s", "p_group_t", "p_unit", "p_unit1", "p_unit2", "p_unit_s",
     "p_unit_t", "p_within", "sumcond1", "sumcond2", "total", "unit1", "unit2",
-    ".", "..base", "..fixed_margins", "..group", "..n_bootstrap", "..unit", "se", "stat"))
+    ".", "..base", "..fixed_margins", "..group", "..n_bootstrap", "..unit", "se", "stat",
+    "M", "N_units", "i.freq1", "i.freq2", "iter", "ls1", "ls2", "p_unit_g_group1",
+    "p_unit_g_group2", "pair", "pct_M"
+))
 
 # log
 
@@ -27,22 +30,28 @@ log_env <- new.env()
 assign("n_printed", 0, envir = log_env)
 
 update_log <- function(bs_n = NULL, bs_max = NULL, ipf_n = NULL, ipf_max = NULL) {
-    if (!is.null(bs_n))    assign("bs_n", bs_n, envir = log_env)
-    if (!is.null(bs_max))  assign("bs_max", bs_max, envir = log_env)
-    if (!is.null(ipf_n))   assign("ipf_n", ipf_n, envir = log_env)
+    if (!is.null(bs_n)) assign("bs_n", bs_n, envir = log_env)
+    if (!is.null(bs_max)) assign("bs_max", bs_max, envir = log_env)
+    if (!is.null(ipf_n)) assign("ipf_n", ipf_n, envir = log_env)
     if (!is.null(ipf_max)) assign("ipf_max", ipf_max, envir = log_env)
 
     if (!is.null(get("bs_n", envir = log_env)) & !is.null(get("ipf_n", envir = log_env))) {
         text <- paste0("[", "Bootstrap ", get("bs_n", envir = log_env), "/",
-                       get("bs_max", envir = log_env),
-                       " IPF ", get("ipf_n", envir = log_env), "/",
-                       get("ipf_max", envir = log_env), "] ", collapse = "")
+            get("bs_max", envir = log_env),
+            " IPF ", get("ipf_n", envir = log_env), "/",
+            get("ipf_max", envir = log_env), "] ",
+            collapse = ""
+        )
     } else if (!is.null(get("bs_n", envir = log_env))) {
         text <- paste0("[", "Bootstrap ", get("bs_n", envir = log_env),
-                       "/", get("bs_max", envir = log_env), "] ", collapse = "")
+            "/", get("bs_max", envir = log_env), "] ",
+            collapse = ""
+        )
     } else if (!is.null(get("ipf_n", envir = log_env))) {
         text <- paste0("[", "IPF ", get("ipf_n", envir = log_env),
-                       "/", get("ipf_max", envir = log_env), "] ", collapse = "")
+            "/", get("ipf_max", envir = log_env), "] ",
+            collapse = ""
+        )
     }
 
     clear_log()
@@ -60,7 +69,9 @@ clear_log <- function() {
 
     if (get("n_printed", envir = log_env) > 0) {
         cat("\r", paste0(rep(" ", times = get("n_printed", envir = log_env)), collapse = ""),
-            "\r", file = stderr())
+            "\r",
+            file = stderr()
+        )
 
         assign("n_printed", 0, envir = log_env)
     }
@@ -187,7 +198,8 @@ add_local <- function(data, group_var, unit_var, base, weight = "freq") {
     )]
     # calculate local linkage, i.e. log(cond.) * log(cond./marginal)
     data[, ls_unit := sum(p_group_g_unit * logf(p_group_g_unit / p_group, base)),
-           by = unit_var]
+        by = unit_var
+    ]
 }
 
 #' @import data.table
@@ -202,7 +214,8 @@ bootstrap_summary <- function(ret, boot_ret, cols, CI) {
         est = mean(est_debiased),
         se = stats::sd(est_debiased),
         CI = list(stats::quantile(est_debiased, pct)),
-        bias = first(est) - mean(est_debiased)), by = cols]
+        bias = first(est) - mean(est_debiased)
+    ), by = cols]
     ret[]
 }
 
@@ -220,9 +233,9 @@ bootstrap_summary <- function(ret, boot_ret, cols, CI) {
 #' @param drop_zero Drop unit-group combinations with zero weight. (Default \code{TRUE})
 #' @return A data.table.
 #' @examples
-#' m = matrix(c(10, 20, 30, 30, 20, 10), nrow = 3)
+#' m <- matrix(c(10, 20, 30, 30, 20, 10), nrow = 3)
 #' colnames(m) <- c("Black", "White")
-#' long = matrix_to_long(m, group = "race", unit = "school")
+#' long <- matrix_to_long(m, group = "race", unit = "school")
 #' mutual_total(long, "race", "school", weight = "n")
 #' @import data.table
 #' @export
@@ -232,10 +245,12 @@ matrix_to_long <- function(matrix, group = "group", unit = "unit",
     if (is.null(rownames(matrix))) rownames(matrix) <- 1:nrow(matrix)
     if (is.null(colnames(matrix))) colnames(matrix) <- 1:ncol(matrix)
     d <- as.data.table(matrix, keep.rownames = unit)
-    long <- melt(d, id.vars = unit,
-                 variable.name = group,
-                 variable.factor = FALSE,
-                 value.name = weight)
+    long <- melt(d,
+        id.vars = unit,
+        variable.name = group,
+        variable.factor = FALSE,
+        value.name = weight
+    )
     if (drop_zero == TRUE) {
         ind <- long[[weight]] > 0
         long[ind]
