@@ -4,7 +4,7 @@
 \alias{get_crosswalk}
 \title{Create crosswalk after compression}
 \usage{
-get_crosswalk(compression, n_units = NULL, percent = NULL)
+get_crosswalk(compression, n_units = NULL, percent = NULL, parts = FALSE)
 }
 \arguments{
 \item{compression}{A "segcompression" object returned by \link{compress}.}
@@ -16,6 +16,8 @@ Only \code{n_units} or \code{percent} must be given. (default: \code{NULL})}
 \item{percent}{Determines the number of merges by specifying the percentage
 of total segregation information retained in the compressed dataset.
 Only \code{n_units} or \code{percent} must be given. (default: \code{NULL})}
+
+\item{parts}{(default: FALSE)}
 }
 \value{
 Returns a ggplot2 plot.

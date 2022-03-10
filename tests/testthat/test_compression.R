@@ -56,6 +56,28 @@ test_that("get_crosswalk works", {
     expect_equal(get_crosswalk(res_all, n_units = 1)$new, rep("M1", 17))
 })
 
+test_that("parts", {
+    # get_crosswalk
+    res_no_parts <- get_crosswalk(res_all, percent = 0.6)
+    res_parts <- get_crosswalk(res_all, percent = 0.6, parts = TRUE)
+    expect_equal(names(res_no_parts), c("school", "new"))
+    expect_equal(names(res_parts), c("school", "new", "parts"))
+    expect_equal(res_no_parts, res_parts[, -"parts"])
+
+    res_no_parts <- get_crosswalk(res_all, percent = 0.99)
+    res_parts <- get_crosswalk(res_all, percent = 0.99, parts = TRUE)
+    expect_equal(res_no_parts, res_parts[, -"parts"])
+
+    expect_true(all(!is.na(res_parts[grepl("^M", new)][["parts"]])))
+
+    # merge_units
+    merged_no_parts <- merge_units(res_all, percent = .8)
+    merged_parts <- merge_units(res_all, percent = .8, parts = TRUE)
+    expect_equal(res_no_parts, res_parts[, -"parts"])
+    expect_equal(names(merged_no_parts), c("school", "race", "n"))
+    expect_equal(names(merged_parts), c("school", "race", "n", "parts"))
+})
+
 test_that("compress edge case", {
     res_edge <- compress(subset, "race", "school", neighbors = "all", weight = "n", max_iter = 1)
     expect_equal(nrow(get_crosswalk(res_edge, n_units = 16)), n_schools)

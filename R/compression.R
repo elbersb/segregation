@@ -302,15 +302,20 @@ scree_plot <- function(compression, tail = Inf) {
 #' @param percent Determines the number of merges by specifying the percentage
 #'  of total segregation information retained in the compressed dataset.
 #'  Only \code{n_units} or \code{percent} must be given. (default: \code{NULL})
+#' @param parts (default: FALSE)
 #' @return Returns a data.table.
 #' @import data.table
 #' @export
-merge_units <- function(compression, n_units = NULL, percent = NULL) {
-    cw <- get_crosswalk(compression, n_units, percent)
+merge_units <- function(compression, n_units = NULL, percent = NULL, parts = FALSE) {
+    cw <- get_crosswalk(compression, n_units, percent, parts = parts)
     data <- compression$data
 
-    merged <- merge(data, cw[, 1:2], by.x = compression$unit, by.y = "unit", all.x = TRUE)
-    merged <- merged[, .(n = sum(n)), by = c(compression$group, "new")]
+    merged <- merge(data, cw, by = compression$unit, all.x = TRUE)
+    if ("parts" %in% names(cw)) {
+        merged <- merged[, .(n = sum(n), parts = first(parts)), by = c("new", compression$group)]
+    } else {
+        merged <- merged[, .(n = sum(n)), by = c("new", compression$group)]
+    }
     setnames(merged, "new", compression$unit)
     merged
 }
@@ -327,10 +332,11 @@ merge_units <- function(compression, n_units = NULL, percent = NULL) {
 #' @param percent Determines the number of merges by specifying the percentage
 #'  of total segregation information retained in the compressed dataset.
 #'  Only \code{n_units} or \code{percent} must be given. (default: \code{NULL})
+#' @param parts (default: FALSE)
 #' @return Returns a ggplot2 plot.
 #' @return Returns a data.table.
 #' @export
-get_crosswalk <- function(compression, n_units = NULL, percent = NULL) {
+get_crosswalk <- function(compression, n_units = NULL, percent = NULL, parts = FALSE) {
     if (is.null(n_units) & is.null(percent)) {
         stop("either n_units or percent has to be given")
     }
@@ -392,5 +398,15 @@ get_crosswalk <- function(compression, n_units = NULL, percent = NULL) {
     units <- unique(compression$data[[compression$unit]])
     unmerged_units <- units[!(units %in% unlist(bags))]
     unmerged <- data.table(unit = unmerged_units, new = unmerged_units)
-    rbindlist(list(merged, unmerged))
+
+    if (parts == TRUE) {
+        merged[["parts"]] <- rep(
+            sapply(bags, function(x) paste(sort(x), collapse = "/")),
+            lengths(bags)
+        )
+    }
+
+    combined <- rbindlist(list(merged, unmerged), fill = TRUE)
+    setnames(combined, "unit", compression$unit)
+    combined
 }
