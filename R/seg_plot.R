@@ -85,8 +85,10 @@ seg_plot <- function(data, group, unit, weight, order = "segregation") {
         ggplot2::theme_bw() +
         ggplot2::theme(
             panel.grid = ggplot2::element_blank(),
-            axis.text.x = ggplot2::element_blank()
-        )
+            axis.text.x = ggplot2::element_blank(),
+            legend.position = "bottom"
+        ) +
+        ggplot2::labs(fill = NULL)
     if (order == "segregation") {
         plot <- plot + ggplot2::labs(x = "< more segregated | less segregated >")
     }
