@@ -22,7 +22,7 @@ globalVariables(c(
     ".", "..base", "..fixed_margins", "..group", "..n_bootstrap", "..unit", "se", "stat",
     "M", "N_units", "i.freq1", "i.freq2", "iter", "ls1", "ls2", "p_unit_g_group1",
     "p_unit_g_group2", "pair", "pct_M",
-    "xmax", "xmin", "ymax", "ymin", "..cols"
+    "xmax", "xmin", "ymax", "ymin", "..cols", "p_overall"
 ))
 
 # log

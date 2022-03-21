@@ -4,7 +4,15 @@
 \alias{seg_plot}
 \title{A visual representation of segregation}
 \usage{
-seg_plot(data, group, unit, weight, order = "segregation")
+seg_plot(
+  data,
+  group,
+  unit,
+  weight,
+  order = "segregation",
+  reference_distribution = NULL,
+  bar_space = 0
+)
 }
 \arguments{
 \item{data}{A data frame.}
@@ -19,8 +27,16 @@ over which segregation is computed.}
 
 \item{weight}{Numeric. (Default \code{NULL})}
 
-\item{order}{A character, either "segregation" or "majority". Affects
-the ordering of the units.}
+\item{order}{A character, either
+"segregation", "entropy", or "majority".
+Affects the ordering of the units.}
+
+\item{reference_distribution}{Specifies the reference distribution, given as
+a two-column data frame, to be plotted on the right.
+If order is \code{segregation}, then this reference distribution is
+also used to compute the local segregation scores.}
+
+\item{bar_space}{Specifies space between single units.}
 }
 \value{
 Returns a ggplot2 object.

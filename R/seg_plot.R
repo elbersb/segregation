@@ -13,6 +13,11 @@
 #' @param order A character, either
 #'   "segregation", "entropy", or "majority".
 #'   Affects the ordering of the units.
+#' @param reference_distribution Specifies the reference distribution, given as
+#'   a two-column data frame, to be plotted on the right.
+#'   If order is \code{segregation}, then this reference distribution is
+#'   also used to compute the local segregation scores.
+#' @param bar_space Specifies space between single units.
 #' @return Returns a ggplot2 object.
 #' @import data.table
 #' @export
@@ -59,7 +64,7 @@ seg_plot <- function(data, group, unit, weight, order = "segregation",
 
     if (order == "segregation") {
         ls <- merge(d, overall[, .(group, p_overall = p)], by = "group", all.x = TRUE)
-        ls <- ls[, .(ls = sum(p * segregation:::logf(p / p_overall))), by = .(unit)]
+        ls <- ls[, .(ls = sum(p * logf(p / p_overall))), by = .(unit)]
         wide <- merge(ls, wide, by = "unit")
         setorder(wide, -ls)
     } else if (order == "entropy") {
