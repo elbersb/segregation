@@ -11,15 +11,12 @@
 #'   over which segregation is computed.
 #' @param weight Numeric. (Default \code{NULL})
 #' @param order A character, either
-#'   "segregation", "entropy", "majority" or "distance".
+#'   "segregation", "entropy", or "majority".
 #'   Affects the ordering of the units.
-#' @param distance_fun A distance function. Only relevant
-#'   if \code{order} is set to \code{"distance"}.
 #' @return Returns a ggplot2 object.
 #' @import data.table
 #' @export
 seg_plot <- function(data, group, unit, weight, order = "segregation",
-                     distance_fun = function(a, b) sum((a - b)^2),
                      reference_distribution = NULL,
                      bar_space = 0) {
     if (!requireNamespace("ggplot2", quietly = TRUE)) {
@@ -28,8 +25,8 @@ seg_plot <- function(data, group, unit, weight, order = "segregation",
 
     stopifnot(length(group) == 1)
     stopifnot(length(unit) == 1)
-    stopifnot(order %in% c("segregation", "entropy", "majority", "distance"))
-    d <- segregation:::prepare_data(data, group, unit, weight)
+    stopifnot(order %in% c("segregation", "entropy", "majority"))
+    d <- prepare_data(data, group, unit, weight)
     # easier if renamed
     setnames(d, group, "group")
     setnames(d, unit, "unit")
@@ -74,32 +71,6 @@ seg_plot <- function(data, group, unit, weight, order = "segregation",
             c(group_order[[1]], utils::tail(group_order, 1)),
             order = c(1, -1)
         )
-    } else if (order == "distance") {
-        ent <- d[, .(entropy = entropy(.SD, "group", weight = "freq")), by = .(unit)]
-        setorder(ent, entropy)
-        # set up quantities for loop
-        u <- ent[["unit"]][1]
-        ordered <- c(u, rep("", nrow(wide) - 1))
-        subset <- wide[unit != u]
-        cols <- 3:(2 + length(group_order))
-        comp <- as.matrix(wide[unit == u, ..cols])
-
-        pb <- utils::txtProgressBar(min = 0, max = nrow(wide) - 1, style = 3)
-        for (i in 2:nrow(wide)) {
-            utils::setTxtProgressBar(pb, i)
-            mat <- as.matrix(subset[, ..cols])
-            dist <- apply(mat, 1, function(x) distance_fun(x, comp))
-            index <- which(dist == min(dist))[1]
-            u <- subset[index][["unit"]]
-            # update quantities
-            ordered[i] <- u
-            subset <- subset[unit != u]
-            comp <- mat[index, ]
-        }
-        close(pb)
-
-        wide[, unit := factor(unit, levels = ordered)]
-        setorder(wide, unit)
     }
 
     # format units
