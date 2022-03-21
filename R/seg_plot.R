@@ -10,68 +10,121 @@
 #'   contained in \code{data}. Defines the second dimension
 #'   over which segregation is computed.
 #' @param weight Numeric. (Default \code{NULL})
-#' @param order A character, either "segregation" or "majority". Affects
-#'   the ordering of the units.
+#' @param order A character, either
+#'   "segregation", "entropy", "majority" or "distance".
+#'   Affects the ordering of the units.
+#' @param distance_fun A distance function. Only relevant
+#'   if \code{order} is set to \code{"distance"}.
 #' @return Returns a ggplot2 object.
 #' @import data.table
 #' @export
-seg_plot <- function(data, group, unit, weight, order = "segregation") {
+seg_plot <- function(data, group, unit, weight, order = "segregation",
+                     distance_fun = function(a, b) sum((a - b)^2),
+                     reference_distribution = NULL,
+                     bar_space = 0) {
     if (!requireNamespace("ggplot2", quietly = TRUE)) {
         stop("Please install ggplot2 to use this function")
     }
 
     stopifnot(length(group) == 1)
-    stopifnot(order %in% c("segregation", "majority"))
-    d <- prepare_data(data, group, unit, weight)
+    stopifnot(length(unit) == 1)
+    stopifnot(order %in% c("segregation", "entropy", "majority", "distance"))
+    d <- segregation:::prepare_data(data, group, unit, weight)
     # easier if renamed
     setnames(d, group, "group")
+    setnames(d, unit, "unit")
 
-    if (is.factor(d[["group"]])) {
-        d[, group := as.character(group)]
-    }
+    d[, group := as.character(group)]
+    d[, unit := as.character(unit)]
 
-    d[, p := freq / sum(freq), by = unit]
-    d[, p_unit := sum(freq), by = unit]
-    N <- d[, first(p_unit), by = unit][, sum(V1)]
+    d[, p := freq / sum(freq), by = .(unit)]
+    d[, p_unit := sum(freq), by = .(unit)]
+    N <- d[, first(p_unit), by = .(unit)][, sum(V1)]
     d[, p_unit := p_unit / N]
 
     # overall
-    overall <- d[, .(freq = sum(freq)), by = .(group)]
-    overall[, p := freq / sum(freq)]
+    if (is.null(reference_distribution)) {
+        overall <- d[, .(freq = sum(freq)), by = .(group)]
+        overall[, p := freq / sum(freq)]
+    } else {
+        stopifnot(is.data.frame(reference_distribution))
+        stopifnot(ncol(reference_distribution) == 2)
+        stopifnot(names(reference_distribution) == c(group, "p"))
+        stopifnot(nrow(reference_distribution) == d[, uniqueN(group)])
+        overall <- as.data.table(reference_distribution)
+        setnames(overall, group, "group")
+        overall[, group := as.character(group)]
+    }
     setorder(overall, -p)
     group_order <- overall[["group"]]
 
-    form <- paste("p_unit +", paste(unit, collapse = "+"), "~ group")
-    wide <- data.table::dcast(d[, -"freq"], form, value.var = "p", fill = 0)
+    wide <- data.table::dcast(d[, -"freq"], p_unit + unit ~ group, value.var = "p", fill = 0)
 
     if (order == "segregation") {
-        ls <- mutual_local(d, "group", unit, weight = "freq", wide = TRUE)
-        wide <- merge(ls, wide, by = unit)
+        ls <- merge(d, overall[, .(group, p_overall = p)], by = "group", all.x = TRUE)
+        ls <- ls[, .(ls = sum(p * segregation:::logf(p / p_overall))), by = .(unit)]
+        wide <- merge(ls, wide, by = "unit")
         setorder(wide, -ls)
+    } else if (order == "entropy") {
+        ent <- d[, .(entropy = entropy(.SD, "group", weight = "freq")), by = .(unit)]
+        wide <- merge(ent, wide, by = "unit")
+        setorder(wide, entropy)
     } else if (order == "majority") {
         setorderv(wide,
             c(group_order[[1]], utils::tail(group_order, 1)),
             order = c(1, -1)
         )
+    } else if (order == "distance") {
+        ent <- d[, .(entropy = entropy(.SD, "group", weight = "freq")), by = .(unit)]
+        setorder(ent, entropy)
+        # set up quantities for loop
+        u <- ent[["unit"]][1]
+        ordered <- c(u, rep("", nrow(wide) - 1))
+        subset <- wide[unit != u]
+        cols <- 3:(2 + length(group_order))
+        comp <- as.matrix(wide[unit == u, ..cols])
+
+        pb <- utils::txtProgressBar(min = 0, max = nrow(wide) - 1, style = 3)
+        for (i in 2:nrow(wide)) {
+            utils::setTxtProgressBar(pb, i)
+            mat <- as.matrix(subset[, ..cols])
+            dist <- apply(mat, 1, function(x) distance_fun(x, comp))
+            index <- which(dist == min(dist))[1]
+            u <- subset[index][["unit"]]
+            # update quantities
+            ordered[i] <- u
+            subset <- subset[unit != u]
+            comp <- mat[index, ]
+        }
+        close(pb)
+
+        wide[, unit := factor(unit, levels = ordered)]
+        setorder(wide, unit)
     }
 
     # format units
     wide[, xmin := cumsum(p_unit) - p_unit]
     wide[, xmax := cumsum(p_unit)]
-    cols <- c(unit, "xmin", "xmax")
-    d <- merge(d, wide[, ..cols], by = unit)
+    wide[, xmin := xmin + (.I - 1) * bar_space]
+    wide[, xmax := xmax + (.I - 1) * bar_space]
+    d <- merge(d, wide[, .(unit, xmin, xmax)], by = "unit")
     d[, group := factor(group, levels = group_order)]
     setorderv(d, c("xmin", "group"))
-    d[, ymin := cumsum(p) - p, by = unit]
-    d[, ymax := cumsum(p), by = unit]
-    breaks <- c(wide[["xmin"]], 1)
+    d[, ymin := cumsum(p) - p, by = .(unit)]
+    d[, ymax := cumsum(p), by = .(unit)]
+
+    if (bar_space == 0) {
+        breaks <- c(wide[["xmin"]], wide[, max(xmax)])
+    } else {
+        breaks <- c()
+    }
 
     # format overall
     overall[, group := factor(group, levels = group_order)]
     overall[, ymin := cumsum(p) - p]
     overall[, ymax := cumsum(p)]
-    overall[, xmin := 1.05]
-    overall[, xmax := 1.08]
+    overall[, xmin := wide[, max(xmax)] + 0.1]
+    overall[, xmax := wide[, max(xmax)] + 0.15]
 
     combine <- rbindlist(list(d, overall), use.names = TRUE, fill = TRUE)
     plot <- ggplot2::ggplot(

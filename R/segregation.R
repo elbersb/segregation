@@ -89,10 +89,7 @@ close_log()
 
 # helpers
 
-logf <- function(v, base) {
-    if (missing(base)) {
-        stop("argument base required")
-    }
+logf <- function(v, base = exp(1)) {
     logged <- log(v, base = base)
     logged[!is.finite(logged)] <- 0
     logged
