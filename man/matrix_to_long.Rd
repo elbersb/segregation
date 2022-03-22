@@ -33,8 +33,8 @@ for use in \link{mutual_total}, etc. Colnames and rownames of
 the matrix will be respected.
 }
 \examples{
-m = matrix(c(10, 20, 30, 30, 20, 10), nrow = 3)
+m <- matrix(c(10, 20, 30, 30, 20, 10), nrow = 3)
 colnames(m) <- c("Black", "White")
-long = matrix_to_long(m, group = "race", unit = "school")
+long <- matrix_to_long(m, group = "race", unit = "school")
 mutual_total(long, "race", "school", weight = "n")
 }
