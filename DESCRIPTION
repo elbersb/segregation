@@ -18,7 +18,7 @@ Description: Computes segregation indices, including the Index of Dissimilarity,
     small sample bias.
 License: MIT + file LICENSE
 Depends: R (>= 3.5.0)
-Imports: data.table
+Imports: data.table, checkmate
 Encoding: UTF-8
 LazyData: true
 Suggests:
