@@ -34,10 +34,16 @@
     <loc>/reference/entropy.html</loc>
   </url>
   <url>
+    <loc>/reference/exposure.html</loc>
+  </url>
+  <url>
     <loc>/reference/index.html</loc>
   </url>
   <url>
     <loc>/reference/ipf.html</loc>
+  </url>
+  <url>
+    <loc>/reference/isolation.html</loc>
   </url>
   <url>
     <loc>/reference/matrix_to_long.html</loc>

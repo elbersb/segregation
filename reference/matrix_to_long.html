@@ -31,7 +31,7 @@ the matrix will be respected."><!-- mathjax --><script src="https://cdnjs.cloudf
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -100,9 +100,9 @@ column represent the groups.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">m</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">30</span>, <span class="fl">20</span>, <span class="fl">10</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">30</span>, <span class="fl">20</span>, <span class="fl">10</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Black"</span>, <span class="st">"White"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">long</span> <span class="op">=</span> <span class="fu">matrix_to_long</span><span class="op">(</span><span class="va">m</span>, group <span class="op">=</span> <span class="st">"race"</span>, unit <span class="op">=</span> <span class="st">"school"</span><span class="op">)</span></span>
+<span class="r-in"><span class="va">long</span> <span class="op">&lt;-</span> <span class="fu">matrix_to_long</span><span class="op">(</span><span class="va">m</span>, group <span class="op">=</span> <span class="st">"race"</span>, unit <span class="op">=</span> <span class="st">"school"</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">long</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    stat        est</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:    M 0.08720802</span>
