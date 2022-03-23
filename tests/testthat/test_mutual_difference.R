@@ -47,68 +47,92 @@ test_that("mutual_difference SHAPLEY", {
     expect_equal(sh1[stat == "M2", est], sh2[stat == "M2", est])
     expect_equal(sh1[stat == "diff", est], sh2[stat == "diff", est])
     expect_equal(sh1[stat == "group_marginal", est], sh2[stat == "unit_marginal", est],
-        tolerance = .0001)
+        tolerance = .0001
+    )
     expect_equal(sh1[stat == "unit_marginal", est], sh2[stat == "group_marginal", est],
-        tolerance = .0001)
+        tolerance = .0001
+    )
     expect_equal(sh1[stat == "structural", est], sh2[stat == "structural", est],
-        tolerance = .0001)
+        tolerance = .0001
+    )
 
     expect_equal(sh3[stat == "M1", est], sh4[stat == "M1", est])
     expect_equal(sh3[stat == "M2", est], sh4[stat == "M2", est])
     expect_equal(sh3[stat == "diff", est], sh4[stat == "diff", est])
     expect_equal(sh3[stat == "group_marginal", est], sh4[stat == "unit_marginal", est],
-        tolerance = .0001)
+        tolerance = .0001
+    )
     expect_equal(sh3[stat == "unit_marginal", est], sh4[stat == "group_marginal", est],
-        tolerance = .0001)
+        tolerance = .0001
+    )
     expect_equal(sh3[stat == "structural", est], sh4[stat == "structural", est],
-        tolerance = .0001)
+        tolerance = .0001
+    )
 
     # symmetry by data inputs
     expect_equal(sh1[stat == "M1", est], sh3[stat == "M2", est])
     expect_equal(sh1[stat == "M2", est], sh3[stat == "M1", est])
     expect_equal(sh1[stat == "diff", est], -sh3[stat == "diff", est])
     expect_equal(sh1[stat == "group_marginal", est], -sh3[stat == "group_marginal", est],
-        tolerance = .0001)
+        tolerance = .0001
+    )
     expect_equal(sh1[stat == "unit_marginal", est], -sh3[stat == "unit_marginal", est],
-        tolerance = .0001)
+        tolerance = .0001
+    )
     expect_equal(sh1[stat == "structural", est], -sh3[stat == "structural", est],
-        tolerance = .0001)
+        tolerance = .0001
+    )
 
     expect_equal(sh2[stat == "M1", est], sh4[stat == "M2", est])
     expect_equal(sh2[stat == "M2", est], sh4[stat == "M1", est])
     expect_equal(sh2[stat == "diff", est], -sh4[stat == "diff", est])
     expect_equal(sh2[stat == "group_marginal", est], -sh4[stat == "group_marginal", est],
-        tolerance = .0001)
+        tolerance = .0001
+    )
     expect_equal(sh2[stat == "unit_marginal", est], -sh4[stat == "unit_marginal", est],
-        tolerance = .0001)
+        tolerance = .0001
+    )
     expect_equal(sh2[stat == "structural", est], -sh4[stat == "structural", est],
-        tolerance = .0001)
+        tolerance = .0001
+    )
 })
 
 test_that("mutual_difference KM", {
-    ret1 <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n", method = "km",
-        precision = .0001)
+    ret1 <- mutual_difference(test_data1, test_data2, "g", "u",
+        weight = "n", method = "km",
+        precision = .0001
+    )
 
     expect_equal(ret1[stat == "diff", est], ret1[stat == "M2", est] - ret1[stat == "M1", est])
-    diff <- ret1[stat %in% c("unit_marginal", "group_marginal", "interaction", "structural"),
-        sum(est)]
+    diff <- ret1[
+        stat %in% c("unit_marginal", "group_marginal", "interaction", "structural"),
+        sum(est)
+    ]
     expect_equal(ret1[stat == "diff", est], diff)
     expect_equal(ret1[stat == "additions", est], 0)
     expect_equal(ret1[stat == "removals", est], 0)
 
     # other way around
-    ret <- mutual_difference(test_data1, test_data2, "u", "g", weight = "n", method = "km",
-        precision = .0001)
+    ret <- mutual_difference(test_data1, test_data2, "u", "g",
+        weight = "n", method = "km",
+        precision = .0001
+    )
 
     expect_equal(ret[stat == "diff", est], ret[stat == "M2", est] - ret[stat == "M1", est])
-    expect_equal(ret[stat == "diff", est],
-        ret[stat %in% c("unit_marginal", "group_marginal", "interaction", "structural"), sum(est)])
+    expect_equal(
+        ret[stat == "diff", est],
+        ret[stat %in% c("unit_marginal", "group_marginal", "interaction", "structural"), sum(est)]
+    )
 
     # same as mutual_total
-    expect_equal(ret[stat == "M1", est],
-        mutual_total(test_data1, "u", "g", weight = "n")[stat == "M", est])
-    expect_equal(ret[stat == "M2", est],
-        mutual_total(test_data2, "u", "g", weight = "n")[stat == "M", est])
+    expect_equal(
+        ret[stat == "M1", est],
+        mutual_total(test_data1, "u", "g", weight = "n")[stat == "M", est]
+    )
+    expect_equal(
+        ret[stat == "M2", est],
+        mutual_total(test_data2, "u", "g", weight = "n")[stat == "M", est]
+    )
 
     expect_equal(nrow(ret), 9)
     expect_equal(ncol(ret), 2)
@@ -130,27 +154,39 @@ test_that("mutual_difference KM", {
 
 test_that("mutual_difference MRC", {
     ret <- mutual_difference(test_data1, test_data2,
-                             "g", "u", weight = "n", method = "mrc")
+        "g", "u",
+        weight = "n", method = "mrc"
+    )
 
     expect_equal(ret[stat == "diff", est], ret[stat == "M2", est] - ret[stat == "M1", est])
-    expect_equal(ret[stat == "diff", est],
-                 ret[stat %in% c("unit_marginal", "group_marginal", "structural"), sum(est)])
+    expect_equal(
+        ret[stat == "diff", est],
+        ret[stat %in% c("unit_marginal", "group_marginal", "structural"), sum(est)]
+    )
     expect_equal(ret[stat == "additions", est], 0)
     expect_equal(ret[stat == "removals", est], 0)
 
     # other way around
     ret <- mutual_difference(test_data1, test_data2,
-                             "u", "g", weight = "n", method = "mrc")
+        "u", "g",
+        weight = "n", method = "mrc"
+    )
 
     expect_equal(ret[stat == "diff", est], ret[stat == "M2", est] - ret[stat == "M1", est])
-    expect_equal(ret[stat == "diff", est],
-                 ret[stat %in% c("unit_marginal", "group_marginal", "structural"), sum(est)])
+    expect_equal(
+        ret[stat == "diff", est],
+        ret[stat %in% c("unit_marginal", "group_marginal", "structural"), sum(est)]
+    )
 
     # same as mutual_total
-    expect_equal(ret[stat == "M1", est],
-        mutual_total(test_data1, "u", "g", weight = "n")[stat == "M", est])
-    expect_equal(ret[stat == "M2", est],
-        mutual_total(test_data2, "u", "g", weight = "n")[stat == "M", est])
+    expect_equal(
+        ret[stat == "M1", est],
+        mutual_total(test_data1, "u", "g", weight = "n")[stat == "M", est]
+    )
+    expect_equal(
+        ret[stat == "M2", est],
+        mutual_total(test_data2, "u", "g", weight = "n")[stat == "M", est]
+    )
 
     expect_equal(nrow(ret), 8)
     expect_equal(ncol(ret), 2)
@@ -158,8 +194,10 @@ test_that("mutual_difference MRC", {
 
 
 test_that("mutual_difference SE", {
-    ret <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n",
-                             method = "shapley", se = TRUE, n_bootstrap = 5)
+    ret <- mutual_difference(test_data1, test_data2, "g", "u",
+        weight = "n",
+        method = "shapley", se = TRUE, n_bootstrap = 5
+    )
     expect_equal(nrow(ret), 8)
     expect_equal(ncol(ret), 5)
     expect_equal(all(ret[est > 0, se] > 0), TRUE)
@@ -167,25 +205,33 @@ test_that("mutual_difference SE", {
     # attributes exist
     expect_equal(dim(attr(ret, "bootstrap")), c(8 * 5, 2))
 
-    ret <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n",
-                             method = "km", se = TRUE, n_bootstrap = 5)
+    ret <- mutual_difference(test_data1, test_data2, "g", "u",
+        weight = "n",
+        method = "km", se = TRUE, n_bootstrap = 5
+    )
     expect_equal(nrow(ret), 9)
     expect_equal(ncol(ret), 5)
     expect_equal(all(ret[est > 0, se] > 0), TRUE)
 
-    ret <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n",
-                             method = "mrc", se = TRUE, n_bootstrap = 5)
+    ret <- mutual_difference(test_data1, test_data2, "g", "u",
+        weight = "n",
+        method = "mrc", se = TRUE, n_bootstrap = 5
+    )
     expect_equal(nrow(ret), 8)
     expect_equal(ncol(ret), 5)
     expect_equal(all(ret[est > 0, se] > 0), TRUE)
 })
 
-test_that("mutual_difference shapley_detailed", {
-    diff_simple <- mutual_difference(schools05, schools00, group = "school", unit = "race",
-        weight = "n", method = "shapley", precision = .000001)
+test_that("mutual_difference shapley_detailed structural", {
+    diff_simple <- mutual_difference(schools05, schools00,
+        group = "school", unit = "race",
+        weight = "n", method = "shapley", precision = .000001
+    )
     # note that the detailed decomposition requires high precision
-    diff <- mutual_difference(schools05, schools00, group = "school", unit = "race",
-        weight = "n", method = "shapley_detailed", precision = .000001)
+    diff <- mutual_difference(schools05, schools00,
+        group = "school", unit = "race",
+        weight = "n", method = "shapley_detailed", precision = .000001
+    )
 
     expect_equal(nrow(diff_simple), 8)
     expect_equal(ncol(diff_simple), 2)
@@ -198,11 +244,15 @@ test_that("mutual_difference shapley_detailed", {
     wide <- dcast(diff[!is.na(race), ], race ~ stat, value.var = "est")
     expect_equal(wide[, sum(.5 * p1 * ls_diff1 + .5 * p2 * ls_diff2)], wide[, sum(total)])
     expect_equal(wide[, sum(.5 * p1 * ls_diff1 + .5 * p2 * ls_diff2)],
-        diff[stat == "structural", est], tolerance = .00001)
+        diff[stat == "structural", est],
+        tolerance = .00001
+    )
 
     # reverse units and groups
-    diff <- mutual_difference(schools05, schools00, group = "race", unit = "school",
-        weight = "n", method = "shapley_detailed", precision = .000001)
+    diff <- mutual_difference(schools05, schools00,
+        group = "race", unit = "school",
+        weight = "n", method = "shapley_detailed", precision = .000001
+    )
 
     schools_in_common <- intersect(schools00$school, schools05$school)
     expect_equal(nrow(diff), 8 + length(schools_in_common) * 6)
@@ -211,13 +261,56 @@ test_that("mutual_difference shapley_detailed", {
     wide <- dcast(diff[!is.na(school), ], school ~ stat, value.var = "est")
     expect_equal(wide[, sum(.5 * p1 * ls_diff1 + .5 * p2 * ls_diff2)], wide[, sum(total)])
     expect_equal(wide[, sum(.5 * p1 * ls_diff1 + .5 * p2 * ls_diff2)],
-        diff[stat == "structural", est], tolerance = .001)
+        diff[stat == "structural", est],
+        tolerance = .001
+    )
+})
+
+test_that("mutual_difference shapley_detailed marginal", {
+    diff_simple <- mutual_difference(schools05, schools00,
+        group = "school", unit = "race",
+        weight = "n", method = "shapley", precision = .000001
+    )
+    # note that the detailed decomposition requires high precision
+    diff <- mutual_difference(schools05, schools00,
+        group = "school", unit = "race",
+        weight = "n", method = "shapley_detailed_marginal", precision = .000001
+    )
+
+    expect_equal(nrow(diff_simple), 8)
+    expect_equal(ncol(diff_simple), 2)
+    expect_equal(nrow(diff), 8 + length(unique(schools00$race)))
+    expect_equal(ncol(diff), 3)
+
+    # same with and without detail
+    expect_equal(diff_simple[, est], diff[1:8, est], tolerance = .00001)
+    expect_equal(diff[!is.na(race), sum(est)],
+        diff[stat == "unit_marginal" & is.na(race), est],
+        tolerance = .00001
+    )
+
+    # reverse units and groups
+    diff <- mutual_difference(schools05, schools00,
+        group = "race", unit = "school",
+        weight = "n", method = "shapley_detailed_marginal", precision = .000001
+    )
+
+    schools_in_common <- intersect(schools00$school, schools05$school)
+    expect_equal(nrow(diff), 8 + length(schools_in_common))
+    expect_equal(ncol(diff), 3)
+
+    expect_equal(diff[!is.na(school), sum(est)],
+        diff[stat == "unit_marginal" & is.na(school), est],
+        tolerance = .00001
+    )
 })
 
 
 test_that("mutual_difference shapley_detailed with SE", {
-    diff <- mutual_difference(schools05, schools00, group = "school", unit = "race",
-        weight = "n", method = "shapley_detailed", precision = .1, se = TRUE, n_bootstrap = 2)
+    diff <- mutual_difference(schools05, schools00,
+        group = "school", unit = "race",
+        weight = "n", method = "shapley_detailed", precision = .1, se = TRUE, n_bootstrap = 2
+    )
 
     expect_equal(nrow(diff), 8 + length(unique(schools00$race)) * 6)
     expect_equal(ncol(diff), 6)
@@ -226,19 +319,22 @@ test_that("mutual_difference shapley_detailed with SE", {
 
 test_that("mutual_difference log base", {
     ret <- mutual_difference(test_data1, test_data2, "g", "u",
-                             weight = "n", method = "shapley", base = 2)
+        weight = "n", method = "shapley", base = 2
+    )
     expect_equal(ret[stat == "diff", est], ret[stat == "M2", est] - ret[stat == "M1", est])
     expect_equal(nrow(ret), 8)
     expect_equal(ncol(ret), 2)
 
     ret <- mutual_difference(test_data1, test_data2, "g", "u",
-                             weight = "n", method = "km", base = 2)
+        weight = "n", method = "km", base = 2
+    )
     expect_equal(ret[stat == "diff", est], ret[stat == "M2", est] - ret[stat == "M1", est])
     expect_equal(nrow(ret), 9)
     expect_equal(ncol(ret), 2)
 
     ret <- mutual_difference(test_data1, test_data2, "g", "u",
-                             weight = "n", method = "mrc", base = 2)
+        weight = "n", method = "mrc", base = 2
+    )
     expect_equal(ret[stat == "diff", est], ret[stat == "M2", est] - ret[stat == "M1", est])
     expect_equal(nrow(ret), 8)
     expect_equal(ncol(ret), 2)
@@ -259,11 +355,17 @@ test_that("difference same as mutual_total (zero weights)", {
     )
 
     shapley <- mutual_difference(test_data1, test_data2,
-                             "g", "u", weight = "n", method = "shapley")
+        "g", "u",
+        weight = "n", method = "shapley"
+    )
     km <- mutual_difference(test_data1, test_data2,
-                             "g", "u", weight = "n", method = "km")
+        "g", "u",
+        weight = "n", method = "km"
+    )
     mrc <- mutual_difference(test_data1, test_data2,
-                                 "g", "u", weight = "n", method = "mrc")
+        "g", "u",
+        weight = "n", method = "mrc"
+    )
     M1 <- mutual_total(test_data1, "g", "u", weight = "n")[stat == "M", est]
     M2 <- mutual_total(test_data2, "g", "u", weight = "n")[stat == "M", est]
 
@@ -279,9 +381,12 @@ test_that("difference same as mutual_total (zero weights)", {
     test_data2$n2 <- test_data2$n
 
     shapley2 <- mutual_difference(test_data1, test_data2,
-                                  "g", "u", weight = "n2", method = "shapley")
+        "g", "u",
+        weight = "n2", method = "shapley"
+    )
     expect_equal(shapley[stat == "structural", est], shapley2[stat == "structural", est],
-                 tolerance = .001)
+        tolerance = .001
+    )
 })
 
 
@@ -303,14 +408,40 @@ test_that("correctly identifies marginal/structural changes", {
     )
 
     shapley_cols <- mutual_difference(test_data, test_data_cols,
-                             "g", "u", weight = "n", method = "shapley")
-    expect_equal(max(abs(shapley_cols[6:8, est])),
-                 abs(shapley_cols[stat == "unit_marginal", est]))
+        "g", "u",
+        weight = "n", method = "shapley"
+    )
+    expect_equal(
+        max(abs(shapley_cols[6:8, est])),
+        abs(shapley_cols[stat == "unit_marginal", est])
+    )
     expect_equal(shapley_cols[stat == "structural", est], 0, tolerance = .001)
 
     shapley_rows <- mutual_difference(test_data, test_data_rows,
-                             "g", "u", weight = "n", method = "shapley")
-    expect_equal(max(abs(shapley_rows[6:8, est])),
-                 abs(shapley_rows[stat == "unit_marginal", est]))
+        "g", "u",
+        weight = "n", method = "shapley"
+    )
+    expect_equal(
+        max(abs(shapley_rows[6:8, est])),
+        abs(shapley_rows[stat == "unit_marginal", est])
+    )
     expect_equal(shapley_rows[stat == "structural", est], 0, tolerance = .001)
+})
+
+
+test_that("errors", {
+    schools00 <- as.data.table(schools00)
+    schools05 <- as.data.table(schools05)
+    expect_error(mutual_difference(
+        schools00[race %in% c("white", "black")],
+        schools05[race %in% c("asian", "hisp")],
+        "race", "school",
+        weight = "n"
+    ))
+    expect_error(mutual_difference(
+        schools00[1:100],
+        schools05[300:500],
+        "race", "school",
+        weight = "n"
+    ))
 })
