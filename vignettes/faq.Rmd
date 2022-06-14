@@ -22,7 +22,7 @@ library("data.table")
 library("tigris")
 library("segregation")
 options(tigris_use_cache = TRUE)
-schools00 = schools00
+schools00 <- schools00
 ```
 
 ## Can index X be added to the package?
@@ -44,10 +44,12 @@ library("dplyr")
 schools00 %>%
   filter(race %in% c("black", "white")) %>%
   group_by(state) %>%
-  group_modify(~dissimilarity(data = .x,
+  group_modify(~ dissimilarity(
+    data = .x,
     group = "race",
     unit = "school",
-    weight = "n"))
+    weight = "n"
+  ))
 ```
 
 A similar pattern works also well with `data.table`:
@@ -55,11 +57,12 @@ A similar pattern works also well with `data.table`:
 ```{r}
 library("data.table")
 
-schools00 = as.data.table(schools00)
+schools00 <- as.data.table(schools00)
 schools00[
   race %in% c("black", "white"),
   dissimilarity(data = .SD, group = "race", unit = "school", weight = "n"),
-  by = .(state)]
+  by = .(state)
+]
 ```
 
 To compute many decompositions at once, it's easiest
@@ -69,21 +72,21 @@ M indices between 2000 and 2005:
 
 ```{r}
 # helper function for decomposition
-diff = function(df, group) {
-  data1 = filter(df, year == 2000)
-  data2 = filter(df, year == 2005)
+diff <- function(df, group) {
+  data1 <- filter(df, year == 2000)
+  data2 <- filter(df, year == 2005)
   mutual_difference(data1, data2, group = "race", unit = "school", weight = "n")
 }
 
 # add year indicators
-schools00$year = 2000
-schools05$year = 2005
-combine = bind_rows(schools00, schools05)
+schools00$year <- 2000
+schools05$year <- 2005
+combine <- bind_rows(schools00, schools05)
 
 combine %>%
- group_by(state) %>%
- group_modify(diff) %>%
- head(5)
+  group_by(state) %>%
+  group_modify(diff) %>%
+  head(5)
 ```
 
 Again, here's also a `data.table` solution:
@@ -102,15 +105,17 @@ First, download the data:
 ```{r}
 library("tidycensus")
 
-cook_data = get_acs(
+cook_data <- get_acs(
   geography = "tract",
   variables = c(
     white = "B03002_003",
     black = "B03002_004",
     asian = "B03002_006",
-    hispanic = "B03002_012"),
+    hispanic = "B03002_012"
+  ),
   state = "IL",
-  county = "Cook")
+  county = "Cook"
+)
 ```
 
 Because this data is in "long" format, it's easy to compute segregation indices:
@@ -122,15 +127,16 @@ cook_data %>%
   dissimilarity(
     group = "variable",
     unit = "GEOID",
-    weight = "estimate")
+    weight = "estimate"
+  )
 
 # compute multigroup M/H indices
 cook_data %>%
   mutual_total(
     group = "variable",
     unit = "GEOID",
-    weight = "estimate")
-
+    weight = "estimate"
+  )
 ```
 
 Producing a map of local segregation scores is also not hard:
@@ -139,14 +145,15 @@ Producing a map of local segregation scores is also not hard:
 library("tigris")
 library("ggplot2")
 
-local_seg = mutual_local(cook_data,
+local_seg <- mutual_local(cook_data,
   group = "variable",
   unit = "GEOID",
   weight = "estimate",
-  wide = TRUE)
+  wide = TRUE
+)
 
 # download shapefile
-seg_geom = tracts("IL", "Cook", cb = TRUE, progress_bar = FALSE) %>%
+seg_geom <- tracts("IL", "Cook", cb = TRUE, progress_bar = FALSE) %>%
   left_join(local_seg, by = "GEOID")
 
 ggplot(seg_geom, aes(fill = ls)) +
@@ -154,6 +161,8 @@ ggplot(seg_geom, aes(fill = ls)) +
   coord_sf(crs = 3435) +
   scale_fill_viridis_c() +
   theme_void() +
-  labs(title = "Local segregation scores for Cook County, IL",
-    fill = NULL)
+  labs(
+    title = "Local segregation scores for Cook County, IL",
+    fill = NULL
+  )
 ```
