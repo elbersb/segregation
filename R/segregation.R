@@ -23,7 +23,8 @@ globalVariables(c(
     "M", "N_units", "i.freq1", "i.freq2", "iter", "ls1", "ls2", "p_unit_g_group1",
     "p_unit_g_group2", "pair", "pct_M",
     "xmax", "xmin", "ymax", "ymin", "..cols", "p_overall",
-    "freq_of", "freq_to"
+    "freq_of", "freq_to",
+    "cumul_prob_1", "cumul_prob_2", "group1", "group2", "pct_group_1"
 ))
 
 # log
@@ -241,8 +242,8 @@ bootstrap_summary <- function(ret, boot_ret, cols, CI) {
 matrix_to_long <- function(matrix, group = "group", unit = "unit",
                            weight = "n", drop_zero = TRUE) {
     if (!is.matrix(matrix)) stop("matrix needs be a matrix object")
-    if (is.null(rownames(matrix))) rownames(matrix) <- 1:nrow(matrix)
-    if (is.null(colnames(matrix))) colnames(matrix) <- 1:ncol(matrix)
+    if (is.null(rownames(matrix))) rownames(matrix) <- seq_len(nrow(matrix))
+    if (is.null(colnames(matrix))) colnames(matrix) <- seq_len(ncol(matrix))
     d <- as.data.table(matrix, keep.rownames = unit)
     long <- melt(d,
         id.vars = unit,

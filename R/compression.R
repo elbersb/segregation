@@ -33,10 +33,10 @@ compress <- function(data, group, unit, weight = NULL,
     d <- prepare_data(data, group, unit, weight)
 
     if (is.factor(d[[unit]])) {
-        d[[unit]] <- as.character(d[[unit]])
+        d[[unit]] <- droplevels(d[[unit]])
     }
     if (is.factor(d[[group]])) {
-        d[[group]] <- as.character(d[[group]])
+        d[[group]] <- droplevels(d[[group]])
     }
 
     if (is.data.frame(neighbors)) {

@@ -53,7 +53,7 @@ test_that("get_crosswalk works", {
     expect_equal(nrow(get_crosswalk(res_all, percent = 0.1)), n_schools)
     expect_equal(nrow(get_crosswalk(res_all, percent = 0.6)), n_schools)
     expect_equal(nrow(get_crosswalk(res_all, percent = 0.9)), n_schools)
-    expect_equal(get_crosswalk(res_all, n_units = 1)$new, rep("M1", 17))
+    expect_equal(as.character(get_crosswalk(res_all, n_units = 1)$new), rep("M1", 17))
 })
 
 test_that("parts", {
@@ -108,7 +108,6 @@ test_that("merge_units edge case", {
     # replicate manual merge
     units <- c(res_edge$iterations$old_unit, res_edge$iterations$new_unit)
     merged_manually <- subset[school %in% units, .(n = sum(n)), by = .(race)]
-    merged_manually[, race := as.character(race)]
     merged_algo <- merged[school == "M1" & n != 0][, -"school"]
     expect_equal(merged_manually, merged_algo)
 })

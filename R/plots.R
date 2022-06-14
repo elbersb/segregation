@@ -18,12 +18,13 @@
 #'   If order is \code{segregation}, then this reference distribution is
 #'   also used to compute the local segregation scores.
 #' @param bar_space Specifies space between single units.
+#' @param title Adds a plot title and appends the value of the H index.
 #' @return Returns a ggplot2 object.
 #' @import data.table
 #' @export
 segplot <- function(data, group, unit, weight, order = "segregation",
                     reference_distribution = NULL,
-                    bar_space = 0) {
+                    bar_space = 0, title = NULL) {
     if (!requireNamespace("ggplot2", quietly = TRUE)) {
         stop("Please install ggplot2 to use this function")
     }
@@ -36,7 +37,6 @@ segplot <- function(data, group, unit, weight, order = "segregation",
     setnames(d, group, "group")
     setnames(d, unit, "unit")
 
-    d[, group := as.character(group)]
     d[, unit := as.character(unit)]
 
     d[, p := freq / sum(freq), by = .(unit)]
@@ -55,7 +55,6 @@ segplot <- function(data, group, unit, weight, order = "segregation",
         stopifnot(nrow(reference_distribution) == d[, uniqueN(group)])
         overall <- as.data.table(reference_distribution)
         setnames(overall, group, "group")
-        overall[, group := as.character(group)]
     }
     setorder(overall, -p)
     group_order <- overall[["group"]]
@@ -72,6 +71,9 @@ segplot <- function(data, group, unit, weight, order = "segregation",
         wide <- merge(ent, wide, by = "unit")
         setorder(wide, entropy)
     } else if (order == "majority") {
+        d[, group := as.character(group)]
+        overall[, group := as.character(group)]
+        group_order <- as.character(group_order)
         setorderv(wide,
             c(group_order[[1]], utils::tail(group_order, 1)),
             order = c(1, -1)
@@ -84,7 +86,9 @@ segplot <- function(data, group, unit, weight, order = "segregation",
     wide[, xmin := xmin + (.I - 1) * bar_space]
     wide[, xmax := xmax + (.I - 1) * bar_space]
     d <- merge(d, wide[, .(unit, xmin, xmax)], by = "unit")
-    d[, group := factor(group, levels = group_order)]
+    if (order == "majority") {
+        d[, group := factor(group, levels = group_order)]
+    }
     setorderv(d, c("xmin", "group"))
     d[, ymin := cumsum(p) - p, by = .(unit)]
     d[, ymax := cumsum(p), by = .(unit)]
@@ -96,11 +100,14 @@ segplot <- function(data, group, unit, weight, order = "segregation",
     }
 
     # format overall
-    overall[, group := factor(group, levels = group_order)]
-    overall[, ymin := cumsum(p) - p]
-    overall[, ymax := cumsum(p)]
+    if (order == "majority") {
+        overall[, group := factor(group, levels = group_order)]
+    }
     overall[, xmin := wide[, max(xmax)] + 0.1]
     overall[, xmax := wide[, max(xmax)] + 0.15]
+    setorderv(overall, "group")
+    overall[, ymin := cumsum(p) - p]
+    overall[, ymax := cumsum(p)]
 
     combine <- rbindlist(list(d, overall), use.names = TRUE, fill = TRUE)
     plot <- ggplot2::ggplot(
@@ -120,6 +127,10 @@ segplot <- function(data, group, unit, weight, order = "segregation",
         ggplot2::labs(fill = NULL)
     if (order == "segregation") {
         plot <- plot + ggplot2::labs(x = "< more segregated | less segregated >")
+    }
+    if (!is.null(title)) {
+        H <- mutual_total(d, "group", "unit", weight = "freq")[stat == "H", est]
+        plot <- plot + ggplot2::labs(title = paste0(title, " (H = ", round(H, 2), ")"))
     }
     plot
 }
