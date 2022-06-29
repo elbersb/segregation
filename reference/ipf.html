@@ -39,6 +39,9 @@ proportional fitting algorithm (IPF)."><!-- mathjax --><script src="https://cdnj
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/faq.html">FAQ</a>
     </li>
+    <li>
+      <a href="../articles/plotting.html">Visualizing segregation</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -70,15 +73,15 @@ proportional fitting algorithm (IPF).</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">ipf</span><span class="op">(</span>
-  <span class="va">source</span>,
-  <span class="va">target</span>,
-  <span class="va">group</span>,
-  <span class="va">unit</span>,
-  weight <span class="op">=</span> <span class="cn">NULL</span>,
-  max_iterations <span class="op">=</span> <span class="fl">100</span>,
-  precision <span class="op">=</span> <span class="fl">1e-04</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">ipf</span><span class="op">(</span></span>
+<span>  <span class="va">source</span>,</span>
+<span>  <span class="va">target</span>,</span>
+<span>  <span class="va">group</span>,</span>
+<span>  <span class="va">unit</span>,</span>
+<span>  weight <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  max_iterations <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  precision <span class="op">=</span> <span class="fl">1e-04</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -86,31 +89,46 @@ proportional fitting algorithm (IPF).</p>
     <dl><dt>source</dt>
 <dd><p>A "source" data frame. The marginals of this
 dataset are adjusted to the marginals of <code>target</code>.</p></dd>
+
+
 <dt>target</dt>
 <dd><p>A "target" data frame. The function returns a dataset
 where the marginal distributions of <code>group</code> and <code>unit</code> categories
 are approximated by those of <code>target</code>.</p></dd>
+
+
 <dt>group</dt>
 <dd><p>A categorical variable or a vector of variables
 contained in <code>source</code> and <code>target</code>. Defines the first distribution
 for adjustment.</p></dd>
+
+
 <dt>unit</dt>
 <dd><p>A categorical variable or a vector of variables
 contained in <code>source</code> and <code>target</code>. Defines the second distribution
 for adjustment.</p></dd>
+
+
 <dt>weight</dt>
 <dd><p>Numeric. (Default <code>NULL</code>)</p></dd>
+
+
 <dt>max_iterations</dt>
 <dd><p>Maximum number of iterations used for the IPF algorithm.</p></dd>
+
+
 <dt>precision</dt>
 <dd><p>Convergence criterion for the IPF algorithm. In every iteration,
 the ratio of the source and target marginals are calculated for every category of
 <code>group</code> and <code>unit</code>. The algorithm converges when all ratios are smaller
 than <code>1 + precision</code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Returns a data frame that retains
+    
+
+<p>Returns a data frame that retains
   the association structure of <code>source</code> while approximating
   the marginal distributions for <code>group</code> and <code>unit</code> of <code>target</code>.
   The dataset identifies each combination of <code>group</code> and <code>unit</code>,
@@ -147,38 +165,38 @@ does not change the number of observations.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># adjusts the marginals of group and unit categories so that</span></span>
-<span class="r-in"><span class="co"># schools00 has similar marginals as schools05</span></span>
-<span class="r-in"><span class="va">adj</span> <span class="op">&lt;-</span> <span class="fu">ipf</span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># adjusts the marginals of group and unit categories so that</span></span></span>
+<span class="r-in"><span><span class="co"># schools00 has similar marginals as schools05</span></span></span>
+<span class="r-in"><span><span class="va">adj</span> <span class="op">&lt;-</span> <span class="fu">ipf</span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>IPF procedure removed 335 units from source, this likely reduced the sample size (check columns n_source and n_target)</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>IPF procedure removed 210 units from target, this likely reduced the sample size (check columns n_source and n_target)</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># check that the new "race" marginals are similar to the target marginals</span></span>
-<span class="r-in"><span class="co"># (the same could be done for schools)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">adj</span><span class="op">$</span><span class="va">n</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">adj</span><span class="op">$</span><span class="va">race</span><span class="op">)</span>, <span class="va">sum</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># check that the new "race" marginals are similar to the target marginals</span></span></span>
+<span class="r-in"><span><span class="co"># (the same could be done for schools)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">adj</span><span class="op">$</span><span class="va">n</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">adj</span><span class="op">$</span><span class="va">race</span><span class="op">)</span>, <span class="va">sum</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Group.1          x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   asian  22442.029</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   black 117182.529</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3    hisp 146620.992</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4   white 439757.285</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  native   6067.165</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">adj</span><span class="op">$</span><span class="va">n_target</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">adj</span><span class="op">$</span><span class="va">race</span><span class="op">)</span>, <span class="va">sum</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">adj</span><span class="op">$</span><span class="va">n_target</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">adj</span><span class="op">$</span><span class="va">race</span><span class="op">)</span>, <span class="va">sum</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Group.1      x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1   asian  22508</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2   black 117527</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3    hisp 147052</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4   white 441050</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5  native   6085</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># note that the adjusted dataset contains fewer</span></span>
-<span class="r-in"><span class="co"># schools than either the source or the target dataset,</span></span>
-<span class="r-in"><span class="co"># because the marginals are only defined for the overlap</span></span>
-<span class="r-in"><span class="co"># of schools</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">schools00</span><span class="op">$</span><span class="va">school</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># note that the adjusted dataset contains fewer</span></span></span>
+<span class="r-in"><span><span class="co"># schools than either the source or the target dataset,</span></span></span>
+<span class="r-in"><span><span class="co"># because the marginals are only defined for the overlap</span></span></span>
+<span class="r-in"><span><span class="co"># of schools</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">schools00</span><span class="op">$</span><span class="va">school</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2045</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">schools05</span><span class="op">$</span><span class="va">school</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">schools05</span><span class="op">$</span><span class="va">school</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1920</span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">adj</span><span class="op">$</span><span class="va">school</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">adj</span><span class="op">$</span><span class="va">school</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1710</span>
 </code></pre></div>
     </div>
@@ -194,7 +212,7 @@ does not change the number of observations.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

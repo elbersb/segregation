@@ -43,6 +43,9 @@ All methods have been extended to account for missing units/groups in either dat
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/faq.html">FAQ</a>
     </li>
+    <li>
+      <a href="../articles/plotting.html">Visualizing segregation</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -78,88 +81,132 @@ All methods have been extended to account for missing units/groups in either dat
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">mutual_difference</span><span class="op">(</span>
-  <span class="va">data1</span>,
-  <span class="va">data2</span>,
-  <span class="va">group</span>,
-  <span class="va">unit</span>,
-  weight <span class="op">=</span> <span class="cn">NULL</span>,
-  method <span class="op">=</span> <span class="st">"shapley"</span>,
-  se <span class="op">=</span> <span class="cn">FALSE</span>,
-  CI <span class="op">=</span> <span class="fl">0.95</span>,
-  n_bootstrap <span class="op">=</span> <span class="fl">100</span>,
-  base <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mutual_difference</span><span class="op">(</span></span>
+<span>  <span class="va">data1</span>,</span>
+<span>  <span class="va">data2</span>,</span>
+<span>  <span class="va">group</span>,</span>
+<span>  <span class="va">unit</span>,</span>
+<span>  weight <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  method <span class="op">=</span> <span class="st">"shapley"</span>,</span>
+<span>  se <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  CI <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  n_bootstrap <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  base <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data1</dt>
 <dd><p>A data frame with same structure as <code>data2</code>.</p></dd>
+
+
 <dt>data2</dt>
 <dd><p>A data frame with same structure as <code>data1</code>.</p></dd>
+
+
 <dt>group</dt>
 <dd><p>A categorical variable or a vector of variables
 contained in <code>data</code>. Defines the first dimension
 over which segregation is computed.</p></dd>
+
+
 <dt>unit</dt>
 <dd><p>A categorical variable or a vector of variables
 contained in <code>data</code>. Defines the second dimension
 over which segregation is computed.</p></dd>
+
+
 <dt>weight</dt>
 <dd><p>Numeric. (Default <code>NULL</code>)</p></dd>
+
+
 <dt>method</dt>
 <dd><p>Either "shapley" (the default), "km" (Karmel and Maclachlan method), or
 "mrc" (Mora and Ruiz-Castillo method).</p></dd>
+
+
 <dt>se</dt>
 <dd><p>If <code>TRUE</code>, the segregation estimates are bootstrapped to provide
 standard errors and to apply bias correction. The bias that is reported
 has already been applied to the estimates (i.e. the reported estimates are "debiased")
 (Default <code>FALSE</code>)</p></dd>
+
+
 <dt>CI</dt>
 <dd><p>If <code>se = TRUE</code>, compute the confidence (CI*100)<!-- % confidence interval -->
 in addition to the bootstrap standard error.
 This is based on percentiles of the bootstrap distribution, and a valid interpretation
 relies on a larger number of bootstrap iterations. (Default <code>0.95</code>)</p></dd>
+
+
 <dt>n_bootstrap</dt>
 <dd><p>Number of bootstrap iterations. (Default <code>100</code>)</p></dd>
+
+
 <dt>base</dt>
 <dd><p>Base of the logarithm that is used in the calculation.
 Defaults to the natural logarithm.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Only used for additional arguments when
 when <code>method</code> is set to <code>shapley</code> or <code>km</code>. See <a href="ipf.html">ipf</a> for details.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Returns a data.table with columns <code>stat</code> and <code>est</code>. The data frame contains
-  the following rows defined by <code>stat</code>:
-<code>M1</code> contains the M for <code>data1</code>.
-<code>M2</code> contains the M for <code>data2</code>.
-<code>diff</code> is the difference between <code>M2</code> and <code>M1</code>.
-  The sum of the five rows following <code>diff</code> equal <code>diff</code>.
-<code>additions</code> contains the change in M induces by <code>unit</code> and <code>group</code> categories
-  present in <code>data2</code> but not <code>data1</code>, and <code>removals</code> the reverse.
-  All methods return the following three terms:
-<code>unit_marginal</code> is the contribution of unit composition differences.
-<code>group_marginal</code> is the contribution of group composition differences.
-<code>structural</code> is the contribution unexplained by the marginal changes, i.e. the structural
-    difference. Note that the interpretation of these terms depend on the exact method used.
-  When using "km", one additional row is returned:
-<code>interaction</code> is the contribution of differences in the joint marginal distribution
-     of <code>unit</code> and <code>group</code>.
-  When "shapley_detailed" is used, an additional column "unit" is returned, along with
+    
+
+<p>Returns a data.table with columns <code>stat</code> and <code>est</code>. The data frame contains
+  the following rows defined by <code>stat</code>:</p>
+<p></p>
+<p><code>M1</code> contains the M for <code>data1</code>.</p>
+<p></p>
+<p><code>M2</code> contains the M for <code>data2</code>.</p>
+<p></p>
+<p><code>diff</code> is the difference between <code>M2</code> and <code>M1</code>.
+  The sum of the five rows following <code>diff</code> equal <code>diff</code>.</p>
+<p></p>
+<p><code>additions</code> contains the change in M induces by <code>unit</code> and <code>group</code> categories
+  present in <code>data2</code> but not <code>data1</code>, and <code>removals</code> the reverse.</p>
+
+
+<p>All methods return the following three terms:</p>
+<p></p>
+<p><code>unit_marginal</code> is the contribution of unit composition differences.</p>
+<p></p>
+<p><code>group_marginal</code> is the contribution of group composition differences.</p>
+<p></p>
+<p><code>structural</code> is the contribution unexplained by the marginal changes, i.e. the structural
+    difference. Note that the interpretation of these terms depend on the exact method used.</p>
+
+
+<p>When using "km", one additional row is returned:</p>
+<p></p>
+<p><code>interaction</code> is the contribution of differences in the joint marginal distribution
+     of <code>unit</code> and <code>group</code>.</p>
+
+
+<p>When "shapley_detailed" is used, an additional column "unit" is returned, along with
     six additional rows for each unit that is present in both <code>data1</code> and <code>data2</code>.
-    The five rows have the following meaning:
-<code>p1</code> (<code>p2</code>) is the proportion of the unit in <code>data1</code> (<code>data2</code>)
+    The five rows have the following meaning:</p>
+<p></p>
+<p><code>p1</code> (<code>p2</code>) is the proportion of the unit in <code>data1</code> (<code>data2</code>)
     once non-intersecting units/groups have been removed. The changes in local linkage are
-    given by <code>ls_diff1</code> and <code>ls_diff2</code>, and their average is given by
-<code>ls_diff_mean</code>. The row named <code>total</code>    summarizes the contribution of
+    given by <code>ls_diff1</code> and <code>ls_diff2</code>, and their average is given by</p>
+<p></p>
+<p><code>ls_diff_mean</code>. The row named <code>total</code></p>
+
+
+<p>summarizes the contribution of
     the unit towards structural change
     using the formula <code>.5 * p1 * ls_diff1 + .5 * p2 * ls_diff2</code>.
-    The sum of all "total" components equals structural change.
-  If <code>se</code> is set to <code>TRUE</code>, an additional column <code>se</code> contains
+    The sum of all "total" components equals structural change.</p>
+
+
+<p>If <code>se</code> is set to <code>TRUE</code>, an additional column <code>se</code> contains
   the associated bootstrapped standard errors, an additional column <code>CI</code> contains
   the estimate confidence interval as a list column, an additional column <code>bias</code> contains
   the estimated bias, and the column <code>est</code> contains the bias-corrected estimates.</p>
@@ -205,26 +252,26 @@ the change in M that is induced by these cases as
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># decompose the difference in school segregation between 2000 and 2005,</span></span>
-<span class="r-in"><span class="co"># using the Shapley method</span></span>
-<span class="r-in"><span class="fu">mutual_difference</span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>, group <span class="op">=</span> <span class="st">"race"</span>, unit <span class="op">=</span> <span class="st">"school"</span>,</span>
-<span class="r-in">    weight <span class="op">=</span> <span class="st">"n"</span>, method <span class="op">=</span> <span class="st">"shapley"</span>, precision <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>              stat          est</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:             M1  0.425538976</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:             M2  0.413385092</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:           diff -0.012153884</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      additions -0.003412776</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:       removals -0.011405093</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6: group_marginal  0.014241685</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7:  unit_marginal -0.005492824</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8:     structural -0.006084876</span>
-<span class="r-in"><span class="co"># =&gt; the structural component is close to zero, thus most change is in the marginals.</span></span>
-<span class="r-in"><span class="co"># This method gives identical results when we switch the unit and group definitions,</span></span>
-<span class="r-in"><span class="co"># and when we switch the data inputs.</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># the Karmel-Maclachlan method is similar, but only adjust the data in the forward direction...</span></span>
-<span class="r-in"><span class="fu">mutual_difference</span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>, group <span class="op">=</span> <span class="st">"school"</span>, unit <span class="op">=</span> <span class="st">"race"</span>,</span>
-<span class="r-in">    weight <span class="op">=</span> <span class="st">"n"</span>, method <span class="op">=</span> <span class="st">"km"</span>, precision <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># decompose the difference in school segregation between 2000 and 2005,</span></span></span>
+<span class="r-in"><span><span class="co"># using the Shapley method</span></span></span>
+<span class="r-in"><span><span class="fu">mutual_difference</span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>, group <span class="op">=</span> <span class="st">"race"</span>, unit <span class="op">=</span> <span class="st">"school"</span>,</span></span>
+<span class="r-in"><span>    weight <span class="op">=</span> <span class="st">"n"</span>, method <span class="op">=</span> <span class="st">"shapley"</span>, precision <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              stat           est</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:             M1  0.4255389759</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:             M2  0.4133850920</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:           diff -0.0121538839</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      additions -0.0034127763</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:       removals -0.0114050931</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6: group_marginal  0.0178548351</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7:  unit_marginal -0.0006253522</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8:     structural -0.0145654974</span>
+<span class="r-in"><span><span class="co"># =&gt; the structural component is close to zero, thus most change is in the marginals.</span></span></span>
+<span class="r-in"><span><span class="co"># This method gives identical results when we switch the unit and group definitions,</span></span></span>
+<span class="r-in"><span><span class="co"># and when we switch the data inputs.</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># the Karmel-Maclachlan method is similar, but only adjust the data in the forward direction...</span></span></span>
+<span class="r-in"><span><span class="fu">mutual_difference</span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>, group <span class="op">=</span> <span class="st">"school"</span>, unit <span class="op">=</span> <span class="st">"race"</span>,</span></span>
+<span class="r-in"><span>    weight <span class="op">=</span> <span class="st">"n"</span>, method <span class="op">=</span> <span class="st">"km"</span>, precision <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              stat          est</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:             M1  0.425538976</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:             M2  0.413385092</span>
@@ -235,10 +282,10 @@ the change in M that is induced by these cases as
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7:  unit_marginal  0.017497722</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8:    interaction  0.003111406</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 9:     structural  0.002663986</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># ...this means that the results won't be identical when we switch the data inputs</span></span>
-<span class="r-in"><span class="fu">mutual_difference</span><span class="op">(</span><span class="va">schools05</span>, <span class="va">schools00</span>, group <span class="op">=</span> <span class="st">"school"</span>, unit <span class="op">=</span> <span class="st">"race"</span>,</span>
-<span class="r-in">    weight <span class="op">=</span> <span class="st">"n"</span>, method <span class="op">=</span> <span class="st">"km"</span>, precision <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># ...this means that the results won't be identical when we switch the data inputs</span></span></span>
+<span class="r-in"><span><span class="fu">mutual_difference</span><span class="op">(</span><span class="va">schools05</span>, <span class="va">schools00</span>, group <span class="op">=</span> <span class="st">"school"</span>, unit <span class="op">=</span> <span class="st">"race"</span>,</span></span>
+<span class="r-in"><span>    weight <span class="op">=</span> <span class="st">"n"</span>, method <span class="op">=</span> <span class="st">"km"</span>, precision <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              stat          est</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:             M1  0.413385092</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:             M2  0.425538976</span>
@@ -247,12 +294,12 @@ the change in M that is induced by these cases as
 <span class="r-out co"><span class="r-pr">#&gt;</span> 5:       removals  0.003412776</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6: group_marginal  0.019784513</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7:  unit_marginal -0.016961244</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8:    interaction  0.016961244</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9:     structural -0.022448498</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># the MRC method indicates a much higher structural change...</span></span>
-<span class="r-in"><span class="fu">mutual_difference</span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>, group <span class="op">=</span> <span class="st">"race"</span>, unit <span class="op">=</span> <span class="st">"school"</span>,</span>
-<span class="r-in">    weight <span class="op">=</span> <span class="st">"n"</span>, method <span class="op">=</span> <span class="st">"mrc"</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8:    interaction -0.002823269</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9:     structural -0.002663986</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># the MRC method indicates a much higher structural change...</span></span></span>
+<span class="r-in"><span><span class="fu">mutual_difference</span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>, group <span class="op">=</span> <span class="st">"race"</span>, unit <span class="op">=</span> <span class="st">"school"</span>,</span></span>
+<span class="r-in"><span>    weight <span class="op">=</span> <span class="st">"n"</span>, method <span class="op">=</span> <span class="st">"mrc"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              stat          est</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:             M1  0.425538976</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:             M2  0.413385092</span>
@@ -262,10 +309,10 @@ the change in M that is induced by these cases as
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:  unit_marginal -0.004207757</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7: group_marginal  0.062334448</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 8:     structural -0.055462706</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># ...and is not symmetric</span></span>
-<span class="r-in"><span class="fu">mutual_difference</span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>, group <span class="op">=</span> <span class="st">"school"</span>, unit <span class="op">=</span> <span class="st">"race"</span>,</span>
-<span class="r-in">    weight <span class="op">=</span> <span class="st">"n"</span>, method <span class="op">=</span> <span class="st">"mrc"</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># ...and is not symmetric</span></span></span>
+<span class="r-in"><span><span class="fu">mutual_difference</span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>, group <span class="op">=</span> <span class="st">"school"</span>, unit <span class="op">=</span> <span class="st">"race"</span>,</span></span>
+<span class="r-in"><span>    weight <span class="op">=</span> <span class="st">"n"</span>, method <span class="op">=</span> <span class="st">"mrc"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>              stat          est</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:             M1  0.425538976</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:             M2  0.413385092</span>
@@ -289,7 +336,7 @@ the change in M that is induced by these cases as
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

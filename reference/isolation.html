@@ -37,6 +37,9 @@
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/faq.html">FAQ</a>
     </li>
+    <li>
+      <a href="../articles/plotting.html">Visualizing segregation</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -66,27 +69,36 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">isolation</span><span class="op">(</span><span class="va">data</span>, <span class="va">group</span>, <span class="va">unit</span>, weight <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">isolation</span><span class="op">(</span><span class="va">data</span>, <span class="va">group</span>, <span class="va">unit</span>, weight <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>A data frame.</p></dd>
+
+
 <dt>group</dt>
 <dd><p>A categorical variable
 contained in <code>data</code>. Defines the first dimension
 over which segregation is computed.</p></dd>
+
+
 <dt>unit</dt>
 <dd><p>A vector of variables
 contained in <code>data</code>. Defines the second dimension
 over which segregation is computed.</p></dd>
+
+
 <dt>weight</dt>
 <dd><p>Numeric. (Default <code>NULL</code>)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Returns a data.table with group column and isolation index.</p>
+    
+
+<p>Returns a data.table with group column and isolation index.</p>
     </div>
 
   </div>
@@ -101,7 +113,7 @@ over which segregation is computed.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

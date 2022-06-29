@@ -40,6 +40,9 @@ Also see mutual_within for detailed within calculations."><!-- mathjax --><scrip
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/faq.html">FAQ</a>
     </li>
+    <li>
+      <a href="../articles/plotting.html">Visualizing segregation</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -72,31 +75,37 @@ Also see <code><a href="mutual_within.html">mutual_within</a></code> for detaile
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">mutual_total</span><span class="op">(</span>
-  <span class="va">data</span>,
-  <span class="va">group</span>,
-  <span class="va">unit</span>,
-  within <span class="op">=</span> <span class="cn">NULL</span>,
-  weight <span class="op">=</span> <span class="cn">NULL</span>,
-  se <span class="op">=</span> <span class="cn">FALSE</span>,
-  CI <span class="op">=</span> <span class="fl">0.95</span>,
-  n_bootstrap <span class="op">=</span> <span class="fl">100</span>,
-  base <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mutual_total</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">group</span>,</span>
+<span>  <span class="va">unit</span>,</span>
+<span>  within <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  weight <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  se <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  CI <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  n_bootstrap <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  base <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>A data frame.</p></dd>
+
+
 <dt>group</dt>
 <dd><p>A categorical variable or a vector of variables
 contained in <code>data</code>. Defines the first dimension
 over which segregation is computed.</p></dd>
+
+
 <dt>unit</dt>
 <dd><p>A categorical variable or a vector of variables
 contained in <code>data</code>. Defines the second dimension
 over which segregation is computed.</p></dd>
+
+
 <dt>within</dt>
 <dd><p>A categorical variable or a vector of variables
 contained in <code>data</code>. The variable(s) should be a superset of either
@@ -104,27 +113,40 @@ the <code>unit</code> or the <code>group</code> for the calculation to be meanin
 If provided, segregation is
 computed within the groups defined by the variable, and then averaged.
 (Default <code>NULL</code>)</p></dd>
+
+
 <dt>weight</dt>
 <dd><p>Numeric. (Default <code>NULL</code>)</p></dd>
+
+
 <dt>se</dt>
 <dd><p>If <code>TRUE</code>, the segregation estimates are bootstrapped to provide
 standard errors and to apply bias correction. The bias that is reported
 has already been applied to the estimates (i.e. the reported estimates are "debiased")
 (Default <code>FALSE</code>)</p></dd>
+
+
 <dt>CI</dt>
 <dd><p>If <code>se = TRUE</code>, compute the confidence (CI*100)<!-- % confidence interval -->
 in addition to the bootstrap standard error.
 This is based on percentiles of the bootstrap distribution, and a valid interpretation
 relies on a larger number of bootstrap iterations. (Default <code>0.95</code>)</p></dd>
+
+
 <dt>n_bootstrap</dt>
 <dd><p>Number of bootstrap iterations. (Default <code>100</code>)</p></dd>
+
+
 <dt>base</dt>
 <dd><p>Base of the logarithm that is used in the calculation.
 Defaults to the natural logarithm.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Returns a data.table with two rows. The column <code>est</code> contains
+    
+
+<p>Returns a data.table with two rows. The column <code>est</code> contains
   the Mutual Information Index, M, and Theil's Entropy Index, H. The H is the
   the M divided by the <code>group</code> entropy. If <code>within</code> was given,
   M and H are weighted averages of the within-category segregation scores.
@@ -142,49 +164,49 @@ Defaults to the natural logarithm.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># calculate school racial segregation</span></span>
-<span class="r-in"><span class="fu">mutual_total</span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"school"</span>, <span class="st">"race"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span> <span class="co"># M =&gt; .425</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># calculate school racial segregation</span></span></span>
+<span class="r-in"><span><span class="fu">mutual_total</span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"school"</span>, <span class="st">"race"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span> <span class="co"># M =&gt; .425</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    stat        est</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:    M 0.42553898</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:    H 0.05642991</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># note that the definition of groups and units is arbitrary</span></span>
-<span class="r-in"><span class="fu">mutual_total</span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span> <span class="co"># M =&gt; .425</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># note that the definition of groups and units is arbitrary</span></span></span>
+<span class="r-in"><span><span class="fu">mutual_total</span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span> <span class="co"># M =&gt; .425</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    stat       est</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:    M 0.4255390</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:    H 0.4188083</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># if groups or units are defined by a combination of variables,</span></span>
-<span class="r-in"><span class="co"># vectors of variable names can be provided -</span></span>
-<span class="r-in"><span class="co"># here there is no difference, because schools</span></span>
-<span class="r-in"><span class="co"># are nested within districts</span></span>
-<span class="r-in"><span class="fu">mutual_total</span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"district"</span>, <span class="st">"school"</span><span class="op">)</span>,</span>
-<span class="r-in">             weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span> <span class="co"># M =&gt; .424</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># if groups or units are defined by a combination of variables,</span></span></span>
+<span class="r-in"><span><span class="co"># vectors of variable names can be provided -</span></span></span>
+<span class="r-in"><span><span class="co"># here there is no difference, because schools</span></span></span>
+<span class="r-in"><span><span class="co"># are nested within districts</span></span></span>
+<span class="r-in"><span><span class="fu">mutual_total</span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"district"</span>, <span class="st">"school"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>             weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span> <span class="co"># M =&gt; .424</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    stat       est</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:    M 0.4255390</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:    H 0.4188083</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># estimate standard errors and 95% CI for M and H</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">mutual_total</span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>,</span>
-<span class="r-in">             se <span class="op">=</span> <span class="cn">TRUE</span>, n_bootstrap <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># estimate segregation within school districts</span></span>
-<span class="r-in"><span class="fu">mutual_total</span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>,</span>
-<span class="r-in">             within <span class="op">=</span> <span class="st">"district"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span> <span class="co"># M =&gt; .087</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># estimate standard errors and 95% CI for M and H</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">mutual_total</span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>,</span></span>
+<span class="r-in"><span>             se <span class="op">=</span> <span class="cn">TRUE</span>, n_bootstrap <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># estimate segregation within school districts</span></span></span>
+<span class="r-in"><span><span class="fu">mutual_total</span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>,</span></span>
+<span class="r-in"><span>             within <span class="op">=</span> <span class="st">"district"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span> <span class="co"># M =&gt; .087</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    stat        est</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:    M 0.08758648</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:    H 0.08620114</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># estimate between-district racial segregation</span></span>
-<span class="r-in"><span class="fu">mutual_total</span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"district"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span> <span class="co"># M =&gt; .338</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># estimate between-district racial segregation</span></span></span>
+<span class="r-in"><span><span class="fu">mutual_total</span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"district"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span> <span class="co"># M =&gt; .338</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    stat       est</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:    M 0.3379525</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:    H 0.3326072</span>
-<span class="r-in"><span class="co"># note that the sum of within-district and between-district</span></span>
-<span class="r-in"><span class="co"># segregation equals total school-race segregation;</span></span>
-<span class="r-in"><span class="co"># here, most segregation is between school districts</span></span>
+<span class="r-in"><span><span class="co"># note that the sum of within-district and between-district</span></span></span>
+<span class="r-in"><span><span class="co"># segregation equals total school-race segregation;</span></span></span>
+<span class="r-in"><span><span class="co"># here, most segregation is between school districts</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -199,7 +221,7 @@ Defaults to the natural logarithm.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

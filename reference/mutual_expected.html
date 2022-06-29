@@ -42,6 +42,9 @@ the interpretation of index scores might have to be adjusted."><!-- mathjax --><
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/faq.html">FAQ</a>
     </li>
+    <li>
+      <a href="../articles/plotting.html">Visualizing segregation</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -76,73 +79,91 @@ the interpretation of index scores might have to be adjusted.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">mutual_expected</span><span class="op">(</span>
-  <span class="va">data</span>,
-  <span class="va">group</span>,
-  <span class="va">unit</span>,
-  weight <span class="op">=</span> <span class="cn">NULL</span>,
-  within <span class="op">=</span> <span class="cn">NULL</span>,
-  fixed_margins <span class="op">=</span> <span class="cn">TRUE</span>,
-  n_bootstrap <span class="op">=</span> <span class="fl">100</span>,
-  base <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mutual_expected</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">group</span>,</span>
+<span>  <span class="va">unit</span>,</span>
+<span>  weight <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  within <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  fixed_margins <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  n_bootstrap <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  base <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>A data frame.</p></dd>
+
+
 <dt>group</dt>
 <dd><p>A categorical variable or a vector of variables
 contained in <code>data</code>. Defines the first dimension
 over which segregation is computed.</p></dd>
+
+
 <dt>unit</dt>
 <dd><p>A categorical variable or a vector of variables
 contained in <code>data</code>. Defines the second dimension
 over which segregation is computed.</p></dd>
+
+
 <dt>weight</dt>
 <dd><p>Numeric. (Default <code>NULL</code>)</p></dd>
+
+
 <dt>within</dt>
 <dd><p>Apply algorithm within each group defined by this variable,
 and report the weighted average. (Default <code>NULL</code>)</p></dd>
+
+
 <dt>fixed_margins</dt>
 <dd><p>Should the margins be fixed or simulated? (Default <code>TRUE</code>)</p></dd>
+
+
 <dt>n_bootstrap</dt>
 <dd><p>Number of bootstrap iterations. (Default <code>100</code>)</p></dd>
+
+
 <dt>base</dt>
 <dd><p>Base of the logarithm that is used in the calculation.
 Defaults to the natural logarithm.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data.table with two rows, corresponding to the expected values of
+    
+
+<p>A data.table with two rows, corresponding to the expected values of
    segregation when true segregation is zero.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># the schools00 dataset has a large sample size, so expected segregation is close to zero</span></span>
-<span class="r-in"><span class="fu">mutual_expected</span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># the schools00 dataset has a large sample size, so expected segregation is close to zero</span></span></span>
+<span class="r-in"><span><span class="fu">mutual_expected</span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         stat         est           se</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: M under 0 0.004801315 8.780815e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: H under 0 0.004725373 8.641930e-05</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># but we can build a smaller table, with 100 students distributed across</span></span>
-<span class="r-in"><span class="co"># 10 schools, where one racial group has 10% of the students</span></span>
-<span class="r-in"><span class="va">small</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">          school <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span>,</span>
-<span class="r-in">          race <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"r1"</span>, <span class="fl">10</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"r2"</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span>,</span>
-<span class="r-in">          n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">9</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">mutual_expected</span><span class="op">(</span><span class="va">small</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         stat       est         se</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: M under 0 0.0563621 0.01763252</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: H under 0 0.1733776 0.05424006</span>
-<span class="r-in"><span class="co"># with an increase in sample size (n=1000), the values improve</span></span>
-<span class="r-in"><span class="va">small</span><span class="op">$</span><span class="va">n</span> <span class="op">&lt;-</span> <span class="va">small</span><span class="op">$</span><span class="va">n</span> <span class="op">*</span> <span class="fl">10</span></span>
-<span class="r-in"><span class="fu">mutual_expected</span><span class="op">(</span><span class="va">small</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: M under 0 0.004816432 7.283338e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: H under 0 0.004740252 7.168139e-05</span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># but we can build a smaller table, with 100 students distributed across</span></span></span>
+<span class="r-in"><span><span class="co"># 10 schools, where one racial group has 10% of the students</span></span></span>
+<span class="r-in"><span><span class="va">small</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    school <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    race <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"r1"</span>, <span class="fl">10</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"r2"</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">9</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">mutual_expected</span><span class="op">(</span><span class="va">small</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         stat        est         se</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: M under 0 0.05507728 0.01701278</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: H under 0 0.16942529 0.05233364</span>
+<span class="r-in"><span><span class="co"># with an increase in sample size (n=1000), the values improve</span></span></span>
+<span class="r-in"><span><span class="va">small</span><span class="op">$</span><span class="va">n</span> <span class="op">&lt;-</span> <span class="va">small</span><span class="op">$</span><span class="va">n</span> <span class="op">*</span> <span class="fl">10</span></span></span>
+<span class="r-in"><span><span class="fu">mutual_expected</span><span class="op">(</span><span class="va">small</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         stat         est          se</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: M under 0 0.004702948 0.002109277</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: H under 0 0.014466916 0.006488426</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: M under 0 0.004402319 0.002080333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: H under 0 0.013542138 0.006399391</span>
 </code></pre></div>
     </div>
   </div>
@@ -157,7 +178,7 @@ Defaults to the natural logarithm.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

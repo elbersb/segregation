@@ -39,6 +39,9 @@ the matrix will be respected."><!-- mathjax --><script src="https://cdnjs.cloudf
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/faq.html">FAQ</a>
     </li>
+    <li>
+      <a href="../articles/plotting.html">Visualizing segregation</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -70,13 +73,13 @@ the matrix will be respected.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">matrix_to_long</span><span class="op">(</span>
-  <span class="va">matrix</span>,
-  group <span class="op">=</span> <span class="st">"group"</span>,
-  unit <span class="op">=</span> <span class="st">"unit"</span>,
-  weight <span class="op">=</span> <span class="st">"n"</span>,
-  drop_zero <span class="op">=</span> <span class="cn">TRUE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">matrix_to_long</span><span class="op">(</span></span>
+<span>  <span class="va">matrix</span>,</span>
+<span>  group <span class="op">=</span> <span class="st">"group"</span>,</span>
+<span>  unit <span class="op">=</span> <span class="st">"unit"</span>,</span>
+<span>  weight <span class="op">=</span> <span class="st">"n"</span>,</span>
+<span>  drop_zero <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -84,26 +87,37 @@ the matrix will be respected.</p>
     <dl><dt>matrix</dt>
 <dd><p>A matrix, where the rows represent the units, and the
 column represent the groups.</p></dd>
+
+
 <dt>group</dt>
 <dd><p>Variable name for group. (Default <code>group</code>)</p></dd>
+
+
 <dt>unit</dt>
 <dd><p>Variable name for unit. (Default <code>unit</code>)</p></dd>
+
+
 <dt>weight</dt>
 <dd><p>Variable name for frequency weight. (Default <code>weight</code>)</p></dd>
+
+
 <dt>drop_zero</dt>
 <dd><p>Drop unit-group combinations with zero weight. (Default <code>TRUE</code>)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data.table.</p>
+    
+
+<p>A data.table.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">30</span>, <span class="fl">20</span>, <span class="fl">10</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Black"</span>, <span class="st">"White"</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">long</span> <span class="op">&lt;-</span> <span class="fu">matrix_to_long</span><span class="op">(</span><span class="va">m</span>, group <span class="op">=</span> <span class="st">"race"</span>, unit <span class="op">=</span> <span class="st">"school"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">long</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">30</span>, <span class="fl">20</span>, <span class="fl">10</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Black"</span>, <span class="st">"White"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">long</span> <span class="op">&lt;-</span> <span class="fu">matrix_to_long</span><span class="op">(</span><span class="va">m</span>, group <span class="op">=</span> <span class="st">"race"</span>, unit <span class="op">=</span> <span class="st">"school"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">long</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    stat        est</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:    M 0.08720802</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:    H 0.12581458</span>
@@ -121,7 +135,7 @@ column represent the groups.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>

@@ -13,6 +13,9 @@
     <loc>/articles/index.html</loc>
   </url>
   <url>
+    <loc>/articles/plotting.html</loc>
+  </url>
+  <url>
     <loc>/articles/segregation.html</loc>
   </url>
   <url>
@@ -23,6 +26,9 @@
   </url>
   <url>
     <loc>/news/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/compress.html</loc>
   </url>
   <url>
     <loc>/reference/dissimilarity.html</loc>
@@ -37,6 +43,9 @@
     <loc>/reference/exposure.html</loc>
   </url>
   <url>
+    <loc>/reference/get_crosswalk.html</loc>
+  </url>
+  <url>
     <loc>/reference/index.html</loc>
   </url>
   <url>
@@ -47,6 +56,9 @@
   </url>
   <url>
     <loc>/reference/matrix_to_long.html</loc>
+  </url>
+  <url>
+    <loc>/reference/merge_units.html</loc>
   </url>
   <url>
     <loc>/reference/mutual_difference.html</loc>
@@ -74,6 +86,15 @@
   </url>
   <url>
     <loc>/reference/schools05.html</loc>
+  </url>
+  <url>
+    <loc>/reference/scree_plot.html</loc>
+  </url>
+  <url>
+    <loc>/reference/segcurve.html</loc>
+  </url>
+  <url>
+    <loc>/reference/segplot.html</loc>
   </url>
   <url>
     <loc>/reference/segregation.html</loc>

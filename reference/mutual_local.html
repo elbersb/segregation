@@ -38,6 +38,9 @@ by unit."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/ma
   <ul class="dropdown-menu" role="menu"><li>
       <a href="../articles/faq.html">FAQ</a>
     </li>
+    <li>
+      <a href="../articles/plotting.html">Visualizing segregation</a>
+    </li>
   </ul></li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -68,59 +71,79 @@ by <code>unit</code>.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">mutual_local</span><span class="op">(</span>
-  <span class="va">data</span>,
-  <span class="va">group</span>,
-  <span class="va">unit</span>,
-  weight <span class="op">=</span> <span class="cn">NULL</span>,
-  se <span class="op">=</span> <span class="cn">FALSE</span>,
-  CI <span class="op">=</span> <span class="fl">0.95</span>,
-  n_bootstrap <span class="op">=</span> <span class="fl">100</span>,
-  base <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,
-  wide <span class="op">=</span> <span class="cn">FALSE</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">mutual_local</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  <span class="va">group</span>,</span>
+<span>  <span class="va">unit</span>,</span>
+<span>  weight <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  se <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  CI <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  n_bootstrap <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  base <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>,</span>
+<span>  wide <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>data</dt>
 <dd><p>A data frame.</p></dd>
+
+
 <dt>group</dt>
 <dd><p>A categorical variable or a vector of variables
 contained in <code>data</code>. Defines the dimension
 over which segregation is computed.</p></dd>
+
+
 <dt>unit</dt>
 <dd><p>A categorical variable or a vector of variables
 contained in <code>data</code>. Defines the group for which local
 segregation indices are calculated.</p></dd>
+
+
 <dt>weight</dt>
 <dd><p>Numeric. (Default <code>NULL</code>)</p></dd>
+
+
 <dt>se</dt>
 <dd><p>If <code>TRUE</code>, the segregation estimates are bootstrapped to provide
 standard errors and to apply bias correction. The bias that is reported
 has already been applied to the estimates (i.e. the reported estimates are "debiased")
 (Default <code>FALSE</code>)</p></dd>
+
+
 <dt>CI</dt>
 <dd><p>If <code>se = TRUE</code>, compute the confidence (CI*100)<!-- % confidence interval -->
 in addition to the bootstrap standard error.
 This is based on percentiles of the bootstrap distribution, and a valid interpretation
 relies on a larger number of bootstrap iterations. (Default <code>0.95</code>)</p></dd>
+
+
 <dt>n_bootstrap</dt>
 <dd><p>Number of bootstrap iterations. (Default <code>100</code>)</p></dd>
+
+
 <dt>base</dt>
 <dd><p>Base of the logarithm that is used in the calculation.
 Defaults to the natural logarithm.</p></dd>
+
+
 <dt>wide</dt>
 <dd><p>Returns a wide dataframe instead of a long dataframe.
 (Default <code>FALSE</code>)</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>Returns a data.table with two rows for each category defined by <code>unit</code>,
+    
+
+<p>Returns a data.table with two rows for each category defined by <code>unit</code>,
   for a total of <code>2*(number of units)</code> rows.
   The column <code>est</code> contains two statistics that
-  are provided for each unit: <code>ls</code>, the local segregation score, and
-<code>p</code>, the proportion of the unit from the total number of cases.
+  are provided for each unit: <code>ls</code>, the local segregation score, and</p>
+<p></p>
+<p><code>p</code>, the proportion of the unit from the total number of cases.
   If <code>se</code> is set to <code>TRUE</code>, an additional column <code>se</code> contains
   the associated bootstrapped standard errors, an additional column <code>CI</code> contains
   the estimate confidence interval as a list column, an additional column <code>bias</code> contains
@@ -137,9 +160,9 @@ Defaults to the natural logarithm.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># which schools are most segregated?</span></span>
-<span class="r-in"><span class="op">(</span><span class="va">localseg</span> <span class="op">=</span> <span class="fu">mutual_local</span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>,</span>
-<span class="r-in">                         weight <span class="op">=</span> <span class="st">"n"</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># which schools are most segregated?</span></span></span>
+<span class="r-in"><span><span class="op">(</span><span class="va">localseg</span> <span class="op">=</span> <span class="fu">mutual_local</span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>,</span></span>
+<span class="r-in"><span>                         weight <span class="op">=</span> <span class="st">"n"</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       school        ls            p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    1:   A1_1 0.1826710 0.0004522985</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    2:   A1_2 0.1825592 0.0004978701</span>
@@ -152,15 +175,15 @@ Defaults to the natural logarithm.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2043: C165_3 0.2972550 0.0005650883</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2044: C166_1 0.3072281 0.0011586588</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2045: C167_1 0.3166498 0.0005354667</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">localseg</span><span class="op">$</span><span class="va">p</span><span class="op">)</span> <span class="co"># =&gt; 1</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">localseg</span><span class="op">$</span><span class="va">p</span><span class="op">)</span> <span class="co"># =&gt; 1</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># the sum of the weighted local segregation scores equals</span></span>
-<span class="r-in"><span class="co"># total segregation</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">localseg</span><span class="op">$</span><span class="va">ls</span> <span class="op">*</span> <span class="va">localseg</span><span class="op">$</span><span class="va">p</span><span class="op">)</span> <span class="co"># =&gt; .425</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># the sum of the weighted local segregation scores equals</span></span></span>
+<span class="r-in"><span><span class="co"># total segregation</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">localseg</span><span class="op">$</span><span class="va">ls</span> <span class="op">*</span> <span class="va">localseg</span><span class="op">$</span><span class="va">p</span><span class="op">)</span> <span class="co"># =&gt; .425</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.425539</span>
-<span class="r-in"><span class="fu"><a href="mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"school"</span>, <span class="st">"race"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span> <span class="co"># M =&gt; .425</span></span>
+<span class="r-in"><span><span class="fu"><a href="mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"school"</span>, <span class="st">"race"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span> <span class="co"># M =&gt; .425</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    stat        est</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:    M 0.42553898</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:    H 0.05642991</span>
@@ -178,7 +201,7 @@ Defaults to the natural logarithm.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
       </footer></div>
