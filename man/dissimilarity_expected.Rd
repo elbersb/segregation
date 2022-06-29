@@ -46,9 +46,10 @@ the interpretation of index scores might have to be adjusted.
 # build a smaller table, with 100 students distributed across
 # 10 schools, where one racial group has 10\% of the students
 small <- data.frame(
-          school = c(1:10, 1:10),
-          race = c(rep("r1", 10), rep("r2", 10)),
-          n = c(rep(1, 10), rep(9, 10)))
+    school = c(1:10, 1:10),
+    race = c(rep("r1", 10), rep("r2", 10)),
+    n = c(rep(1, 10), rep(9, 10))
+)
 dissimilarity_expected(small, "race", "school", weight = "n")
 # with an increase in sample size (n=1000), the values improve
 small$n <- small$n * 10

@@ -20,7 +20,11 @@ globalVariables(c(
     "p_group_g_unit2", "p_group_s", "p_group_t", "p_unit", "p_unit1", "p_unit2", "p_unit_s",
     "p_unit_t", "p_within", "sumcond1", "sumcond2", "total", "unit1", "unit2",
     ".", "..base", "..fixed_margins", "..group", "..n_bootstrap", "..unit", "se", "stat",
-    "freq_of", "freq_to"
+    "M", "N_units", "i.freq1", "i.freq2", "iter", "ls1", "ls2", "p_unit_g_group1",
+    "p_unit_g_group2", "pair", "pct_M",
+    "xmax", "xmin", "ymax", "ymin", "..cols", "p_overall",
+    "freq_of", "freq_to",
+    "cumul_prob_1", "cumul_prob_2", "group1", "group2", "pct_group_1"
 ))
 
 # log
@@ -87,10 +91,7 @@ close_log()
 
 # helpers
 
-logf <- function(v, base) {
-    if (missing(base)) {
-        stop("argument base required")
-    }
+logf <- function(v, base = exp(1)) {
     logged <- log(v, base = base)
     logged[!is.finite(logged)] <- 0
     logged
@@ -241,8 +242,8 @@ bootstrap_summary <- function(ret, boot_ret, cols, CI) {
 matrix_to_long <- function(matrix, group = "group", unit = "unit",
                            weight = "n", drop_zero = TRUE) {
     if (!is.matrix(matrix)) stop("matrix needs be a matrix object")
-    if (is.null(rownames(matrix))) rownames(matrix) <- 1:nrow(matrix)
-    if (is.null(colnames(matrix))) colnames(matrix) <- 1:ncol(matrix)
+    if (is.null(rownames(matrix))) rownames(matrix) <- seq_len(nrow(matrix))
+    if (is.null(colnames(matrix))) colnames(matrix) <- seq_len(ncol(matrix))
     d <- as.data.table(matrix, keep.rownames = unit)
     long <- melt(d,
         id.vars = unit,
