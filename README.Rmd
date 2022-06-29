@@ -11,12 +11,12 @@ editor_options:
 
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>",
-  fig.path = "README-"
+    collapse = TRUE,
+    comment = "#>",
+    fig.path = "README-"
 )
-options(scipen=999)
-options(digits=3)
+options(scipen = 999)
+options(digits = 3)
 set.seed(69839)
 ```
 
@@ -38,10 +38,12 @@ Find more information in the
 [vignette](https://elbersb.github.io/segregation/articles/segregation.html)
 and the [documentation](https://elbersb.de/segregation).
 
--   calculate total, between, within, and local segregation
+-   calculate total, between, within, and local segregation using the M/H indices
 -   decompose differences in total segregation over time (Elbers 2020)
+-   other supported indices are the dissimilarity, isolation, and exposure indices
 -   estimate standard errors and confidence intervals via bootstrapping,
     which also corrects for small sample bias
+-   contains functions to visualize segregation patterns
 -   every method returns a
     [tidy](https://vita.had.co.nz/papers/tidy-data.html)
     [data.table](https://rdatatable.gitlab.io/data.table/) for easy
@@ -52,7 +54,8 @@ and the [documentation](https://elbersb.de/segregation).
 Most of the procedures implemented in this package are described in more
 detail [in this SMR
 paper](https://journals.sagepub.com/doi/full/10.1177/0049124121986204)
-([Preprint](https://osf.io/preprints/socarxiv/ya7zs/)).
+([Preprint](https://osf.io/preprints/socarxiv/ya7zs/)) 
+and [in this working paper](https://osf.io/preprints/socarxiv/ruw4g/).
 
 ## Usage
 
@@ -70,8 +73,10 @@ Standard errors in all functions can be estimated via boostrapping. This
 will also apply bias-correction to the estimates:
 
 ```{r}
-mutual_total(schools00, "race", "school", weight = "n",
-             se = TRUE, CI = 0.90, n_bootstrap = 500)
+mutual_total(schools00, "race", "school",
+    weight = "n",
+    se = TRUE, CI = 0.90, n_bootstrap = 500
+)
 ```
 
 Decompose segregation into a between-state and a within-state term (the
@@ -91,8 +96,10 @@ estimation. The sum of the proportion-weighted local segregation scores
 equals M:
 
 ```{r}
-local <- mutual_local(schools00, group = "school", unit = "race", weight = "n",
-             se = TRUE, CI = 0.90, n_bootstrap = 500, wide = TRUE)
+local <- mutual_local(schools00,
+    group = "school", unit = "race", weight = "n",
+    se = TRUE, CI = 0.90, n_bootstrap = 500, wide = TRUE
+)
 local[, c("race", "ls", "p", "ls_CI")]
 sum(local$p * local$ls)
 ```
@@ -102,12 +109,20 @@ proportional fitting (IPF) and the Shapley decomposition (see Elbers
 2021 for details):
 
 ```{r}
-mutual_difference(schools00, schools05, group = "race", unit = "school",
-                  weight = "n", method = "shapley")
+mutual_difference(schools00, schools05,
+    group = "race", unit = "school",
+    weight = "n", method = "shapley"
+)
+```
+
+Show a segplot:
+
+```{r segplot}
+segplot(schools00, group = "race", unit = "school", weight = "n")
 ```
 
 Find more information in the
-[vignette](https://elbersb.github.io/segregation/articles/segregation.html).
+[documentation](https://elbersb.github.io/segregation).
 
 ## How to install
 
