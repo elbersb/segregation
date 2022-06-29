@@ -101,13 +101,15 @@
 <p>An R package to calculate and decompose entropy-based, multigroup segregation indices, with a focus on the Mutual Information Index (M) and Theil’s Information Index (H). The index of Dissimilarity (D) is also supported.</p>
 <p>Find more information in the <a href="https://elbersb.github.io/segregation/articles/segregation.html" class="external-link">vignette</a> and the <a href="https://elbersb.de/segregation" class="external-link">documentation</a>.</p>
 <ul>
-<li>calculate total, between, within, and local segregation</li>
+<li>calculate total, between, within, and local segregation using the M/H indices</li>
 <li>decompose differences in total segregation over time (Elbers 2020)</li>
+<li>other supported indices are the dissimilarity, isolation, and exposure indices</li>
 <li>estimate standard errors and confidence intervals via bootstrapping, which also corrects for small sample bias</li>
+<li>contains functions to visualize segregation patterns</li>
 <li>every method returns a <a href="https://vita.had.co.nz/papers/tidy-data.html" class="external-link">tidy</a> <a href="https://rdatatable.gitlab.io/data.table/" class="external-link">data.table</a> for easy post-processing and plotting</li>
 <li>uses the <a href="https://rdatatable.gitlab.io/data.table/" class="external-link"><code>data.table</code></a> package internally, so it’s relatively fast</li>
 </ul>
-<p>Most of the procedures implemented in this package are described in more detail <a href="https://journals.sagepub.com/doi/full/10.1177/0049124121986204" class="external-link">in this SMR paper</a> (<a href="https://osf.io/preprints/socarxiv/ya7zs/" class="external-link">Preprint</a>).</p>
+<p>Most of the procedures implemented in this package are described in more detail <a href="https://journals.sagepub.com/doi/full/10.1177/0049124121986204" class="external-link">in this SMR paper</a> (<a href="https://osf.io/preprints/socarxiv/ya7zs/" class="external-link">Preprint</a>) and <a href="https://osf.io/preprints/socarxiv/ruw4g/" class="external-link">in this working paper</a>.</p>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
 </h2>
@@ -117,37 +119,47 @@
 <span></span>
 <span><span class="co"># example dataset with fake data provided by the package</span></span>
 <span><span class="fu"><a href="reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    stat   est</span></span>
-<span><span class="co">#&gt; 1:    M 0.426</span></span>
-<span><span class="co">#&gt; 2:    H 0.419</span></span></code></pre></div>
+<span><span class="co">#&gt;      stat   est</span></span>
+<span><span class="co">#&gt;    &lt;char&gt; &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:      M 0.426</span></span>
+<span><span class="co">#&gt; 2:      H 0.419</span></span></code></pre></div>
 <p>Standard errors in all functions can be estimated via boostrapping. This will also apply bias-correction to the estimates:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>,</span>
-<span>             se <span class="op">=</span> <span class="cn">TRUE</span>, CI <span class="op">=</span> <span class="fl">0.90</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>,</span>
+<span>    weight <span class="op">=</span> <span class="st">"n"</span>,</span>
+<span>    se <span class="op">=</span> <span class="cn">TRUE</span>, CI <span class="op">=</span> <span class="fl">0.90</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; 500 bootstrap iterations on 877739 observations</span></span>
-<span><span class="co">#&gt;    stat   est       se          CI    bias</span></span>
-<span><span class="co">#&gt; 1:    M 0.422 0.000775 0.421,0.423 0.00361</span></span>
-<span><span class="co">#&gt; 2:    H 0.415 0.000712 0.414,0.416 0.00356</span></span></code></pre></div>
+<span><span class="co">#&gt;      stat   est       se          CI    bias</span></span>
+<span><span class="co">#&gt;    &lt;char&gt; &lt;num&gt;    &lt;num&gt;      &lt;list&gt;   &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:      M 0.422 0.000775 0.421,0.423 0.00361</span></span>
+<span><span class="co">#&gt; 2:      H 0.415 0.000712 0.414,0.416 0.00356</span></span></code></pre></div>
 <p>Decompose segregation into a between-state and a within-state term (the sum of these equals total segregation):</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># between states</span></span>
 <span><span class="fu"><a href="reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"state"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    stat    est</span></span>
-<span><span class="co">#&gt; 1:    M 0.0992</span></span>
-<span><span class="co">#&gt; 2:    H 0.0977</span></span>
+<span><span class="co">#&gt;      stat    est</span></span>
+<span><span class="co">#&gt;    &lt;char&gt;  &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:      M 0.0992</span></span>
+<span><span class="co">#&gt; 2:      H 0.0977</span></span>
 <span></span>
 <span><span class="co"># within states</span></span>
 <span><span class="fu"><a href="reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, within <span class="op">=</span> <span class="st">"state"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    stat   est</span></span>
-<span><span class="co">#&gt; 1:    M 0.326</span></span>
-<span><span class="co">#&gt; 2:    H 0.321</span></span></code></pre></div>
+<span><span class="co">#&gt;      stat   est</span></span>
+<span><span class="co">#&gt;    &lt;char&gt; &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1:      M 0.326</span></span>
+<span><span class="co">#&gt; 2:      H 0.321</span></span></code></pre></div>
 <p>Local segregation (<code>ls</code>) is a decomposition by units or groups (here racial groups). This function also support standard error and CI estimation. The sum of the proportion-weighted local segregation scores equals M:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">local</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mutual_local.html">mutual_local</a></span><span class="op">(</span><span class="va">schools00</span>, group <span class="op">=</span> <span class="st">"school"</span>, unit <span class="op">=</span> <span class="st">"race"</span>, weight <span class="op">=</span> <span class="st">"n"</span>,</span>
-<span>             se <span class="op">=</span> <span class="cn">TRUE</span>, CI <span class="op">=</span> <span class="fl">0.90</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">local</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/mutual_local.html">mutual_local</a></span><span class="op">(</span><span class="va">schools00</span>,</span>
+<span>    group <span class="op">=</span> <span class="st">"school"</span>, unit <span class="op">=</span> <span class="st">"race"</span>, weight <span class="op">=</span> <span class="st">"n"</span>,</span>
+<span>    se <span class="op">=</span> <span class="cn">TRUE</span>, CI <span class="op">=</span> <span class="fl">0.90</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span>, wide <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; 500 bootstrap iterations on 877739 observations</span></span>
 <span><span class="va">local</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"race"</span>, <span class="st">"ls"</span>, <span class="st">"p"</span>, <span class="st">"ls_CI"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt; Key: &lt;race&gt;</span></span>
 <span><span class="co">#&gt;      race    ls       p       ls_CI</span></span>
+<span><span class="co">#&gt;    &lt;fctr&gt; &lt;num&gt;   &lt;num&gt;      &lt;list&gt;</span></span>
 <span><span class="co">#&gt; 1:  asian 0.591 0.02255 0.582,0.601</span></span>
 <span><span class="co">#&gt; 2:  black 0.876 0.19017 0.873,0.879</span></span>
 <span><span class="co">#&gt; 3:   hisp 0.771 0.15167 0.767,0.775</span></span>
@@ -157,9 +169,12 @@
 <span><span class="co">#&gt; [1] 0.422</span></span></code></pre></div>
 <p>Decompose the difference in M between 2000 and 2005, using iterative proportional fitting (IPF) and the Shapley decomposition (see Elbers 2021 for details):</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="reference/mutual_difference.html">mutual_difference</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>, group <span class="op">=</span> <span class="st">"race"</span>, unit <span class="op">=</span> <span class="st">"school"</span>,</span>
-<span>                  weight <span class="op">=</span> <span class="st">"n"</span>, method <span class="op">=</span> <span class="st">"shapley"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="reference/mutual_difference.html">mutual_difference</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>,</span>
+<span>    group <span class="op">=</span> <span class="st">"race"</span>, unit <span class="op">=</span> <span class="st">"school"</span>,</span>
+<span>    weight <span class="op">=</span> <span class="st">"n"</span>, method <span class="op">=</span> <span class="st">"shapley"</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt;              stat      est</span></span>
+<span><span class="co">#&gt;            &lt;char&gt;    &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1:             M1  0.42554</span></span>
 <span><span class="co">#&gt; 2:             M2  0.41339</span></span>
 <span><span class="co">#&gt; 3:           diff -0.01215</span></span>
@@ -168,16 +183,20 @@
 <span><span class="co">#&gt; 6: group_marginal  0.01787</span></span>
 <span><span class="co">#&gt; 7:  unit_marginal -0.01171</span></span>
 <span><span class="co">#&gt; 8:     structural -0.00349</span></span></code></pre></div>
-<p>Find more information in the <a href="https://elbersb.github.io/segregation/articles/segregation.html" class="external-link">vignette</a>.</p>
+<p>Show a segplot:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/segplot.html">segplot</a></span><span class="op">(</span><span class="va">schools00</span>, group <span class="op">=</span> <span class="st">"race"</span>, unit <span class="op">=</span> <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="README-segplot-1.png"><!-- --></p>
+<p>Find more information in the <a href="https://elbersb.github.io/segregation" class="external-link">documentation</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="how-to-install">How to install<a class="anchor" aria-label="anchor" href="#how-to-install"></a>
 </h2>
 <p>To install the package from CRAN, use</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"segregation"</span><span class="op">)</span></span></code></pre></div>
 <p>To install the development version, use</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"elbersb/segregation"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
