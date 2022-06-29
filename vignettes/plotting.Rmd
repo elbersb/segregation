@@ -1,0 +1,45 @@
+---
+title: "Visualizing segregation"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{FAQ}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+library("segregation")
+```
+
+## Segregation curve
+
+```{r}
+segcurve(subset(schools00, race %in% c("white", "black")),
+    "race", "school",
+    weight = "n"
+)
+```
+
+## Segplot
+
+```{r}
+sch <- subset(schools00, state == "A")
+
+# basic segplot
+segplot(sch, "race", "school", weight = "n", axis_labels = "both")
+
+# order by majority group (white in this case)
+segplot(sch, "race", "school", weight = "n", order = "majority")
+
+# increase the space between bars
+# (has to be very low here because there are many schools in this dataset)
+segplot(sch, "race", "school", weight = "n", bar_space = 0.0005)
+
+# change the reference distribution
+# (here, we just use an equalized distribution across the five groups)
+(ref <- data.frame(race = unique(schools00$race), p = rep(0.2, 5)))
+segplot(sch, "race", "school",
+    weight = "n",
+    reference_distribution = ref
+)
+```
