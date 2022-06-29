@@ -4,7 +4,7 @@
 - add within argument to mutual_expected
 - add dissimilarity_expected
 - add suite of compression-related functions
-- add seg_plot function
+- add segplot function
 - add functions exposure and isolation
 
 # segregation 0.6.0
