@@ -15,7 +15,7 @@ Description: Computes segregation indices, including the Index of Dissimilarity,
     and by within and between terms. The package also provides a method to decompose
     differences in segregation as described by Elbers (2021) <doi:10.1177/0049124121986204>.
     The package includes standard error estimation by bootstrapping, which also corrects for
-    small sample bias.
+    small sample bias. The package also contains functions for visualizing segregation patterns.
 License: MIT + file LICENSE
 Depends: R (>= 3.5.0)
 Imports: data.table, checkmate
@@ -33,5 +33,5 @@ Suggests:
     tigris
 URL: https://elbersb.github.io/segregation/
 BugReports: https://github.com/elbersb/segregation/issues
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 VignetteBuilder: knitr

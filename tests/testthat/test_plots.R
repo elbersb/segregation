@@ -44,6 +44,14 @@ test_that("reference", {
     expect_equal(sp$data[["unit"]], sp_ref$data[["unit"]])
 })
 
+test_that("axis_labels", {
+    left <- segplot(schools00, "race", "school", weight = "n", axis_labels = "left")
+    right <- segplot(schools00, "race", "school", weight = "n", axis_labels = "right")
+    both <- segplot(schools00, "race", "school", weight = "n", axis_labels = "both")
+    expect_equal(nrow(left$data), nrow(right$data))
+    expect_equal(nrow(both$data), nrow(right$data))
+})
+
 test_that("segcurve", {
     expect_error(segcurve(schools00, "race", "school", weight = "n"))
 

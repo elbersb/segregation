@@ -19,19 +19,24 @@
 #'   also used to compute the local segregation scores.
 #' @param bar_space Specifies space between single units.
 #' @param title Adds a plot title and appends the value of the H index.
+#' @param axis_labels One of "left", "right", or "both". Determines where the
+#'   y axis labels are placed.
 #' @return Returns a ggplot2 object.
 #' @import data.table
 #' @export
 segplot <- function(data, group, unit, weight, order = "segregation",
                     reference_distribution = NULL,
-                    bar_space = 0, title = NULL) {
+                    bar_space = 0, title = NULL, axis_labels = "left") {
     if (!requireNamespace("ggplot2", quietly = TRUE)) {
         stop("Please install ggplot2 to use this function")
     }
 
     stopifnot(length(group) == 1)
     stopifnot(length(unit) == 1)
+    stopifnot(length(axis_labels) == 1)
     stopifnot(order %in% c("segregation", "entropy", "majority"))
+    stopifnot(axis_labels %in% c("left", "right", "both"))
+
     d <- prepare_data(data, group, unit, weight)
     # easier if renamed
     setnames(d, group, "group")
@@ -115,7 +120,6 @@ segplot <- function(data, group, unit, weight, order = "segregation",
         ggplot2::aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax)
     ) +
         ggplot2::geom_rect(ggplot2::aes_string(fill = "group")) +
-        ggplot2::scale_y_continuous(labels = scales::percent_format(), expand = c(0, 0)) +
         ggplot2::scale_x_continuous(breaks = breaks, expand = c(0, 0)) +
         ggplot2::guides(fill = ggplot2::guide_legend(reverse = TRUE)) +
         ggplot2::theme_bw() +
@@ -125,6 +129,27 @@ segplot <- function(data, group, unit, weight, order = "segregation",
             legend.position = "bottom"
         ) +
         ggplot2::labs(fill = NULL)
+
+    if (axis_labels == "left") {
+        plot <- plot + ggplot2::scale_y_continuous(
+            labels = scales::percent_format(),
+            expand = c(0, 0)
+        )
+    } else if (axis_labels == "right") {
+        plot <- plot + ggplot2::scale_y_continuous(
+            labels = scales::percent_format(),
+            expand = c(0, 0),
+            position = "right"
+        )
+    } else if (axis_labels == "both") {
+        plot <- plot + ggplot2::scale_y_continuous(
+            labels = scales::percent_format(),
+            expand = c(0, 0),
+            sec.axis = ggplot2::dup_axis()
+        )
+    }
+
+
     if (order == "segregation") {
         plot <- plot + ggplot2::labs(x = "< more segregated | less segregated >")
     }

@@ -11,7 +11,9 @@ segplot(
   weight,
   order = "segregation",
   reference_distribution = NULL,
-  bar_space = 0
+  bar_space = 0,
+  title = NULL,
+  axis_labels = "left"
 )
 }
 \arguments{
@@ -37,6 +39,11 @@ If order is \code{segregation}, then this reference distribution is
 also used to compute the local segregation scores.}
 
 \item{bar_space}{Specifies space between single units.}
+
+\item{title}{Adds a plot title and appends the value of the H index.}
+
+\item{axis_labels}{One of "left", "right", or "both". Determines where the
+y axis labels are placed.}
 }
 \value{
 Returns a ggplot2 object.
