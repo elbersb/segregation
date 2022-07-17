@@ -182,6 +182,9 @@ Across Time and Space. Sociological Methods & Research.
 -   Some of the analyses [in this
     article](https://multimedia.tijd.be/diversiteit/) by the Belgian
     newspaper *De Tijd* used the package.
+-   The analyses of [this article in the Wall Street
+    Journal](https://www.wsj.com/articles/chicago-vs-dallas-why-the-north-lags-behind-the-south-and-west-in-racial-integration-11657936680)
+    were produced using this package.
 
 ## References on entropy-based segregation indices
 

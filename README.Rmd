@@ -38,9 +38,11 @@ Find more information in the
 [vignette](https://elbersb.github.io/segregation/articles/segregation.html)
 and the [documentation](https://elbersb.de/segregation).
 
--   calculate total, between, within, and local segregation using the M/H indices
+-   calculate total, between, within, and local segregation using the
+    M/H indices
 -   decompose differences in total segregation over time (Elbers 2020)
--   other supported indices are the dissimilarity, isolation, and exposure indices
+-   other supported indices are the dissimilarity, isolation, and
+    exposure indices
 -   estimate standard errors and confidence intervals via bootstrapping,
     which also corrects for small sample bias
 -   contains functions to visualize segregation patterns
@@ -54,8 +56,8 @@ and the [documentation](https://elbersb.de/segregation).
 Most of the procedures implemented in this package are described in more
 detail [in this SMR
 paper](https://journals.sagepub.com/doi/full/10.1177/0049124121986204)
-([Preprint](https://osf.io/preprints/socarxiv/ya7zs/)) 
-and [in this working paper](https://osf.io/preprints/socarxiv/ruw4g/).
+([Preprint](https://osf.io/preprints/socarxiv/ya7zs/)) and [in this
+working paper](https://osf.io/preprints/socarxiv/ruw4g/).
 
 ## Usage
 
@@ -161,6 +163,9 @@ Across Time and Space. Sociological Methods & Research.
 -   Some of the analyses [in this
     article](https://multimedia.tijd.be/diversiteit/) by the Belgian
     newspaper *De Tijd* used the package.
+-   The analyses of [this article in the Wall Street
+    Journal](https://www.wsj.com/articles/chicago-vs-dallas-why-the-north-lags-behind-the-south-and-west-in-racial-integration-11657936680)
+    were produced using this package.
 
 ## References on entropy-based segregation indices
 
