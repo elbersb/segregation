@@ -211,8 +211,8 @@ H(\mathbf{T})=\frac{M(\mathbf{T})}{E(\mathbf{T})},
 <span>             se <span class="op">=</span> <span class="cn">TRUE</span>, CI <span class="op">=</span> <span class="fl">.95</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 500 bootstrap iterations on 877739 observations</span></span>
 <span><span class="co">#&gt;    stat       est           se                  CI        bias</span></span>
-<span><span class="co">#&gt; 1:    M 0.4219003 0.0007719052 0.4203912,0.4233419 0.003638708</span></span>
-<span><span class="co">#&gt; 2:    H 0.4152171 0.0007243806 0.4138685,0.4166676 0.003591213</span></span></code></pre></div>
+<span><span class="co">#&gt; 1:    M 0.4219195 0.0008122519 0.4203798,0.4235621 0.003619514</span></span>
+<span><span class="co">#&gt; 2:    H 0.4152383 0.0007193725 0.4138099,0.4165422 0.003570044</span></span></code></pre></div>
 <p>As there a large number of observations, the standard errors are very small.</p>
 </div>
 <div class="section level2">
@@ -351,17 +351,17 @@ H(\mathbf{T})=H(\mathbf{S}) + \sum_{s=1}^S \frac{E(\mathbf{T}_s)}{E(\mathbf{T})}
 <span>                    se <span class="op">=</span> <span class="cn">TRUE</span>, CI <span class="op">=</span> <span class="fl">.95</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 500 bootstrap iterations on 877739 observations</span></span>
 <span><span class="co">#&gt;    stat       est           se                  CI        bias</span></span>
-<span><span class="co">#&gt; 1:    M 0.4218962 0.0008100675 0.4203556,0.4234404 0.003642810</span></span>
-<span><span class="co">#&gt; 2:    H 0.4152128 0.0007206959 0.4137912,0.4165806 0.003595533</span></span></code></pre></div>
+<span><span class="co">#&gt; 1:    M 0.4219066 0.0007588171 0.4205871,0.4234066 0.003632376</span></span>
+<span><span class="co">#&gt; 2:    H 0.4152143 0.0006923681 0.4138709,0.4165045 0.003593967</span></span></code></pre></div>
 <p>The confidence intervals are based on the percentiles from the bootstrap distribution, and hence require a large number of bootstrap iterations for valid interpretation. The estimate <code>est</code> that is reported in the results has already been “debiased”, i.e. the bias that has been estimated from the bootstrap distribution (which is reported in <code>bias</code>) has been subtracted from the usual maximum-likelihood estimate that we would obtain from <code>mutual_total</code> with <code>se = FALSE</code>. The confidence interval is centered around the debiased estimate.</p>
 <p>On balance, confidence intervals are preferred over the standard error because the bootstrap distribution can be skewed, especially when segregation is very low or very high. For this example, we can see that the standard errors provide almost identical coverage to the confidence intervals, as</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># M</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">se</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">est</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">est</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.4203084 0.4234839</span></span>
+<span><span class="co">#&gt; [1] 0.4204193 0.4233939</span></span>
 <span><span class="co"># H</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">se</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">est</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">est</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.4138002 0.4166253</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.4138573 0.4165714</span></span></code></pre></div>
 <p>provide effectively the same coverage as the confidence intervals obtained from the percentile bootstrap.</p>
 <p>Whenever the bootstrap is used, the bootstrap distributions for each parameter are reported in an attribute <code>bootstrap</code> of the returned object. This can be used, for instance, to check whether the bootstrap distribution is skewed. The following code computes local segregation scores for all schools, and then shows a histogram of the bootstrap distribution for school C137_9, which has a very low local segregation score:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
@@ -377,8 +377,8 @@ H(\mathbf{T})=H(\mathbf{S}) + \sum_{s=1}^S \frac{E(\mathbf{T}_s)}{E(\mathbf{T})}
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/mutual_expected.html">mutual_expected</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         stat         est           se</span></span>
-<span><span class="co">#&gt; 1: M under 0 0.004806265 6.959850e-05</span></span>
-<span><span class="co">#&gt; 2: H under 0 0.004730245 6.849767e-05</span></span></code></pre></div>
+<span><span class="co">#&gt; 1: M under 0 0.004799547 7.770695e-05</span></span>
+<span><span class="co">#&gt; 2: H under 0 0.004723633 7.647788e-05</span></span></code></pre></div>
 <p>Here, there is no concern about bias due to a small sample size.</p>
 </div>
 <div class="section level2">
@@ -393,8 +393,8 @@ H(\mathbf{T})=H(\mathbf{S}) + \sum_{s=1}^S \frac{E(\mathbf{T}_s)}{E(\mathbf{T})}
 <span><span class="co">#&gt; 3:           diff -0.012153884</span></span>
 <span><span class="co">#&gt; 4:      additions -0.003412776</span></span>
 <span><span class="co">#&gt; 5:       removals -0.011405093</span></span>
-<span><span class="co">#&gt; 6: group_marginal  0.018550238</span></span>
-<span><span class="co">#&gt; 7:  unit_marginal -0.012391915</span></span>
+<span><span class="co">#&gt; 6: group_marginal  0.017871051</span></span>
+<span><span class="co">#&gt; 7:  unit_marginal -0.011712727</span></span>
 <span><span class="co">#&gt; 8:     structural -0.003494338</span></span></code></pre></div>
 <p>This method also supports inference by setting <code>se = TRUE</code>.</p>
 </div>
@@ -424,7 +424,7 @@ H(\mathbf{T})=H(\mathbf{S}) + \sum_{s=1}^S \frac{E(\mathbf{T}_s)}{E(\mathbf{T})}
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>

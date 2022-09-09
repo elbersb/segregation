@@ -246,6 +246,30 @@
 <span>  <span class="op">)</span></span></code></pre></div>
 <p><img src="faq_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
 </div>
+<div class="section level2">
+<h2 id="how-can-i-compute-margins-adjusted-local-segregation-scores">How can I compute margins-adjusted local segregation scores?<a class="anchor" aria-label="anchor" href="#how-can-i-compute-margins-adjusted-local-segregation-scores"></a>
+</h2>
+<p>When using <code>mutual_difference</code>, supply <code>method = "shapley_detailed"</code> to get two different local segregation scores that are margins-adjusted (one is coming from adjusting forward, the other from adjusting backwards). By averaging them we can create a single margins-adjusted local segregation score:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">diff</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutual_difference.html">mutual_difference</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, </span>
+<span>                          weight <span class="op">=</span> <span class="st">"n"</span>, method <span class="op">=</span> <span class="st">"shapley_detailed"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">diff</span><span class="op">[</span><span class="va">stat</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ls_diff1"</span>, <span class="st">"ls_diff2"</span><span class="op">)</span>, </span>
+<span>     <span class="fu">.</span><span class="op">(</span>ls_diff_adjusted <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">est</span><span class="op">)</span><span class="op">)</span>, </span>
+<span>     by <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">school</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt;       school ls_diff_adjusted</span></span>
+<span><span class="co">#&gt;    1:   A1_3     -0.088983164</span></span>
+<span><span class="co">#&gt;    2:   A2_2     -0.044338042</span></span>
+<span><span class="co">#&gt;    3:   A2_3     -0.101696519</span></span>
+<span><span class="co">#&gt;    4:   A2_4     -0.020134162</span></span>
+<span><span class="co">#&gt;    5:   A2_6     -0.138567163</span></span>
+<span><span class="co">#&gt;   ---                        </span></span>
+<span><span class="co">#&gt; 1706: C164_2     -0.031329845</span></span>
+<span><span class="co">#&gt; 1707: C165_1     -0.023978101</span></span>
+<span><span class="co">#&gt; 1708: C165_3      0.003781632</span></span>
+<span><span class="co">#&gt; 1709: C166_1      0.010270713</span></span>
+<span><span class="co">#&gt; 1710: C167_1     -0.002663687</span></span></code></pre></div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -265,7 +289,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
