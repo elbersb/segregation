@@ -166,3 +166,20 @@ ggplot(seg_geom, aes(fill = ls)) +
     fill = NULL
   )
 ```
+
+## How can I compute margins-adjusted local segregation scores?
+
+When using `mutual_difference`, supply `method = "shapley_detailed"`
+to get two different local segregation scores that are margins-adjusted 
+(one is coming from adjusting forward, the other from adjusting
+backwards). By averaging them we can create a single margins-adjusted 
+local segregation score:
+
+```{r}
+diff <- mutual_difference(schools00, schools05, "race", "school", 
+                          weight = "n", method = "shapley_detailed")
+
+diff[stat %in% c("ls_diff1", "ls_diff2"), 
+     .(ls_diff_adjusted = mean(est)), 
+     by = .(school)]
+```
