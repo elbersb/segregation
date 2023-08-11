@@ -94,11 +94,21 @@
 
     
     
-<p>The package provides the functions <code><a href="../reference/segcurve.html">segcurve()</a></code> and <code><a href="../reference/segplot.html">segplot()</a></code> to visualize segregation. These functions return simple ggplots, which can then be further styled and themed. For the <code><a href="../reference/segplot.html">segplot()</a></code> function, it is often interesting to also compress the segregation information that is contained in large datasets. How to do this using the functions <code><a href="../reference/compress.html">compress()</a></code> and <code><a href="../reference/merge_units.html">merge_units()</a></code> is also described below, and in more detail <a href="https://osf.io/preprints/socarxiv/ruw4g/" class="external-link">in this working paper</a>.</p>
+<p>The package provides the functions <code><a href="../reference/segcurve.html">segcurve()</a></code> and
+<code><a href="../reference/segplot.html">segplot()</a></code> to visualize segregation. These functions return
+simple ggplots, which can then be further styled and themed. For the
+<code><a href="../reference/segplot.html">segplot()</a></code> function, it is often interesting to also
+compress the segregation information that is contained in large
+datasets. How to do this using the functions <code><a href="../reference/compress.html">compress()</a></code> and
+<code><a href="../reference/merge_units.html">merge_units()</a></code> is also described below, and in more detail
+<a href="https://osf.io/preprints/socarxiv/ruw4g/" class="external-link">in this working
+paper</a>.</p>
 <div class="section level2">
 <h2 id="segregation-curve">Segregation curve<a class="anchor" aria-label="anchor" href="#segregation-curve"></a>
 </h2>
-<p>The segregation curve was first introduced by <a href="https://www.jstor.org/stable/2088328" class="external-link">Duncan and Duncan (1955)</a>. The function <code><a href="../reference/segcurve.html">segcurve()</a></code> provides a simple way of plotting a segregation curve:</p>
+<p>The segregation curve was first introduced by <a href="https://www.jstor.org/stable/2088328" class="external-link">Duncan and Duncan
+(1955)</a>. The function <code><a href="../reference/segcurve.html">segcurve()</a></code> provides a simple way
+of plotting a segregation curve:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/segcurve.html">segcurve</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="va">race</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"black"</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  <span class="st">"race"</span>, <span class="st">"school"</span>,</span>
@@ -109,8 +119,25 @@
 <div class="section level2">
 <h2 id="segplot">Segplot<a class="anchor" aria-label="anchor" href="#segplot"></a>
 </h2>
-<p>The function <code><a href="../reference/segplot.html">segplot()</a></code> is provided to generate segplots. Segplots are described in more detail <a href="https://osf.io/preprints/socarxiv/ruw4g/" class="external-link">in this working paper</a>. The function requires the dataset, the group, and unit variables, and, if required, a variable that identifies the weight (<code>n</code> in this case).</p>
-<p>Other options to customize the look of the segplot are given by the argument <code>order</code>. By default, the units of the segplot are ordered by their local segregation score, but it is also possible to order them by entropy (i.e., diversity) or by share of the majority population. This last option can be useful for the two-group case. The argument <code>bar_space</code> can be used to increase the space between the units from the default of zero space between bars. When plotting a subset of the dataset, the reference distribution shown on the right of the segplot can be changed by supplying a two-column data frame to the <code>reference_distribution</code> argument. One column of this frame should contain the group identifiers, and the other should include the reference proportion of each group. To show axis labels either on the left side only, the right side only, or on both sides, use the argument <code>axis_labels</code>.</p>
+<p>The function <code><a href="../reference/segplot.html">segplot()</a></code> is provided to generate segplots.
+Segplots are described in more detail <a href="https://osf.io/preprints/socarxiv/ruw4g/" class="external-link">in this working
+paper</a>. The function requires the dataset, the group, and unit
+variables, and, if required, a variable that identifies the weight
+(<code>n</code> in this case).</p>
+<p>Other options to customize the look of the segplot are given by the
+argument <code>order</code>. By default, the units of the segplot are
+ordered by their local segregation score, but it is also possible to
+order them by entropy (i.e., diversity) or by share of the majority
+population. This last option can be useful for the two-group case. The
+argument <code>bar_space</code> can be used to increase the space
+between the units from the default of zero space between bars. When
+plotting a subset of the dataset, the reference distribution shown on
+the right of the segplot can be changed by supplying a two-column data
+frame to the <code>reference_distribution</code> argument. One column of
+this frame should contain the group identifiers, and the other should
+include the reference proportion of each group. To show axis labels
+either on the left side only, the right side only, or on both sides, use
+the argument <code>axis_labels</code>.</p>
 <p>Examples of how to use these arguments are given below:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sch</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="va">state</span> <span class="op">==</span> <span class="st">"A"</span><span class="op">)</span></span>
@@ -146,15 +173,36 @@
 <div class="section level3">
 <h3 id="compressing-segregation-information">Compressing segregation information<a class="anchor" aria-label="anchor" href="#compressing-segregation-information"></a>
 </h3>
-<p>The compression algorithm requires three steps to be taken. First, it is important to decide which units should be permitted to merge: for residential segregation, we may only want to allow neighboring units (such as tracts) to be mergeable. In this case, the first step consists of compiling a data frame with exactly two columns, where each row identifies a pair of neighboring units. In other cases, we may want to allow all units to be mergeable, in principle. However, this can be very time-consuming as it requires each unit to be compared to all others at every step of the merging operation. To speed up compression, we therefore implement an option that allows units to be merged only within a window of “neighboring” units, where the definition of each window is based on similarities in local segregation. Hence, for a given unit, only <code>n_neighbors</code> are considered at every step, and these neighbors are based on similarities in local segregation. Smaller <code>n_neighbors</code> values will result in faster run times, but increase the probability of non-optimal merges. The method of merging can be specified in the <code><a href="../reference/compress.html">compress()</a></code> function by supplying the argument neighbors.</p>
-<p>The second step is then to run the actual compression algorithm using <code><a href="../reference/compress.html">compress()</a></code>. For this example, we choose to compress based on a relatively small window:</p>
+<p>The compression algorithm requires three steps to be taken. First, it
+is important to decide which units should be permitted to merge: for
+residential segregation, we may only want to allow neighboring units
+(such as tracts) to be mergeable. In this case, the first step consists
+of compiling a data frame with exactly two columns, where each row
+identifies a pair of neighboring units. In other cases, we may want to
+allow all units to be mergeable, in principle. However, this can be very
+time-consuming as it requires each unit to be compared to all others at
+every step of the merging operation. To speed up compression, we
+therefore implement an option that allows units to be merged only within
+a window of “neighboring” units, where the definition of each window is
+based on similarities in local segregation. Hence, for a given unit,
+only <code>n_neighbors</code> are considered at every step, and these
+neighbors are based on similarities in local segregation. Smaller
+<code>n_neighbors</code> values will result in faster run times, but
+increase the probability of non-optimal merges. The method of merging
+can be specified in the <code><a href="../reference/compress.html">compress()</a></code> function by supplying
+the argument neighbors.</p>
+<p>The second step is then to run the actual compression algorithm using
+<code><a href="../reference/compress.html">compress()</a></code>. For this example, we choose to compress based
+on a relatively small window:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># compression based on window of 20 'neighboring' units</span></span>
 <span><span class="co"># in terms of local segregation (alternatively, neighbors can be a data frame)</span></span>
 <span><span class="va">comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compress.html">compress</a></span><span class="op">(</span><span class="va">sch</span>, <span class="st">"race"</span>, <span class="st">"school"</span>,</span>
 <span>  weight <span class="op">=</span> <span class="st">"n"</span>, neighbors <span class="op">=</span> <span class="st">"local"</span>, n_neighbors <span class="op">=</span> <span class="fl">20</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>After running <code><a href="../reference/compress.html">compress()</a></code>—which can take some time depending on how many neighbors need to be considered—the output summarizes the compression that can be achieved:</p>
+<p>After running <code><a href="../reference/compress.html">compress()</a></code>—which can take some time
+depending on how many neighbors need to be considered—the output
+summarizes the compression that can be achieved:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">comp</span></span></code></pre></div>
 <pre><code><span><span class="co">## Compression of dataset with 560 units</span></span>
@@ -162,11 +210,21 @@
 <span><span class="co">## - Threshold 99%: M = 0.4045489; Units = 98</span></span>
 <span><span class="co">## - Threshold 95%: M = 0.3886079; Units = 24</span></span>
 <span><span class="co">## - Threshold 90%: M = 0.3696806; Units = 10</span></span></code></pre>
-<p>The results indicate that 99% of the segregation information can be retained by only 98 units (out of 560 in the original dataset), 95% in only 24 units, and 90% in 10 units. The percentage of information retained on each iteration can be accessed via the data frame available through <code>comp$iterations</code>. This data frame can also be used to generate a plot that shows the relationship between the number of merges and the loss in segregation information:</p>
+<p>The results indicate that 99% of the segregation information can be
+retained by only 98 units (out of 560 in the original dataset), 95% in
+only 24 units, and 90% in 10 units. The percentage of information
+retained on each iteration can be accessed via the data frame available
+through <code>comp$iterations</code>. This data frame can also be used
+to generate a plot that shows the relationship between the number of
+merges and the loss in segregation information:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/scree_plot.html">scree_plot</a></span><span class="op">(</span><span class="va">comp</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plotting_files/figure-html/unnamed-chunk-6-1.png" width="700"></p>
-<p>The third step is to create a new dataset based on the desired level of compression. This can be achieved using the function <code><a href="../reference/merge_units.html">merge_units()</a></code>, and either <code>n_units</code> or <code>percent</code> can be specified to indicate the desired level of compression.</p>
+<p>The third step is to create a new dataset based on the desired level
+of compression. This can be achieved using the function
+<code><a href="../reference/merge_units.html">merge_units()</a></code>, and either <code>n_units</code> or
+<code>percent</code> can be specified to indicate the desired level of
+compression.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sch_compressed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/merge_units.html">merge_units</a></span><span class="op">(</span><span class="va">comp</span>, n_units <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span>
 <span><span class="co"># or, for instance: merge_units(comp, percent = 0.80)</span></span>
@@ -178,7 +236,8 @@
 <span><span class="co">## 4:    M14  white 31256</span></span>
 <span><span class="co">## 5:    M14 native   218</span></span>
 <span><span class="co">## 6:    M15  asian     2</span></span></code></pre>
-<p>The compressed dataset has the same format as the original dataset and can now be used to produce another segplot, e.g.</p>
+<p>The compressed dataset has the same format as the original dataset
+and can now be used to produce another segplot, e.g.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/segplot.html">segplot</a></span><span class="op">(</span><span class="va">sch_compressed</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plotting_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
@@ -203,7 +262,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>

@@ -106,8 +106,14 @@ over which segregation is computed.</p></dd>
 
 <dt>order</dt>
 <dd><p>A character, either
-"segregation", "entropy", or "majority".
-Affects the ordering of the units.</p></dd>
+"segregation", "entropy", "majority", or "majority_fixed".
+Affects the ordering of the units.
+The horizontal ordering of the groups can be changed
+by using a factor variable for <code>group</code>.
+The difference between "majority" and "majority_fixed" is that the former
+will reorder the groups in such a way that the majority group actually comes first.
+If you want to control the ordering yourself, use "majority_fixed" and specify
+the <code>group</code> variable as a factor variable.</p></dd>
 
 
 <dt>reference_distribution</dt>
@@ -149,7 +155,7 @@ y axis labels are placed.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer></div>
