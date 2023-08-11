@@ -4,6 +4,7 @@ context("plots")
 skip_if(!requireNamespace("ggplot2", quietly = TRUE))
 
 plot_majority <- segplot(schools00, "race", "school", weight = "n", order = "majority")
+plot_majority_fixed <- segplot(schools00, "race", "school", weight = "n", order = "majority_fixed")
 plot_seg <- segplot(schools00, "race", "school", weight = "n", order = "segregation")
 plot_entropy <- segplot(schools00, "race", "school",
     weight = "n", order = "entropy",
@@ -13,6 +14,7 @@ plot_entropy <- segplot(schools00, "race", "school",
 test_that("dimensions", {
     expect_equal(nrow(plot_majority$data), nrow(plot_seg$data))
     expect_equal(nrow(plot_majority$data), nrow(plot_entropy$data))
+    expect_equal(nrow(plot_majority$data), nrow(plot_majority_fixed$data))
 })
 
 test_that("reference", {

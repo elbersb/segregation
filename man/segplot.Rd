@@ -30,8 +30,14 @@ over which segregation is computed.}
 \item{weight}{Numeric. (Default \code{NULL})}
 
 \item{order}{A character, either
-"segregation", "entropy", or "majority".
-Affects the ordering of the units.}
+"segregation", "entropy", "majority", or "majority_fixed".
+Affects the ordering of the units.
+The horizontal ordering of the groups can be changed
+by using a factor variable for \code{group}.
+The difference between "majority" and "majority_fixed" is that the former
+will reorder the groups in such a way that the majority group actually comes first.
+If you want to control the ordering yourself, use "majority_fixed" and specify
+the \code{group} variable as a factor variable.}
 
 \item{reference_distribution}{Specifies the reference distribution, given as
 a two-column data frame, to be plotted on the right.

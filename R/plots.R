@@ -11,8 +11,14 @@
 #'   over which segregation is computed.
 #' @param weight Numeric. (Default \code{NULL})
 #' @param order A character, either
-#'   "segregation", "entropy", or "majority".
+#'   "segregation", "entropy", "majority", or "majority_fixed".
 #'   Affects the ordering of the units.
+#'   The horizontal ordering of the groups can be changed
+#'   by using a factor variable for \code{group}.
+#'   The difference between "majority" and "majority_fixed" is that the former
+#'   will reorder the groups in such a way that the majority group actually comes first.
+#'   If you want to control the ordering yourself, use "majority_fixed" and specify
+#'   the \code{group} variable as a factor variable.
 #' @param reference_distribution Specifies the reference distribution, given as
 #'   a two-column data frame, to be plotted on the right.
 #'   If order is \code{segregation}, then this reference distribution is
@@ -34,7 +40,7 @@ segplot <- function(data, group, unit, weight, order = "segregation",
     stopifnot(length(group) == 1)
     stopifnot(length(unit) == 1)
     stopifnot(length(axis_labels) == 1)
-    stopifnot(order %in% c("segregation", "entropy", "majority"))
+    stopifnot(order %in% c("segregation", "entropy", "majority", "majority_fixed"))
     stopifnot(axis_labels %in% c("left", "right", "both"))
 
     d <- prepare_data(data, group, unit, weight)
@@ -61,8 +67,16 @@ segplot <- function(data, group, unit, weight, order = "segregation",
         overall <- as.data.table(reference_distribution)
         setnames(overall, group, "group")
     }
+    # order by size
     setorder(overall, -p)
     group_order <- overall[["group"]]
+    if (order == "majority") {
+        # if majority, we always force a reordering by group size
+        d[, group := as.character(group)]
+        overall[, group := as.character(group)]
+        d[, group := factor(group, levels = group_order)]
+        overall[, group := factor(group, levels = group_order)]
+    }
 
     wide <- data.table::dcast(d[, -"freq"], p_unit + unit ~ group, value.var = "p", fill = 0)
 
@@ -75,10 +89,10 @@ segplot <- function(data, group, unit, weight, order = "segregation",
         ent <- d[, .(entropy = entropy(.SD, "group", weight = "freq")), by = .(unit)]
         wide <- merge(ent, wide, by = "unit")
         setorder(wide, entropy)
-    } else if (order == "majority") {
-        d[, group := as.character(group)]
-        overall[, group := as.character(group)]
-        group_order <- as.character(group_order)
+    } else if (order %in% c("majority", "majority_fixed")) {
+        if (is.factor(d[["group"]])) {
+            group_order <- d[, levels(group)]
+        }
         setorderv(wide,
             c(group_order[[1]], utils::tail(group_order, 1)),
             order = c(1, -1)
@@ -91,9 +105,6 @@ segplot <- function(data, group, unit, weight, order = "segregation",
     wide[, xmin := xmin + (.I - 1) * bar_space]
     wide[, xmax := xmax + (.I - 1) * bar_space]
     d <- merge(d, wide[, .(unit, xmin, xmax)], by = "unit")
-    if (order == "majority") {
-        d[, group := factor(group, levels = group_order)]
-    }
     setorderv(d, c("xmin", "group"))
     d[, ymin := cumsum(p) - p, by = .(unit)]
     d[, ymax := cumsum(p), by = .(unit)]
@@ -105,9 +116,6 @@ segplot <- function(data, group, unit, weight, order = "segregation",
     }
 
     # format overall
-    if (order == "majority") {
-        overall[, group := factor(group, levels = group_order)]
-    }
     overall[, xmin := wide[, max(xmax)] + 0.1]
     overall[, xmax := wide[, max(xmax)] + 0.15]
     setorderv(overall, "group")
@@ -148,7 +156,6 @@ segplot <- function(data, group, unit, weight, order = "segregation",
             sec.axis = ggplot2::dup_axis()
         )
     }
-
 
     if (order == "segregation") {
         plot <- plot + ggplot2::labs(x = "< more segregated | less segregated >")
