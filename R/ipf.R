@@ -52,6 +52,7 @@
 #'  T. Karmel and M. Maclachlan. 1988.
 #'   "Occupational Sex Segregation — Increasing or Decreasing?" Economic Record 64: 187-195.
 #' @examples
+#' \dontrun{
 #' # adjusts the marginals of group and unit categories so that
 #' # schools00 has similar marginals as schools05
 #' adj <- ipf(schools00, schools05, "race", "school", weight = "n")
@@ -68,6 +69,7 @@
 #' length(unique(schools00$school))
 #' length(unique(schools05$school))
 #' length(unique(adj$school))
+#' }
 #' @import data.table
 #' @export
 ipf <- function(source, target, group, unit, weight = NULL,

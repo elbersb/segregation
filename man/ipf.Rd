@@ -70,6 +70,7 @@ target data frame. This is different from other IPF implementations, but ensures
 does not change the number of observations.
 }
 \examples{
+\dontrun{
 # adjusts the marginals of group and unit categories so that
 # schools00 has similar marginals as schools05
 adj <- ipf(schools00, schools05, "race", "school", weight = "n")
@@ -86,6 +87,7 @@ aggregate(adj$n_target, list(adj$race), sum)
 length(unique(schools00$school))
 length(unique(schools05$school))
 length(unique(adj$school))
+}
 }
 \references{
 W. E. Deming and F. F. Stephan. 1940.

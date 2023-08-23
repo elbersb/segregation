@@ -130,29 +130,41 @@ the change in M that is induced by these cases as
 \code{removals} (present in \code{data1}, but not in \code{data2}).
 }
 \examples{
+\dontrun{
 # decompose the difference in school segregation between 2000 and 2005,
 # using the Shapley method
-mutual_difference(schools00, schools05, group = "race", unit = "school",
-    weight = "n", method = "shapley", precision = .1)
+mutual_difference(schools00, schools05,
+    group = "race", unit = "school",
+    weight = "n", method = "shapley", precision = .1
+)
 # => the structural component is close to zero, thus most change is in the marginals.
 # This method gives identical results when we switch the unit and group definitions,
 # and when we switch the data inputs.
 
 # the Karmel-Maclachlan method is similar, but only adjust the data in the forward direction...
-mutual_difference(schools00, schools05, group = "school", unit = "race",
-    weight = "n", method = "km", precision = .1)
+mutual_difference(schools00, schools05,
+    group = "school", unit = "race",
+    weight = "n", method = "km", precision = .1
+)
 
 # ...this means that the results won't be identical when we switch the data inputs
-mutual_difference(schools05, schools00, group = "school", unit = "race",
-    weight = "n", method = "km", precision = .1)
+mutual_difference(schools05, schools00,
+    group = "school", unit = "race",
+    weight = "n", method = "km", precision = .1
+)
 
 # the MRC method indicates a much higher structural change...
-mutual_difference(schools00, schools05, group = "race", unit = "school",
-    weight = "n", method = "mrc")
+mutual_difference(schools00, schools05,
+    group = "race", unit = "school",
+    weight = "n", method = "mrc"
+)
 
 # ...and is not symmetric
-mutual_difference(schools00, schools05, group = "school", unit = "race",
-    weight = "n", method = "mrc")
+mutual_difference(schools00, schools05,
+    group = "school", unit = "race",
+    weight = "n", method = "mrc"
+)
+}
 }
 \references{
 W. E. Deming, F. F. Stephan. 1940. "On a Least Squares Adjustment of a Sampled Frequency Table

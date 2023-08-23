@@ -111,29 +111,41 @@
 #'       "Analyzing Changes in Occupational Segregation: The Case of Switzerland (1970–2000)."
 #'        Research on Economic Inequality 17: 171–202.
 #' @examples
+#' \dontrun{
 #' # decompose the difference in school segregation between 2000 and 2005,
 #' # using the Shapley method
-#' mutual_difference(schools00, schools05, group = "race", unit = "school",
-#'     weight = "n", method = "shapley", precision = .1)
+#' mutual_difference(schools00, schools05,
+#'     group = "race", unit = "school",
+#'     weight = "n", method = "shapley", precision = .1
+#' )
 #' # => the structural component is close to zero, thus most change is in the marginals.
 #' # This method gives identical results when we switch the unit and group definitions,
 #' # and when we switch the data inputs.
 #'
 #' # the Karmel-Maclachlan method is similar, but only adjust the data in the forward direction...
-#' mutual_difference(schools00, schools05, group = "school", unit = "race",
-#'     weight = "n", method = "km", precision = .1)
+#' mutual_difference(schools00, schools05,
+#'     group = "school", unit = "race",
+#'     weight = "n", method = "km", precision = .1
+#' )
 #'
 #' # ...this means that the results won't be identical when we switch the data inputs
-#' mutual_difference(schools05, schools00, group = "school", unit = "race",
-#'     weight = "n", method = "km", precision = .1)
+#' mutual_difference(schools05, schools00,
+#'     group = "school", unit = "race",
+#'     weight = "n", method = "km", precision = .1
+#' )
 #'
 #' # the MRC method indicates a much higher structural change...
-#' mutual_difference(schools00, schools05, group = "race", unit = "school",
-#'     weight = "n", method = "mrc")
+#' mutual_difference(schools00, schools05,
+#'     group = "race", unit = "school",
+#'     weight = "n", method = "mrc"
+#' )
 #'
 #' # ...and is not symmetric
-#' mutual_difference(schools00, schools05, group = "school", unit = "race",
-#'     weight = "n", method = "mrc")
+#' mutual_difference(schools00, schools05,
+#'     group = "school", unit = "race",
+#'     weight = "n", method = "mrc"
+#' )
+#' }
 #' @import data.table
 #' @export
 mutual_difference <- function(data1, data2, group, unit,
@@ -163,11 +175,15 @@ mutual_difference <- function(data1, data2, group, unit,
     d1 <- prepare_data(data1, group, unit, weight)
     d2 <- prepare_data(data2, group, unit, weight)
 
-    nrow_group <- nrow(merge(unique(d1[, group, with = FALSE]),
-        unique(d2[, group, with = FALSE])))
+    nrow_group <- nrow(merge(
+        unique(d1[, group, with = FALSE]),
+        unique(d2[, group, with = FALSE])
+    ))
     if (nrow_group == 0) stop("No overlap in group")
-    nrow_unit <- nrow(merge(unique(d1[, unit, with = FALSE]),
-        unique(d2[, unit, with = FALSE])))
+    nrow_unit <- nrow(merge(
+        unique(d1[, unit, with = FALSE]),
+        unique(d2[, unit, with = FALSE])
+    ))
     if (nrow_unit == 0) stop("No overlap in unit")
 
     ret <- fun(d1, d2, group, unit, base, ...)
@@ -181,7 +197,8 @@ mutual_difference <- function(data1, data2, group, unit,
             all.equal(n_total2, round(n_total2)) != TRUE) {
             stop(paste0(
                 "bootstrap with a total sample size that is not an integer is not allowed, ",
-                "maybe scale your weights?"))
+                "maybe scale your weights?"
+            ))
         }
 
         # draw from a multinomial with weights specified by the cell counts
@@ -213,10 +230,14 @@ shapley_compute <- function(d1, d2, group, unit, base, detail, ...) {
     # these are the original datasets containing ALL units and groups
     M1 <- m(d1, "freq")
     M2 <- m(d2, "freq")
-    d1[, c("p_unit", "p_group", "p_group_g_unit",
-        "n_unit", "n_group", "ls_unit") := NULL]
-    d2[, c("p_unit", "p_group", "p_group_g_unit",
-        "n_unit", "n_group", "ls_unit") := NULL]
+    d1[, c(
+        "p_unit", "p_group", "p_group_g_unit",
+        "n_unit", "n_group", "ls_unit"
+    ) := NULL]
+    d2[, c(
+        "p_unit", "p_group", "p_group_g_unit",
+        "n_unit", "n_group", "ls_unit"
+    ) := NULL]
 
     # group = A, unit = A, structure = A
     d_AAA <- create_common_data(d1, d2, group, unit, suppress_warnings = TRUE)
@@ -254,17 +275,21 @@ shapley_compute <- function(d1, d2, group, unit, base, detail, ...) {
     structural <- .5 * (m_AAB - m_AAA) + .5 * (m_BBB - m_BBA)
 
     group_marginal <- .25 * (m_BAA - m_AAA + (m_BBA - m_ABA) +
-                             m_BBB - m_ABB + (m_BAB - m_AAB))
+        m_BBB - m_ABB + (m_BAB - m_AAB))
     unit_marginal <- .25 * (m_ABA - m_AAA + (m_BBA - m_BAA) +
-                            m_BBB - m_BAB + (m_ABB - m_AAB))
+        m_BBB - m_BAB + (m_ABB - m_AAB))
 
     stopifnot(round(group_marginal + unit_marginal, 4) == round(marginal, 4))
     stopifnot(round(M2 - m_BBB + m_AAA - M1 + marginal + structural, 4) == round(M2 - M1, 4))
 
-    stat <- c("M1", "M2", "diff", "additions", "removals",
-             "group_marginal", "unit_marginal", "structural")
-    est <- c(M1, M2, M2 - M1, M2 - m_BBB, m_AAA - M1,
-             group_marginal, unit_marginal, structural)
+    stat <- c(
+        "M1", "M2", "diff", "additions", "removals",
+        "group_marginal", "unit_marginal", "structural"
+    )
+    est <- c(
+        M1, M2, M2 - M1, M2 - m_BBB, m_AAA - M1,
+        group_marginal, unit_marginal, structural
+    )
     ret <- data.table(stat = stat, est = est, stringsAsFactors = FALSE)
 
     if (is.null(detail)) {
@@ -278,10 +303,11 @@ shapley_compute <- function(d1, d2, group, unit, base, detail, ...) {
             d_BBB[, list(m_BBB = first(p_unit * ls_unit)), by = unit],
             d_BAB[, list(m_BAB = first(p_unit * ls_unit)), by = unit],
             d_ABB[, list(m_ABB = first(p_unit * ls_unit)), by = unit],
-            d_AAB[, list(m_AAB = first(p_unit * ls_unit)), by = unit])
+            d_AAB[, list(m_AAB = first(p_unit * ls_unit)), by = unit]
+        )
         by_unit <- Reduce(merge, dfs)
         by_unit[, est := .25 * (m_ABA - m_AAA + (m_BBA - m_BAA) +
-                   m_BBB - m_BAB + (m_ABB - m_AAB))]
+            m_BBB - m_BAB + (m_ABB - m_AAB))]
         by_unit <- by_unit[, c(unit, "est"), with = FALSE]
         by_unit[, stat := "unit_marginal"]
         stopifnot(all.equal(by_unit[, sum(est)], unit_marginal))
@@ -314,10 +340,14 @@ km_compute <- function(d1, d2, group, unit, base, ...) {
 
     M1 <- m(d1, "freq")
     M2 <- m(d2, "freq")
-    d1[, c("p_unit", "p_group", "p_group_g_unit",
-        "n_unit", "n_group", "ls_unit") := NULL]
-    d2[, c("p_unit", "p_group", "p_group_g_unit",
-        "n_unit", "n_group", "ls_unit") := NULL]
+    d1[, c(
+        "p_unit", "p_group", "p_group_g_unit",
+        "n_unit", "n_group", "ls_unit"
+    ) := NULL]
+    d2[, c(
+        "p_unit", "p_group", "p_group_g_unit",
+        "n_unit", "n_group", "ls_unit"
+    ) := NULL]
 
     d1_source <- create_common_data(d1, d2, group, unit, suppress_warnings = TRUE)
 
@@ -332,8 +362,9 @@ km_compute <- function(d1, d2, group, unit, base, ...) {
     d1_marg_d2[, `:=`(n_group = sum(n_source), n_group_target = sum(n_target)), by = group]
     d1_marg_d2[, `:=`(n_unit = sum(n_source), n_unit_target = sum(n_target)), by = unit]
     d1_marg_d2[, `:=`(
-            n_group_adj = n_source * n_group_target / n_group,
-            n_unit_adj = n_source * n_unit_target / n_unit)]
+        n_group_adj = n_source * n_group_target / n_group,
+        n_unit_adj = n_source * n_unit_target / n_unit
+    )]
     M_marg2 <- m(d1_marg_d2, "n")
     M_marg2_group <- m(d1_marg_d2, "n_group_adj")
     M_marg2_unit <- m(d1_marg_d2, "n_unit_adj")
@@ -343,10 +374,14 @@ km_compute <- function(d1, d2, group, unit, base, ...) {
     mix_unit <- M_marg2_unit - M1r
     struct <- M2r - M_marg2
 
-    stat <- c("M1", "M2", "diff", "additions", "removals",
-              "group_marginal", "unit_marginal", "interaction", "structural")
-    est <- c(M1, M2, M2 - M1, M2 - M2r, M1r - M1,
-             mix_group, mix_unit, mix - mix_group - mix_unit, struct)
+    stat <- c(
+        "M1", "M2", "diff", "additions", "removals",
+        "group_marginal", "unit_marginal", "interaction", "structural"
+    )
+    est <- c(
+        M1, M2, M2 - M1, M2 - M2r, M1r - M1,
+        mix_group, mix_unit, mix - mix_group - mix_unit, struct
+    )
     data.table(stat = stat, est = est, stringsAsFactors = FALSE)
 }
 
@@ -369,21 +404,27 @@ mrc_compute <- function(d1, d2, group, unit, base) {
     # reduce M for d1
     add_local(joined, group, unit, base, "freq1")
     M1r <- m(joined)
-    setnames(joined, c("p_unit", "p_group", "p_group_g_unit", "ls_unit"),
-        c("p_unit1", "p_group1", "p_group_g_unit1", "ls_unit1"))
+    setnames(
+        joined, c("p_unit", "p_group", "p_group_g_unit", "ls_unit"),
+        c("p_unit1", "p_group1", "p_group_g_unit1", "ls_unit1")
+    )
     # reduce M for d2
     add_local(joined, group, unit, base, "freq2")
     M2r <- m(joined)
-    setnames(joined, c("p_unit", "p_group", "p_group_g_unit", "ls_unit"),
-        c("p_unit2", "p_group2", "p_group_g_unit2", "ls_unit2"))
+    setnames(
+        joined, c("p_unit", "p_group", "p_group_g_unit", "ls_unit"),
+        c("p_unit2", "p_group2", "p_group_g_unit2", "ls_unit2")
+    )
 
     n_total1 <- sum(joined$freq1, na.rm = TRUE)
     n_total2 <- sum(joined$freq2, na.rm = TRUE)
 
     p_group1 <- joined[, list(p_group = sum(freq1, na.rm = TRUE) / n_total1),
-                       by = group][, p_group]
+        by = group
+    ][, p_group]
     p_group2 <- joined[, list(p_group = sum(freq2, na.rm = TRUE) / n_total2),
-                       by = group][, p_group]
+        by = group
+    ][, p_group]
     entropy_group1 <- sum(p_group1 * logf(1 / p_group1, base))
     entropy_group2 <- sum(p_group2 * logf(1 / p_group2, base))
     group_entropy <- entropy_group2 - entropy_group1
@@ -394,25 +435,31 @@ mrc_compute <- function(d1, d2, group, unit, base) {
         entropy_cond1 = sum(p_group_g_unit1 * logf(1 / p_group_g_unit1, base), na.rm = TRUE),
         entropy_cond2 = sum(p_group_g_unit2 * logf(1 / p_group_g_unit2, base), na.rm = TRUE),
         p_unit1 = mean(p_unit1, na.rm = TRUE),
-        p_unit2 = mean(p_unit2, na.rm = TRUE)), by = unit]
+        p_unit2 = mean(p_unit2, na.rm = TRUE)
+    ), by = unit]
     joined[, p_unit1 := ifelse(is.na(p_unit1), 0, p_unit1)]
     joined[, p_unit2 := ifelse(is.na(p_unit2), 0, p_unit2)]
     joined <- joined[, list(
         cond1 = p_unit1 * sumcond2 - p_unit1 * sumcond1,
         cond2 = p_unit2 * sumcond2 - p_unit2 * sumcond1,
         unit1 = (p_unit2 - p_unit1) * sumcond2,
-        unit2 = - (p_unit1 - p_unit2) * sumcond1,
+        unit2 = -(p_unit1 - p_unit2) * sumcond1,
         entropy_cond1 = entropy_cond1 * p_unit1,
-        entropy_cond2 = entropy_cond2 * p_unit2)]
+        entropy_cond2 = entropy_cond2 * p_unit2
+    )]
     cond <- .5 * sum(joined[, cond1]) + .5 * sum(joined[, cond2])
     unit_marginal <- .5 * sum(joined[, unit1]) + .5 * sum(joined[, unit2])
 
     additions <- M2 - M2r
     removals <- M1r - M1
-    stat <- c("M1", "M2", "diff", "additions", "removals",
-        "unit_marginal", "group_marginal", "structural")
-    est <- c(M1, M2, M2 - M1, additions, removals,
-        unit_marginal, group_entropy, cond)
+    stat <- c(
+        "M1", "M2", "diff", "additions", "removals",
+        "unit_marginal", "group_marginal", "structural"
+    )
+    est <- c(
+        M1, M2, M2 - M1, additions, removals,
+        unit_marginal, group_entropy, cond
+    )
 
     data.table(stat = stat, est = est, stringsAsFactors = FALSE)
 }

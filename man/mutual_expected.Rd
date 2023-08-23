@@ -51,6 +51,7 @@ and calculates segregation. If the expected values are large,
 the interpretation of index scores might have to be adjusted.
 }
 \examples{
+\dontrun{
 # the schools00 dataset has a large sample size, so expected segregation is close to zero
 mutual_expected(schools00, "race", "school", weight = "n")
 
@@ -65,4 +66,5 @@ mutual_expected(small, "race", "school", weight = "n")
 # with an increase in sample size (n=1000), the values improve
 small$n <- small$n * 10
 mutual_expected(small, "race", "school", weight = "n")
+}
 }

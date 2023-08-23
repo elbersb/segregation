@@ -100,6 +100,7 @@ expected_compute <- function(index, d, group_var, unit_var,
 #' @return A data.table with two rows, corresponding to the expected values of
 #'    segregation when true segregation is zero.
 #' @examples
+#' \dontrun{
 #' # the schools00 dataset has a large sample size, so expected segregation is close to zero
 #' mutual_expected(schools00, "race", "school", weight = "n")
 #'
@@ -114,6 +115,7 @@ expected_compute <- function(index, d, group_var, unit_var,
 #' # with an increase in sample size (n=1000), the values improve
 #' small$n <- small$n * 10
 #' mutual_expected(small, "race", "school", weight = "n")
+#' }
 #' @import data.table
 #' @export
 mutual_expected <- function(data, group, unit, weight = NULL,

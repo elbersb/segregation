@@ -13,10 +13,12 @@ test_data2 <- data.frame(
 )
 
 test_that("mutual_difference method not defined error", {
+    testthat::skip_on_cran()
     expect_error(mutual_difference(test_data1, test_data2, "g", "u", weight = "n", method = "X"))
 })
 
 test_that("mutual_difference SHAPLEY", {
+    testthat::skip_on_cran()
     sh1 <- mutual_difference(test_data1, test_data2, "g", "u", weight = "n", method = "shapley")
     sh2 <- mutual_difference(test_data1, test_data2, "u", "g", weight = "n", method = "shapley")
     sh3 <- mutual_difference(test_data2, test_data1, "g", "u", weight = "n", method = "shapley")
@@ -98,6 +100,7 @@ test_that("mutual_difference SHAPLEY", {
 })
 
 test_that("mutual_difference KM", {
+    testthat::skip_on_cran()
     ret1 <- mutual_difference(test_data1, test_data2, "g", "u",
         weight = "n", method = "km",
         precision = .0001
@@ -153,6 +156,7 @@ test_that("mutual_difference KM", {
 
 
 test_that("mutual_difference MRC", {
+    testthat::skip_on_cran()
     ret <- mutual_difference(test_data1, test_data2,
         "g", "u",
         weight = "n", method = "mrc"
@@ -194,6 +198,7 @@ test_that("mutual_difference MRC", {
 
 
 test_that("mutual_difference SE", {
+    testthat::skip_on_cran()
     ret <- mutual_difference(test_data1, test_data2, "g", "u",
         weight = "n",
         method = "shapley", se = TRUE, n_bootstrap = 5
@@ -223,6 +228,7 @@ test_that("mutual_difference SE", {
 })
 
 test_that("mutual_difference shapley_detailed structural", {
+    testthat::skip_on_cran()
     diff_simple <- mutual_difference(schools05, schools00,
         group = "school", unit = "race",
         weight = "n", method = "shapley", precision = .000001
@@ -267,6 +273,7 @@ test_that("mutual_difference shapley_detailed structural", {
 })
 
 test_that("mutual_difference shapley_detailed marginal", {
+    testthat::skip_on_cran()
     diff_simple <- mutual_difference(schools05, schools00,
         group = "school", unit = "race",
         weight = "n", method = "shapley", precision = .000001
@@ -307,6 +314,7 @@ test_that("mutual_difference shapley_detailed marginal", {
 
 
 test_that("mutual_difference shapley_detailed with SE", {
+    testthat::skip_on_cran()
     diff <- mutual_difference(schools05, schools00,
         group = "school", unit = "race",
         weight = "n", method = "shapley_detailed", precision = .1, se = TRUE, n_bootstrap = 2
@@ -318,6 +326,7 @@ test_that("mutual_difference shapley_detailed with SE", {
 
 
 test_that("mutual_difference log base", {
+    testthat::skip_on_cran()
     ret <- mutual_difference(test_data1, test_data2, "g", "u",
         weight = "n", method = "shapley", base = 2
     )
@@ -342,6 +351,7 @@ test_that("mutual_difference log base", {
 
 
 test_that("difference same as mutual_total (zero weights)", {
+    testthat::skip_on_cran()
     # test with zero weights
     test_data1 <- data.frame(
         u = c(rep("a", 4), rep("b", 4), rep("c", 4)),
@@ -391,6 +401,7 @@ test_that("difference same as mutual_total (zero weights)", {
 
 
 test_that("correctly identifies marginal/structural changes", {
+    testthat::skip_on_cran()
     test_data <- data.frame(
         u = c(rep("a", 2), rep("b", 2), rep("c", 2)),
         g = rep(c(1, 2), 3),
@@ -430,6 +441,7 @@ test_that("correctly identifies marginal/structural changes", {
 
 
 test_that("errors", {
+    testthat::skip_on_cran()
     schools00 <- as.data.table(schools00)
     schools05 <- as.data.table(schools05)
     expect_error(mutual_difference(
