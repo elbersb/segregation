@@ -43,6 +43,7 @@ and the [documentation](https://elbersb.de/segregation).
 -   decompose differences in total segregation over time (Elbers 2020)
 -   other supported indices are the dissimilarity, isolation, and
     exposure indices
+-   supports [segregation visualizations](https://elbersb.github.io/segregation/articles/plotting.html) (segregation curves and 'segplots')
 -   estimate standard errors and confidence intervals via bootstrapping,
     which also corrects for small sample bias
 -   contains functions to visualize segregation patterns
@@ -124,7 +125,7 @@ segplot(schools00, group = "race", unit = "school", weight = "n")
 ```
 
 Find more information in the
-[documentation](https://elbersb.github.io/segregation).
+[documentation](https://elbersb.github.io/segregation/).
 
 ## How to install
 

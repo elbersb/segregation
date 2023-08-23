@@ -1,12 +1,12 @@
 ## Test environments
 
-* local macOS 11.4, R 4.1.0
-* windows-latest (release, on Github Actions)
-* macOS-latest (release, on Github Actions)
-* ubuntu-20.04 (release, on Github Actions)
-* ubuntu-20.04 (devel, on Github Actions)
-* rhub (windows, ubuntu 16.04, fedora linux)
+* local macOS 13.3.1, R 4.2.0
+* tested using Github Actions (mac, win, ubuntu)
+* tested using win-devel
 
 ## R CMD check results
 
-No ERRORs, WARNINGSs, or NOTES.
+No ERRORs, WARNINGSs, or NOTES on most systems.
+
+1 NOTE on win-devel: finds some potentially invalid URLs (403 mostly),
+but these all seem to work correctly.

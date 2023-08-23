@@ -91,10 +91,14 @@ create_common_data <- function(d1, d2, group, unit, suppress_warnings = FALSE, f
     # combinations that don't exist. There might be rare cases where the loop needs to be repeated
     # even further, but then the table is probably too sparse anyway
     common_group <- fintersect(d1[, group, with = FALSE], d2[, group, with = FALSE])
-    common_unit <- fintersect(merge(d1, common_group)[, unit, with = FALSE],
-                              merge(d2, common_group)[, unit, with = FALSE])
-    common_group <- fintersect(merge(d1, common_unit)[, group, with = FALSE],
-                               merge(d2, common_unit)[, group, with = FALSE])
+    common_unit <- fintersect(
+        merge(d1, common_group)[, unit, with = FALSE],
+        merge(d2, common_group)[, unit, with = FALSE]
+    )
+    common_group <- fintersect(
+        merge(d1, common_unit)[, group, with = FALSE],
+        merge(d2, common_unit)[, group, with = FALSE]
+    )
     common_group$key <- 1
     common_unit$key <- 1
     common <- merge(common_unit, common_group, allow.cartesian = TRUE)
@@ -111,22 +115,26 @@ create_common_data <- function(d1, d2, group, unit, suppress_warnings = FALSE, f
         if (nrow(group_removed_d1) > 0) {
             warning(paste0(
                 "IPF procedure removed ", nrow(group_removed_d1), " group categories from source, ",
-                "this likely reduced the sample size (check columns n_source and n_target)"))
+                "this likely reduced the sample size (check columns n_source and n_target)"
+            ))
         }
         if (nrow(group_removed_d2) > 0) {
             warning(paste0(
                 "IPF procedure removed ", nrow(group_removed_d2), " group categories from target, ",
-                "this likely reduced the sample size (check columns n_source and n_target)"))
+                "this likely reduced the sample size (check columns n_source and n_target)"
+            ))
         }
         if (nrow(unit_removed_d1) > 0) {
             warning(paste0(
                 "IPF procedure removed ", nrow(unit_removed_d1), " units from source, ",
-                "this likely reduced the sample size (check columns n_source and n_target)"))
+                "this likely reduced the sample size (check columns n_source and n_target)"
+            ))
         }
         if (nrow(unit_removed_d1) > 0) {
             warning(paste0(
                 "IPF procedure removed ", nrow(unit_removed_d2), " units from target, ",
-                "this likely reduced the sample size (check columns n_source and n_target)"))
+                "this likely reduced the sample size (check columns n_source and n_target)"
+            ))
         }
     }
 
@@ -154,7 +162,6 @@ create_common_data <- function(d1, d2, group, unit, suppress_warnings = FALSE, f
 ipf_compute <- function(data, group, unit,
                         max_iterations = 100, precision = .001,
                         only_group = FALSE, only_unit = FALSE) {
-
     # work with relative weights
     data[, p1 := freq1 / sum(freq1)]
     data[, p2 := freq2 / sum(freq2)]
@@ -195,7 +202,7 @@ ipf_compute <- function(data, group, unit,
         group_ratio <- data[, list(first(p_group_s), first(p_group_t)), by = group][, abs(V1 - V2)]
         unit_ratio <- data[, list(first(p_unit_s), first(p_unit_t)), by = unit][, abs(V1 - V2)]
 
-        if (all(group_ratio <= precision) & all(unit_ratio <= precision)) {
+        if (all(group_ratio <= precision) && all(unit_ratio <= precision)) {
             converged <- TRUE
             break
         }
@@ -211,8 +218,10 @@ ipf_compute <- function(data, group, unit,
     setnames(data, "freq1", "n_source")
     setnames(data, "freq2", "n_target")
 
-    data[, c("p_unit_t", "p_unit_s", "p_group_t", "p_group_s",
-             "freq_orig1", "freq_orig2", "p1", "p2") := NULL]
+    data[, c(
+        "p_unit_t", "p_unit_s", "p_group_t", "p_group_s",
+        "freq_orig1", "freq_orig2", "p1", "p2"
+    ) := NULL]
     setkey(data, NULL)
     data
 }

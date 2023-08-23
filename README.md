@@ -18,20 +18,23 @@ Find more information in the
 [vignette](https://elbersb.github.io/segregation/articles/segregation.html)
 and the [documentation](https://elbersb.de/segregation).
 
-- calculate total, between, within, and local segregation using the M/H
-  indices
-- decompose differences in total segregation over time (Elbers 2020)
-- other supported indices are the dissimilarity, isolation, and exposure
-  indices
-- estimate standard errors and confidence intervals via bootstrapping,
-  which also corrects for small sample bias
-- contains functions to visualize segregation patterns
-- every method returns a
-  [tidy](https://vita.had.co.nz/papers/tidy-data.html)
-  [data.table](https://rdatatable.gitlab.io/data.table/) for easy
-  post-processing and plotting
-- uses the [`data.table`](https://rdatatable.gitlab.io/data.table/)
-  package internally, so it’s relatively fast
+-   calculate total, between, within, and local segregation using the
+    M/H indices
+-   decompose differences in total segregation over time (Elbers 2020)
+-   other supported indices are the dissimilarity, isolation, and
+    exposure indices
+-   supports [segregation
+    visualizations](https://elbersb.github.io/segregation/articles/plotting.html)
+    (segregation curves and ‘segplots’)
+-   estimate standard errors and confidence intervals via bootstrapping,
+    which also corrects for small sample bias
+-   contains functions to visualize segregation patterns
+-   every method returns a
+    [tidy](https://vita.had.co.nz/papers/tidy-data.html)
+    [data.table](https://rdatatable.gitlab.io/data.table/) for easy
+    post-processing and plotting
+-   uses the [`data.table`](https://rdatatable.gitlab.io/data.table/)
+    package internally, so it’s relatively fast
 
 Most of the procedures implemented in this package are described in more
 detail [in this SMR
@@ -142,7 +145,7 @@ segplot(schools00, group = "race", unit = "school", weight = "n")
 ![](README-segplot-1.png)<!-- -->
 
 Find more information in the
-[documentation](https://elbersb.github.io/segregation).
+[documentation](https://elbersb.github.io/segregation/).
 
 ## How to install
 
@@ -168,22 +171,22 @@ Across Time and Space. Sociological Methods & Research.
 
 ## Some additional resources
 
-- The book *Analyzing US Census Data: Methods, Maps, and Models in R* by
-  Kyle E. Walker contains [a discussion of this
-  package](https://walker-data.com/census-r/modeling-us-census-data.html#indices-of-segregation-and-diversity),
-  and is a great resource for anyone working with spatial data,
-  especially U.S. Census data.
-- A paper that makes use of this package: [Did Residential Racial
-  Segregation in the U.S. Really Increase? An Analysis Accounting for
-  Changes in Racial
-  Diversity](https://elbersb.com/public/posts/segregation-increase/)
-  ([Code and Data](https://osf.io/mg9q4/))
-- Some of the analyses [in this
-  article](https://multimedia.tijd.be/diversiteit/) by the Belgian
-  newspaper *De Tijd* used the package.
-- The analyses of [this article in the Wall Street
-  Journal](https://www.wsj.com/articles/chicago-vs-dallas-why-the-north-lags-behind-the-south-and-west-in-racial-integration-11657936680)
-  were produced using this package.
+-   The book *Analyzing US Census Data: Methods, Maps, and Models in R*
+    by Kyle E. Walker contains [a discussion of this
+    package](https://walker-data.com/census-r/modeling-us-census-data.html#indices-of-segregation-and-diversity),
+    and is a great resource for anyone working with spatial data,
+    especially U.S. Census data.
+-   A paper that makes use of this package: [Did Residential Racial
+    Segregation in the U.S. Really Increase? An Analysis Accounting for
+    Changes in Racial
+    Diversity](https://elbersb.com/public/posts/segregation-increase/)
+    ([Code and Data](https://osf.io/mg9q4/))
+-   Some of the analyses [in this
+    article](https://multimedia.tijd.be/diversiteit/) by the Belgian
+    newspaper *De Tijd* used the package.
+-   The analyses of [this article in the Wall Street
+    Journal](https://www.wsj.com/articles/chicago-vs-dallas-why-the-north-lags-behind-the-south-and-west-in-racial-integration-11657936680)
+    were produced using this package.
 
 ## References on entropy-based segregation indices
 

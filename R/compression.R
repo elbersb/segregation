@@ -83,7 +83,7 @@ compress <- function(data, group, unit, weight = NULL,
     # sort within rows to get rid of duplicates (i.e. 1-2 eq. 2-1)
     neighbors <- data.table::as.data.table(t(apply(neighbors, 1, sort)))
     neighbors <- unique(neighbors)[V1 != V2]
-    neighbors[, pair := 1:.N]
+    neighbors[, pair := seq_len(.N)]
 
     nd <- merge(neighbors, d,
         by.x = "V1", by.y = "unit",
@@ -337,10 +337,10 @@ merge_units <- function(compression, n_units = NULL, percent = NULL, parts = FAL
 #' @return Returns a data.table.
 #' @export
 get_crosswalk <- function(compression, n_units = NULL, percent = NULL, parts = FALSE) {
-    if (is.null(n_units) & is.null(percent)) {
+    if (is.null(n_units) && is.null(percent)) {
         stop("either n_units or percent has to be given")
     }
-    if (!is.null(n_units) & !is.null(percent)) {
+    if (!is.null(n_units) && !is.null(percent)) {
         stop("only n_units or percent has to be given")
     }
     if (!is.null(n_units)) {
@@ -349,7 +349,7 @@ get_crosswalk <- function(compression, n_units = NULL, percent = NULL, parts = F
         }
         n_iterations <- compression$iterations[N_units == n_units, iter]
     } else if (!is.null(percent)) {
-        if (percent <= 0 | percent > 1) {
+        if (percent <= 0 || percent > 1) {
             stop("percent is out of bounds")
         }
         n_iterations <- compression$iterations[pct_M > percent][.N][["iter"]]
@@ -376,11 +376,11 @@ get_crosswalk <- function(compression, n_units = NULL, percent = NULL, parts = F
 
         if ((sum(old_unit_bag) + sum(new_unit_bag)) == 0) {
             bags[[length(bags) + 1]] <- c(old_unit, new_unit)
-        } else if (sum(old_unit_bag) == 1 & sum(new_unit_bag) == 0) {
+        } else if (sum(old_unit_bag) == 1 && sum(new_unit_bag) == 0) {
             bags[[which(old_unit_bag)]] <- c(bags[[which(old_unit_bag)]], new_unit)
-        } else if (sum(old_unit_bag) == 0 & sum(new_unit_bag) == 1) {
+        } else if (sum(old_unit_bag) == 0 && sum(new_unit_bag) == 1) {
             bags[[which(new_unit_bag)]] <- c(bags[[which(new_unit_bag)]], old_unit)
-        } else if (sum(old_unit_bag) == 1 & sum(new_unit_bag) == 1) {
+        } else if (sum(old_unit_bag) == 1 && sum(new_unit_bag) == 1) {
             bags[[length(bags) + 1]] <- c(
                 bags[[which(new_unit_bag)]],
                 bags[[which(old_unit_bag)]]
