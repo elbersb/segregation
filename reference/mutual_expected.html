@@ -22,7 +22,7 @@ the interpretation of index scores might have to be adjusted."><!-- mathjax --><
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">segregation</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.6.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
 
@@ -144,8 +144,8 @@ Defaults to the natural logarithm.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># the schools00 dataset has a large sample size, so expected segregation is close to zero</span></span></span>
 <span class="r-in"><span><span class="fu">mutual_expected</span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         stat         est           se</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: M under 0 0.004789528 7.829299e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: H under 0 0.004713773 7.705464e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: M under 0 0.004798925 8.094547e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: H under 0 0.004723021 7.966517e-05</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># but we can build a smaller table, with 100 students distributed across</span></span></span>
 <span class="r-in"><span><span class="co"># 10 schools, where one racial group has 10% of the students</span></span></span>
@@ -156,14 +156,14 @@ Defaults to the natural logarithm.</p></dd>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">mutual_expected</span><span class="op">(</span><span class="va">small</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         stat        est         se</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: M under 0 0.05357493 0.01800998</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: H under 0 0.16480386 0.05540119</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: M under 0 0.05496733 0.02051771</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: H under 0 0.16908708 0.06311529</span>
 <span class="r-in"><span><span class="co"># with an increase in sample size (n=1000), the values improve</span></span></span>
 <span class="r-in"><span><span class="va">small</span><span class="op">$</span><span class="va">n</span> <span class="op">&lt;-</span> <span class="va">small</span><span class="op">$</span><span class="va">n</span> <span class="op">*</span> <span class="fl">10</span></span></span>
 <span class="r-in"><span><span class="fu">mutual_expected</span><span class="op">(</span><span class="va">small</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         stat        est          se</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: M under 0 0.00453973 0.002016165</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: H under 0 0.01396484 0.006202001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: M under 0 0.00444547 0.001992486</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: H under 0 0.01367488 0.006129161</span>
 </code></pre></div>
     </div>
   </div>
