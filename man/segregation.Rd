@@ -3,6 +3,7 @@
 \docType{package}
 \name{segregation}
 \alias{segregation}
+\alias{segregation-package}
 \title{segregation: Entropy-based segregation indices}
 \description{
 Calculate and decompose entropy-based, multigroup segregation indices, with a focus
@@ -12,4 +13,8 @@ and between terms. Includes standard error estimation by bootstrapping.
 }
 \seealso{
 \url{https://elbersb.com/segregation}
+}
+\author{
+\strong{Maintainer}: Benjamin Elbers \email{be2239@columbia.edu} (\href{https://orcid.org/0000-0001-5392-3448}{ORCID})
+
 }

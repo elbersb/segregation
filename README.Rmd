@@ -27,7 +27,7 @@ Version](https://www.r-pkg.org/badges/version/segregation)](https://CRAN.R-proje
 [![R build
 status](https://github.com/elbersb/segregation/workflows/R-CMD-check/badge.svg)](https://github.com/elbersb/segregation/actions)
 [![Coverage
-status](https://codecov.io/gh/elbersb/segregation/branch/master/graph/badge.svg)](https://codecov.io/github/elbersb/segregation?branch=master)
+status](https://codecov.io/gh/elbersb/segregation/branch/master/graph/badge.svg)](https://app.codecov.io/github/elbersb/segregation?branch=master)
 
 An R package to calculate and decompose entropy-based, multigroup
 segregation indices, with a focus on the Mutual Information Index (M)
@@ -170,10 +170,10 @@ Across Time and Space. Sociological Methods & Research.
 ## References on entropy-based segregation indices
 
 Deutsch, J., Flückiger, Y. & Silber, J. (2009). Analyzing Changes in
-Occupational Segregation: The Case of Switzerland (1970–2000), in: Yves
+Occupational Segregation: The Case of Switzerland (1970--2000), in: Yves
 Flückiger, Sean F. Reardon, Jacques Silber (eds.) Occupational and
 Residential Segregation (Research on Economic Inequality, Volume 17),
-171–202.
+171--202.
 
 DiPrete, T. A., Eller, C. C., Bol, T., & van de Werfhorst, H. G. (2017).
 School-to-Work Linkages in the United States, Germany, and France.
@@ -206,7 +206,7 @@ Sean F. Reardon, Jacques Silber (eds.) Occupational and Residential
 Segregation (Research on Economic Inequality, Volume 17), 33-53.
 
 Mora, R., & Ruiz-Castillo, J. (2011). Entropy-based Segregation Indices.
-Sociological Methodology, 41(1), 159–194.
+Sociological Methodology, 41(1), 159--194.
 <https://doi.org/10.1111/j.1467-9531.2011.01237.x>
 
 Van Puyenbroeck, T., De Bruyne, K., & Sels, L. (2012). More than 'Mutual

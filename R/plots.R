@@ -127,7 +127,7 @@ segplot <- function(data, group, unit, weight, order = "segregation",
         combine,
         ggplot2::aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax)
     ) +
-        ggplot2::geom_rect(ggplot2::aes_string(fill = "group")) +
+        ggplot2::geom_rect(ggplot2::aes(fill = .data[["group"]])) +
         ggplot2::scale_x_continuous(breaks = breaks, expand = c(0, 0)) +
         ggplot2::guides(fill = ggplot2::guide_legend(reverse = TRUE)) +
         ggplot2::theme_bw() +

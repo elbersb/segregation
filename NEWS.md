@@ -1,4 +1,4 @@
-# segregation 0.6.0.9000
+# segregation 1.0.0
 
 - add mutual_total_nested
 - add within argument to mutual_expected
@@ -6,6 +6,7 @@
 - add suite of compression-related functions
 - add segplot function
 - add functions exposure and isolation
+- fix that roxygen2 problem
 
 # segregation 0.6.0
 

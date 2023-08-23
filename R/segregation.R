@@ -9,7 +9,7 @@
 #'
 #' @docType package
 #' @name segregation
-NULL
+'_PACKAGE'
 
 globalVariables(c(
     "V1", "V2", "cond1", "cond2", "entropy_cond", "entropy_cond1", "entropy_cond2", "entropyw",
@@ -24,7 +24,8 @@ globalVariables(c(
     "p_unit_g_group2", "pair", "pct_M",
     "xmax", "xmin", "ymax", "ymin", "..cols", "p_overall",
     "freq_of", "freq_to",
-    "cumul_prob_1", "cumul_prob_2", "group1", "group2", "pct_group_1"
+    "cumul_prob_1", "cumul_prob_2", "group1", "group2", "pct_group_1",
+    ".data"
 ))
 
 # log
