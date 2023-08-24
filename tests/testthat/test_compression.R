@@ -10,6 +10,7 @@ all_neighbors <- expand.grid(a = all_neighbors, b = all_neighbors)
 res_all <- compress(subset, "race", "school", weight = "n", neighbors = all_neighbors)
 
 test_that("result is the same with no neighbors given", {
+    testthat::skip_on_cran()
     res2 <- compress(subset, "race", "school", neighbors = "all", weight = "n")
     expect_equal(res_all$iterations, res2$iterations)
 })

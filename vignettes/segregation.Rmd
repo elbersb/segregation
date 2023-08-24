@@ -12,6 +12,12 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+data.table::setDTthreads(1)
+
+# skip this vignette on CRAN etc.
+BUILD_VIGNETTE <- identical(Sys.getenv("BUILD_VIGNETTE"), "true")
+knitr::opts_chunk$set(eval = BUILD_VIGNETTE)
 ```
 
 The `segregation` package includes functionality to calculate entropy-based segregation measures, namely the Mutual Information Index (M) and the Theil Index (H), which is a normalized version of the M index. The package also includes several methods for decomposing the index into between/within components and into local segregation scores, as well as methods to decompose differences in segregation indices. All of these methods have arguments to obtain standard errors and confidence intervals through bootstrapping.

@@ -13,6 +13,8 @@ localse <- mutual_local(test_data, "u", "g", weight = "n", se = TRUE, n_bootstra
 localbase2 <- mutual_local(test_data, "g", "u", weight = "n", base = 2)
 
 test_that("local calculation works", {
+    testthat::skip_on_cran()
+
     expect_equal(sum(local[stat == "p", est]), 1)
     expect_equal(sum(local2[local2$stat == "p", est]), 1)
     expect_equal(sum(localse[localse$stat == "p", est]), 1)
@@ -32,20 +34,28 @@ test_that("local calculation works", {
 })
 
 test_that("return works", {
+    testthat::skip_on_cran()
+
     expect_equal(nrow(local), 8)
     expect_equal(ncol(local), 3)
 })
 
 test_that("bootstrapping works", {
+    testthat::skip_on_cran()
+
     expect_equal(nrow(localse), 8)
     expect_equal(ncol(localse), 6)
 })
 
 test_that("bootstrap attributes exists", {
+    testthat::skip_on_cran()
+
     expect_equal(dim(attr(localse, "bootstrap")), c(10 * length(unique(test_data$g)) * 2, 3))
 })
 
 test_that("bootstrapping fails when sample size is non-integer", {
+    testthat::skip_on_cran()
+
     test_data <- data.frame(
         u = c(rep("a", 4), rep("b", 4)),
         g = rep(c(1, 2, 3, 4), 2),

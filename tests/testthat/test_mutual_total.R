@@ -10,6 +10,8 @@ test_data <- data.frame(
 )
 
 test_that("mutual M works both ways around", {
+    testthat::skip_on_cran()
+
     expect_equal(
         mutual_total(test_data, "u", "g", weight = "n")[stat == "M", est],
         mutual_total(test_data, "g", "u", weight = "n")[stat == "M", est]
@@ -43,6 +45,8 @@ test_that("mutual M works both ways around", {
 })
 
 test_that("between + within = total", {
+    testthat::skip_on_cran()
+
     expect_equal(
         mutual_total(test_data, "u", "g", weight = "n")[stat == "M", est],
         mutual_total(test_data, "u", "supergroup", weight = "n")[stat == "M", est] +
@@ -58,6 +62,8 @@ test_that("between + within = total", {
 p_12 <- sum(test_data[test_data$supergroup == 12, "n"]) / sum(test_data$n)
 p_34 <- sum(test_data[test_data$supergroup == 34, "n"]) / sum(test_data$n)
 test_that("within estimations are correct", {
+    testthat::skip_on_cran()
+
     d_12 <- test_data[test_data$supergroup == 12, ]
     d_34 <- test_data[test_data$supergroup == 34, ]
     expect_equal(
@@ -69,6 +75,8 @@ test_that("within estimations are correct", {
 })
 
 test_that("H is correct", {
+    testthat::skip_on_cran()
+
     ret <- mutual_total(test_data, "u", "g", weight = "n")
     expect_equal(ret[stat == "H", est] >= 0 & ret[stat == "H", est] <= 1, TRUE)
 })
@@ -89,6 +97,8 @@ test_that("bootstrapping works", {
 })
 
 test_that("bootstrap attributes exists", {
+    testthat::skip_on_cran()
+
     ret <- mutual_total(test_data, "u", "g", weight = "n", se = TRUE, n_bootstrap = 10)
     expect_equal(dim(attr(ret, "bootstrap")), c(2 * 10, 2))
 })

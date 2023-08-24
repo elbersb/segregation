@@ -2,10 +2,14 @@ library("segregation")
 context("test_entropy")
 
 test_that("custom log function", {
+    testthat::skip_on_cran()
+
     expect_equal(logf(2, exp(1)), log(2))
 })
 
 test_that("correct entropy calculation", {
+    testthat::skip_on_cran()
+
     expect_equal(entropy(data.frame(x = c(1)), "x"), 0)
     expect_equal(entropy(data.frame(x = c(1, 2)), "x"), log(2))
     expect_equal(entropy(data.frame(x = c(1, 2, 3)), "x"), log(3))

@@ -13,22 +13,27 @@ mutual_total_compute <- function(data, group, unit, base) {
     entropy_group <- sum(p * logf(1 / p, base))
     H <- M / entropy_group
 
-    data.table(stat = c("M", "H"), est = c(M, H),
-               stringsAsFactors = FALSE)
+    data.table(
+        stat = c("M", "H"), est = c(M, H),
+        stringsAsFactors = FALSE
+    )
 }
 
 #' @import data.table
 mutual_total_within_compute <- function(data, group, unit, within, base,
                                         components = FALSE) {
-
     if (components == FALSE) {
         total <- mutual_total_compute(data, group, c(within, unit), base)
         within_data <- data[, list(freq = sum(freq)), by = c(group, within)]
         between <- mutual_total_compute(within_data, group, within, base)
-        res <- data.table(stat = c("M", "H"),
-            est = c(total[[1, "est"]] - between[[1, "est"]],
-                total[[2, "est"]] - between[[2, "est"]]),
-            stringsAsFactors = FALSE)
+        res <- data.table(
+            stat = c("M", "H"),
+            est = c(
+                total[[1, "est"]] - between[[1, "est"]],
+                total[[2, "est"]] - between[[2, "est"]]
+            ),
+            stringsAsFactors = FALSE
+        )
         return(res)
     }
 
@@ -39,8 +44,8 @@ mutual_total_within_compute <- function(data, group, unit, within, base,
     # calculate proportions and entropy for each within unit
     n_within[, `:=`(p_within = n_within / n_total, p = n_within_group / n_within)]
     entropy <- n_within[, list(entropyw = sum(p * logf(1 / p, base)), p_within = first(p_within)),
-                        by = within
-                        ]
+        by = within
+    ]
     setkeyv(entropy, within)
 
     # calculate totals
@@ -51,8 +56,10 @@ mutual_total_within_compute <- function(data, group, unit, within, base,
     # calculate entropy within groups
     by_unit <- data[, list(
         p_unit = first(p_unit),
-        entropy_cond = sum(p_group_g_unit * logf(1 / p_group_g_unit, base))),
-        by = c(within, unit)]
+        entropy_cond = sum(p_group_g_unit * logf(1 / p_group_g_unit, base))
+    ),
+    by = c(within, unit)
+    ]
     setkeyv(by_unit, within)
 
     # compute total entropy
@@ -70,9 +77,10 @@ mutual_total_within_compute <- function(data, group, unit, within, base,
     by_within$H <- ifelse(is.finite(by_within$H), by_within$H, 0)
 
     melt(by_within,
-         id.vars = within, measure.vars = c("M", "p", "H", "ent_ratio"),
-         variable.name = "stat", value.name = "est",
-         variable.factor = FALSE)
+        id.vars = within, measure.vars = c("M", "p", "H", "ent_ratio"),
+        variable.name = "stat", value.name = "est",
+        variable.factor = FALSE
+    )
 }
 
 #' Calculate total segregation for M and H
@@ -132,23 +140,27 @@ mutual_total_within_compute <- function(data, group, unit, within, base,
 #' # here there is no difference, because schools
 #' # are nested within districts
 #' mutual_total(schools00, "race", c("district", "school"),
-#'              weight = "n") # M => .424
+#'     weight = "n"
+#' ) # M => .424
 #'
 #' # estimate standard errors and 95% CI for M and H
 #' \dontrun{
-#' mutual_total(schools00, "race", "school", weight = "n",
-#'              se = TRUE, n_bootstrap = 1000)
-#' }
+#' mutual_total(schools00, "race", "school",
+#'     weight = "n",
+#'     se = TRUE, n_bootstrap = 1000
+#' )
 #'
 #' # estimate segregation within school districts
 #' mutual_total(schools00, "race", "school",
-#'              within = "district", weight = "n") # M => .087
+#'     within = "district", weight = "n"
+#' ) # M => .087
 #'
 #' # estimate between-district racial segregation
 #' mutual_total(schools00, "race", "district", weight = "n") # M => .338
 #' # note that the sum of within-district and between-district
 #' # segregation equals total school-race segregation;
 #' # here, most segregation is between school districts
+#' }
 #' @import data.table
 #' @export
 mutual_total <- function(data, group, unit, within = NULL, weight = NULL,
@@ -171,7 +183,8 @@ mutual_total <- function(data, group, unit, within = NULL, weight = NULL,
         } else {
             stop(paste0(
                 "bootstrap with a total sample size that is not an integer is not allowed, ",
-                "maybe scale your weights?"))
+                "maybe scale your weights?"
+            ))
         }
         # draw from a multinomial with weights specified by the cell counts
         draws <- stats::rmultinom(n_bootstrap, n_total, d[["freq"]] / n_total)
@@ -245,11 +258,13 @@ mutual_total <- function(data, group, unit, within = NULL, weight = NULL,
 #' Ricardo Mora and Javier Ruiz-Castillo. 2011.
 #'      "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
 #' @examples
-#' (within <- mutual_within(schools00, "race", "school", within = "state",
-#'                          weight = "n", wide = TRUE))
+#' (within <- mutual_within(schools00, "race", "school",
+#'     within = "state",
+#'     weight = "n", wide = TRUE
+#' ))
 #' # the M for state "A" is .409
 #' # manual calculation
-#' schools_A <- schools00[schools00$state=="A",]
+#' schools_A <- schools00[schools00$state == "A", ]
 #' mutual_total(schools_A, "race", "school", weight = "n") # M => .409
 #'
 #' # to recover the within M and H from the output, multiply
@@ -261,8 +276,8 @@ mutual_total <- function(data, group, unit, within = NULL, weight = NULL,
 #' @import data.table
 #' @export
 mutual_within <- function(data, group, unit, within,
-                         weight = NULL, se = FALSE, CI = 0.95, n_bootstrap = 100, base = exp(1),
-                         wide = FALSE) {
+                          weight = NULL, se = FALSE, CI = 0.95, n_bootstrap = 100, base = exp(1),
+                          wide = FALSE) {
     stopifnot(CI > 0 & CI < 1)
     d <- prepare_data(data, group, unit, weight, within)
 
@@ -277,7 +292,8 @@ mutual_within <- function(data, group, unit, within,
         } else {
             stop(paste0(
                 "bootstrap with a total sample size that is not an integer is not allowed, ",
-                "maybe scale your weights?"))
+                "maybe scale your weights?"
+            ))
         }
 
         # draw from a multinomial with weights specified by the cell counts
@@ -295,20 +311,26 @@ mutual_within <- function(data, group, unit, within,
     }
 
     if (wide == TRUE) {
-        f <- stats::as.formula(paste(paste(within, collapse = "+"),
-                                     "~ factor(stat, levels=c('M', 'p', 'H', 'ent_ratio'))"))
+        f <- stats::as.formula(paste(
+            paste(within, collapse = "+"),
+            "~ factor(stat, levels=c('M', 'p', 'H', 'ent_ratio'))"
+        ))
         if (se == TRUE) {
             ret <- dcast(ret, f, value.var = c("est", "se", "CI", "bias"))
-            names(ret) <- c(within,
-                            "M", "p", "H", "ent_ratio",
-                            "M_se", "p_se", "H_se", "ent_ratio_se",
-                            "M_CI", "p_CI", "H_CI", "ent_ratio_CI",
-                            "M_bias", "p_bias", "H_bias", "ent_ratio_bias")
-            setcolorder(ret, c(within,
-                               "M", "M_se", "M_CI", "M_bias",
-                               "p", "p_se", "p_CI", "p_bias",
-                               "H", "H_se", "H_CI", "H_bias",
-                               "ent_ratio", "ent_ratio_se", "ent_ratio_CI", "ent_ratio_bias"))
+            names(ret) <- c(
+                within,
+                "M", "p", "H", "ent_ratio",
+                "M_se", "p_se", "H_se", "ent_ratio_se",
+                "M_CI", "p_CI", "H_CI", "ent_ratio_CI",
+                "M_bias", "p_bias", "H_bias", "ent_ratio_bias"
+            )
+            setcolorder(ret, c(
+                within,
+                "M", "M_se", "M_CI", "M_bias",
+                "p", "p_se", "p_CI", "p_bias",
+                "H", "H_se", "H_CI", "H_bias",
+                "ent_ratio", "ent_ratio_se", "ent_ratio_CI", "ent_ratio_bias"
+            ))
             setattr(ret, "bootstrap", boot_ret)
         } else {
             ret <- dcast(ret, f, value.var = c("est"))
@@ -325,9 +347,10 @@ mutual_local_compute <- function(data, group, unit, base = exp(1)) {
     local <- data[, list(ls = first(ls_unit), p = first(p_unit)), by = unit]
     # melt into long form
     melt(local,
-         id.vars = unit, measure.vars = c("ls", "p"),
-         variable.name = "stat", value.name = "est",
-         variable.factor = FALSE)
+        id.vars = unit, measure.vars = c("ls", "p"),
+        variable.name = "stat", value.name = "est",
+        variable.factor = FALSE
+    )
 }
 
 #' Calculates local segregation indices based on M
@@ -374,8 +397,9 @@ mutual_local_compute <- function(data, group, unit, base = exp(1)) {
 #'   "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
 #' @examples
 #' # which schools are most segregated?
-#' (localseg = mutual_local(schools00, "race", "school",
-#'                          weight = "n", wide = TRUE))
+#' (localseg <- mutual_local(schools00, "race", "school",
+#'     weight = "n", wide = TRUE
+#' ))
 #'
 #' sum(localseg$p) # => 1
 #'
@@ -402,7 +426,8 @@ mutual_local <- function(data, group, unit, weight = NULL,
         } else {
             stop(paste0(
                 "bootstrap with a total sample size that is not an integer is not allowed, ",
-                "maybe scale your weights?"))
+                "maybe scale your weights?"
+            ))
         }
 
         # draw from a multinomial with weights specified by the cell counts
@@ -420,17 +445,23 @@ mutual_local <- function(data, group, unit, weight = NULL,
     }
 
     if (wide == TRUE) {
-        f <- stats::as.formula(paste(paste(unit, collapse = "+"),
-                                     "~ factor(stat, levels=c('ls', 'p'))"))
+        f <- stats::as.formula(paste(
+            paste(unit, collapse = "+"),
+            "~ factor(stat, levels=c('ls', 'p'))"
+        ))
         if (se == TRUE) {
             ret <- dcast(ret, f, value.var = c("est", "se", "CI", "bias"))
-            names(ret) <- c(unit, "ls", "p",
+            names(ret) <- c(
+                unit, "ls", "p",
                 "ls_se", "p_se",
                 "ls_CI", "p_CI",
-                "ls_bias", "p_bias")
-            setcolorder(ret, c(unit,
+                "ls_bias", "p_bias"
+            )
+            setcolorder(ret, c(
+                unit,
                 "ls", "ls_se", "ls_CI", "ls_bias",
-                "p", "p_se", "p_CI", "p_bias"))
+                "p", "p_se", "p_CI", "p_bias"
+            ))
             setattr(ret, "bootstrap", boot_ret)
         } else {
             ret <- dcast(ret, f, value.var = c("est"))
@@ -461,7 +492,8 @@ mutual_local <- function(data, group, unit, weight = NULL,
 #'   the levels of nesting.
 #' @examples
 #' mutual_total_nested(schools00, "race", c("state", "district", "school"),
-#'                     weight = "n")
+#'     weight = "n"
+#' )
 #' # This is a simpler way to run the following manually:
 #' # mutual_total(schools00, "race", "state", weight = "n")
 #' # mutual_total(schools00, "race", "district", within = "state", weight = "n")

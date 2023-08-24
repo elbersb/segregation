@@ -13,6 +13,8 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
+data.table::setDTthreads(1)
+
 # skip this vignette on CRAN etc.
 BUILD_VIGNETTE <- identical(Sys.getenv("BUILD_VIGNETTE"), "true")
 knitr::opts_chunk$set(eval = BUILD_VIGNETTE)
@@ -176,10 +178,12 @@ backwards). By averaging them we can create a single margins-adjusted
 local segregation score:
 
 ```{r}
-diff <- mutual_difference(schools00, schools05, "race", "school", 
-                          weight = "n", method = "shapley_detailed")
+diff <- mutual_difference(schools00, schools05, "race", "school",
+  weight = "n", method = "shapley_detailed"
+)
 
-diff[stat %in% c("ls_diff1", "ls_diff2"), 
-     .(ls_diff_adjusted = mean(est)), 
-     by = .(school)]
+diff[stat %in% c("ls_diff1", "ls_diff2"),
+  .(ls_diff_adjusted = mean(est)),
+  by = .(school)
+]
 ```
