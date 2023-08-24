@@ -2,6 +2,8 @@ library("segregation")
 context("test_ipf")
 
 test_that("different precisions", {
+    testthat::skip_on_cran()
+
     # reduce to overlap sample
     schools00_r <- schools00[schools00$school %in% schools05$school, ]
     schools05_r <- schools05[schools05$school %in% schools00$school, ]
@@ -28,15 +30,25 @@ test_that("different precisions", {
 })
 
 test_that("warn if iterations are too low", {
+    testthat::skip_on_cran()
+
     expect_error(
         suppressWarnings(
-            ipf(schools00, schools05, "race", "school", weight = "n",
-            precision = .00001, max_iterations = 1)))
+            ipf(schools00, schools05, "race", "school",
+                weight = "n",
+                precision = .00001, max_iterations = 1
+            )
+        )
+    )
 })
 
 test_that("gives sames results as mutual_difference", {
-    diff <- mutual_difference(schools00, schools05, group = "race", unit = "school",
-        weight = "n", method = "km", precision = 0.000001)
+    testthat::skip_on_cran()
+
+    diff <- mutual_difference(schools00, schools05,
+        group = "race", unit = "school",
+        weight = "n", method = "km", precision = 0.000001
+    )
     # what changed from 2000 to 2005?
     # first reduce to overlap sample
     schools00_r <- schools00[schools00$school %in% schools05$school, ]
@@ -55,10 +67,13 @@ test_that("gives sames results as mutual_difference", {
     expect_equal(
         M_05 - M_00 - structural_change,
         diff[stat %in% c("unit_marginal", "group_marginal", "interaction"), sum(est)],
-        tolerance = .001)
+        tolerance = .001
+    )
 })
 
 test_that("example from Karmel & Maclachlan 1988", {
+    testthat::skip_on_cran()
+
     source <- data.frame(
         occ = rep(c(1, 2, 3), 2),
         gender = c(rep("male", 3), rep("female", 3)),
@@ -79,21 +94,29 @@ test_that("example from Karmel & Maclachlan 1988", {
     expect_equal(adj[adj$gender == "female" & adj$occ == 2, "n"][[1]], 114.5)
     expect_equal(adj[adj$gender == "female" & adj$occ == 3, "n"][[1]], 70.2)
 
-    expect_equal(sum(adj[adj$gender == "male", "n"]),
-                 sum(adj[adj$gender == "male", "n_target"]))
-    expect_equal(sum(adj[adj$gender == "female", "n"]),
-                 sum(adj[adj$gender == "female", "n_target"]))
+    expect_equal(
+        sum(adj[adj$gender == "male", "n"]),
+        sum(adj[adj$gender == "male", "n_target"])
+    )
+    expect_equal(
+        sum(adj[adj$gender == "female", "n"]),
+        sum(adj[adj$gender == "female", "n_target"])
+    )
     expect_equal(sum(adj[adj$occ == 1, "n"]), sum(adj[adj$occ == 1, "n_target"]))
     expect_equal(sum(adj[adj$occ == 2, "n"]), sum(adj[adj$occ == 2, "n_target"]))
     expect_equal(sum(adj[adj$occ == 3, "n"]), sum(adj[adj$occ == 3, "n_target"]))
 })
 
 test_that("warning about units and groups being dropped", {
+    testthat::skip_on_cran()
+
     expect_warning(ipfd <- ipf(schools00, schools05, "race", "school", weight = "n"))
     expect_equal(sum(ipfd$n), sum(ipfd$n_source))
 })
 
 test_that("returns same number of observations as before", {
+    testthat::skip_on_cran()
+
     # schools are dropped here
     suppressWarnings(ipfd <- ipf(schools00, schools05, "race", "school", weight = "n"))
     expect_equal(sum(ipfd$n), sum(ipfd$n_source))

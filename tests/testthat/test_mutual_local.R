@@ -60,12 +60,18 @@ test_that("bootstrapping fails when sample size is non-integer", {
 })
 
 test_that("option wide works", {
+    testthat::skip_on_cran()
+
     nowide <- mutual_local(test_data, "u", "g", weight = "n")
-    nowide_se <- mutual_local(test_data, "u", "g", weight = "n",
-        se = TRUE, n_bootstrap = 10)
+    nowide_se <- mutual_local(test_data, "u", "g",
+        weight = "n",
+        se = TRUE, n_bootstrap = 10
+    )
     wide <- mutual_local(test_data, "u", "g", weight = "n", wide = TRUE)
-    wide_se <- mutual_local(test_data, "u", "g", weight = "n", wide = TRUE,
-        se = TRUE, n_bootstrap = 10)
+    wide_se <- mutual_local(test_data, "u", "g",
+        weight = "n", wide = TRUE,
+        se = TRUE, n_bootstrap = 10
+    )
 
     expect_equal(ncol(nowide) + 3, ncol(nowide_se))
     expect_equal(nrow(nowide), 8)
@@ -78,8 +84,10 @@ test_that("option wide works", {
     expect_equal(nowide[stat == "p", est], wide$p)
 
     total <- mutual_total(test_data, "u", "g", weight = "n")
-    expect_equal(total[stat == "M", est],
-                 sum(nowide[stat == "ls", est] * nowide[stat == "p", "est"]))
+    expect_equal(
+        total[stat == "M", est],
+        sum(nowide[stat == "ls", est] * nowide[stat == "p", "est"])
+    )
     expect_equal(total[stat == "M", est], sum(wide$ls * wide$p))
     expect_equal(total[stat == "H", est], sum(wide$ls * wide$p) / entropy(test_data, "u", "n"))
 

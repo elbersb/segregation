@@ -74,12 +74,16 @@ test_that("H is correct", {
 })
 
 test_that("bootstrapping works", {
+    testthat::skip_on_cran()
+
     ret <- mutual_total(test_data, "u", "g", weight = "n", se = TRUE, n_bootstrap = 10)
     expect_equal(dim(ret), c(2, 5))
     expect_equal(all(ret$se > 0), TRUE)
 
-    ret <- mutual_total(test_data, "u", "g", weight = "n", se = TRUE, n_bootstrap = 10,
-                        within = "supergroup")
+    ret <- mutual_total(test_data, "u", "g",
+        weight = "n", se = TRUE, n_bootstrap = 10,
+        within = "supergroup"
+    )
     expect_equal(dim(ret), c(2, 5))
     expect_equal(all(ret$se > 0), TRUE)
 })
@@ -90,6 +94,8 @@ test_that("bootstrap attributes exists", {
 })
 
 test_that("bootstrapping fails when sample size is non-integer", {
+    testthat::skip_on_cran()
+
     test_data <- data.frame(
         u = c(rep("a", 4), rep("b", 4)),
         g = rep(c(1, 2, 3, 4), 2),
@@ -113,8 +119,12 @@ test_data <- data.frame(
 )
 
 test_that("zero weights no problem", {
-    expect_equal(dim(mutual_total(test_data, "u", "g", weight = "n",
-        se = TRUE, n_bootstrap = 10)), c(2, 5))
+    testthat::skip_on_cran()
+
+    expect_equal(dim(mutual_total(test_data, "u", "g",
+        weight = "n",
+        se = TRUE, n_bootstrap = 10
+    )), c(2, 5))
     expect_equal(dim(mutual_total(test_data, "u", "g", weight = "n")), c(2, 2))
     expect_equal(mutual_total(test_data, "u", "g", weight = "n")[stat == "M", est], log(2))
     expect_equal(mutual_total(test_data, "u", "g", weight = "n")[stat == "H", est], 1)
@@ -123,13 +133,18 @@ test_that("zero weights no problem", {
     test_data2$g <- as.factor(test_data2$g)
     expect_equal(
         mutual_total(test_data, "u", "g", weight = "n")[["est"]],
-        mutual_total(test_data2, "u", "g", weight = "n")[["est"]])
+        mutual_total(test_data2, "u", "g", weight = "n")[["est"]]
+    )
 })
 
 test_that("gives errors", {
+    testthat::skip_on_cran()
+
     expect_error(mutual_total("test_data", "u", "g", weight = "n"), "not a data.frame")
-    expect_error(mutual_total(test_data[test_data$u == "c", ], "u", "g", weight = "n"),
-        "data.frame is empty")
+    expect_error(
+        mutual_total(test_data[test_data$u == "c", ], "u", "g", weight = "n"),
+        "data.frame is empty"
+    )
 
     expect_error(mutual_total(test_data, "u2", "g", weight = "n"), "u2 not in data.frame")
     expect_error(mutual_total(test_data, "u2", "g2", weight = "n"), "u2, g2 not in data.frame")
@@ -142,6 +157,8 @@ test_that("gives errors", {
 })
 
 test_that("debiasing works correctly", {
+    testthat::skip_on_cran()
+
     nose <- mutual_total(test_data, "u", "g", weight = "n")
     withse <- mutual_total(test_data, "u", "g", weight = "n", se = TRUE)
     expect_equal(nose$est, withse$est + withse$bias)

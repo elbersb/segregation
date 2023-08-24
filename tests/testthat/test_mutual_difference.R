@@ -327,6 +327,7 @@ test_that("mutual_difference shapley_detailed with SE", {
 
 test_that("mutual_difference log base", {
     testthat::skip_on_cran()
+
     ret <- mutual_difference(test_data1, test_data2, "g", "u",
         weight = "n", method = "shapley", base = 2
     )

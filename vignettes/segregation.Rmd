@@ -58,7 +58,7 @@ If you have data in the form of contingency tables, you can use `matrix_to_long(
 to convert them to the long format required for the package. As an example:
 
 ```{r}
-(m = matrix(c(10, 20, 30, 30, 20, 10), nrow = 3))
+(m <- matrix(c(10, 20, 30, 30, 20, 10), nrow = 3))
 colnames(m) <- c("Black", "White")
 matrix_to_long(m, group = "race", unit = "school")
 ```
@@ -92,8 +92,11 @@ Therefore, if the H index is used, it is important to specify the groups and uni
 For inference (discussed in more detail [below](#inference)), we can use bootstrapping to obtain standard errors and confidence intervals:
 
 ```{r}
-mutual_total(schools00, "race", "school", weight = "n",
-             se = TRUE, CI = .95, n_bootstrap = 500)
+# setting n_bootstrap = 100 here to speed up - more iterations are recommended in practice
+mutual_total(schools00, "race", "school",
+  weight = "n",
+  se = TRUE, CI = .95, n_bootstrap = 100
+)
 ```
 
 As there a large number of observations, the standard errors are very small.
@@ -143,7 +146,8 @@ By using `mutual_total()` with the `within` argument, we can obtain the overall 
 
 ```{r}
 (within <- mutual_within(schools00, "race", "school",
-                         within = "state", weight = "n", wide = TRUE))
+  within = "state", weight = "n", wide = TRUE
+))
 ```
 
 This is a much simpler way to obtain state-specific segregation scores compared to subsetting manually, as shown in the beginning of this section. In addition to the M and H indices, we also obtain `p`, the population proportion of the state ($p_s$ above), and `ent_ratio`, which is $E(\mathbf{T}_s)/E(\mathbf{T})$ from above. Hence, we can recover the total within-component using
@@ -167,7 +171,8 @@ The between-within decomposition can also be applied repeatedly in a hierarchica
 
 ```{r}
 mutual_total_nested(schools00, "race", c("state", "district", "school"),
-                    weight = "n")
+  weight = "n"
+)
 # This is a simpler way of running the following three decompositions manually:
 # mutual_total(schools00, "race", "state", weight = "n")
 # mutual_total(schools00, "race", "district", within = "state", weight = "n")
@@ -190,8 +195,11 @@ mutual_local(schools00, "race", "school", weight = "n", wide = TRUE)
 Local segregation scores are based on much less data than the full M index, so it often makes sense to obtain confidence intervals. The following code plots the length of the 95% confidence interval in relation to the size of each school:
 
 ```{r}
-localse <- mutual_local(schools00, "race", "school", weight = "n",
-                        se = TRUE, wide = TRUE, n_bootstrap = 1000)
+# setting n_bootstrap = 100 here to speed up
+localse <- mutual_local(schools00, "race", "school",
+  weight = "n",
+  se = TRUE, wide = TRUE, n_bootstrap = 100
+)
 localse$lengthCI <- sapply(localse$ls_CI, base::diff)
 with(localse, plot(x = p, y = lengthCI, pch = 16, cex = 0.3))
 ```
@@ -219,8 +227,11 @@ The four main functions of the packages, `mutual_total()`, `mutual_within()`, `m
 To estimate standard errors and confidence intervals, use `se = TRUE`. The coverage of the confidence interval can be specified in the `CI` argument. The number of bootstrap iterations can be specified as well:
 
 ```{r}
-(se <- mutual_total(schools00, "race", "school", weight = "n",
-                    se = TRUE, CI = .95, n_bootstrap = 500))
+# setting n_bootstrap = 100 here to speed up
+(se <- mutual_total(schools00, "race", "school",
+  weight = "n",
+  se = TRUE, CI = .95, n_bootstrap = 100
+))
 ```
 The confidence intervals are based on the percentiles from the bootstrap distribution, and hence require a large number of bootstrap iterations for valid interpretation. The estimate `est` that is reported in the results has already been "debiased", i.e. the bias that has been estimated from the bootstrap distribution (which is reported in `bias`) has been subtracted from the usual maximum-likelihood estimate that we would obtain from `mutual_total` with `se = FALSE`. The confidence interval is centered around the debiased estimate.
 
@@ -237,8 +248,11 @@ provide effectively the same coverage as the confidence intervals obtained from 
 Whenever the bootstrap is used, the bootstrap distributions for each parameter are reported in an attribute `bootstrap` of the returned object. This can be used, for instance, to check whether the bootstrap distribution is skewed. The following code computes local segregation scores for all schools, and then shows a histogram of the bootstrap distribution for school C137_9, which has a very low local segregation score:
 
 ```{r}
-local <- mutual_local(schools00, "race", "school", weight = "n",
-                      se = TRUE, CI = .95, n_bootstrap = 500)
+# setting n_bootstrap = 100 here to speed up
+local <- mutual_local(schools00, "race", "school",
+  weight = "n",
+  se = TRUE, CI = .95, n_bootstrap = 100
+)
 # pick bootstrap distribution of local segregation scores for school C137_9
 ls_school <- attr(local, "bootstrap")[school == "C137_9" & stat == "ls", boot_est]
 hist(ls_school, main = "Bootstrap distribution for school C137_9")
@@ -251,7 +265,8 @@ the package also provides a function `mutual_expected()` that simulates random c
 from the marginal distributions of your table. For the `schools00` dataset:
 
 ```{r}
-mutual_expected(schools00, "race", "school", weight = "n", n_bootstrap = 500)
+# setting n_bootstrap = 100 here to speed up
+mutual_expected(schools00, "race", "school", weight = "n", n_bootstrap = 100)
 ```
 
 Here, there is no concern about bias due to a small sample size.
