@@ -1,3 +1,7 @@
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+    return()
+}
+
 library("segregation")
 context("test_mutual_within")
 
@@ -10,8 +14,6 @@ test_data <- data.frame(
 )
 
 test_that("dimensions and bootstrapping", {
-    testthat::skip_on_cran()
-
     within <- mutual_within(test_data, "u", "g",
         within = "supergroup", weight = "n"
     )
@@ -24,8 +26,6 @@ test_that("dimensions and bootstrapping", {
 })
 
 test_that("bootstrap attributes exists", {
-    testthat::skip_on_cran()
-
     within_se <- mutual_within(test_data, "u", "g",
         within = "supergroup", weight = "n", se = TRUE, n_bootstrap = 10
     )
@@ -34,8 +34,6 @@ test_that("bootstrap attributes exists", {
 })
 
 test_that("bootstrapping fails when sample size is non-integer", {
-    testthat::skip_on_cran()
-
     test_data <- data.frame(
         u = c(rep("a", 4), rep("b", 4)),
         g = rep(c(1, 2, 3, 4), 2),
@@ -56,8 +54,6 @@ test_that("bootstrapping fails when sample size is non-integer", {
 })
 
 test_that("between + within = total", {
-    testthat::skip_on_cran()
-
     total <- mutual_total(test_data, "u", "g", within = "supergroup", weight = "n")
     m <- total[stat == "M", est]
     h <- total[stat == "H", est]
@@ -84,8 +80,6 @@ test_that("between + within = total", {
 })
 
 test_that("option wide works", {
-    testthat::skip_on_cran()
-
     nowide <- mutual_within(test_data, "u", "g",
         within = "supergroup", weight = "n"
     )

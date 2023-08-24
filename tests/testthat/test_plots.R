@@ -1,3 +1,7 @@
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+    return()
+}
+
 library("segregation")
 context("plots")
 
@@ -12,16 +16,12 @@ plot_entropy <- segplot(schools00, "race", "school",
 )
 
 test_that("dimensions", {
-    testthat::skip_on_cran()
-
     expect_equal(nrow(plot_majority$data), nrow(plot_seg$data))
     expect_equal(nrow(plot_majority$data), nrow(plot_entropy$data))
     expect_equal(nrow(plot_majority$data), nrow(plot_majority_fixed$data))
 })
 
 test_that("reference", {
-    testthat::skip_on_cran()
-
     reference <- data.table::as.data.table(schools00)
     reference <- reference[, .(N = sum(n)), by = .(race)]
     reference[, p := N / sum(N)]
@@ -51,8 +51,6 @@ test_that("reference", {
 })
 
 test_that("axis_labels", {
-    testthat::skip_on_cran()
-
     left <- segplot(schools00, "race", "school", weight = "n", axis_labels = "left")
     right <- segplot(schools00, "race", "school", weight = "n", axis_labels = "right")
     both <- segplot(schools00, "race", "school", weight = "n", axis_labels = "both")
@@ -61,8 +59,6 @@ test_that("axis_labels", {
 })
 
 test_that("segcurve", {
-    testthat::skip_on_cran()
-
     expect_error(segcurve(schools00, "race", "school", weight = "n"))
 
     p1 <- segcurve(subset(schools00, race %in% c("white", "black")),

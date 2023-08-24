@@ -1,16 +1,16 @@
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+    return()
+}
+
 library("segregation")
 context("test_matrix_to_long")
 
 test_that("accept only matrix", {
-    testthat::skip_on_cran()
-
     a <- data.frame()
     expect_error(matrix_to_long(a))
 })
 
 test_that("no names", {
-    testthat::skip_on_cran()
-
     m <- matrix(c(10, 20, 30, 30, 20, 10), nrow = 3)
     long <- matrix_to_long(m)
     expect_equal(names(long), c("unit", "group", "n"))
@@ -19,8 +19,6 @@ test_that("no names", {
 })
 
 test_that("rownames only", {
-    testthat::skip_on_cran()
-
     m <- matrix(c(10, 20, 30, 30, 20, 10), nrow = 3)
     colnames(m) <- c("A", "B")
     long <- matrix_to_long(m)
@@ -30,8 +28,6 @@ test_that("rownames only", {
 })
 
 test_that("colnames only", {
-    testthat::skip_on_cran()
-
     m <- matrix(c(10, 20, 30, 30, 20, 10), nrow = 3)
     rownames(m) <- c("S1", "S2", "S3")
     long <- matrix_to_long(m)
@@ -41,8 +37,6 @@ test_that("colnames only", {
 })
 
 test_that("rownames + colnames", {
-    testthat::skip_on_cran()
-
     m <- matrix(c(10, 20, 30, 30, 20, 10), nrow = 3)
     colnames(m) <- c("A", "B")
     rownames(m) <- c("S1", "S2", "S3")
@@ -53,8 +47,6 @@ test_that("rownames + colnames", {
 })
 
 test_that("arguments", {
-    testthat::skip_on_cran()
-
     # drop zero
     m <- matrix(c(10, 20, 30, 0, 20, 0), nrow = 3)
     long1 <- matrix_to_long(m)

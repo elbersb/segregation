@@ -1,9 +1,11 @@
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+    return()
+}
+
 library("segregation")
 context("test_ipf")
 
 test_that("different precisions", {
-    testthat::skip_on_cran()
-
     # reduce to overlap sample
     schools00_r <- schools00[schools00$school %in% schools05$school, ]
     schools05_r <- schools05[schools05$school %in% schools00$school, ]
@@ -30,8 +32,6 @@ test_that("different precisions", {
 })
 
 test_that("warn if iterations are too low", {
-    testthat::skip_on_cran()
-
     expect_error(
         suppressWarnings(
             ipf(schools00, schools05, "race", "school",
@@ -43,8 +43,6 @@ test_that("warn if iterations are too low", {
 })
 
 test_that("gives sames results as mutual_difference", {
-    testthat::skip_on_cran()
-
     diff <- mutual_difference(schools00, schools05,
         group = "race", unit = "school",
         weight = "n", method = "km", precision = 0.000001
@@ -72,8 +70,6 @@ test_that("gives sames results as mutual_difference", {
 })
 
 test_that("example from Karmel & Maclachlan 1988", {
-    testthat::skip_on_cran()
-
     source <- data.frame(
         occ = rep(c(1, 2, 3), 2),
         gender = c(rep("male", 3), rep("female", 3)),
@@ -108,15 +104,11 @@ test_that("example from Karmel & Maclachlan 1988", {
 })
 
 test_that("warning about units and groups being dropped", {
-    testthat::skip_on_cran()
-
     expect_warning(ipfd <- ipf(schools00, schools05, "race", "school", weight = "n"))
     expect_equal(sum(ipfd$n), sum(ipfd$n_source))
 })
 
 test_that("returns same number of observations as before", {
-    testthat::skip_on_cran()
-
     # schools are dropped here
     suppressWarnings(ipfd <- ipf(schools00, schools05, "race", "school", weight = "n"))
     expect_equal(sum(ipfd$n), sum(ipfd$n_source))

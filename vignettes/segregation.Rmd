@@ -98,10 +98,9 @@ Therefore, if the H index is used, it is important to specify the groups and uni
 For inference (discussed in more detail [below](#inference)), we can use bootstrapping to obtain standard errors and confidence intervals:
 
 ```{r}
-# setting n_bootstrap = 100 here to speed up - more iterations are recommended in practice
 mutual_total(schools00, "race", "school",
   weight = "n",
-  se = TRUE, CI = .95, n_bootstrap = 100
+  se = TRUE, CI = .95, n_bootstrap = 500
 )
 ```
 
@@ -201,10 +200,9 @@ mutual_local(schools00, "race", "school", weight = "n", wide = TRUE)
 Local segregation scores are based on much less data than the full M index, so it often makes sense to obtain confidence intervals. The following code plots the length of the 95% confidence interval in relation to the size of each school:
 
 ```{r}
-# setting n_bootstrap = 100 here to speed up
 localse <- mutual_local(schools00, "race", "school",
   weight = "n",
-  se = TRUE, wide = TRUE, n_bootstrap = 100
+  se = TRUE, wide = TRUE, n_bootstrap = 500
 )
 localse$lengthCI <- sapply(localse$ls_CI, base::diff)
 with(localse, plot(x = p, y = lengthCI, pch = 16, cex = 0.3))
@@ -233,10 +231,9 @@ The four main functions of the packages, `mutual_total()`, `mutual_within()`, `m
 To estimate standard errors and confidence intervals, use `se = TRUE`. The coverage of the confidence interval can be specified in the `CI` argument. The number of bootstrap iterations can be specified as well:
 
 ```{r}
-# setting n_bootstrap = 100 here to speed up
 (se <- mutual_total(schools00, "race", "school",
   weight = "n",
-  se = TRUE, CI = .95, n_bootstrap = 100
+  se = TRUE, CI = .95, n_bootstrap = 500
 ))
 ```
 The confidence intervals are based on the percentiles from the bootstrap distribution, and hence require a large number of bootstrap iterations for valid interpretation. The estimate `est` that is reported in the results has already been "debiased", i.e. the bias that has been estimated from the bootstrap distribution (which is reported in `bias`) has been subtracted from the usual maximum-likelihood estimate that we would obtain from `mutual_total` with `se = FALSE`. The confidence interval is centered around the debiased estimate.
@@ -254,10 +251,9 @@ provide effectively the same coverage as the confidence intervals obtained from 
 Whenever the bootstrap is used, the bootstrap distributions for each parameter are reported in an attribute `bootstrap` of the returned object. This can be used, for instance, to check whether the bootstrap distribution is skewed. The following code computes local segregation scores for all schools, and then shows a histogram of the bootstrap distribution for school C137_9, which has a very low local segregation score:
 
 ```{r}
-# setting n_bootstrap = 100 here to speed up
 local <- mutual_local(schools00, "race", "school",
   weight = "n",
-  se = TRUE, CI = .95, n_bootstrap = 100
+  se = TRUE, CI = .95, n_bootstrap = 500
 )
 # pick bootstrap distribution of local segregation scores for school C137_9
 ls_school <- attr(local, "bootstrap")[school == "C137_9" & stat == "ls", boot_est]
@@ -271,8 +267,7 @@ the package also provides a function `mutual_expected()` that simulates random c
 from the marginal distributions of your table. For the `schools00` dataset:
 
 ```{r}
-# setting n_bootstrap = 100 here to speed up
-mutual_expected(schools00, "race", "school", weight = "n", n_bootstrap = 100)
+mutual_expected(schools00, "race", "school", weight = "n", n_bootstrap = 500)
 ```
 
 Here, there is no concern about bias due to a small sample size.

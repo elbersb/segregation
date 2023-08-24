@@ -1,9 +1,11 @@
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+    return()
+}
+
 library("segregation")
 context("test_exposure_isolation")
 
 test_that("two group case", {
-    testthat::skip_on_cran()
-
     two <- data.table::as.data.table(schools00)
     two <- two[race %in% c("white", "black")]
     exp <- exposure(two, "race", "school", "n")
@@ -19,8 +21,6 @@ test_that("two group case", {
 })
 
 test_that("exposure", {
-    testthat::skip_on_cran()
-
     exp <- exposure(schools00, "race", "school", "n")
     expect_equal(
         exp[, .(sum = sum(exposure)), by = .(of)][["sum"]],
@@ -29,8 +29,6 @@ test_that("exposure", {
 })
 
 test_that("exposure and isolation", {
-    testthat::skip_on_cran()
-
     exp <- exposure(schools00, "race", "school", "n")[of == to]
     iso <- isolation(schools00, "race", "school", "n")
     comp <- merge(exp, iso, by.x = "of", by.y = "race")

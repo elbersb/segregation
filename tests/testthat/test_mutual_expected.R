@@ -1,3 +1,7 @@
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+    return()
+}
+
 library("segregation")
 context("test_mutual_expected")
 
@@ -16,8 +20,6 @@ data2 <- data.frame(
 )
 
 test_that("works both ways around", {
-    testthat::skip_on_cran()
-
     expect_equal(
         mutual_expected(data1, "u", "g", weight = "n")[stat == "M under 0", est],
         mutual_expected(data1, "g", "u", weight = "n")[stat == "M under 0", est],
@@ -32,8 +34,6 @@ test_that("works both ways around", {
 })
 
 test_that("fixed margins = FALSE", {
-    testthat::skip_on_cran()
-
     expect_equal(
         mutual_expected(data1, "u", "g", weight = "n", fixed_margins = FALSE)[stat == "M under 0", est],
         mutual_expected(data1, "g", "u", weight = "n", fixed_margins = FALSE)[stat == "M under 0", est],
@@ -42,8 +42,6 @@ test_that("fixed margins = FALSE", {
 })
 
 test_that("within argument", {
-    testthat::skip_on_cran()
-
     within <- mutual_expected(school_ses, "ethnic_group", "school_id", within = "ses_quintile")
     # manually
     d <- data.table::as.data.table(school_ses)
@@ -57,8 +55,6 @@ test_that("within argument", {
 
 
 test_that("dissimilarity", {
-    testthat::skip_on_cran()
-
     expect_error(dissimilarity_expected(data1, "u", "g", weight = "n"))
     expect_equal(dissimilarity_expected(data1, "g", "u", n_bootstrap = 500, weight = "n")$est,
         0.098,
@@ -75,8 +71,6 @@ test_that("dissimilarity", {
 })
 
 test_that("dissimilarity - Winship 1977", {
-    testthat::skip_on_cran()
-
     # see table 2
     mat <- matrix(c(rep(1, 1000), rep(9, 1000)), ncol = 2)
     d <- matrix_to_long(mat)
@@ -104,8 +98,6 @@ test_that("dissimilarity - Winship 1977", {
 })
 
 test_that("errors", {
-    testthat::skip_on_cran()
-
     dat <- data.frame(
         u = rep(c(1, 2, 3, 4), 2),
         g = c(rep("a", 4), rep("b", 4)),

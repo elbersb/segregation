@@ -1,3 +1,7 @@
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+    return()
+}
+
 library("segregation")
 context("test_compression")
 
@@ -10,13 +14,11 @@ all_neighbors <- expand.grid(a = all_neighbors, b = all_neighbors)
 res_all <- compress(subset, "race", "school", weight = "n", neighbors = all_neighbors)
 
 test_that("result is the same with no neighbors given", {
-    testthat::skip_on_cran()
     res2 <- compress(subset, "race", "school", neighbors = "all", weight = "n")
     expect_equal(res_all$iterations, res2$iterations)
 })
 
 test_that("compress works", {
-    testthat::skip_on_cran()
     # 9 merges
     expect_equal(nrow(res_all$iterations), 16)
     # M values is declining continously
@@ -26,13 +28,11 @@ test_that("compress works", {
 })
 
 test_that("print", {
-    testthat::skip_on_cran()
     expect_output(print(res_all), "17 units")
     expect_output(print(res_all), "Threshold 99%")
 })
 
 test_that("get_crosswalk works", {
-    testthat::skip_on_cran()
     expect_error(
         get_crosswalk(schools00),
         "either n_units or percent has to be given"
@@ -60,7 +60,6 @@ test_that("get_crosswalk works", {
 })
 
 test_that("parts", {
-    testthat::skip_on_cran()
     # get_crosswalk
     res_no_parts <- get_crosswalk(res_all, percent = 0.6)
     res_parts <- get_crosswalk(res_all, percent = 0.6, parts = TRUE)
@@ -83,13 +82,11 @@ test_that("parts", {
 })
 
 test_that("compress edge case", {
-    testthat::skip_on_cran()
     res_edge <- compress(subset, "race", "school", neighbors = "all", weight = "n", max_iter = 1)
     expect_equal(nrow(get_crosswalk(res_edge, n_units = 16)), n_schools)
 })
 
 test_that("merge_units", {
-    testthat::skip_on_cran()
     merged <- merge_units(res_all, percent = 0.8)
     new_units_cw <- sort(unique(get_crosswalk(res_all, percent = 0.8)$new))
     new_units_merged <- sort(unique(merged$school))
@@ -97,7 +94,6 @@ test_that("merge_units", {
 })
 
 test_that("percent works", {
-    testthat::skip_on_cran()
     M_full <- mutual_total(subset, "race", "school", weight = "n")[stat == "M"][["est"]]
 
     for (pct in seq(0.1, 0.9, by = 0.05)) {
@@ -110,7 +106,6 @@ test_that("percent works", {
 })
 
 test_that("merge_units edge case", {
-    testthat::skip_on_cran()
     res_edge <- compress(subset, "race", "school", neighbors = "all", weight = "n", max_iter = 1)
     merged <- merge_units(res_edge, n_units = 16)
     # replicate manual merge
@@ -121,7 +116,6 @@ test_that("merge_units edge case", {
 })
 
 test_that("scree plot", {
-    testthat::skip_on_cran()
     if (requireNamespace("ggplot2", quietly = TRUE)) {
         plot <- scree_plot(res_all)
         expect_equal(nrow(plot$data), n_schools)

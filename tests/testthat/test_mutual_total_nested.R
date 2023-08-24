@@ -1,9 +1,11 @@
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+    return()
+}
+
 library("segregation")
 context("test_mutual_total_nested")
 
 test_that("works both ways around", {
-    testthat::skip_on_cran()
-
     decomp <- mutual_total_nested(schools00, "race",
         c("state", "district", "school"),
         weight = "n"

@@ -1,9 +1,11 @@
+if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
+    return()
+}
+
 library("segregation")
 context("test_dissimilarity")
 
 test_that("correct calculations", {
-    testthat::skip_on_cran()
-
     m0 <- matrix_to_long(matrix(c(100, 100, 100, 100, 100, 100), ncol = 2))
     expect_equal(dissimilarity(m0, "group", "unit", weight = "n")$est[[1]], 0)
 
@@ -17,8 +19,6 @@ test_that("correct calculations", {
 })
 
 test_that("alternative calculation", {
-    testthat::skip_on_cran()
-
     tab <- t(matrix(c(100, 60, 40, 0, 0, 40, 60, 100), ncol = 2))
     div <- sweep(tab, 1, rowSums(tab), "/")
     d <- 1 / 2 * sum(apply(div, 2, segregation:::abs_diff))
@@ -27,7 +27,6 @@ test_that("alternative calculation", {
 })
 
 test_that("SE works", {
-    testthat::skip_on_cran()
     m0 <- matrix_to_long(matrix(c(100, 60, 40, 0, 0, 40, 60, 100), ncol = 2))
     d <- dissimilarity(m0, "group", "unit", weight = "n", se = TRUE)
     expect_equal(dim(d), c(1, 5))
@@ -36,8 +35,6 @@ test_that("SE works", {
 })
 
 test_that("names of columns", {
-    testthat::skip_on_cran()
-
     m0 <- matrix_to_long(matrix(c(100, 60, 40, 0, 0, 40, 60, 100), ncol = 2),
         group = "race", unit = "tract"
     )
@@ -52,15 +49,11 @@ test_that("names of columns", {
 
 
 test_that("bootstrapping fails when sample size is non-integer", {
-    testthat::skip_on_cran()
-
     m0 <- matrix_to_long(matrix(c(100.3, 60, 40, 0, 0, 40, 60, 100), ncol = 2))
     expect_error(dissimilarity(m0, "group", "unit", weight = "n", se = TRUE))
 })
 
 test_that("gives error when group > 2", {
-    testthat::skip_on_cran()
-
     m0 <- matrix_to_long(matrix(c(100, 60, 40, 10, 20, 40, 60, 100, 50), ncol = 3))
     expect_error(dissimilarity(m0, "group", "unit", weight = "n"))
 })
