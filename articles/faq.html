@@ -266,12 +266,14 @@ adjusting forward, the other from adjusting backwards). By averaging
 them we can create a single margins-adjusted local segregation
 score:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">diff</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutual_difference.html">mutual_difference</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, </span>
-<span>                          weight <span class="op">=</span> <span class="st">"n"</span>, method <span class="op">=</span> <span class="st">"shapley_detailed"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">diff</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutual_difference.html">mutual_difference</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>, <span class="st">"race"</span>, <span class="st">"school"</span>,</span>
+<span>  weight <span class="op">=</span> <span class="st">"n"</span>, method <span class="op">=</span> <span class="st">"shapley_detailed"</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">diff</span><span class="op">[</span><span class="va">stat</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ls_diff1"</span>, <span class="st">"ls_diff2"</span><span class="op">)</span>, </span>
-<span>     <span class="fu">.</span><span class="op">(</span>ls_diff_adjusted <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">est</span><span class="op">)</span><span class="op">)</span>, </span>
-<span>     by <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">school</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="va">diff</span><span class="op">[</span><span class="va">stat</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ls_diff1"</span>, <span class="st">"ls_diff2"</span><span class="op">)</span>,</span>
+<span>  <span class="fu">.</span><span class="op">(</span>ls_diff_adjusted <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">est</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  by <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">school</span><span class="op">)</span></span>
+<span><span class="op">]</span></span>
 <span><span class="co">#&gt;       school ls_diff_adjusted</span></span>
 <span><span class="co">#&gt;    1:   A1_3     -0.088983164</span></span>
 <span><span class="co">#&gt;    2:   A2_2     -0.044338042</span></span>
