@@ -75,11 +75,13 @@ Calculates the segregation between \code{group} and \code{unit}
 within each category defined by \code{within}.
 }
 \examples{
-(within <- mutual_within(schools00, "race", "school", within = "state",
-                         weight = "n", wide = TRUE))
+(within <- mutual_within(schools00, "race", "school",
+    within = "state",
+    weight = "n", wide = TRUE
+))
 # the M for state "A" is .409
 # manual calculation
-schools_A <- schools00[schools00$state=="A",]
+schools_A <- schools00[schools00$state == "A", ]
 mutual_total(schools_A, "race", "school", weight = "n") # M => .409
 
 # to recover the within M and H from the output, multiply

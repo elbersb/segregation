@@ -66,8 +66,9 @@ by \code{unit}.
 }
 \examples{
 # which schools are most segregated?
-(localseg = mutual_local(schools00, "race", "school",
-                         weight = "n", wide = TRUE))
+(localseg <- mutual_local(schools00, "race", "school",
+    weight = "n", wide = TRUE
+))
 
 sum(localseg$p) # => 1
 

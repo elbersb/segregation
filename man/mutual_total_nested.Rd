@@ -33,7 +33,8 @@ the sequence of variables in \code{unit}.
 }
 \examples{
 mutual_total_nested(schools00, "race", c("state", "district", "school"),
-                    weight = "n")
+    weight = "n"
+)
 # This is a simpler way to run the following manually:
 # mutual_total(schools00, "race", "state", weight = "n")
 # mutual_total(schools00, "race", "district", within = "state", weight = "n")

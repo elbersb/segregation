@@ -79,23 +79,27 @@ mutual_total(schools00, "race", "school", weight = "n") # M => .425
 # here there is no difference, because schools
 # are nested within districts
 mutual_total(schools00, "race", c("district", "school"),
-             weight = "n") # M => .424
+    weight = "n"
+) # M => .424
 
 # estimate standard errors and 95\% CI for M and H
 \dontrun{
-mutual_total(schools00, "race", "school", weight = "n",
-             se = TRUE, n_bootstrap = 1000)
-}
+mutual_total(schools00, "race", "school",
+    weight = "n",
+    se = TRUE, n_bootstrap = 1000
+)
 
 # estimate segregation within school districts
 mutual_total(schools00, "race", "school",
-             within = "district", weight = "n") # M => .087
+    within = "district", weight = "n"
+) # M => .087
 
 # estimate between-district racial segregation
 mutual_total(schools00, "race", "district", weight = "n") # M => .338
 # note that the sum of within-district and between-district
 # segregation equals total school-race segregation;
 # here, most segregation is between school districts
+}
 }
 \references{
 Henri Theil. 1971. Principles of Econometrics. New York: Wiley.
