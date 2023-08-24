@@ -141,11 +141,9 @@ Defaults to the natural logarithm.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># the schools00 dataset has a large sample size, so expected segregation is close to zero</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># the schools00 dataset has a large sample size, so expected segregation is close to zero</span></span></span>
 <span class="r-in"><span><span class="fu">mutual_expected</span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         stat         est           se</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: M under 0 0.004822273 7.500883e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: H under 0 0.004746000 7.382243e-05</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># but we can build a smaller table, with 100 students distributed across</span></span></span>
 <span class="r-in"><span><span class="co"># 10 schools, where one racial group has 10% of the students</span></span></span>
@@ -155,15 +153,10 @@ Defaults to the natural logarithm.</p></dd>
 <span class="r-in"><span>    n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">10</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">9</span>, <span class="fl">10</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">mutual_expected</span><span class="op">(</span><span class="va">small</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         stat        est         se</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: M under 0 0.05181156 0.01919105</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: H under 0 0.15937950 0.05903432</span>
 <span class="r-in"><span><span class="co"># with an increase in sample size (n=1000), the values improve</span></span></span>
 <span class="r-in"><span><span class="va">small</span><span class="op">$</span><span class="va">n</span> <span class="op">&lt;-</span> <span class="va">small</span><span class="op">$</span><span class="va">n</span> <span class="op">*</span> <span class="fl">10</span></span></span>
 <span class="r-in"><span><span class="fu">mutual_expected</span><span class="op">(</span><span class="va">small</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         stat         est          se</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: M under 0 0.004774043 0.002209628</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: H under 0 0.014685614 0.006797120</span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>

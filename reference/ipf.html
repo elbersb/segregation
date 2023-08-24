@@ -165,39 +165,24 @@ does not change the number of observations.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># adjusts the marginals of group and unit categories so that</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># adjusts the marginals of group and unit categories so that</span></span></span>
 <span class="r-in"><span><span class="co"># schools00 has similar marginals as schools05</span></span></span>
 <span class="r-in"><span><span class="va">adj</span> <span class="op">&lt;-</span> <span class="fu">ipf</span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>IPF procedure removed 335 units from source, this likely reduced the sample size (check columns n_source and n_target)</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>IPF procedure removed 210 units from target, this likely reduced the sample size (check columns n_source and n_target)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># check that the new "race" marginals are similar to the target marginals</span></span></span>
 <span class="r-in"><span><span class="co"># (the same could be done for schools)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">adj</span><span class="op">$</span><span class="va">n</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">adj</span><span class="op">$</span><span class="va">race</span><span class="op">)</span>, <span class="va">sum</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Group.1          x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   asian  22442.029</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   black 117182.529</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    hisp 146620.992</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   white 439757.285</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  native   6067.165</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">adj</span><span class="op">$</span><span class="va">n_target</span>, <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">adj</span><span class="op">$</span><span class="va">race</span><span class="op">)</span>, <span class="va">sum</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Group.1      x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   asian  22508</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   black 117527</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3    hisp 147052</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   white 441050</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  native   6085</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># note that the adjusted dataset contains fewer</span></span></span>
 <span class="r-in"><span><span class="co"># schools than either the source or the target dataset,</span></span></span>
 <span class="r-in"><span><span class="co"># because the marginals are only defined for the overlap</span></span></span>
 <span class="r-in"><span><span class="co"># of schools</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">schools00</span><span class="op">$</span><span class="va">school</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2045</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">schools05</span><span class="op">$</span><span class="va">school</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1920</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">adj</span><span class="op">$</span><span class="va">school</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1710</span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>
   </div>
