@@ -9,7 +9,12 @@
 #'
 #' @docType package
 #' @name segregation
-'_PACKAGE'
+"_PACKAGE"
+
+#' @importFrom Rcpp sourceCpp
+#' @import RcppProgress
+#' @useDynLib segregation, .registration = TRUE
+NULL
 
 globalVariables(c(
     "V1", "V2", "cond1", "cond2", "entropy_cond", "entropy_cond1", "entropy_cond2", "entropyw",
@@ -39,7 +44,7 @@ update_log <- function(bs_n = NULL, bs_max = NULL, ipf_n = NULL, ipf_max = NULL)
     if (!is.null(ipf_n)) assign("ipf_n", ipf_n, envir = log_env)
     if (!is.null(ipf_max)) assign("ipf_max", ipf_max, envir = log_env)
 
-    if (!is.null(get("bs_n", envir = log_env)) & !is.null(get("ipf_n", envir = log_env))) {
+    if (!is.null(get("bs_n", envir = log_env)) && !is.null(get("ipf_n", envir = log_env))) {
         text <- paste0("[", "Bootstrap ", get("bs_n", envir = log_env), "/",
             get("bs_max", envir = log_env),
             " IPF ", get("ipf_n", envir = log_env), "/",

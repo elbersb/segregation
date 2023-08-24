@@ -7,3 +7,4 @@ data-raw/sc*
 inst/doc
 docs/
 .DS_Store
+.vscode/*

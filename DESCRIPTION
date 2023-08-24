@@ -18,7 +18,11 @@ Description: Computes segregation indices, including the Index of Dissimilarity,
     small sample bias. The package also contains functions for visualizing segregation patterns.
 License: MIT + file LICENSE
 Depends: R (>= 3.5.0)
-Imports: data.table, checkmate
+Imports: 
+    data.table,
+    checkmate,
+    Rcpp,
+    RcppProgress,
 Encoding: UTF-8
 LazyData: true
 Suggests:
@@ -35,3 +39,6 @@ URL: https://elbersb.github.io/segregation/
 BugReports: https://github.com/elbersb/segregation/issues
 RoxygenNote: 7.2.3
 VignetteBuilder: knitr
+LinkingTo: 
+    Rcpp,
+    RcppProgress

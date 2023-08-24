@@ -13,3 +13,4 @@
 ^\.github$
 ^_pkgdown.yml$
 ^CITATION.cff$
+^\.vscode$

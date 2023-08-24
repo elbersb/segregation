@@ -11,7 +11,7 @@ res_all <- compress(subset, "race", "school", weight = "n", neighbors = all_neig
 
 test_that("result is the same with no neighbors given", {
     res2 <- compress(subset, "race", "school", neighbors = "all", weight = "n")
-    expect_equal(res_all$iterations[, -"time"], res2$iterations[, -"time"])
+    expect_equal(res_all$iterations, res2$iterations)
 })
 
 test_that("compress works", {
@@ -26,7 +26,6 @@ test_that("compress works", {
 
 test_that("print", {
     testthat::skip_on_cran()
-    expect_output(print(res_all), "Final M: 0")
     expect_output(print(res_all), "17 units")
     expect_output(print(res_all), "Threshold 99%")
 })

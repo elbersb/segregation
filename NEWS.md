@@ -3,7 +3,7 @@
 - add mutual_total_nested
 - add within argument to mutual_expected
 - add dissimilarity_expected
-- add suite of compression-related functions
+- add suite of compression-related functions (some in C++)
 - add segplot function
 - add functions exposure and isolation
 - fix that roxygen2 problem
