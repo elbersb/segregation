@@ -1,3 +1,5 @@
+# segregation (development version)
+
 # segregation 1.0.0
 
 - add mutual_total_nested
