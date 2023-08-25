@@ -173,15 +173,17 @@ Defaults to the natural logarithm.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="op">(</span><span class="va">within</span> <span class="op">&lt;-</span> <span class="fu">mutual_within</span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, within <span class="op">=</span> <span class="st">"state"</span>,</span></span>
-<span class="r-in"><span>                         weight <span class="op">=</span> <span class="st">"n"</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="op">(</span><span class="va">within</span> <span class="op">&lt;-</span> <span class="fu">mutual_within</span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>,</span></span>
+<span class="r-in"><span>    within <span class="op">=</span> <span class="st">"state"</span>,</span></span>
+<span class="r-in"><span>    weight <span class="op">=</span> <span class="st">"n"</span>, wide <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    state         M         p         H ent_ratio</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:     A 0.4085965 0.2768819 0.4969216 0.8092501</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:     B 0.2549959 0.4035425 0.2680884 0.9361190</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3:     C 0.3450221 0.3195756 0.3611257 0.9402955</span>
 <span class="r-in"><span><span class="co"># the M for state "A" is .409</span></span></span>
 <span class="r-in"><span><span class="co"># manual calculation</span></span></span>
-<span class="r-in"><span><span class="va">schools_A</span> <span class="op">&lt;-</span> <span class="va">schools00</span><span class="op">[</span><span class="va">schools00</span><span class="op">$</span><span class="va">state</span><span class="op">==</span><span class="st">"A"</span>,<span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">schools_A</span> <span class="op">&lt;-</span> <span class="va">schools00</span><span class="op">[</span><span class="va">schools00</span><span class="op">$</span><span class="va">state</span> <span class="op">==</span> <span class="st">"A"</span>, <span class="op">]</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools_A</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span> <span class="co"># M =&gt; .409</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    stat       est</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1:    M 0.4085965</span>
