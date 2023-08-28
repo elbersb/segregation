@@ -30,7 +30,7 @@ globalVariables(c(
     "xmax", "xmin", "ymax", "ymin", "..cols", "p_overall",
     "freq_of", "freq_to",
     "cumul_prob_1", "cumul_prob_2", "group1", "group2", "pct_group_1",
-    ".data"
+    ".data", "new_unit", "old_unit"
 ))
 
 # log

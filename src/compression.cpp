@@ -217,3 +217,63 @@ List compress_compute_cpp(
         _["old_unit"] = results.old_unit,
         _["new_unit"] = results.new_unit);
 }
+
+int find_in_sets(String needle, std::vector<std::set<String>> haystack)
+{
+    for (int i = 0; i < haystack.size(); i++)
+    {
+        const bool is_in = haystack[i].find(needle) != haystack[i].end();
+        if (is_in == true)
+            return i;
+    }
+    return -1;
+}
+
+// [[Rcpp::export]]
+List get_crosswalk_cpp(StringVector old_unit, StringVector new_unit)
+{
+    std::vector<std::set<String>> bags;
+
+    for (int i = 0; i < old_unit.size(); i++)
+    {
+        int old_unit_bag = find_in_sets(old_unit[i], bags);
+        int new_unit_bag = find_in_sets(new_unit[i], bags);
+
+        if (old_unit_bag == -1 && new_unit_bag == -1)
+        {
+            // neither unit in bags - add new bag
+            bags.push_back({old_unit[i], new_unit[i]});
+        }
+        else if (old_unit_bag != -1 && new_unit_bag == -1)
+        {
+            // old_unit already exists - add new_unit to same bag
+            bags[old_unit_bag].insert(new_unit[i]);
+        }
+        else if (old_unit_bag == -1 && new_unit_bag != -1)
+        {
+            // new_unit already exists - add old_unit to same bag
+            bags[new_unit_bag].insert(old_unit[i]);
+        }
+        else if (old_unit_bag != -1 && new_unit_bag != -1)
+        {
+            // both units exist in different bags, merge the two
+            bags[old_unit_bag].insert(bags[new_unit_bag].begin(), bags[new_unit_bag].end());
+            bags.erase(bags.begin() + new_unit_bag);
+        }
+    }
+
+    // convert to List
+    List l(bags.size());
+    for (int i = 0; i < bags.size(); i++)
+    {
+        StringVector bag(bags[i].size());
+        int index = 0;
+        for (auto el : bags[i])
+        {
+            bag[index] = el;
+            index++;
+        }
+        l[i] = bag;
+    }
+    return l;
+}

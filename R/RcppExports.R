@@ -5,3 +5,7 @@ compress_compute_cpp <- function(m_neighbors, m_data, unit_names, max_iter) {
     .Call(`_segregation_compress_compute_cpp`, m_neighbors, m_data, unit_names, max_iter)
 }
 
+get_crosswalk_cpp <- function(old_unit, new_unit) {
+    .Call(`_segregation_get_crosswalk_cpp`, old_unit, new_unit)
+}
+

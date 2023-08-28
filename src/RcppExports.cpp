@@ -24,9 +24,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// get_crosswalk_cpp
+List get_crosswalk_cpp(StringVector old_unit, StringVector new_unit);
+RcppExport SEXP _segregation_get_crosswalk_cpp(SEXP old_unitSEXP, SEXP new_unitSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< StringVector >::type old_unit(old_unitSEXP);
+    Rcpp::traits::input_parameter< StringVector >::type new_unit(new_unitSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_crosswalk_cpp(old_unit, new_unit));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_segregation_compress_compute_cpp", (DL_FUNC) &_segregation_compress_compute_cpp, 4},
+    {"_segregation_get_crosswalk_cpp", (DL_FUNC) &_segregation_get_crosswalk_cpp, 2},
     {NULL, NULL, 0}
 };
 

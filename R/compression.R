@@ -243,40 +243,8 @@ get_crosswalk <- function(compression, n_units = NULL, percent = NULL, parts = F
     }
 
     iterations <- compression$iterations[1:n_iterations, .(N_units, old_unit, new_unit)]
-    n <- iterations[, utils::tail(N_units, 1)]
-    iterations[, N_units := NULL]
 
-    bags <- list(c(iterations[1, old_unit], iterations[1, new_unit]))
-
-    if (nrow(iterations) <= 1) {
-        seq <- c()
-    } else {
-        seq <- 2:nrow(iterations)
-    }
-
-    for (i in seq) {
-        old_unit <- iterations[i, old_unit]
-        new_unit <- iterations[i, new_unit]
-
-        old_unit_bag <- sapply(seq_len(length(bags)), function(ibag) old_unit %in% bags[[ibag]])
-        new_unit_bag <- sapply(seq_len(length(bags)), function(ibag) new_unit %in% bags[[ibag]])
-
-        if ((sum(old_unit_bag) + sum(new_unit_bag)) == 0) {
-            bags[[length(bags) + 1]] <- c(old_unit, new_unit)
-        } else if (sum(old_unit_bag) == 1 && sum(new_unit_bag) == 0) {
-            bags[[which(old_unit_bag)]] <- c(bags[[which(old_unit_bag)]], new_unit)
-        } else if (sum(old_unit_bag) == 0 && sum(new_unit_bag) == 1) {
-            bags[[which(new_unit_bag)]] <- c(bags[[which(new_unit_bag)]], old_unit)
-        } else if (sum(old_unit_bag) == 1 && sum(new_unit_bag) == 1) {
-            bags[[length(bags) + 1]] <- c(
-                bags[[which(new_unit_bag)]],
-                bags[[which(old_unit_bag)]]
-            )
-            bags[[which(new_unit_bag)]] <- "X"
-            bags[[which(old_unit_bag)]] <- "X"
-            bags <- bags[bags != "X"]
-        }
-    }
+    bags <- get_crosswalk_cpp(iterations[, old_unit], iterations[, new_unit])
 
     merged <- data.table(
         unit = unlist(bags),
