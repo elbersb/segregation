@@ -39,6 +39,7 @@ URL: https://elbersb.github.io/segregation/
 BugReports: https://github.com/elbersb/segregation/issues
 RoxygenNote: 7.2.3
 VignetteBuilder: knitr
+SystemRequirements: C++17
 LinkingTo: 
     Rcpp,
     RcppProgress
