@@ -124,3 +124,12 @@ test_that("scree plot", {
         expect_equal(nrow(plot$data), 3)
     }
 })
+
+test_that("data set names", {
+    subset <- schools00[1:50, ]
+    data.table::setDT(subset)
+    names(subset) <- c("state", "district", "unit", "group", "n")
+    res <- compress(subset, "group", "unit", neighbors = "all", weight = "n")
+
+    expect_equal(nrow(res$iterations), 16)
+})

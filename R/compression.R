@@ -27,8 +27,17 @@
 #' @export
 compress <- function(data, group, unit, weight = NULL,
                      neighbors = "local", n_neighbors = 50, max_iter = Inf) {
-    stopifnot(length(group) == 1)
-    stopifnot(length(unit) == 1)
+    checkmate::assert_data_frame(data)
+    checkmate::assert_vector(group, len = 1)
+    checkmate::assert_vector(unit, len = 1)
+    checkmate::assert_vector(weight, len = 1, null.ok = TRUE)
+    if (is.data.frame(neighbors)) {
+        checkmate::assert_data_frame(neighbors, ncols = 2)
+    } else {
+        checkmate::assert_choice(neighbors, c("all", "local"))
+    }
+    checkmate::assert_number(n_neighbors, lower = 1, finite = TRUE)
+    checkmate::assert_number(max_iter)
 
     d <- prepare_data(data, group, unit, weight)
 
@@ -43,12 +52,10 @@ compress <- function(data, group, unit, weight = NULL,
         d[[unit]] <- as.character(d[[unit]])
     }
 
-    if (is.data.frame(neighbors)) {
-        stopifnot(ncol(neighbors) == 2)
-    } else if (neighbors == "all") {
+    if (is.character(neighbors) && neighbors == "all") {
         all_units <- unique(d[[unit]])
         neighbors <- expand.grid(a = all_units, b = all_units)
-    } else if (neighbors == "local") {
+    } else if (is.character(neighbors) && neighbors == "local") {
         ls <- mutual_local(d, group, unit, weight = "freq", wide = TRUE)
         entropy <- d[, .(entropy = entropy(.SD, group, weight = "freq")), by = unit]
         ls <- merge(ls, entropy)
@@ -61,40 +68,31 @@ compress <- function(data, group, unit, weight = NULL,
             data.table(a = focal, b = c(nb_before, nb_after))
         })
         neighbors <- rbindlist(neighbors)
-    } else {
-        stop("neighbors: not a valid argument")
     }
-
-    # rename -- easier
-    setnames(d, unit, "unit")
-    setnames(d, group, "group")
-    setkeyv(d, "unit")
 
     # sort within rows to get rid of duplicates (i.e. 1-2 eq. 2-1)
     neighbors <- data.table::as.data.table(t(apply(neighbors, 1, sort)))
     neighbors <- unique(neighbors)[V1 != V2]
 
     # calculate M
-    initial_M <- mutual_total(d, "group", "unit", weight = "freq")[["est"]][1]
+    initial_M <- mutual_total(d, group, unit, weight = "freq")[["est"]][1]
 
     if (is.infinite(max_iter)) {
         total_units <- length(d[, unique(unit)])
         max_iter <- min(nrow(neighbors), total_units - 1)
     }
 
-    m_neighbors <- as.matrix(neighbors)
-    wide <- dcast(d, unit ~ group, value.var = "freq", fill = 0)
-    m_data <- as.matrix(wide[, -"unit"])
+    wide <- dcast(d, paste0(unit, "~", group), value.var = "freq", fill = 0)
+    units <- as.character(wide[[unit]])
+    wide[, (unit) := NULL]
 
-    res <- compress_compute_cpp(m_neighbors, m_data, as.character(wide[, unit]), max_iter)
+    res <- compress_compute_cpp(as.matrix(neighbors), as.matrix(wide), units, max_iter)
     iterations <- as.data.table(res)
     if (nrow(iterations) == 0) {
         stop("user interruption")
     }
     iterations[, pct_M := M / initial_M]
 
-    setnames(d, "unit", unit)
-    setnames(d, "group", group)
     setnames(d, "freq", "n")
 
     compression <- list(
