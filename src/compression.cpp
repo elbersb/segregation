@@ -87,9 +87,10 @@ double calculate_reduction(double n, std::vector<double> &unit1, std::vector<dou
 
 // [[Rcpp::export]]
 List compress_compute_cpp(
+    std::string neighbors_option,
     StringMatrix m_neighbors,
     NumericMatrix m_data,
-    StringVector unit_names,
+    std::vector<std::string> unit_names,
     int max_iter)
 {
     // prepare main data structure: map, where the key is the unit name
@@ -97,7 +98,7 @@ List compress_compute_cpp(
     std::map<std::string, std::vector<double>> data;
     for (int i = 0; i < m_data.nrow(); i++)
     {
-        std::string unit = Rcpp::as<std::string>(unit_names[i]);
+        auto unit = unit_names[i];
         data[unit] = {};
         for (int j = 0; j < m_data.ncol(); j++)
             data[unit].push_back(m_data(i, j));
@@ -110,12 +111,25 @@ List compress_compute_cpp(
 
     // prepare neighbors data structure (list of sets with 2 elements each)
     std::map<std::set<std::string>, double> neighbors;
-    for (int i = 0; i < m_neighbors.nrow(); i++)
+    if (neighbors_option == "all")
     {
-        std::string unit1 = Rcpp::as<std::string>(m_neighbors(i, 0));
-        std::string unit2 = Rcpp::as<std::string>(m_neighbors(i, 1));
-        if (unit1 != unit2)
-            neighbors[{unit1, unit2}] = 0;
+        for (int row = 0; row < unit_names.size(); row++)
+        {
+            for (int col = row + 1; col < unit_names.size(); col++)
+            {
+                neighbors[{unit_names[row], unit_names[col]}] = 0;
+            }
+        }
+    }
+    else if (neighbors_option == "df" || neighbors_option == "local")
+    {
+        for (int i = 0; i < m_neighbors.nrow(); i++)
+        {
+            std::string unit1 = Rcpp::as<std::string>(m_neighbors(i, 0));
+            std::string unit2 = Rcpp::as<std::string>(m_neighbors(i, 1));
+            if (unit1 != unit2)
+                neighbors[{unit1, unit2}] = 0;
+        }
     }
 
     // calculate reduction for each neighbor pair
@@ -127,6 +141,12 @@ List compress_compute_cpp(
         const std::string unit1 = *iter;
         const std::string unit2 = *next(iter);
         neighbors[{unit1, unit2}] = calculate_reduction(n_total, data[unit1], data[unit2]);
+    }
+
+    // determine maximum number of iterations
+    if (max_iter == -1)
+    {
+        max_iter = std::min(static_cast<int>(neighbors.size()), static_cast<int>(unit_names.size()) - 1);
     }
 
     CompressionResults results;

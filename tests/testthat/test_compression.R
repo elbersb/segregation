@@ -133,3 +133,17 @@ test_that("data set names", {
 
     expect_equal(nrow(res$iterations), 16)
 })
+
+test_that("local neighbors", {
+    subset <- schools00[1:500, ]
+    data.table::setDT(subset)
+    res_local <- compress(subset, "race", "school", neighbors = "local", n_neighbors = 100, weight = "n")
+    res_local_small <- compress(subset, "race", "school", neighbors = "local", n_neighbors = 5, weight = "n")
+    res_all <- compress(subset, "race", "school", neighbors = "all", weight = "n")
+
+    expect_equal(res_local$iterations$old_unit, res_all$iterations$old_unit)
+    expect_true(
+        res_local_small$iterations[pct_M > 0.99][.N][["N_units"]] >
+            res_local$iterations[pct_M > 0.99][.N][["N_units"]]
+    )
+})
