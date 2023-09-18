@@ -70,10 +70,6 @@ compress <- function(data, group, unit, weight = NULL,
         neighbors <- rbindlist(neighbors)
     }
 
-    # sort within rows to get rid of duplicates (i.e. 1-2 eq. 2-1)
-    neighbors <- data.table::as.data.table(t(apply(neighbors, 1, sort)))
-    neighbors <- unique(neighbors)[V1 != V2]
-
     # calculate M
     initial_M <- mutual_total(d, group, unit, weight = "freq")[["est"]][1]
 

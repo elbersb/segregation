@@ -114,6 +114,18 @@ List compress_compute_cpp(
     {
         std::string unit1 = Rcpp::as<std::string>(m_neighbors(i, 0));
         std::string unit2 = Rcpp::as<std::string>(m_neighbors(i, 1));
+        if (unit1 != unit2)
+            neighbors[{unit1, unit2}] = 0;
+    }
+
+    // calculate reduction for each neighbor pair
+    // (we don't do this in the previous step because otherwise we
+    // might do a lot of duplicate calculations)
+    for (const auto &[key, reduction] : neighbors)
+    {
+        auto iter = key.begin();
+        const std::string unit1 = *iter;
+        const std::string unit2 = *next(iter);
         neighbors[{unit1, unit2}] = calculate_reduction(n_total, data[unit1], data[unit2]);
     }
 
