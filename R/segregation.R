@@ -181,6 +181,13 @@ prepare_data <- function(data, group, unit, weight, within = NULL) {
         vars <- c(vars, within)
     }
 
+    # drop unused factor levels - these can lead to problems downstream
+    for (var in vars) {
+        if (is.factor(data[[var]])) {
+            data[[var]] <- droplevels(data[[var]])
+        }
+    }
+
     # collapse on vars, and select only positive weights
     data <- data[freq > 0, list(freq = sum(freq)), by = vars]
     setattr(data, "vars", vars)

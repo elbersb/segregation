@@ -41,12 +41,6 @@ compress <- function(data, group, unit, weight = NULL,
 
     d <- prepare_data(data, group, unit, weight)
 
-    if (is.factor(d[[unit]])) {
-        d[[unit]] <- droplevels(d[[unit]])
-    }
-    if (is.factor(d[[group]])) {
-        d[[group]] <- droplevels(d[[group]])
-    }
     if (!is.factor(d[[unit]]) && !is.character(d[[unit]])) {
         warning("coercing unit ids to character")
         d[[unit]] <- as.character(d[[unit]])
