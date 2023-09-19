@@ -208,10 +208,10 @@ summarizes the compression that can be achieved:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">comp</span></span>
 <span><span class="co">#&gt; Compression of dataset with 560 units</span></span>
-<span><span class="co">#&gt; Original M: 0.4085965; Final M: 6.661338e-16</span></span>
-<span><span class="co">#&gt; - Threshold 99%: M = 0.4045489; Units = 98</span></span>
-<span><span class="co">#&gt; - Threshold 95%: M = 0.3886079; Units = 24</span></span>
-<span><span class="co">#&gt; - Threshold 90%: M = 0.3696806; Units = 10</span></span></code></pre></div>
+<span><span class="co">#&gt; Original M: 0.4085965; Final M: 7.771561e-16</span></span>
+<span><span class="co">#&gt; - Threshold 99%: M = 0.4045242; Units = 92</span></span>
+<span><span class="co">#&gt; - Threshold 95%: M = 0.388871; Units = 22</span></span>
+<span><span class="co">#&gt; - Threshold 90%: M = 0.3695035; Units = 9</span></span></code></pre></div>
 <p>The results indicate that 99% of the segregation information can be
 retained by only 98 units (out of 560 in the original dataset), 95% in
 only 24 units, and 90% in 10 units. The percentage of information
@@ -231,13 +231,13 @@ compression.</p>
 <code class="sourceCode R"><span><span class="va">sch_compressed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/merge_units.html">merge_units</a></span><span class="op">(</span><span class="va">comp</span>, n_units <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span>
 <span><span class="co"># or, for instance: merge_units(comp, percent = 0.80)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sch_compressed</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    school  race     n</span></span>
-<span><span class="co">#&gt; 1:     M8 asian   394</span></span>
-<span><span class="co">#&gt; 2:     M8 black  5742</span></span>
-<span><span class="co">#&gt; 3:     M8  hisp   880</span></span>
-<span><span class="co">#&gt; 4:     M8 white 31256</span></span>
-<span><span class="co">#&gt; 5:    M14 black   162</span></span>
-<span><span class="co">#&gt; 6:    M14  hisp   321</span></span></code></pre></div>
+<span><span class="co">#&gt;    school  race    n</span></span>
+<span><span class="co">#&gt; 1:    M12 asian  143</span></span>
+<span><span class="co">#&gt; 2:    M12 black  445</span></span>
+<span><span class="co">#&gt; 3:    M12  hisp  472</span></span>
+<span><span class="co">#&gt; 4:    M12 white 6174</span></span>
+<span><span class="co">#&gt; 5:     M2 black   67</span></span>
+<span><span class="co">#&gt; 6:     M2  hisp  642</span></span></code></pre></div>
 <p>The compressed dataset has the same format as the original dataset
 and can now be used to produce another segplot, e.g.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
