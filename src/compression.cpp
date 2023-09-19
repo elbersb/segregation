@@ -309,7 +309,7 @@ List compress_compute_cpp(
         _["new_unit"] = results.new_unit);
 }
 
-int find_in_sets(String needle, std::vector<std::set<String>> haystack)
+int find_in_sets(std::string needle, std::vector<std::set<std::string>> haystack)
 {
     for (int i = 0; i < haystack.size(); i++)
     {
@@ -321,9 +321,9 @@ int find_in_sets(String needle, std::vector<std::set<String>> haystack)
 }
 
 // [[Rcpp::export]]
-List get_crosswalk_cpp(StringVector old_unit, StringVector new_unit)
+List get_crosswalk_cpp(std::vector<std::string> old_unit, std::vector<std::string> new_unit)
 {
-    std::vector<std::set<String>> bags;
+    std::vector<std::set<std::string>> bags;
 
     for (int i = 0; i < old_unit.size(); i++)
     {
@@ -357,7 +357,7 @@ List get_crosswalk_cpp(StringVector old_unit, StringVector new_unit)
     List l(bags.size());
     for (int i = 0; i < bags.size(); i++)
     {
-        StringVector bag(bags[i].size());
+        std::vector<std::string> bag(bags[i].size());
         int index = 0;
         for (auto el : bags[i])
         {

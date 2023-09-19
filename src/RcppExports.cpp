@@ -27,13 +27,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // get_crosswalk_cpp
-List get_crosswalk_cpp(StringVector old_unit, StringVector new_unit);
+List get_crosswalk_cpp(std::vector<std::string> old_unit, std::vector<std::string> new_unit);
 RcppExport SEXP _segregation_get_crosswalk_cpp(SEXP old_unitSEXP, SEXP new_unitSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< StringVector >::type old_unit(old_unitSEXP);
-    Rcpp::traits::input_parameter< StringVector >::type new_unit(new_unitSEXP);
+    Rcpp::traits::input_parameter< std::vector<std::string> >::type old_unit(old_unitSEXP);
+    Rcpp::traits::input_parameter< std::vector<std::string> >::type new_unit(new_unitSEXP);
     rcpp_result_gen = Rcpp::wrap(get_crosswalk_cpp(old_unit, new_unit));
     return rcpp_result_gen;
 END_RCPP
