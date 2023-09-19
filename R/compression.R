@@ -44,6 +44,7 @@ compress <- function(data, group, unit, weight = NULL,
     if (!is.factor(d[[unit]]) && !is.character(d[[unit]])) {
         warning("coercing unit ids to character")
         d[[unit]] <- as.character(d[[unit]])
+        neighbors <- as.character(neighbors)
     }
 
     wide <- dcast(d, paste0(unit, "~", group), value.var = "freq", fill = 0)
@@ -53,24 +54,11 @@ compress <- function(data, group, unit, weight = NULL,
     if (is.infinite(max_iter)) max_iter <- -1
 
     if (is.data.frame(neighbors)) {
-        res <- compress_compute_cpp("df", as.matrix(neighbors), as.matrix(wide), units, max_iter)
-    } else if (is.character(neighbors) && neighbors == "all") {
-        res <- compress_compute_cpp("all", matrix(""), as.matrix(wide), units, max_iter)
-    } else if (is.character(neighbors) && neighbors == "local") {
-        ls <- mutual_local(d, group, unit, weight = "freq", wide = TRUE)
-        entropy <- d[, .(entropy = entropy(.SD, group, weight = "freq")), by = unit]
-        ls <- merge(ls, entropy)
-
-        setorder(ls, entropy)
-        neighbors <- lapply(2:(nrow(ls) - 1), function(u) {
-            focal <- ls[[unit]][u]
-            nb_before <- ls[[unit]][max(c(1, u - n_neighbors)):(u - 1)]
-            nb_after <- ls[[unit]][(u + 1):min(c(nrow(ls), u + n_neighbors))]
-            data.table(a = focal, b = c(nb_before, nb_after))
-        })
-        neighbors <- rbindlist(neighbors)
-
-        res <- compress_compute_cpp("local", as.matrix(neighbors), as.matrix(wide), units, max_iter)
+        res <- compress_compute_cpp("df", as.matrix(neighbors), -1, as.matrix(wide), units, max_iter)
+    } else if (neighbors == "all") {
+        res <- compress_compute_cpp("all", matrix(""), -1, as.matrix(wide), units, max_iter)
+    } else if (neighbors == "local") {
+        res <- compress_compute_cpp("local", matrix(""), n_neighbors, as.matrix(wide), units, max_iter)
     }
 
     iterations <- as.data.table(res)

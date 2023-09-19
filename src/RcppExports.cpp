@@ -11,17 +11,18 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // compress_compute_cpp
-List compress_compute_cpp(std::string neighbors_option, StringMatrix m_neighbors, NumericMatrix m_data, std::vector<std::string> unit_names, int max_iter);
-RcppExport SEXP _segregation_compress_compute_cpp(SEXP neighbors_optionSEXP, SEXP m_neighborsSEXP, SEXP m_dataSEXP, SEXP unit_namesSEXP, SEXP max_iterSEXP) {
+List compress_compute_cpp(std::string neighbors_option, StringMatrix m_neighbors, int n_neighbors, NumericMatrix m_data, std::vector<std::string> unit_names, int max_iter);
+RcppExport SEXP _segregation_compress_compute_cpp(SEXP neighbors_optionSEXP, SEXP m_neighborsSEXP, SEXP n_neighborsSEXP, SEXP m_dataSEXP, SEXP unit_namesSEXP, SEXP max_iterSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::string >::type neighbors_option(neighbors_optionSEXP);
     Rcpp::traits::input_parameter< StringMatrix >::type m_neighbors(m_neighborsSEXP);
+    Rcpp::traits::input_parameter< int >::type n_neighbors(n_neighborsSEXP);
     Rcpp::traits::input_parameter< NumericMatrix >::type m_data(m_dataSEXP);
     Rcpp::traits::input_parameter< std::vector<std::string> >::type unit_names(unit_namesSEXP);
     Rcpp::traits::input_parameter< int >::type max_iter(max_iterSEXP);
-    rcpp_result_gen = Rcpp::wrap(compress_compute_cpp(neighbors_option, m_neighbors, m_data, unit_names, max_iter));
+    rcpp_result_gen = Rcpp::wrap(compress_compute_cpp(neighbors_option, m_neighbors, n_neighbors, m_data, unit_names, max_iter));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -39,7 +40,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_segregation_compress_compute_cpp", (DL_FUNC) &_segregation_compress_compute_cpp, 5},
+    {"_segregation_compress_compute_cpp", (DL_FUNC) &_segregation_compress_compute_cpp, 6},
     {"_segregation_get_crosswalk_cpp", (DL_FUNC) &_segregation_get_crosswalk_cpp, 2},
     {NULL, NULL, 0}
 };

@@ -44,6 +44,47 @@ std::tuple<double, double> calculate_m(std::map<std::string, std::vector<double>
     return std::make_tuple(n_total, m_total);
 }
 
+std::vector<std::pair<std::string, double>> calculate_ls(std::map<std::string, std::vector<double>> &data)
+{
+    // create group sums
+    int n_groups = data.begin()->second.size();
+    std::vector<double> group_sums(n_groups, 0.0);
+    for (auto &[unit, counts] : data)
+    {
+        for (int i = 0; i < n_groups; i++)
+            group_sums[i] += counts[i];
+    }
+
+    // create group proportions
+    double n_total = std::accumulate(group_sums.begin(), group_sums.end(), 0);
+    std::vector<double> group_p(n_groups, 0.0);
+    for (int i = 0; i < n_groups; i++)
+    {
+        group_p[i] = group_sums[i] / n_total;
+    }
+
+    // create local segregation scores for each unit
+    std::vector<std::pair<std::string, double>> ls;
+    for (auto &[unit, counts] : data)
+    {
+        double n_unit = std::accumulate(counts.begin(), counts.end(), 0);
+        double ls_unit = 0.0;
+        for (int i = 0; i < n_groups; i++)
+        {
+            double p_group_given_unit = counts[i] / n_unit;
+            if (p_group_given_unit == 0)
+                continue;
+            ls_unit += p_group_given_unit * std::log(p_group_given_unit / group_p[i]);
+        }
+        ls.push_back({unit, ls_unit});
+    }
+
+    std::sort(ls.begin(), ls.end(), [](auto &left, auto &right)
+              { return left.second < right.second; });
+
+    return ls;
+}
+
 double calculate_reduction(double n, std::vector<double> &unit1, std::vector<double> &unit2)
 {
     // create group sums
@@ -89,6 +130,7 @@ double calculate_reduction(double n, std::vector<double> &unit1, std::vector<dou
 List compress_compute_cpp(
     std::string neighbors_option,
     StringMatrix m_neighbors,
+    int n_neighbors,
     NumericMatrix m_data,
     std::vector<std::string> unit_names,
     int max_iter)
@@ -121,7 +163,21 @@ List compress_compute_cpp(
             }
         }
     }
-    else if (neighbors_option == "df" || neighbors_option == "local")
+    else if (neighbors_option == "local")
+    {
+        auto ls = calculate_ls(data);
+        for (int i = 0; i < ls.size(); i++)
+        {
+            for (int j = std::max(i - n_neighbors, 0);
+                 j < std::min(i + n_neighbors + 1, static_cast<int>(ls.size()) - 1);
+                 j++)
+            {
+                if (i != j)
+                    neighbors[{ls[i].first, ls[j].first}] = 0;
+            }
+        }
+    }
+    else if (neighbors_option == "df")
     {
         for (int i = 0; i < m_neighbors.nrow(); i++)
         {
@@ -209,7 +265,7 @@ List compress_compute_cpp(
                 new_key.erase(unit_delete);
                 new_key.insert(unit_keep);
 
-                auto iter = new_key.begin();
+                const auto iter = new_key.begin();
                 const std::string unit1 = *iter;
                 const std::string unit2 = *next(iter);
                 new_neighbors[{unit1, unit2}] = calculate_reduction(n_total, data[unit1], data[unit2]);
@@ -217,7 +273,7 @@ List compress_compute_cpp(
             else if (keep_found)
             {
                 // recalculate if updated unit is involved
-                auto iter = key.begin();
+                const auto iter = key.begin();
                 const std::string unit1 = *iter;
                 const std::string unit2 = *next(iter);
                 new_neighbors[{unit1, unit2}] = calculate_reduction(n_total, data[unit1], data[unit2]);
