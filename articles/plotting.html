@@ -172,9 +172,10 @@ the argument <code>axis_labels</code>.</p>
 <span>  reference_distribution <span class="op">=</span> <span class="va">ref</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="plotting_files/figure-html/unnamed-chunk-3-4.png" width="700"></p>
-<div class="section level3">
-<h3 id="compressing-segregation-information">Compressing segregation information<a class="anchor" aria-label="anchor" href="#compressing-segregation-information"></a>
-</h3>
+</div>
+<div class="section level2">
+<h2 id="compressing-segregation-information">Compressing segregation information<a class="anchor" aria-label="anchor" href="#compressing-segregation-information"></a>
+</h2>
 <p>The compression algorithm requires three steps to be taken. First, it
 is important to decide which units should be permitted to merge: for
 residential segregation, we may only want to allow neighboring units
@@ -208,7 +209,7 @@ summarizes the compression that can be achieved:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">comp</span></span>
 <span><span class="co">#&gt; Compression of dataset with 560 units</span></span>
-<span><span class="co">#&gt; Original M: 0.4085965; Final M: 7.771561e-16</span></span>
+<span><span class="co">#&gt; Original M: 0.4085965; Final M: 0</span></span>
 <span><span class="co">#&gt; - Threshold 99%: M = 0.4045242; Units = 92</span></span>
 <span><span class="co">#&gt; - Threshold 95%: M = 0.388871; Units = 22</span></span>
 <span><span class="co">#&gt; - Threshold 90%: M = 0.3695035; Units = 9</span></span></code></pre></div>
@@ -255,7 +256,6 @@ and can now be used to produce another segplot, e.g.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/segplot.html">segplot</a></span><span class="op">(</span><span class="va">sch_compressed</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="plotting_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
-</div>
 </div>
   </div>
 
