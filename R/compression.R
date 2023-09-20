@@ -62,9 +62,6 @@ compress <- function(data, group, unit, weight = NULL,
     }
 
     iterations <- as.data.table(res)
-    if (nrow(iterations) == 0) {
-        stop("user interruption")
-    }
 
     initial_M <- mutual_total(d, group, unit, weight = "freq")[["est"]][1]
     iterations[, pct_M := M / initial_M]
@@ -343,14 +340,8 @@ midcache.dendrogram <- function(x) {
         repeat {
             if (!stats::is.leaf(d)) {
                 k <- length(d)
-                if (k < 1) {
-                    stop("dendrogram node with non-positive #{branches}")
-                }
                 depth <- depth + 1L
                 kk[depth] <- k
-                if (storage.mode(jj) != storage.mode(kk)) {
-                    storage.mode(jj) <- storage.mode(kk)
-                }
                 dd[[depth]] <- d
                 d <- d[[jj[depth] <- 1L]]
                 next

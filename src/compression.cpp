@@ -229,7 +229,7 @@ List compress_compute_cpp(
     while (neighbors.size() > 0)
     {
         if (Progress::check_abort())
-            return List::create();
+            throw Rcpp::exception("user interruption");
 
         // find smallest reduction
         double min_reduction = 10000;
