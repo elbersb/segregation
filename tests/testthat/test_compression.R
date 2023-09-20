@@ -147,3 +147,12 @@ test_that("local neighbors", {
             res_local$iterations[pct_M > 0.99][.N][["N_units"]]
     )
 })
+
+test_that("dendrogram", {
+    dend <- as.dendrogram(res_all)
+    expect_equal(attr(dend, "height"), res_all$iterations$M[[1]])
+    expect_equal(attr(dend, "members"), length(unique(res_all$data$school)))
+
+    res_limited <- compress(subset, "race", "school", weight = "n", max_iter = 5)
+    expect_error(as.dendrogram(res_limited))
+})

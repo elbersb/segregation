@@ -1,8 +1,8 @@
 ---
-title: "Visualizing segregation"
+title: "Visualizing and compressing segregation"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Visualizing segregation}
+  %\VignetteIndexEntry{Visualizing and compressing segregation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -132,6 +132,14 @@ between the number of merges and the loss in segregation information:
 
 ```{r}
 scree_plot(comp)
+```
+
+Another way to learn more about the compression is to visualize the information as a dendrogram:
+
+```{r}
+dend <- as.dendrogram(comp)
+dendextend::labels(dend) <- NULL # remove the labels
+plot(dend)
 ```
 
 The third step is to create a new dataset based on the desired level of compression. 

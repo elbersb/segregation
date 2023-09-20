@@ -1,5 +1,8 @@
 # segregation (development version)
 
+- various improvements to compression algorithm
+- add dendrogram visualization
+
 # segregation 1.0.0
 
 - add mutual_total_nested

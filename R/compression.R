@@ -238,3 +238,155 @@ get_crosswalk <- function(compression, n_units = NULL, percent = NULL, parts = F
     setnames(combined, "unit", compression$unit)
     combined
 }
+
+#' @importFrom stats as.dendrogram
+#' @export
+as.dendrogram.segcompression <- function(object, ...) {
+    if (utils::tail(object$iterations$N_units, 1) != 1) {
+        stop("Compression algorithm needs to be run on complete dataset (max_iter = Inf)")
+    }
+    if (!requireNamespace("rrapply", quietly = TRUE)) {
+        stop("Please install rrapply to use this function")
+    }
+    if (!requireNamespace("dendextend", quietly = TRUE)) {
+        stop("Please install dendextend to use this function")
+    }
+
+    reduction <- 0
+    tree <- list()
+
+    for (i in seq_len(nrow(object$iterations))) {
+        old_unit <- object$iterations[i, ][["old_unit"]]
+        new_unit <- object$iterations[i, ][["new_unit"]]
+        M_wgt <- object$iterations[i, ][["M_wgt"]]
+        reduction <- reduction + M_wgt
+
+        if (length(tree) > 0) {
+            find_old <- rrapply::rrapply(tree,
+                classes = "list",
+                condition = function(x, .xname) x == old_unit,
+                f = function(x, .xpos) .xpos,
+                how = "flatten"
+            )
+            find_new <- rrapply::rrapply(tree,
+                classes = "list",
+                condition = function(x, .xname) x == new_unit,
+                f = function(x, .xpos) .xpos,
+                how = "flatten"
+            )
+        } else {
+            find_old <- list()
+            find_new <- list()
+        }
+
+        if (length(find_old) > 0 && length(find_new) > 0) {
+            indices <- sort(c(find_old[[1]][1], find_new[[1]][1]))
+            combined <- list(tree[[indices[1]]], tree[[indices[2]]])
+            attr(combined, "height") <- reduction
+
+            tree[[indices[1]]] <- combined
+            tree[[indices[2]]] <- NULL
+        } else if (length(find_old) > 0 || length(find_new) > 0) {
+            if (length(find_old) > 0) {
+                index <- find_old[[1]][1]
+                new_item <- list(new_unit)
+                attr(new_item, "label") <- new_unit
+            } else {
+                index <- find_new[[1]][1]
+                new_item <- list(old_unit)
+                attr(new_item, "label") <- old_unit
+            }
+            attr(new_item, "height") <- 0
+            attr(new_item, "members") <- 1
+            attr(new_item, "leaf") <- TRUE
+
+            if (M_wgt == attr(tree[[index]], "height")) {
+                tree[[index]][[length(tree[[index]]) + 1]] <- new_item
+            } else {
+                combined <- list(tree[[index]], new_item)
+                attr(combined, "height") <- reduction
+                tree[[index]] <- combined
+            }
+        } else {
+            lhs <- list(old_unit)
+            attr(lhs, "label") <- old_unit
+            attr(lhs, "height") <- 0
+            attr(lhs, "members") <- 1
+            attr(lhs, "leaf") <- TRUE
+            rhs <- list(new_unit)
+            attr(rhs, "label") <- new_unit
+            attr(rhs, "height") <- 0
+            attr(rhs, "members") <- 1
+            attr(rhs, "leaf") <- TRUE
+            combined <- list(lhs, rhs)
+            attr(combined, "height") <- M_wgt
+            attr(combined, "members") <- 2
+            tree[[length(tree) + 1]] <- combined
+        }
+    }
+
+    dend <- tree[[1]]
+    class(dend) <- "dendrogram"
+    dend <- dendextend::fix_members_attr.dendrogram(dend)
+    dend <- midcache.dendrogram(dend)
+    return(dend)
+}
+
+# copied from stats -- not exported
+midcache.dendrogram <- function(x) {
+    stopifnot(inherits(x, "dendrogram"))
+    setmid <- function(d, type) {
+        depth <- 0L
+        kk <- integer()
+        jj <- integer()
+        dd <- list()
+        repeat {
+            if (!stats::is.leaf(d)) {
+                k <- length(d)
+                if (k < 1) {
+                    stop("dendrogram node with non-positive #{branches}")
+                }
+                depth <- depth + 1L
+                kk[depth] <- k
+                if (storage.mode(jj) != storage.mode(kk)) {
+                    storage.mode(jj) <- storage.mode(kk)
+                }
+                dd[[depth]] <- d
+                d <- d[[jj[depth] <- 1L]]
+                next
+            }
+            while (depth) {
+                k <- kk[depth]
+                j <- jj[depth]
+                r <- dd[[depth]]
+                r[[j]] <- unclass(d)
+                if (j < k) {
+                    break
+                }
+                depth <- depth - 1L
+                midS <- sum(vapply(r, .midDend, 0))
+                attr(r, "midpoint") <- (.memberDend(r[[1L]]) + midS) / 2
+                d <- r
+            }
+            if (!depth) {
+                break
+            }
+            dd[[depth]] <- r
+            d <- r[[jj[depth] <- j + 1L]]
+        }
+        d
+    }
+    setmid(x)
+}
+
+.midDend <- function(x) {
+    attr(x, "midpoint") %||% 0
+}
+
+.memberDend <- function(x) {
+    attr(x, "x.member") %||% (attr(x, "members") %||% 1L)
+}
+
+`%||%` <- function(L, R) {
+    if (is.null(L)) R else L
+}
