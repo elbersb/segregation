@@ -85,7 +85,7 @@ segplot(sch, "race", "school",
 )
 ```
 
-### Compressing segregation information
+## Compressing segregation information
 
 The compression algorithm requires three steps to be taken. 
 First, it is important to decide which units should be permitted to merge: 

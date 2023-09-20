@@ -289,7 +289,15 @@ List compress_compute_cpp(
         counter += 1;
         results.iter.push_back(counter);
         results.M_wgt.push_back(min_reduction);
-        results.M.push_back(m_current);
+        if (n_units_current == 1)
+        {
+            // ensure that this is displayed as a true 0
+            results.M.push_back(0);
+        }
+        else
+        {
+            results.M.push_back(m_current);
+        }
         results.N_units.push_back(n_units_current);
         results.old_unit.push_back(unit_delete);
         results.new_unit.push_back(unit_keep);
