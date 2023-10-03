@@ -213,6 +213,10 @@ segcurve <- function(data, group, unit, weight = NULL, segment = NULL) {
     setorder(wide, segment, pct_group_1)
     wide[, cumul_prob_1 := cumsum(group1) / sum(group1), by = .(segment)]
     wide[, cumul_prob_2 := cumsum(group2) / sum(group2), by = .(segment)]
+    # need to add line through origin
+    wide <- wide[, .(segment, cumul_prob_1, cumul_prob_2)]
+    zeros <- wide[, .(cumul_prob_1 = 0, cumul_prob_2 = 0), by = .(segment)]
+    wide <- rbindlist(list(wide, zeros))
 
     p <- ggplot2::ggplot(wide, ggplot2::aes(x = cumul_prob_2, y = cumul_prob_1)) +
         ggplot2::annotate(geom = "segment", x = 0, y = 0, xend = 1, yend = 1, colour = "darkgray") +
