@@ -249,8 +249,8 @@ standard errors and confidence intervals:</p>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; 500 bootstrap iterations on 877739 observations</span></span>
 <span><span class="co">#&gt;    stat       est           se                  CI        bias</span></span>
-<span><span class="co">#&gt; 1:    M 0.4218888 0.0008052111 0.4202830,0.4234599 0.003650193</span></span>
-<span><span class="co">#&gt; 2:    H 0.4152473 0.0007114470 0.4137465,0.4165963 0.003561007</span></span></code></pre></div>
+<span><span class="co">#&gt; 1:    M 0.4219383 0.0008178582 0.4203089,0.4236068 0.003600699</span></span>
+<span><span class="co">#&gt; 2:    H 0.4152563 0.0007530694 0.4137359,0.4167181 0.003552063</span></span></code></pre></div>
 <p>As there a large number of observations, the standard errors are very
 small.</p>
 </div>
@@ -481,8 +481,8 @@ iterations can be specified as well:</p>
 <span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 500 bootstrap iterations on 877739 observations</span></span>
 <span><span class="co">#&gt;    stat       est           se                  CI        bias</span></span>
-<span><span class="co">#&gt; 1:    M 0.4219476 0.0007579537 0.4205498,0.4234631 0.003591399</span></span>
-<span><span class="co">#&gt; 2:    H 0.4152541 0.0006763022 0.4138784,0.4166825 0.003554205</span></span></code></pre></div>
+<span><span class="co">#&gt; 1:    M 0.4218735 0.0007364381 0.4205171,0.4232621 0.003665477</span></span>
+<span><span class="co">#&gt; 2:    H 0.4152207 0.0006890576 0.4139019,0.4165112 0.003587629</span></span></code></pre></div>
 <p>The confidence intervals are based on the percentiles from the
 bootstrap distribution, and hence require a large number of bootstrap
 iterations for valid interpretation. The estimate <code>est</code> that
@@ -500,10 +500,10 @@ intervals, as</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># M</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">se</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">est</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">est</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.4204620 0.4234332</span></span>
+<span><span class="co">#&gt; [1] 0.4204301 0.4233169</span></span>
 <span><span class="co"># H</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">se</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">est</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">est</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.4139286 0.4165797</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.4138701 0.4165712</span></span></code></pre></div>
 <p>provide effectively the same coverage as the confidence intervals
 obtained from the percentile bootstrap.</p>
 <p>Whenever the bootstrap is used, the bootstrap distributions for each
@@ -535,8 +535,8 @@ For the <code>schools00</code> dataset:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/mutual_expected.html">mutual_expected</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         stat         est           se</span></span>
-<span><span class="co">#&gt; 1: M under 0 0.004808867 7.623260e-05</span></span>
-<span><span class="co">#&gt; 2: H under 0 0.004732807 7.502684e-05</span></span></code></pre></div>
+<span><span class="co">#&gt; 1: M under 0 0.004806118 7.679837e-05</span></span>
+<span><span class="co">#&gt; 2: H under 0 0.004730100 7.558367e-05</span></span></code></pre></div>
 <p>Here, there is no concern about bias due to a small sample size.</p>
 </div>
 <div class="section level2">
@@ -557,8 +557,8 @@ the terms of the decomposition are found in Elbers (2021).</p>
 <span><span class="co">#&gt; 3:           diff -0.012153884</span></span>
 <span><span class="co">#&gt; 4:      additions -0.003412776</span></span>
 <span><span class="co">#&gt; 5:       removals -0.011405093</span></span>
-<span><span class="co">#&gt; 6: group_marginal  0.017865684</span></span>
-<span><span class="co">#&gt; 7:  unit_marginal -0.011707361</span></span>
+<span><span class="co">#&gt; 6: group_marginal  0.018550238</span></span>
+<span><span class="co">#&gt; 7:  unit_marginal -0.012391915</span></span>
 <span><span class="co">#&gt; 8:     structural -0.003494338</span></span></code></pre></div>
 <p>This method also supports inference by setting
 <code>se = TRUE</code>.</p>
