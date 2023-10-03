@@ -2,7 +2,7 @@
 % Please edit documentation in R/mutual.R
 \name{mutual_total}
 \alias{mutual_total}
-\title{Calculate total segregation for M and H}
+\title{Calculates the Mutual Information Index M and Theil's Entropy Index H}
 \usage{
 mutual_total(
   data,

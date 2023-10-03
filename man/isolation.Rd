@@ -2,7 +2,7 @@
 % Please edit documentation in R/exposure.R
 \name{isolation}
 \alias{isolation}
-\title{Calculates isolation}
+\title{Calculates isolation indices}
 \usage{
 isolation(data, group, unit, weight = NULL)
 }

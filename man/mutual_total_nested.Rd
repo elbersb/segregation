@@ -2,7 +2,7 @@
 % Please edit documentation in R/mutual.R
 \name{mutual_total_nested}
 \alias{mutual_total_nested}
-\title{Calculate a nested decomposition of segregation for M and H}
+\title{Calculates a nested decomposition of segregation for M and H}
 \usage{
 mutual_total_nested(data, group, unit, weight = NULL, base = exp(1))
 }

@@ -147,7 +147,7 @@ scree_plot <- function(compression, tail = Inf) {
         ggplot2::theme(legend.position = "none", panel.grid.minor = ggplot2::element_blank())
 }
 
-#' merge_units
+#' Creates a compressed dataset
 #'
 #' After running \link{compress}, this function creates a dataset where
 #' units are merged.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/dissimilarity.R
 \name{dissimilarity}
 \alias{dissimilarity}
-\title{Calculate Dissimilarity Index}
+\title{Calculates Index of Dissimilarity}
 \usage{
 dissimilarity(
   data,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/exposure.R
 \name{exposure}
 \alias{exposure}
-\title{Calculates pairwise exposure}
+\title{Calculates pairwise exposure indices}
 \usage{
 exposure(data, group, unit, weight = NULL)
 }

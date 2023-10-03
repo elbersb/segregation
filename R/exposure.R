@@ -1,4 +1,4 @@
-#' Calculates pairwise exposure
+#' Calculates pairwise exposure indices
 #'
 #' Returns the pairwise exposure indices between groups
 #'
@@ -34,7 +34,7 @@ exposure <- function(data, group, unit, weight = NULL) {
     exp[]
 }
 
-#' Calculates isolation
+#' Calculates isolation indices
 #'
 #' Returns isolation index of each group
 #'

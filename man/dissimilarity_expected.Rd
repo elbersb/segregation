@@ -2,7 +2,7 @@
 % Please edit documentation in R/mutual_expected.R
 \name{dissimilarity_expected}
 \alias{dissimilarity_expected}
-\title{Calculate expected values when true segregation is zero}
+\title{Calculates expected values when true segregation is zero}
 \usage{
 dissimilarity_expected(
   data,

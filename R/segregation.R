@@ -9,6 +9,7 @@
 #'
 #' @docType package
 #' @name segregation
+#' @keywords internal
 "_PACKAGE"
 
 #' @importFrom Rcpp sourceCpp

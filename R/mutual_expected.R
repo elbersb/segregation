@@ -2,7 +2,7 @@ expected_compute <- function(index, d, group_var, unit_var,
                              fixed_margins, n_bootstrap, base) {
     n_group <- d[, sum(freq), by = get(group_var)][, V1]
     n_unit <- d[, sum(freq), by = get(unit_var)][, V1]
-    if (length(n_group) == 1 | length(n_unit) == 1) {
+    if (length(n_group) == 1 || length(n_unit) == 1) {
         if (index == "mh") {
             return(data.table(
                 stat = c("M under 0", "H under 0"),
@@ -74,7 +74,7 @@ expected_compute <- function(index, d, group_var, unit_var,
     }
 }
 
-#' Calculate expected values when true segregation is zero
+#' Calculates expected values when true segregation is zero
 #'
 #' When sample sizes are small, one group has a small proportion, or
 #' when there are many units, segregation indices are typically upwardly
@@ -155,7 +155,7 @@ mutual_expected <- function(data, group, unit, weight = NULL,
     res
 }
 
-#' Calculate expected values when true segregation is zero
+#' Calculates expected values when true segregation is zero
 #'
 #' When sample sizes are small, one group has a small proportion, or
 #' when there are many units, segregation indices are typically upwardly

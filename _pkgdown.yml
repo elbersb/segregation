@@ -1,3 +1,46 @@
+url: https://elbersb.com/segregation
+
+authors:
+  Benjamin Elbers:
+    href: https://elbersb.com
+
 template:
-  params:
-    bootswatch: cosmo
+  bootstrap: 5
+
+reference:
+  - title: Segregation indices
+    contents:
+      - dissimilarity
+      - exposure
+      - isolation
+      - mutual_total
+      - mutual_total_nested
+      - mutual_within
+      - mutual_local
+  - title: Visualizing segregation
+    contents:
+      - segcurve
+      - segplot
+  - title: Debiasing
+    contents:
+      - mutual_expected
+      - dissimilarity_expected
+  - title: Comparing differences
+    contents:
+      - mutual_difference
+      - ipf
+  - title: Compressing segregation
+    contents:
+      - compress
+      - merge_units
+      - get_crosswalk
+      - scree_plot
+  - title: Datasets
+    contents:
+      - school_ses
+      - schools00
+      - schools05
+  - title: Helper functions
+    contents:
+      - entropy
+      - matrix_to_long

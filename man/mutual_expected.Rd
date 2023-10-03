@@ -2,7 +2,7 @@
 % Please edit documentation in R/mutual_expected.R
 \name{mutual_expected}
 \alias{mutual_expected}
-\title{Calculate expected values when true segregation is zero}
+\title{Calculates expected values when true segregation is zero}
 \usage{
 mutual_expected(
   data,

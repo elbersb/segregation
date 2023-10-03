@@ -2,7 +2,7 @@
 % Please edit documentation in R/mutual.R
 \name{mutual_local}
 \alias{mutual_local}
-\title{Calculates local segregation indices based on M}
+\title{Calculates local segregation scores based on M}
 \usage{
 mutual_local(
   data,

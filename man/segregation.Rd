@@ -18,3 +18,4 @@ and between terms. Includes standard error estimation by bootstrapping.
 \strong{Maintainer}: Benjamin Elbers \email{be2239@columbia.edu} (\href{https://orcid.org/0000-0001-5392-3448}{ORCID})
 
 }
+\keyword{internal}

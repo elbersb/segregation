@@ -193,7 +193,7 @@ mutual_difference <- function(data1, data2, group, unit,
         n_total1 <- sum(d1[, "freq"])
         n_total2 <- sum(d2[, "freq"])
 
-        if (all.equal(n_total1, round(n_total1)) != TRUE |
+        if (all.equal(n_total1, round(n_total1)) != TRUE ||
             all.equal(n_total2, round(n_total2)) != TRUE) {
             stop(paste0(
                 "bootstrap with a total sample size that is not an integer is not allowed, ",

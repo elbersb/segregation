@@ -9,11 +9,11 @@ abs_diff <- function(x) {
 #' @import data.table
 dissimilarity_compute <- function(data, group, unit) {
     data[, n_group := sum(freq), by = group]
-    est <- 1/2 * data[, abs_diff(freq / n_group), by = unit][, sum(V1)]
+    est <- 1 / 2 * data[, abs_diff(freq / n_group), by = unit][, sum(V1)]
     data.table(stat = "D", est = est, stringsAsFactors = FALSE)
 }
 
-#' Calculate Dissimilarity Index
+#' Calculates Index of Dissimilarity
 #'
 #' Returns the total segregation between \code{group} and \code{unit} using
 #' the Index of Dissimilarity.
@@ -72,7 +72,8 @@ dissimilarity <- function(data, group, unit, weight = NULL,
         } else {
             stop(paste0(
                 "bootstrap with a total sample size that is not an integer is not allowed, ",
-                "maybe scale your weights?"))
+                "maybe scale your weights?"
+            ))
         }
         # draw from a multinomial with weights specified by the cell counts
         draws <- stats::rmultinom(n_bootstrap, n_total, d[["freq"]] / n_total)
@@ -89,4 +90,3 @@ dissimilarity <- function(data, group, unit, weight = NULL,
     }
     ret
 }
-

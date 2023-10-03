@@ -2,7 +2,7 @@
 % Please edit documentation in R/mutual.R
 \name{mutual_within}
 \alias{mutual_within}
-\title{Calculate detailed within-category segregation scores for M and H}
+\title{Calculates detailed within-category segregation scores for M and H}
 \usage{
 mutual_within(
   data,

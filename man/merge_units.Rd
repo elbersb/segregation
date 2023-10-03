@@ -2,7 +2,7 @@
 % Please edit documentation in R/compression.R
 \name{merge_units}
 \alias{merge_units}
-\title{merge_units}
+\title{Creates a compressed dataset}
 \usage{
 merge_units(compression, n_units = NULL, percent = NULL, parts = FALSE)
 }
