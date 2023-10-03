@@ -32,14 +32,29 @@ detail [in this working paper](https://osf.io/preprints/socarxiv/ruw4g/).
 ## Segregation curve
 
 The segregation curve was first introduced by [Duncan and Duncan (1955)](https://www.jstor.org/stable/2088328).
-The function `segcurve()` provides a simple way of plotting a segregation curve:
+The function `segcurve()` provides a simple way of plotting one or several segregation curves:
 
 ```{r}
-segcurve(subset(schools00, race %in% c("white", "black")),
+segcurve(subset(schools00, race %in% c("white", "asian")),
   "race", "school",
-  weight = "n"
+  weight = "n",
+  segment = "state" # leave this out to produce a single curve
 )
 ```
+
+In this case, state `A` is the most segregated, while state `B` and `C` are similarly segregated,
+but at a lower level. Segregation curves are closely related to the index of dissimilarity, and 
+here this corresponds to the following index values:
+
+```{r}
+# converting to data.table makes this easier
+data.table::as.data.table(schools00)[
+  race %in% c("white", "asian"),
+  dissimilarity(.SD, "race", "school", weight = "n"),
+  by = .(state)
+]
+```
+
 
 ## Segplot
 

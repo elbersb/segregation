@@ -4,24 +4,25 @@
 \alias{segcurve}
 \title{A visual representation of two-group segregation}
 \usage{
-segcurve(data, group, unit, weight)
+segcurve(data, group, unit, weight = NULL, segment = NULL)
 }
 \arguments{
 \item{data}{A data frame.}
 
-\item{group}{A categorical variable or a vector of variables
-contained in \code{data}. Defines the first dimension
-over which segregation is computed.}
+\item{group}{A categorical variable contained in \code{data}.
+Defines the first dimension over which segregation is computed.}
 
-\item{unit}{A categorical variable or a vector of variables
-contained in \code{data}. Defines the second dimension
-over which segregation is computed.}
+\item{unit}{A categorical variable contained in \code{data}.
+Defines the second dimension over which segregation is computed.}
 
 \item{weight}{Numeric. (Default \code{NULL})}
+
+\item{segment}{A categorical variable contained in \code{data}. (Default \code{NULL})
+If given, several segregation curves will be shown, one for each segment.}
 }
 \value{
 Returns a ggplot2 object.
 }
 \description{
-Produces a segregation curve, as defined in Duncan and Duncan (1955)
+Produces one or several segregation curves, as defined in Duncan and Duncan (1955)
 }

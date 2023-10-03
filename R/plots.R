@@ -170,50 +170,67 @@ segplot <- function(data, group, unit, weight, order = "segregation",
 
 #' A visual representation of two-group segregation
 #'
-#' Produces a segregation curve, as defined in Duncan and Duncan (1955)
+#' Produces one or several segregation curves, as defined in Duncan and Duncan (1955)
 #'
 #' @param data A data frame.
-#' @param group A categorical variable or a vector of variables
-#'   contained in \code{data}. Defines the first dimension
-#'   over which segregation is computed.
-#' @param unit A categorical variable or a vector of variables
-#'   contained in \code{data}. Defines the second dimension
-#'   over which segregation is computed.
+#' @param group A categorical variable contained in \code{data}.
+#'   Defines the first dimension over which segregation is computed.
+#' @param unit A categorical variable contained in \code{data}.
+#'   Defines the second dimension over which segregation is computed.
 #' @param weight Numeric. (Default \code{NULL})
+#' @param segment A categorical variable contained in \code{data}. (Default \code{NULL})
+#'   If given, several segregation curves will be shown, one for each segment.
 #' @return Returns a ggplot2 object.
 #' @import data.table
 #' @export
-segcurve <- function(data, group, unit, weight) {
+segcurve <- function(data, group, unit, weight = NULL, segment = NULL) {
     if (!requireNamespace("ggplot2", quietly = TRUE)) {
         stop("Please install ggplot2 to use this function")
     }
 
     stopifnot(length(group) == 1)
     stopifnot(length(unit) == 1)
-    d <- prepare_data(data, group, unit, weight)
+    d <- prepare_data(data, group, unit, weight, within = segment)
     # easier if renamed
     setnames(d, group, "group")
     setnames(d, unit, "unit")
+    if (is.null(segment)) {
+        d[["segment"]] <- 1
+    } else {
+        stopifnot(length(segment) == 1)
+        setnames(d, segment, "segment")
+        d[["segment"]] <- as.factor(d[["segment"]])
+    }
 
     if (d[, uniqueN(group)] != 2) {
         stop("requires exactly two groups")
     }
 
-    wide <- dcast(d, unit ~ group, value.var = "freq", fill = 0)
-    group_names <- names(wide)[2:3]
+    wide <- dcast(d, segment + unit ~ group, value.var = "freq", fill = 0)
+    group_names <- names(wide)[3:4]
     setnames(wide, group_names, c("group1", "group2"))
     wide[, pct_group_1 := group1 / (group1 + group2)]
-    setorder(wide, pct_group_1)
-    wide[, cumul_prob_1 := cumsum(group1) / sum(group1)]
-    wide[, cumul_prob_2 := cumsum(group2) / sum(group2)]
+    setorder(wide, segment, pct_group_1)
+    wide[, cumul_prob_1 := cumsum(group1) / sum(group1), by = .(segment)]
+    wide[, cumul_prob_2 := cumsum(group2) / sum(group2), by = .(segment)]
 
-    ggplot2::ggplot(wide, ggplot2::aes(x = cumul_prob_2, y = cumul_prob_1)) +
+    p <- ggplot2::ggplot(wide, ggplot2::aes(x = cumul_prob_2, y = cumul_prob_1)) +
         ggplot2::annotate(geom = "segment", x = 0, y = 0, xend = 1, yend = 1, colour = "darkgray") +
-        ggplot2::geom_line() +
         ggplot2::scale_x_continuous(labels = scales::percent_format(accuracy = 1)) +
         ggplot2::scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
         ggplot2::labs(
             x = paste("Cumulative % ", group_names[2]),
             y = paste("Cumulative % ", group_names[1])
-        )
+        ) +
+        ggplot2::coord_fixed()
+
+    if (is.null(segment)) {
+        p <- p + ggplot2::geom_line()
+    } else {
+        p <- p +
+            ggplot2::geom_line(ggplot2::aes(color = segment)) +
+            ggplot2::labs(color = segment)
+    }
+
+    return(p)
 }

@@ -60,6 +60,8 @@ test_that("axis_labels", {
 
 test_that("segcurve", {
     expect_error(segcurve(schools00, "race", "school", weight = "n"))
+    expect_error(segcurve(schools00, "race", "school", weight = "n", segment = c("a", "b")))
+    expect_error(segcurve(schools00, "race", "school", weight = "n", segment = c("state", "school")))
 
     p1 <- segcurve(subset(schools00, race %in% c("white", "black")),
         "race", "school",
@@ -69,4 +71,10 @@ test_that("segcurve", {
         "race", "school",
         weight = "n"
     )
+    p3 <- segcurve(subset(schools00, race %in% c("white", "asian")),
+        "race", "school",
+        weight = "n",
+        segment = "state"
+    )
+    expect_equal(p3$labels$colour, "state")
 })

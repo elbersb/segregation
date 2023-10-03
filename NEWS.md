@@ -2,6 +2,7 @@
 
 - various improvements to compression algorithm
 - add dendrogram visualization
+- allow multiple curves in `segcurve` function
 
 # segregation 1.0.0
 
