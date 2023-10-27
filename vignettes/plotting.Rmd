@@ -73,8 +73,6 @@ the reference distribution shown on the right of the segplot can be changed by
 supplying a two-column data frame to the `reference_distribution` argument. 
 One column of this frame should contain the group identifiers, and 
 the other should include the reference proportion of each group. 
-To show axis labels either on the left side only, the right side only, 
-or on both sides, use the argument `axis_labels`.
 
 Examples of how to use these arguments are given below:
 
@@ -82,7 +80,7 @@ Examples of how to use these arguments are given below:
 sch <- subset(schools00, state == "A")
 
 # basic segplot
-segplot(sch, "race", "school", weight = "n", axis_labels = "both")
+segplot(sch, "race", "school", weight = "n")
 
 # order by majority group (white in this case)
 segplot(sch, "race", "school", weight = "n", order = "majority")
