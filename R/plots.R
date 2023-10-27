@@ -116,8 +116,8 @@ segplot <- function(data, group, unit, weight, order = "segregation",
     }
 
     # format overall
-    overall[, xmin := wide[, max(xmax)] + 0.1]
-    overall[, xmax := wide[, max(xmax)] + 0.15]
+    overall[, xmin := wide[, max(xmax)] + 0.05]
+    overall[, xmax := wide[, max(xmax)] + 0.10]
     setorderv(overall, "group")
     overall[, ymin := cumsum(p) - p]
     overall[, ymax := cumsum(p)]
@@ -127,6 +127,8 @@ segplot <- function(data, group, unit, weight, order = "segregation",
         combine,
         ggplot2::aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax)
     ) +
+        ggplot2::geom_vline(xintercept = wide[, max(xmax)]) +
+        ggplot2::geom_vline(xintercept = wide[, max(xmax) + 0.05]) +
         ggplot2::geom_rect(ggplot2::aes(fill = .data[["group"]])) +
         ggplot2::scale_x_continuous(breaks = breaks, expand = c(0, 0)) +
         ggplot2::guides(fill = ggplot2::guide_legend(reverse = TRUE)) +
@@ -134,7 +136,7 @@ segplot <- function(data, group, unit, weight, order = "segregation",
         ggplot2::theme(
             panel.grid = ggplot2::element_blank(),
             axis.text.x = ggplot2::element_blank(),
-            legend.position = "bottom"
+            legend.position = "right"
         ) +
         ggplot2::labs(fill = NULL)
 
