@@ -67,10 +67,10 @@
 <span>  <span class="va">unit</span>,</span>
 <span>  <span class="va">weight</span>,</span>
 <span>  order <span class="op">=</span> <span class="st">"segregation"</span>,</span>
+<span>  secondary_plot <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  reference_distribution <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  bar_space <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  title <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  axis_labels <span class="op">=</span> <span class="st">"left"</span></span>
+<span>  hline <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -108,6 +108,14 @@ If you want to control the ordering yourself, use "majority_fixed" and specify
 the <code>group</code> variable as a factor variable.</p></dd>
 
 
+<dt>secondary_plot</dt>
+<dd><p>If <code>NULL</code> (default), no secondary plot is drawn.
+If "segregation", a secondary plot is drawn that shows adjusted local segregation
+scores for each unit. If "cumulative", a secondary plot is drawn that shows
+the cumulative contribution of each unit toward the total H (calculated as the
+proportion of each unit times the adjusted local segregation of each unit)0.</p></dd>
+
+
 <dt>reference_distribution</dt>
 <dd><p>Specifies the reference distribution, given as
 a two-column data frame, to be plotted on the right.
@@ -119,20 +127,16 @@ also used to compute the local segregation scores.</p></dd>
 <dd><p>Specifies space between single units.</p></dd>
 
 
-<dt>title</dt>
-<dd><p>Adds a plot title and appends the value of the H index.</p></dd>
-
-
-<dt>axis_labels</dt>
-<dd><p>One of "left", "right", or "both". Determines where the
-y axis labels are placed.</p></dd>
+<dt>hline</dt>
+<dd><p>Default <code>NULL</code>. If a color is specified,
+horizontal lines will be drawn where groups are separated.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>Returns a ggplot2 object.</p>
+<p>Returns a ggplot2 or patchwork object.</p>
     </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
