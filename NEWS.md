@@ -3,6 +3,8 @@
 - various improvements to compression algorithm
 - add dendrogram visualization
 - allow multiple curves in `segcurve` function
+- segplot: add 'secondary_plot' argument
+- segplot: remove 'title' argument
 
 # segregation 1.0.0
 

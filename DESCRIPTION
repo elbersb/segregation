@@ -36,7 +36,8 @@ Suggests:
     tidycensus,
     tigris,
     rrapply,
-    dendextend
+    dendextend,
+    patchwork
 URL: https://elbersb.github.io/segregation/
 BugReports: https://github.com/elbersb/segregation/issues
 RoxygenNote: 7.2.3

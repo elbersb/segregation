@@ -10,9 +10,9 @@ segplot(
   unit,
   weight,
   order = "segregation",
+  secondary_plot = NULL,
   reference_distribution = NULL,
-  bar_space = 0,
-  title = NULL
+  bar_space = 0
 )
 }
 \arguments{
@@ -38,17 +38,21 @@ will reorder the groups in such a way that the majority group actually comes fir
 If you want to control the ordering yourself, use "majority_fixed" and specify
 the \code{group} variable as a factor variable.}
 
+\item{secondary_plot}{If \code{NULL} (default), no secondary plot is drawn.
+If "segregation", a secondary plot is drawn that shows adjusted local segregation
+scores for each unit. If "cumulative", a secondary plot is drawn that shows
+the cumulative contribution of each unit toward the total H (calculated as the
+proportion of each unit times the adjusted local segregation of each unit)0.}
+
 \item{reference_distribution}{Specifies the reference distribution, given as
 a two-column data frame, to be plotted on the right.
 If order is \code{segregation}, then this reference distribution is
 also used to compute the local segregation scores.}
 
 \item{bar_space}{Specifies space between single units.}
-
-\item{title}{Adds a plot title and appends the value of the H index.}
 }
 \value{
-Returns a ggplot2 object.
+Returns a ggplot2 or patchwork object.
 }
 \description{
 Produces a segregation plot.

@@ -28,7 +28,7 @@ globalVariables(c(
     ".", "..base", "..fixed_margins", "..group", "..n_bootstrap", "..unit", "se", "stat",
     "M", "N_units", "i.freq1", "i.freq2", "iter", "ls1", "ls2", "p_unit_g_group1",
     "p_unit_g_group2", "pair", "pct_M",
-    "xmax", "xmin", "ymax", "ymin", "..cols", "p_overall",
+    "x", "xend", "y", "yend", "xmax", "xmin", "ymax", "ymin", "..cols", "p_overall",
     "freq_of", "freq_to",
     "cumul_prob_1", "cumul_prob_2", "group1", "group2", "pct_group_1",
     ".data", "new_unit", "old_unit"

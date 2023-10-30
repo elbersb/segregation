@@ -98,6 +98,12 @@ segplot(sch, "race", "school",
 )
 ```
 
+It is also possible to show a secondary plot that shows the adjusted local segregation scores:
+
+```{r}
+segplot(sch, "race", "school", weight = "n", secondary_plot = "segregation")
+```
+
 ## Compressing segregation information
 
 The compression algorithm requires three steps to be taken. 
@@ -169,5 +175,5 @@ The compressed dataset has the same format as the original dataset
 and can now be used to produce another segplot, e.g.
 
 ```{r}
-segplot(sch_compressed, "race", "school", weight = "n")
+segplot(sch_compressed, "race", "school", weight = "n", secondary_plot = "segregation")
 ```

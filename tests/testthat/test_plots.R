@@ -6,6 +6,7 @@ library("segregation")
 context("plots")
 
 skip_if(!requireNamespace("ggplot2", quietly = TRUE))
+skip_if(!requireNamespace("patchwork", quietly = TRUE))
 
 plot_majority <- segplot(schools00, "race", "school", weight = "n", order = "majority")
 plot_majority_fixed <- segplot(schools00, "race", "school", weight = "n", order = "majority_fixed")
@@ -48,6 +49,22 @@ test_that("reference", {
     )
     # identical order
     expect_equal(sp$data[["unit"]], sp_ref$data[["unit"]])
+})
+
+test_that("secondary plot", {
+    plot_2a <- segplot(schools00, "race", "school",
+        weight = "n",
+        order = "segregation", secondary_plot = "segregation"
+    )
+    plot_2b <- segplot(schools00, "race", "school",
+        weight = "n",
+        order = "segregation", secondary_plot = "cumulative"
+    )
+
+    expect_equal(plot_seg$data, plot_2a[[1]]$data)
+    expect_equal(plot_seg$data, plot_2b[[1]]$data)
+    expect_true("patchwork" %in% class(plot_2a))
+    expect_true("patchwork" %in% class(plot_2b))
 })
 
 test_that("segcurve", {
