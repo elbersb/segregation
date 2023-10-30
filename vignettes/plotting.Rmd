@@ -157,8 +157,7 @@ Another way to learn more about the compression is to visualize the information 
 
 ```{r}
 dend <- as.dendrogram(comp)
-dendextend::labels(dend) <- NULL # remove the labels
-plot(dend)
+plot(dend, leaflab = "none")
 ```
 
 The third step is to create a new dataset based on the desired level of compression. 
