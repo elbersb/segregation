@@ -12,7 +12,8 @@ segplot(
   order = "segregation",
   secondary_plot = NULL,
   reference_distribution = NULL,
-  bar_space = 0
+  bar_space = 0,
+  hline = NULL
 )
 }
 \arguments{
@@ -50,6 +51,9 @@ If order is \code{segregation}, then this reference distribution is
 also used to compute the local segregation scores.}
 
 \item{bar_space}{Specifies space between single units.}
+
+\item{hline}{Default \code{NULL}. If a color is specified,
+horizontal lines will be drawn where groups are separated.}
 }
 \value{
 Returns a ggplot2 or patchwork object.

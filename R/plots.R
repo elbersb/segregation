@@ -29,13 +29,15 @@
 #'   If order is \code{segregation}, then this reference distribution is
 #'   also used to compute the local segregation scores.
 #' @param bar_space Specifies space between single units.
+#' @param hline Default \code{NULL}. If a color is specified,
+#'   horizontal lines will be drawn where groups are separated.
 #' @return Returns a ggplot2 or patchwork object.
 #' @import data.table
 #' @export
 segplot <- function(data, group, unit, weight,
                     order = "segregation", secondary_plot = NULL,
                     reference_distribution = NULL,
-                    bar_space = 0) {
+                    bar_space = 0, hline = NULL) {
     if (!requireNamespace("patchwork", quietly = TRUE)) {
         stop("Please install patchwork to use this function")
     }
@@ -54,6 +56,8 @@ segplot <- function(data, group, unit, weight,
     checkmate::assert_choice(order, c("segregation", "entropy", "majority", "majority_fixed"))
     checkmate::assert_choice(secondary_plot, c("segregation", "cumulative"), null.ok = TRUE)
     checkmate::assert_data_frame(reference_distribution, ncols = 2, nrows = d[, uniqueN(group)], null.ok = TRUE)
+    checkmate::assert_numeric(bar_space, len = 1)
+    checkmate::assert_character(hline, len = 1, null.ok = TRUE)
 
     d[, unit := as.character(unit)]
     d[, p := freq / sum(freq), by = .(unit)]
@@ -147,6 +151,10 @@ segplot <- function(data, group, unit, weight,
             legend.position = "right"
         ) +
         ggplot2::labs(fill = NULL)
+
+    if (!is.null(hline)) {
+        plot <- plot + ggplot2::geom_hline(yintercept = overall[1:(.N - 1), ymax], color = hline)
+    }
 
     if (order == "segregation" && is.null(secondary_plot)) {
         plot <- plot + ggplot2::labs(x = "< more segregated | less segregated >")
