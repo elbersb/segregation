@@ -56,7 +56,7 @@ segplot <- function(data, group, unit, weight,
     checkmate::assert_choice(order, c("segregation", "entropy", "majority", "majority_fixed"))
     checkmate::assert_choice(secondary_plot, c("segregation", "cumulative"), null.ok = TRUE)
     checkmate::assert_data_frame(reference_distribution, ncols = 2, nrows = d[, uniqueN(group)], null.ok = TRUE)
-    checkmate::assert_numeric(bar_space, len = 1)
+    checkmate::assert_numeric(bar_space, len = 1, lower = 0)
     checkmate::assert_character(hline, len = 1, null.ok = TRUE)
 
     d[, unit := as.character(unit)]
@@ -171,7 +171,7 @@ segplot <- function(data, group, unit, weight,
             label <- "Cumulative"
         }
 
-        stat_segments_h <- wide[, .(unit, x = xmin, xend = xmax, y = stat, yend = stat)]
+        stat_segments_h <- wide[, .(unit, x = ifelse(.I == 1, xmin, xmin - bar_space), xend = xmax, y = stat, yend = stat)]
         stat_segments_v <- wide[, .(unit, x = xmax, xend = xmax, y = stat, yend = shift(stat, type = "lead"))]
         stat_segments <- rbindlist(list(stat_segments_h, stat_segments_v))
         sub_plot <- ggplot2::ggplot(
