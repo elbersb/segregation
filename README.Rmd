@@ -142,11 +142,14 @@ devtools::install_github("elbersb/segregation")
 
 ## Citation
 
-If you use this package for your research, please cite:
+If you use this package for your research, please cite one of the following papers:
 
-Elbers, B. (2021). A Method for Studying Differences in Segregation
+- Elbers, Benjamin (2021). A Method for Studying Differences in Segregation
 Across Time and Space. Sociological Methods & Research.
 <https://doi.org/10.1177/0049124121986204>
+
+- Elbers, Benjamin and Rob Gruijters (2023). Segplot: A New Method for Visualizing Patterns of Multi-Group Segregation.
+<https://doi.org/10.1016/j.rssm.2023.100860>
 
 ## Some additional resources
 

@@ -58,6 +58,10 @@ data.table::as.data.table(schools00)[
 
 ## Segplot
 
+::: {.alert .alert-primary}
+Please consider citing the following paper if you use segplot: Benjamin Elbers and Rob Gruijters. 2023. "[Segplot: A New Method for Visualizing Patterns of Multi-Group Segregation](https://doi.org/10.1016/j.rssm.2023.100860). Research in Social Stratification and Mobility.
+:::
+
 The function `segplot()` is provided to generate segplots. Segplots are described in more
 detail [in this working paper](https://osf.io/preprints/socarxiv/ruw4g/).
 The function requires the dataset, the group, and unit variables, and, if required, 
