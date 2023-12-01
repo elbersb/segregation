@@ -44,7 +44,6 @@ compress <- function(data, group, unit, weight = NULL,
     if (!is.factor(d[[unit]]) && !is.character(d[[unit]])) {
         warning("coercing unit ids to character")
         d[[unit]] <- as.character(d[[unit]])
-        neighbors <- as.character(neighbors)
     }
 
     wide <- dcast(d, paste0(unit, "~", group), value.var = "freq", fill = 0)
@@ -54,7 +53,8 @@ compress <- function(data, group, unit, weight = NULL,
     if (is.infinite(max_iter)) max_iter <- -1
 
     if (is.data.frame(neighbors)) {
-        res <- compress_compute_cpp("df", as.matrix(neighbors), -1, as.matrix(wide), units, max_iter)
+        mat <- cbind(as.character(neighbors[[1]]), as.character(neighbors[[2]]))
+        res <- compress_compute_cpp("df", mat, -1, as.matrix(wide), units, max_iter)
     } else if (neighbors == "all") {
         res <- compress_compute_cpp("all", matrix(""), -1, as.matrix(wide), units, max_iter)
     } else if (neighbors == "local") {
