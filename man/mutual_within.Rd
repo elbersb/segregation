@@ -75,6 +75,7 @@ Calculates the segregation between \code{group} and \code{unit}
 within each category defined by \code{within}.
 }
 \examples{
+\dontrun{
 (within <- mutual_within(schools00, "race", "school",
     within = "state",
     weight = "n", wide = TRUE
@@ -90,6 +91,7 @@ sum(within$p * within$M) # => .326
 sum(within$p * within$ent_ratio * within$H) # => .321
 # compare with:
 mutual_total(schools00, "race", "school", within = "state", weight = "n")
+}
 }
 \references{
 Henri Theil. 1971. Principles of Econometrics. New York: Wiley.

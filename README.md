@@ -186,7 +186,7 @@ following papers:
 -   A paper that makes use of this package: [Did Residential Racial
     Segregation in the U.S. Really Increase? An Analysis Accounting for
     Changes in Racial
-    Diversity](https://elbersb.com/public/posts/segregation-increase/)
+    Diversity](https://elbersb.com/public/posts/2021-07-23-segregation-increase/)
     ([Code and Data](https://osf.io/mg9q4/))
 -   Some of the analyses [in this
     article](https://multimedia.tijd.be/diversiteit/) by the Belgian

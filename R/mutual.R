@@ -258,6 +258,7 @@ mutual_total <- function(data, group, unit, within = NULL, weight = NULL,
 #' Ricardo Mora and Javier Ruiz-Castillo. 2011.
 #'      "Entropy-based Segregation Indices". Sociological Methodology 41(1): 159–194.
 #' @examples
+#' \dontrun{
 #' (within <- mutual_within(schools00, "race", "school",
 #'     within = "state",
 #'     weight = "n", wide = TRUE
@@ -273,6 +274,7 @@ mutual_total <- function(data, group, unit, within = NULL, weight = NULL,
 #' sum(within$p * within$ent_ratio * within$H) # => .321
 #' # compare with:
 #' mutual_total(schools00, "race", "school", within = "state", weight = "n")
+#' }
 #' @import data.table
 #' @export
 mutual_within <- function(data, group, unit, within,

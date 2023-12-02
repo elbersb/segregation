@@ -1,5 +1,7 @@
 # segregation (development version)
 
+# segregation 1.1.0
+
 - various improvements to compression algorithm
 - add dendrogram visualization
 - allow multiple curves in `segcurve` function
