@@ -120,7 +120,7 @@ Black-White dissimilarity index for each state separately:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://r-datatable.com" class="external-link">"data.table"</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">schools00</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">schools00</span><span class="op">)</span></span>
+<span><span class="va">schools00</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/as.data.table.html" class="external-link">as.data.table</a></span><span class="op">(</span><span class="va">schools00</span><span class="op">)</span></span>
 <span><span class="va">schools00</span><span class="op">[</span></span>
 <span>  <span class="va">race</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"black"</span>, <span class="st">"white"</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">.SD</span>, group <span class="op">=</span> <span class="st">"race"</span>, unit <span class="op">=</span> <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span>,</span>
@@ -162,7 +162,7 @@ solution to decompose the state-specific M indices between 2000 and
 <span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> A     removals   0.039<span style="text-decoration: underline;">0</span></span></span></code></pre></div>
 <p>Again, here’s also a <code>data.table</code> solution:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://Rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">combine</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/setDT.html" class="external-link">setDT</a></span><span class="op">(</span><span class="va">combine</span><span class="op">)</span></span>
 <span><span class="va">combine</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">(</span><span class="va">.SD</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">state</span><span class="op">)</span><span class="op">]</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    state      stat         est</span></span>
 <span><span class="co">#&gt; 1:     A        M1  0.40859652</span></span>
@@ -193,7 +193,7 @@ package.</p>
 <span>  state <span class="op">=</span> <span class="st">"IL"</span>,</span>
 <span>  county <span class="op">=</span> <span class="st">"Cook"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Getting data from the 2017-2021 5-year ACS</span></span></code></pre></div>
+<span><span class="co">#&gt; Getting data from the 2018-2022 5-year ACS</span></span></code></pre></div>
 <p>Because this data is in “long” format, it’s easy to compute
 segregation indices:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -206,7 +206,7 @@ segregation indices:</p>
 <span>    weight <span class="op">=</span> <span class="st">"estimate"</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt;    stat       est</span></span>
-<span><span class="co">#&gt; 1:    D 0.7855711</span></span>
+<span><span class="co">#&gt; 1:    D 0.7816367</span></span>
 <span></span>
 <span><span class="co"># compute multigroup M/H indices</span></span>
 <span><span class="va">cook_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
@@ -216,8 +216,8 @@ segregation indices:</p>
 <span>    weight <span class="op">=</span> <span class="st">"estimate"</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="co">#&gt;    stat       est</span></span>
-<span><span class="co">#&gt; 1:    M 0.5114435</span></span>
-<span><span class="co">#&gt; 2:    H 0.4089561</span></span></code></pre></div>
+<span><span class="co">#&gt; 1:    M 0.5058722</span></span>
+<span><span class="co">#&gt; 2:    H 0.4031731</span></span></code></pre></div>
 <p>Producing a map of local segregation scores is also not hard:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/walkerke/tigris" class="external-link">"tigris"</a></span><span class="op">)</span></span>
@@ -233,7 +233,7 @@ segregation indices:</p>
 <span><span class="co"># download shapefile</span></span>
 <span><span class="va">seg_geom</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/tigris/man/tracts.html" class="external-link">tracts</a></span><span class="op">(</span><span class="st">"IL"</span>, <span class="st">"Cook"</span>, cb <span class="op">=</span> <span class="cn">TRUE</span>, progress_bar <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">local_seg</span>, by <span class="op">=</span> <span class="st">"GEOID"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Retrieving data for the year 2021</span></span>
+<span><span class="co">#&gt; Retrieving data for the year 2022</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">seg_geom</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">ls</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsf.html" class="external-link">geom_sf</a></span><span class="op">(</span>color <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span> <span class="op">+</span></span>
@@ -247,6 +247,29 @@ segregation indices:</p>
 <p><img src="faq_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
 </div>
 <div class="section level2">
+<h2 id="can-i-compite-local-segregation-scores-for-the-h-index">Can I compite local segregation scores for the H index?<a class="anchor" aria-label="anchor" href="#can-i-compite-local-segregation-scores-for-the-h-index"></a>
+</h2>
+<p>See <a href="https://osf.io/preprints/socarxiv/3juyc" class="external-link">this paper</a>
+for more information. The short answer is that you can divide the local
+segregation scores of the M index by the entropy of the group
+distribution. A weighted average of these scores must then equal the H
+index, as the H index is just the M index divided by the entropy of the
+group distribution.</p>
+<p>Here’s an example:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="op">(</span><span class="fu"><a href="../reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    stat       est</span></span>
+<span><span class="co">#&gt; 1:    M 0.4255390</span></span>
+<span><span class="co">#&gt; 2:    H 0.4188083</span></span>
+<span></span>
+<span><span class="va">local</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutual_local.html">mutual_local</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="op">(</span><span class="va">local</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">p</span> <span class="op">*</span> <span class="va">ls</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="co"># same as M index above</span></span>
+<span><span class="co">#&gt; [1] 0.425539</span></span>
+<span><span class="va">local</span><span class="op">[</span>, <span class="va">ls_H</span> <span class="op">:=</span> <span class="va">ls</span> <span class="op">/</span> <span class="fu"><a href="../reference/entropy.html">entropy</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="op">(</span><span class="va">local</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">p</span> <span class="op">*</span> <span class="va">ls_H</span><span class="op">)</span><span class="op">]</span><span class="op">)</span> <span class="co"># same as H index above</span></span>
+<span><span class="co">#&gt; [1] 0.4188083</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="how-can-i-compute-margins-adjusted-local-segregation-scores">How can I compute margins-adjusted local segregation scores?<a class="anchor" aria-label="anchor" href="#how-can-i-compute-margins-adjusted-local-segregation-scores"></a>
 </h2>
 <p>When using <code>mutual_difference</code>, supply
@@ -255,7 +278,7 @@ segregation scores that are margins-adjusted (one is coming from
 adjusting forward, the other from adjusting backwards). By averaging
 them we can create a single margins-adjusted local segregation
 score:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">diff</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutual_difference.html">mutual_difference</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>, <span class="st">"race"</span>, <span class="st">"school"</span>,</span>
 <span>  weight <span class="op">=</span> <span class="st">"n"</span>, method <span class="op">=</span> <span class="st">"shapley_detailed"</span></span>
 <span><span class="op">)</span></span>
