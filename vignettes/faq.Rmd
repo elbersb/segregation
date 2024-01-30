@@ -169,7 +169,7 @@ ggplot(seg_geom, aes(fill = ls)) +
   )
 ```
 
-## Can I compite local segregation scores for the H index?
+## Can I compute local segregation scores for the H index?
 
 See [this paper](https://osf.io/preprints/socarxiv/3juyc) for more information. The short
 answer is that you can divide the local segregation scores of the M index by the entropy
