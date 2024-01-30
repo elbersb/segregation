@@ -169,6 +169,25 @@ ggplot(seg_geom, aes(fill = ls)) +
   )
 ```
 
+## Can I compite local segregation scores for the H index?
+
+See [this paper](https://osf.io/preprints/socarxiv/3juyc) for more information. The short
+answer is that you can divide the local segregation scores of the M index by the entropy
+of the group distribution. A weighted average of these scores must then equal the H index, as
+the H index is just the M index divided by the entropy of the group distribution.
+
+Here's an example:
+
+```{r}
+(mutual_total(schools00, "race", "school", weight = "n"))
+
+local <- mutual_local(schools00, "race", "school", weight = "n", wide = TRUE)
+(local[, sum(p * ls)]) # same as M index above
+local[, ls_H := ls / entropy(schools00, "race", weight = "n")]
+(local[, sum(p * ls_H)]) # same as H index above
+```
+
+
 ## How can I compute margins-adjusted local segregation scores?
 
 When using `mutual_difference`, supply `method = "shapley_detailed"`
