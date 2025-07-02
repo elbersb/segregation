@@ -1,5 +1,7 @@
 # segregation (development version)
 
+- ipf: decrease default precision (longer runtime, but more precise results)
+
 # segregation 1.1.0
 
 - various improvements to compression algorithm

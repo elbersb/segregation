@@ -73,7 +73,7 @@
 #' @import data.table
 #' @export
 ipf <- function(source, target, group, unit, weight = NULL,
-                max_iterations = 100, precision = .0001) {
+                max_iterations = 100, precision = 1e-07) {
     d1 <- prepare_data(source, group, unit, weight)
     d2 <- prepare_data(target, group, unit, weight)
 
