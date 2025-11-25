@@ -1,6 +1,7 @@
 # segregation (development version)
 
 - ipf: decrease default precision (longer runtime, but more precise results)
+- entropy: add 'within' argument
 
 # segregation 1.1.0
 
