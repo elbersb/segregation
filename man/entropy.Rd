@@ -12,6 +12,9 @@ entropy(data, group, within = NULL, weight = NULL, base = exp(1))
 \item{group}{A categorical variable or a vector of variables
 contained in \code{data}.}
 
+\item{within}{A categorical variable or a vector of variables
+contained in \code{data}.}
+
 \item{weight}{Numeric. (Default \code{NULL})}
 
 \item{base}{Base of the logarithm that is used in the entropy

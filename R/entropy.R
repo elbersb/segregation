@@ -6,6 +6,8 @@
 #' @param data A data frame.
 #' @param group A categorical variable or a vector of variables
 #'   contained in \code{data}.
+#' @param within A categorical variable or a vector of variables
+#'   contained in \code{data}.
 #' @param weight Numeric. (Default \code{NULL})
 #' @param base Base of the logarithm that is used in the entropy
 #'   calculation. Defaults to the natural logarithm.
