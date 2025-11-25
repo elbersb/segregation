@@ -5,7 +5,7 @@ Returns the entropy of the distribution defined by `group`.
 ## Usage
 
 ``` r
-entropy(data, group, weight = NULL, base = exp(1))
+entropy(data, group, within = NULL, weight = NULL, base = exp(1))
 ```
 
 ## Arguments
@@ -15,6 +15,10 @@ entropy(data, group, weight = NULL, base = exp(1))
   A data frame.
 
 - group:
+
+  A categorical variable or a vector of variables contained in `data`.
+
+- within:
 
   A categorical variable or a vector of variables contained in `data`.
 

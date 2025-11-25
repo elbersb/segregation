@@ -37,7 +37,7 @@ group."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Calculates the entropy of a distribution</h1>
-      <small class="dont-index">Source: <a href="https://github.com/elbersb/segregation/blob/master/R/segregation.R" class="external-link"><code>R/segregation.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/elbersb/segregation/blob/master/R/entropy.R" class="external-link"><code>R/entropy.R</code></a></small>
       <div class="d-none name"><code>entropy.Rd</code></div>
     </div>
 
@@ -48,7 +48,7 @@ group."></head><body>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">entropy</span><span class="op">(</span><span class="va">data</span>, <span class="va">group</span>, weight <span class="op">=</span> <span class="cn">NULL</span>, base <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">entropy</span><span class="op">(</span><span class="va">data</span>, <span class="va">group</span>, within <span class="op">=</span> <span class="cn">NULL</span>, weight <span class="op">=</span> <span class="cn">NULL</span>, base <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">exp</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -60,6 +60,11 @@ group."></head><body>
 
 
 <dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
+<dd><p>A categorical variable or a vector of variables
+contained in <code>data</code>.</p></dd>
+
+
+<dt id="arg-within">within<a class="anchor" aria-label="anchor" href="#arg-within"></a></dt>
 <dd><p>A categorical variable or a vector of variables
 contained in <code>data</code>.</p></dd>
 
