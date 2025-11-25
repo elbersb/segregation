@@ -43,13 +43,14 @@ expected_compute <- function(index, d, group_var, unit_var,
                 sim <- stats::r2dtable(1, group_margins[, i], unit_margins[, i])[[1]]
                 p <- sim / sum(sim)
                 # margins are simulated, calculate new margins
-                p_group_sim <- apply(p, 1, sum)
-                p_unit_sim <- apply(p, 2, sum)
+                p_group_sim <- rowSums(p)
+                p_unit_sim <- colSums(p)
                 entropy_group_sim <- -sum(p_group_sim * logf(p_group_sim, base))
             }
 
             # calculate local segregation scores per unit
-            ls <- apply(p, 2, function(x) sum(x / sum(x) * logf((x / sum(x)) / p_group_sim, base)))
+            p_within_unit <- sweep(p, 2, p_unit_sim, "/")
+            ls <- apply(p_within_unit, 2, function(x) sum(x * logf(x / p_group_sim, base)))
 
             if (index == "mh") {
                 m <- sum(p_unit_sim * ls)
