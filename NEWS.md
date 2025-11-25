@@ -1,5 +1,7 @@
 # segregation (development version)
 
+- breaking: rename `mutual_expected` to `mutual_total_expected`
+- add `mutual_local_expected`
 - ipf: decrease default precision (longer runtime, but more precise results)
 - entropy: add 'within' argument
 

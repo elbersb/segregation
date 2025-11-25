@@ -263,11 +263,11 @@ hist(ls_school, main = "Bootstrap distribution for school C137_9")
 For this school, the bootstrap distribution is skewed. If precise inference about this specific school is needed, the standard error should not be interpreted, and the confidence interval should only be interpreted when the number of bootstrap iterations is large.
 
 If you are concerned that your contingency table is too small to provide reliable segregation estimates,
-the package also provides a function `mutual_expected()` that simulates random cell counts under independence
+the package also provides a function `mutual_total_expected()` that simulates random cell counts under independence
 from the marginal distributions of your table. For the `schools00` dataset:
 
 ```{r}
-mutual_expected(schools00, "race", "school", weight = "n", n_bootstrap = 500)
+mutual_total_expected(schools00, "race", "school", weight = "n", n_bootstrap = 500)
 ```
 
 Here, there is no concern about bias due to a small sample size.
