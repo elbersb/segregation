@@ -35,21 +35,25 @@ expected_compute <- function(index, d, group_var, unit_var,
         if (index %in% c("ls", "mh")) {
             if (fixed_margins == TRUE) {
                 p <- sim_fixed[[i]] / sum(sim_fixed[[i]])
+                # margins are fixed, just copy over
                 p_group_sim <- p_group
                 p_unit_sim <- p_unit
+                entropy_group_sim <- entropy_group
             } else {
                 sim <- stats::r2dtable(1, group_margins[, i], unit_margins[, i])[[1]]
                 p <- sim / sum(sim)
+                # margins are simulated, calculate new margins
                 p_group_sim <- apply(p, 1, sum)
                 p_unit_sim <- apply(p, 2, sum)
-                entropy_group <- -sum(p_group_sim * logf(p_group_sim, base))
+                entropy_group_sim <- -sum(p_group_sim * logf(p_group_sim, base))
             }
 
-            ls <- apply(p, 2, function(x) sum(x / sum(x) * logf(x / sum(x) / p_group_sim, base)))
+            # calculate local segregation scores per unit
+            ls <- apply(p, 2, function(x) sum(x / sum(x) * logf((x / sum(x)) / p_group_sim, base)))
 
             if (index == "mh") {
                 m <- sum(p_unit_sim * ls)
-                h <- m / entropy_group
+                h <- m / entropy_group_sim
                 data.table(
                     stat = c("M under 0", "H under 0"),
                     est = c(m, h)
