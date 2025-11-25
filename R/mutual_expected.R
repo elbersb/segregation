@@ -21,10 +21,7 @@ expected_compute <- function(index, d, group_var, unit_var,
 
     if (fixed_margins == TRUE) {
         # take the margins from the table provided
-        if (index == "mh") {
-            entropy_group <- -sum(p_group * logf(p_group, base))
-            entropy_unit <- -sum(p_unit * logf(p_unit, base))
-        }
+        entropy_group <- -sum(p_group * logf(p_group, base))
         sim_fixed <- stats::r2dtable(n_bootstrap, n_group, n_unit)
     } else {
         # simulate margins using a multinomial model
@@ -46,19 +43,18 @@ expected_compute <- function(index, d, group_var, unit_var,
                 p_group_sim <- apply(p, 1, sum)
                 p_unit_sim <- apply(p, 2, sum)
                 entropy_group <- -sum(p_group_sim * logf(p_group_sim, base))
-                entropy_unit <- -sum(p_unit_sim * logf(p_unit_sim, base))
             }
 
+            ls <- apply(p, 2, function(x) sum(x / sum(x) * logf(x / sum(x) / p_group_sim, base)))
+
             if (index == "mh") {
-                m <- sum(p * logf(p, base)) + entropy_group + entropy_unit
+                m <- sum(p_unit_sim * ls)
                 h <- m / entropy_group
                 data.table(
                     stat = c("M under 0", "H under 0"),
                     est = c(m, h)
                 )
             } else {
-                p_group_sim <- apply(p, 1, sum)
-                ls <- apply(p, 2, function(x) sum(x / sum(x) * logf(x / sum(x) / p_group_sim, base)))
                 ls_data <- copy(by_unit)
                 ls_data[, n := NULL]
                 ls_data[, ls := ls]
