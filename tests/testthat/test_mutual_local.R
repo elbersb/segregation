@@ -91,7 +91,7 @@ test_that("option wide works", {
         sum(nowide[stat == "ls", est] * nowide[stat == "p", "est"])
     )
     expect_equal(total[stat == "M", est], sum(wide$ls * wide$p))
-    expect_equal(total[stat == "H", est], sum(wide$ls * wide$p) / entropy(test_data, "u", "n"))
+    expect_equal(total[stat == "H", est], sum(wide$ls * wide$p) / entropy(test_data, "u", weight = "n"))
 
     expect_equal(all(nowide_se[["se"]] > 0), TRUE)
 })

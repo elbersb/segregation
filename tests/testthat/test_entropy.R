@@ -27,3 +27,29 @@ test_that("correct entropy calculation", {
         .25 * log(1 / .25) + .75 * log(1 / .75)
     )
 })
+
+test_that("conditional entropy calculation", {
+    # complete independence
+    df <- data.frame(
+        race = c("w", "w", "b", "b"),
+        district = c(1, 2, 1, 2),
+        n = c(10, 10, 10, 10)
+    )
+
+    expect_equal(entropy(df, "race", weight = "n"), log(2))
+    expect_equal(entropy(df, "district", weight = "n"), log(2))
+    expect_equal(entropy(df, c("race", "district"), weight = "n"), log(4))
+    expect_equal(entropy(df, "race", within = "district", weight = "n"), log(2))
+
+    # complete dependence
+    df2 <- data.frame(
+        race = c("w", "w", "b", "b"),
+        district = c("1", "2", "1", "2"),
+        n = c(10, 0, 0, 10)
+    )
+
+    expect_equal(entropy(df2, "race", weight = "n"), log(2))
+    expect_equal(entropy(df2, "district", weight = "n"), log(2))
+    expect_equal(entropy(df2, c("race", "district"), weight = "n"), log(2))
+    expect_equal(entropy(df2, "race", within = "district", weight = "n"), 0)
+})

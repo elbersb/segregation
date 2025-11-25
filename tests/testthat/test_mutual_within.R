@@ -114,7 +114,7 @@ test_that("option wide works", {
     expect_equal(total[stat == "M", est], sum(wide$M * wide$p))
     expect_equal(
         total[stat == "M", est],
-        sum(wide$H * wide$p * wide$ent_ratio * entropy(test_data, "u", "n"))
+        sum(wide$H * wide$p * wide$ent_ratio * entropy(test_data, "u", weight = "n"))
     )
 
     expect_equal(
