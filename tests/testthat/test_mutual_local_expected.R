@@ -33,6 +33,16 @@ test_that("works both ways around", {
     expect_equal(data2a[, sum(est * p_mean)], data2b[, sum(est * p_mean)], tolerance = 0.01)
 })
 
+test_that("works nested", {
+    data1$superunit <- data1$u <= 3
+    a <- mutual_local_expected(data1, "g", c("superunit", "u"), weight = "n")
+    b <- mutual_local_expected(data1, "g", "u", weight = "n")
+
+    expect_equal(a$est, b$est, tolerance = 0.01)
+    expect_equal(a$se, b$se, tolerance = 0.01)
+    expect_equal(length(a$est), 4)
+})
+
 test_that("fixed margins = FALSE", {
     data1a <- mutual_local_expected(data1, "u", "g", weight = "n", fixed_margins = FALSE)
     data1b <- mutual_local_expected(data1, "g", "u", weight = "n", fixed_margins = FALSE)

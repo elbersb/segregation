@@ -33,6 +33,16 @@ test_that("works both ways around", {
     )
 })
 
+test_that("works nested", {
+    data1$superunit <- data1$u <= 3
+    a <- mutual_total_expected(data1, "g", c("superunit", "u"), weight = "n")
+    b <- mutual_total_expected(data1, "g", "u", weight = "n")
+
+    expect_equal(a$est, b$est, tolerance = 0.01)
+    expect_equal(a$se, b$se, tolerance = 0.01)
+    expect_equal(length(a$est), 2)
+})
+
 test_that("fixed margins = FALSE", {
     expect_equal(
         mutual_total_expected(data1, "u", "g", weight = "n", fixed_margins = FALSE)[stat == "M under 0", est],
