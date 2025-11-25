@@ -1,0 +1,429 @@
+# A walkthrough of the segregation package
+
+The `segregation` package includes functionality to calculate
+entropy-based segregation measures, namely the Mutual Information Index
+(M) and the Theil Index (H), which is a normalized version of the M
+index. The package also includes several methods for decomposing the
+index into between/within components and into local segregation scores,
+as well as methods to decompose differences in segregation indices. All
+of these methods have arguments to obtain standard errors and confidence
+intervals through bootstrapping.
+
+Detailed information on these indices can be found in the references at
+the end of this vignette.
+
+## The basic mathematics
+
+The idea of a segregation index is to summarize a contingency table to a
+single number. For instance, we may have a table with $U$ units, say
+schools or occupations, and $G$ groups, say gender or racial groups. For
+each combination of unit and group we have a count, $t_{ug}$. Arranged
+in a $U \times G$ matrix $\mathbf{T}$, this is what the structure of the
+data looks like:
+
+|         | $g = 1$  |  …  | $g = G$  |
+|:-------:|:--------:|:---:|:--------:|
+| $u = 1$ | $t_{11}$ |  …  | $t_{1G}$ |
+| $u = 2$ | $t_{21}$ |  …  | $t_{2G}$ |
+| $u = 3$ | $t_{31}$ |  …  | $t_{3G}$ |
+|    …    |    …     |  …  |    …     |
+| $u = U$ | $t_{U1}$ |  …  | $t_{UG}$ |
+
+From this matrix, we can define
+$t = \sum_{u = 1}^{U}\sum_{g = 1}^{G}t_{ug}$, the total population size.
+The joint probability of being in unit $u$ and racial group $g$ is
+$p_{ug} = t_{ug}/t$. Also define
+$p_{u \cdot} = \sum_{g = 1}^{G}t_{ug}/t$ and
+$p_{\cdot g} = \sum_{u = 1}^{U}t_{ug}/t$ as the marginal probabilities
+of units and groups, respectively. The **Mutual Information Index** is
+then defined as
+
+$$M(\mathbf{T}) = \sum\limits_{u = 1}^{U}\sum\limits_{g = 1}^{G}p_{ug}\log\frac{p_{ug}}{p_{u \cdot}p_{\cdot g}}.$$
+The **Theil Index** is closely related to the M index, as it is just a
+normalized version of the Mutual Information Index:
+
+$$H(\mathbf{T}) = \frac{M(\mathbf{T})}{E(\mathbf{T})},$$
+
+where $E(\mathbf{T})$ denotes the entropy of the group marginal
+distribution of $\mathbf{T}$,
+i.e. $E(\mathbf{T}) = - \sum_{g = 1}^{G}p_{\cdot g}\log p_{\cdot g}$.
+Dividing through the group entropy has the effect of constraining H to
+be between 0 and 1.
+
+## Data format
+
+For the examples, we will use a dataset built into the `segregation`
+package, `schools00`. This dataset contains data on 2,045 schools across
+429 school districts in three U.S. states. For each school, the dataset
+records the number of Asian, Black, Hispanic, White, and Native American
+students. The `segregation` package requires data in long form (because
+most segregation data comes in this form), not in the form of
+contingency tables. Hence, each row of the `schools00` dataset is a
+unique combination of a given school and a racial group, and the column
+`n` records the number of students for this combination:
+
+``` r
+library("segregation")
+head(schools00[, c("school", "race", "n")])
+```
+
+Note that in the first school, `A1_1`, there are no Native American
+students. Hence, that row is missing.
+
+If you have data in the form of contingency tables, you can use
+[`matrix_to_long()`](https://elbersb.com/segregation/reference/matrix_to_long.md)
+to convert them to the long format required for the package. As an
+example:
+
+``` r
+(m <- matrix(c(10, 20, 30, 30, 20, 10), nrow = 3))
+colnames(m) <- c("Black", "White")
+matrix_to_long(m, group = "race", unit = "school")
+```
+
+The `group` and `unit` arguments are optional.
+
+## Computing the M and H indices
+
+Compute the M and H indices using
+[`mutual_total()`](https://elbersb.com/segregation/reference/mutual_total.md):
+
+``` r
+mutual_total(schools00, "race", "school", weight = "n")
+```
+
+Interpreting the M is not easy, because it is not normalized. However,
+the H can range from 0 to 1, so a value of 0.419 would indicate moderate
+segregation.
+
+The second argument to
+[`mutual_total()`](https://elbersb.com/segregation/reference/mutual_total.md)
+refers to the groups, while the third argument refers to the units.
+Switching groups and units does not affect the M index, but does change
+the H index:
+
+``` r
+mutual_total(schools00, "school", "race", weight = "n")
+```
+
+This is because the `segregation` package always divides by the marginal
+*group* entropy, and it would here hence divide by the entropy of the
+school distribution, which we would expect to be much larger (as there
+are many more schools than racial groups). To check, we can use the
+[`entropy()`](https://elbersb.com/segregation/reference/entropy.md)
+function:
+
+``` r
+(entropy(schools00, "race", weight = "n"))
+(entropy(schools00, "school", weight = "n"))
+```
+
+Therefore, if the H index is used, it is important to specify the groups
+and units correctly.
+
+For inference (discussed in more detail [below](#inference)), we can use
+bootstrapping to obtain standard errors and confidence intervals:
+
+``` r
+mutual_total(schools00, "race", "school",
+  weight = "n",
+  se = TRUE, CI = .95, n_bootstrap = 500
+)
+```
+
+As there a large number of observations, the standard errors are very
+small.
+
+## Between-Within decomposition
+
+We might wonder whether segregation is different across the three
+different states. We can compute their segregation indices manually
+(just showing the M for simplicity):
+
+``` r
+split_schools <- split(schools00, schools00$state)
+mutual_total(split_schools$A, "race", "school", weight = "n")[1, ]
+mutual_total(split_schools$B, "race", "school", weight = "n")[1, ]
+mutual_total(split_schools$C, "race", "school", weight = "n")[1, ]
+```
+
+Clearly, state A is more segregated than state C, which in turn shows
+higher school segregation than B. One of the advantages of entropy-based
+segregation indices is that these three state-specific indices have a
+simple relationship to the overall index. This is called the
+between/within decomposition: Total segregation can be decomposed into a
+term that measures how much the distribution of racial groups differs
+*between* states, and into a term that measures segregation *within*
+states. If we have $S$ states (or “super-units” more generally), where
+each school belongs to exactly one state, the M index can be decomposed
+as follows:
+
+$$M(\mathbf{T}) = M(\mathbf{S}) + \sum\limits_{s = 1}^{S}p_{s}M\left( \mathbf{T}_{s} \right),$$
+where $\mathbf{T}$ is the full $U \times G$ contingency table,
+$\mathbf{S}$ is the aggregated contingency table of dimension
+$S \times G$, $p_{s}$ is the population proportion of state $s$ (such
+that $\sum_{s = 1}^{S}p_{s} = 1$), and $\mathbf{T}_{s}$ is the subset of
+rows of $\mathbf{T}$ belonging to state $s$. Put in simple terms, the M
+index can be decomposed into a between-state segregation index, plus a
+weighted average of within-state M indices.
+
+For the H index, we are dividing the above formula by $E(\mathbf{T})$.
+This makes the formula a bit more complicated, because the normalization
+has to be offset in the decomposition:
+
+$$H(\mathbf{T}) = H(\mathbf{S}) + \sum\limits_{s = 1}^{S}\frac{E\left( \mathbf{T}_{s} \right)}{E(\mathbf{T})}p_{s}H\left( \mathbf{T}_{s} \right),$$
+
+where $E( \cdot )$ is again the entropy of the marginal group
+distribution. Note that $E(\mathbf{T}) = E(\mathbf{S})$, because the
+group marginal distributions are identical.
+
+To compute the decomposition using the `segregation` package, use:
+
+``` r
+# total segregation
+(total <- mutual_total(schools00, "race", "school", weight = "n"))
+# between-state segregation:
+#     how much does the racial distributions differ across states?
+(between <- mutual_total(schools00, "race", "state", weight = "n"))
+# within-state segregation:
+#     how much segregation exist within states?
+(mutual_total(schools00, "race", "school", within = "state", weight = "n"))
+```
+
+Note that $0.426 = 0.0992 + 0.326$ and $0.419 = 0.0977 + 0.321$. The
+results indicate that about 75% of the segregation is within states. In
+other words, differences in the racial composition of the three
+different states account for less than 25% of segregation.
+
+By using
+[`mutual_total()`](https://elbersb.com/segregation/reference/mutual_total.md)
+with the `within` argument, we can obtain the overall within component,
+but we do not obtain the decomposition by state. To do so, we can use
+[`mutual_within()`](https://elbersb.com/segregation/reference/mutual_within.md):
+
+``` r
+(within <- mutual_within(schools00, "race", "school",
+  within = "state", weight = "n", wide = TRUE
+))
+```
+
+This is a much simpler way to obtain state-specific segregation scores
+compared to subsetting manually, as shown in the beginning of this
+section. In addition to the M and H indices, we also obtain `p`, the
+population proportion of the state ($p_{s}$ above), and `ent_ratio`,
+which is $E\left( \mathbf{T}_{s} \right)/E(\mathbf{T})$ from above.
+Hence, we can recover the total within-component using
+
+``` r
+with(within, sum(M * p))
+with(within, sum(H * p * ent_ratio))
+```
+
+which is exactly the same as before. The quantity
+$p_{s}M\left( \mathbf{T}_{s} \right)$ is itself of interest, because it
+shows how much the states contribute to the segregation total, when
+taking into account their size. By adding the between component, we can
+calculate the contribution of the four components:
+
+``` r
+# merge into a vector
+components <- c(between$est[1], within$M * within$p)
+names(components) <- c("Between", "A", "B", "C")
+signif(100 * components / total$est[1], 3)
+```
+
+Each of the four components contributes about a quarter to the total
+segregation of 0.426. Note that state A is the smallest state (27.7% of
+the population), but contributes the largest percentage (26.6%) to total
+segregation. Hence, the decomposition shows that it is important to look
+at both $p_{s}$, the state sizes, as well as
+$M\left( \mathbf{T}_{s} \right)$, within-state segregation.
+
+The between-within decomposition can also be applied repeatedly in a
+hierarchical setting. For instance, in the `schools00` dataset, schools
+are nested within districts, and districts are nested within states.
+Therefore, we can ask: How much segregation is due to segregation
+between states, how much segregation is due to between-district
+segregation within states, and how much segregation is due to
+between-school segregation within districts? The package provides a
+convenience function for this use case:
+
+``` r
+mutual_total_nested(schools00, "race", c("state", "district", "school"),
+  weight = "n"
+)
+# This is a simpler way of running the following three decompositions manually:
+# mutual_total(schools00, "race", "state", weight = "n")
+# mutual_total(schools00, "race", "district", within = "state", weight = "n")
+# mutual_total(schools00, "race", "school", within = c("state", "district"), weight = "n")
+```
+
+## Local segregation
+
+The M index (but not the H index) allows for another decomposition, into
+local segregation scores. To define this decomposition, let
+$p_{g|u} = t_{ug}/t_{u \cdot}$ be the conditional probability of being
+in group $g$, given that one is in unit $u$. We can then define the
+*local segregation score of unit $u$* as
+
+$$L_{u} = \sum\limits_{g = 1}^{G}p_{g|u}\log\frac{p_{g|u}}{p_{\cdot g}}$$
+The weighted average of the $L_{u}$ is again $M(\mathbf{T})$,
+i.e. $M(\mathbf{T}) = \sum_{u = 1}^{U}p_{u \cdot}L_{u}$.
+
+To obtain the local segregation scores $L_{u}$, along with the marginal
+weights $p_{u \cdot}$, use
+[`mutual_local()`](https://elbersb.com/segregation/reference/mutual_local.md):
+
+``` r
+mutual_local(schools00, "race", "school", weight = "n", wide = TRUE)
+```
+
+Local segregation scores are based on much less data than the full M
+index, so it often makes sense to obtain confidence intervals. The
+following code plots the length of the 95% confidence interval in
+relation to the size of each school:
+
+``` r
+localse <- mutual_local(schools00, "race", "school",
+  weight = "n",
+  se = TRUE, wide = TRUE, n_bootstrap = 500
+)
+localse$lengthCI <- sapply(localse$ls_CI, base::diff)
+with(localse, plot(x = p, y = lengthCI, pch = 16, cex = 0.3))
+```
+
+Although the relationship is not deterministic, larger schools have
+shorter confidence intervals.
+
+Because the M is symmetric, local segregation scores can also be
+obtained for groups. The equivalent definition for the *local
+segregation score of group $g$* is then
+
+$$L_{g} = \sum\limits_{u = 1}^{U}p_{u|g}\log\frac{p_{u|g}}{p_{u \cdot}},$$
+
+and, as expected, $M(\mathbf{T}) = \sum_{g = 1}^{G}p_{\cdot g}L_{g}$.
+
+To obtain these scores, switch the group and unit arguments in
+`mutual_local`:
+
+``` r
+(localg <- mutual_local(schools00, "school", "race", weight = "n", wide = TRUE))
+```
+
+These results show that the racial groups experience very different
+levels of segregation: White students are less segregated than Asian,
+Black, Hispanic, and, especially, Native American students.
+
+## Inference
+
+The four main functions of the packages,
+[`mutual_total()`](https://elbersb.com/segregation/reference/mutual_total.md),
+[`mutual_within()`](https://elbersb.com/segregation/reference/mutual_within.md),
+[`mutual_local()`](https://elbersb.com/segregation/reference/mutual_local.md),
+and
+[`mutual_difference()`](https://elbersb.com/segregation/reference/mutual_difference.md)
+all support inference through bootstrapping. Inference for segregation
+indices is tricky, and the standard error estimates and confidence
+intervals should not be trusted too much when there is little data, and
+especially when the segregation index is very close to either 0 or
+maximum segregation.
+
+To estimate standard errors and confidence intervals, use `se = TRUE`.
+The coverage of the confidence interval can be specified in the `CI`
+argument. The number of bootstrap iterations can be specified as well:
+
+``` r
+(se <- mutual_total(schools00, "race", "school",
+  weight = "n",
+  se = TRUE, CI = .95, n_bootstrap = 500
+))
+```
+
+The confidence intervals are based on the percentiles from the bootstrap
+distribution, and hence require a large number of bootstrap iterations
+for valid interpretation. The estimate `est` that is reported in the
+results has already been “debiased”, i.e. the bias that has been
+estimated from the bootstrap distribution (which is reported in `bias`)
+has been subtracted from the usual maximum-likelihood estimate that we
+would obtain from `mutual_total` with `se = FALSE`. The confidence
+interval is centered around the debiased estimate.
+
+On balance, confidence intervals are preferred over the standard error
+because the bootstrap distribution can be skewed, especially when
+segregation is very low or very high. For this example, we can see that
+the standard errors provide almost identical coverage to the confidence
+intervals, as
+
+``` r
+# M
+with(se, c(est[1] - 1.96 * se[1], est[1] + 1.96 * se[1]))
+# H
+with(se, c(est[2] - 1.96 * se[2], est[2] + 1.96 * se[2]))
+```
+
+provide effectively the same coverage as the confidence intervals
+obtained from the percentile bootstrap.
+
+Whenever the bootstrap is used, the bootstrap distributions for each
+parameter are reported in an attribute `bootstrap` of the returned
+object. This can be used, for instance, to check whether the bootstrap
+distribution is skewed. The following code computes local segregation
+scores for all schools, and then shows a histogram of the bootstrap
+distribution for school C137_9, which has a very low local segregation
+score:
+
+``` r
+local <- mutual_local(schools00, "race", "school",
+  weight = "n",
+  se = TRUE, CI = .95, n_bootstrap = 500
+)
+# pick bootstrap distribution of local segregation scores for school C137_9
+ls_school <- attr(local, "bootstrap")[school == "C137_9" & stat == "ls", boot_est]
+hist(ls_school, main = "Bootstrap distribution for school C137_9")
+```
+
+For this school, the bootstrap distribution is skewed. If precise
+inference about this specific school is needed, the standard error
+should not be interpreted, and the confidence interval should only be
+interpreted when the number of bootstrap iterations is large.
+
+If you are concerned that your contingency table is too small to provide
+reliable segregation estimates, the package also provides a function
+[`mutual_expected()`](https://elbersb.com/segregation/reference/mutual_expected.md)
+that simulates random cell counts under independence from the marginal
+distributions of your table. For the `schools00` dataset:
+
+``` r
+mutual_expected(schools00, "race", "school", weight = "n", n_bootstrap = 500)
+```
+
+Here, there is no concern about bias due to a small sample size.
+
+## Decomposing differences in indices
+
+The command
+[`mutual_difference()`](https://elbersb.com/segregation/reference/mutual_difference.md)
+can be used to decompose differences in segregation, as described in
+Elbers (2021). The default, and recommended method, is to use
+`method = shapley` (or `method = shapley_detailed`). The other methods
+(`mrc`, `km`) exist mostly for testing purposes, and are not
+recommended. Details on the procedure and how to interpret the terms of
+the decomposition are found in Elbers (2021).
+
+``` r
+mutual_difference(schools00, schools05, "race", "school", weight = "n")
+```
+
+This method also supports inference by setting `se = TRUE`.
+
+## References
+
+Elbers, B. (2021). A Method for Studying Differences in Segregation
+Across Time and Space. Sociological Methods & Research.
+<https://doi.org/10.1177/0049124121986204>
+
+Mora, R., & Ruiz-Castillo, J. (2011). Entropy-based Segregation Indices.
+Sociological Methodology, 41(1), 159–194.
+<https://doi.org/10.1111/j.1467-9531.2011.01237.x>
+
+Theil, H. (1971). Principles of Econometrics. New York: Wiley

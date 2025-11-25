@@ -179,14 +179,7 @@ and the column <code>n</code> records the number of students for this
 combination:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://elbersb.github.io/segregation/" class="external-link">"segregation"</a></span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">schools00</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"school"</span>, <span class="st">"race"</span>, <span class="st">"n"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   school  race   n</span></span>
-<span><span class="co">#&gt; 1   A1_1 asian   2</span></span>
-<span><span class="co">#&gt; 2   A1_1 black  14</span></span>
-<span><span class="co">#&gt; 3   A1_1  hisp  30</span></span>
-<span><span class="co">#&gt; 4   A1_1 white 351</span></span>
-<span><span class="co">#&gt; 5   A1_2 black   9</span></span>
-<span><span class="co">#&gt; 6   A1_2  hisp 101</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">schools00</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"school"</span>, <span class="st">"race"</span>, <span class="st">"n"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <p>Note that in the first school, <code>A1_1</code>, there are no Native
 American students. Hence, that row is missing.</p>
 <p>If you have data in the form of contingency tables, you can use
@@ -194,20 +187,8 @@ American students. Hence, that row is missing.</p>
 required for the package. As an example:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">20</span>, <span class="fl">30</span>, <span class="fl">30</span>, <span class="fl">20</span>, <span class="fl">10</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      [,1] [,2]</span></span>
-<span><span class="co">#&gt; [1,]   10   30</span></span>
-<span><span class="co">#&gt; [2,]   20   20</span></span>
-<span><span class="co">#&gt; [3,]   30   10</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Black"</span>, <span class="st">"White"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/matrix_to_long.html">matrix_to_long</a></span><span class="op">(</span><span class="va">m</span>, group <span class="op">=</span> <span class="st">"race"</span>, unit <span class="op">=</span> <span class="st">"school"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    school   race     n</span></span>
-<span><span class="co">#&gt;    &lt;char&gt; &lt;char&gt; &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:      1  Black    10</span></span>
-<span><span class="co">#&gt; 2:      2  Black    20</span></span>
-<span><span class="co">#&gt; 3:      3  Black    30</span></span>
-<span><span class="co">#&gt; 4:      1  White    30</span></span>
-<span><span class="co">#&gt; 5:      2  White    20</span></span>
-<span><span class="co">#&gt; 6:      3  White    10</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/matrix_to_long.html">matrix_to_long</a></span><span class="op">(</span><span class="va">m</span>, group <span class="op">=</span> <span class="st">"race"</span>, unit <span class="op">=</span> <span class="st">"school"</span><span class="op">)</span></span></code></pre></div>
 <p>The <code>group</code> and <code>unit</code> arguments are
 optional.</p>
 </div>
@@ -216,11 +197,7 @@ optional.</p>
 </h2>
 <p>Compute the M and H indices using <code><a href="../reference/mutual_total.html">mutual_total()</a></code>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      stat       est</span></span>
-<span><span class="co">#&gt;    &lt;char&gt;     &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:      M 0.4255390</span></span>
-<span><span class="co">#&gt; 2:      H 0.4188083</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></code></pre></div>
 <p>Interpreting the M is not easy, because it is not normalized.
 However, the H can range from 0 to 1, so a value of 0.419 would indicate
 moderate segregation.</p>
@@ -228,11 +205,7 @@ moderate segregation.</p>
 groups, while the third argument refers to the units. Switching groups
 and units does not affect the M index, but does change the H index:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"school"</span>, <span class="st">"race"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      stat        est</span></span>
-<span><span class="co">#&gt;    &lt;char&gt;      &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:      M 0.42553898</span></span>
-<span><span class="co">#&gt; 2:      H 0.05642991</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"school"</span>, <span class="st">"race"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></code></pre></div>
 <p>This is because the <code>segregation</code> package always divides
 by the marginal <em>group</em> entropy, and it would here hence divide
 by the entropy of the school distribution, which we would expect to be
@@ -240,9 +213,7 @@ much larger (as there are many more schools than racial groups). To
 check, we can use the <code><a href="../reference/entropy.html">entropy()</a></code> function:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="fu"><a href="../reference/entropy.html">entropy</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 1.016071</span></span>
-<span><span class="op">(</span><span class="fu"><a href="../reference/entropy.html">entropy</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 7.541018</span></span></code></pre></div>
+<span><span class="op">(</span><span class="fu"><a href="../reference/entropy.html">entropy</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Therefore, if the H index is used, it is important to specify the
 groups and units correctly.</p>
 <p>For inference (discussed in more detail <a href="#inference">below</a>), we can use bootstrapping to obtain
@@ -251,12 +222,7 @@ standard errors and confidence intervals:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>,</span>
 <span>  weight <span class="op">=</span> <span class="st">"n"</span>,</span>
 <span>  se <span class="op">=</span> <span class="cn">TRUE</span>, CI <span class="op">=</span> <span class="fl">.95</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; 500 bootstrap iterations on 877739 observations</span></span>
-<span><span class="co">#&gt;      stat       est           se                  CI        bias</span></span>
-<span><span class="co">#&gt;    &lt;char&gt;     &lt;num&gt;        &lt;num&gt;              &lt;list&gt;       &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:      M 0.4219677 0.0007802234 0.4204723,0.4234911 0.003571264</span></span>
-<span><span class="co">#&gt; 2:      H 0.4153241 0.0006804194 0.4141087,0.4166140 0.003484230</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 <p>As there a large number of observations, the standard errors are very
 small.</p>
 </div>
@@ -269,17 +235,8 @@ different states. We can compute their segregation indices manually
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">split_schools</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools00</span><span class="op">$</span><span class="va">state</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">split_schools</span><span class="op">$</span><span class="va">A</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span></span>
-<span><span class="co">#&gt;      stat       est</span></span>
-<span><span class="co">#&gt;    &lt;char&gt;     &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:      M 0.4085965</span></span>
 <span><span class="fu"><a href="../reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">split_schools</span><span class="op">$</span><span class="va">B</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span></span>
-<span><span class="co">#&gt;      stat       est</span></span>
-<span><span class="co">#&gt;    &lt;char&gt;     &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:      M 0.2549959</span></span>
-<span><span class="fu"><a href="../reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">split_schools</span><span class="op">$</span><span class="va">C</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span></span>
-<span><span class="co">#&gt;      stat       est</span></span>
-<span><span class="co">#&gt;    &lt;char&gt;     &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:      M 0.3450221</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">split_schools</span><span class="op">$</span><span class="va">C</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span></span></code></pre></div>
 <p>Clearly, state A is more segregated than state C, which in turn shows
 higher school segregation than B. One of the advantages of entropy-based
 segregation indices is that these three state-specific indices have a
@@ -332,24 +289,12 @@ package, use:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># total segregation</span></span>
 <span><span class="op">(</span><span class="va">total</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      stat       est</span></span>
-<span><span class="co">#&gt;    &lt;char&gt;     &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:      M 0.4255390</span></span>
-<span><span class="co">#&gt; 2:      H 0.4188083</span></span>
 <span><span class="co"># between-state segregation:</span></span>
 <span><span class="co">#     how much does the racial distributions differ across states?</span></span>
 <span><span class="op">(</span><span class="va">between</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"state"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      stat        est</span></span>
-<span><span class="co">#&gt;    &lt;char&gt;      &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:      M 0.09924370</span></span>
-<span><span class="co">#&gt; 2:      H 0.09767398</span></span>
 <span><span class="co"># within-state segregation:</span></span>
 <span><span class="co">#     how much segregation exist within states?</span></span>
-<span><span class="op">(</span><span class="fu"><a href="../reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, within <span class="op">=</span> <span class="st">"state"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      stat       est</span></span>
-<span><span class="co">#&gt;    &lt;char&gt;     &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:      M 0.3262953</span></span>
-<span><span class="co">#&gt; 2:      H 0.3211343</span></span></code></pre></div>
+<span><span class="op">(</span><span class="fu"><a href="../reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, within <span class="op">=</span> <span class="st">"state"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Note that
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.426</mn><mo>=</mo><mn>0.0992</mn><mo>+</mo><mn>0.326</mn></mrow><annotation encoding="application/x-tex">0.426 = 0.0992 + 0.326</annotation></semantics></math>
 and
@@ -364,13 +309,7 @@ obtain the decomposition by state. To do so, we can use
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">within</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutual_within.html">mutual_within</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>,</span>
 <span>  within <span class="op">=</span> <span class="st">"state"</span>, weight <span class="op">=</span> <span class="st">"n"</span>, wide <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Key: &lt;state&gt;</span></span>
-<span><span class="co">#&gt;     state         M         p         H ent_ratio</span></span>
-<span><span class="co">#&gt;    &lt;fctr&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:      A 0.4085965 0.2768819 0.4969216 0.8092501</span></span>
-<span><span class="co">#&gt; 2:      B 0.2549959 0.4035425 0.2680884 0.9361190</span></span>
-<span><span class="co">#&gt; 3:      C 0.3450221 0.3195756 0.3611257 0.9402955</span></span></code></pre></div>
+<span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>This is a much simpler way to obtain state-specific segregation
 scores compared to subsetting manually, as shown in the beginning of
 this section. In addition to the M and H indices, we also obtain
@@ -381,9 +320,7 @@ above), and <code>ent_ratio</code>, which is
 from above. Hence, we can recover the total within-component using</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">within</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">M</span> <span class="op">*</span> <span class="va">p</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.3262953</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">within</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">H</span> <span class="op">*</span> <span class="va">p</span> <span class="op">*</span> <span class="va">ent_ratio</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.3211343</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">within</span>, <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">H</span> <span class="op">*</span> <span class="va">p</span> <span class="op">*</span> <span class="va">ent_ratio</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>which is exactly the same as before. The quantity
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>s</mi></msub><mi>M</mi><mrow><mo stretchy="true" form="prefix">(</mo><msub><mi>𝐓</mi><mi>s</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">p_s M(\mathbf{T}_s)</annotation></semantics></math>
 is itself of interest, because it shows how much the states contribute
@@ -394,9 +331,7 @@ components:</p>
 <code class="sourceCode R"><span><span class="co"># merge into a vector</span></span>
 <span><span class="va">components</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">between</span><span class="op">$</span><span class="va">est</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">within</span><span class="op">$</span><span class="va">M</span> <span class="op">*</span> <span class="va">within</span><span class="op">$</span><span class="va">p</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">components</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Between"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif</a></span><span class="op">(</span><span class="fl">100</span> <span class="op">*</span> <span class="va">components</span> <span class="op">/</span> <span class="va">total</span><span class="op">$</span><span class="va">est</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="fl">3</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Between       A       B       C </span></span>
-<span><span class="co">#&gt;    23.3    26.6    24.2    25.9</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">signif</a></span><span class="op">(</span><span class="fl">100</span> <span class="op">*</span> <span class="va">components</span> <span class="op">/</span> <span class="va">total</span><span class="op">$</span><span class="va">est</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <p>Each of the four components contributes about a quarter to the total
 segregation of 0.426. Note that state A is the smallest state (27.7% of
 the population), but contributes the largest percentage (26.6%) to total
@@ -418,14 +353,6 @@ a convenience function for this use case:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/mutual_total_nested.html">mutual_total_nested</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"state"</span>, <span class="st">"district"</span>, <span class="st">"school"</span><span class="op">)</span>,</span>
 <span>  weight <span class="op">=</span> <span class="st">"n"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt;     between          within   stat        est</span></span>
-<span><span class="co">#&gt;      &lt;char&gt;          &lt;char&gt; &lt;char&gt;      &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:    state                      M 0.09924370</span></span>
-<span><span class="co">#&gt; 2:    state                      H 0.09767398</span></span>
-<span><span class="co">#&gt; 3: district           state      M 0.23870880</span></span>
-<span><span class="co">#&gt; 4: district           state      H 0.23493319</span></span>
-<span><span class="co">#&gt; 5:   school state, district      M 0.08758648</span></span>
-<span><span class="co">#&gt; 6:   school state, district      H 0.08620114</span></span>
 <span><span class="co"># This is a simpler way of running the following three decompositions manually:</span></span>
 <span><span class="co"># mutual_total(schools00, "race", "state", weight = "n")</span></span>
 <span><span class="co"># mutual_total(schools00, "race", "district", within = "state", weight = "n")</span></span>
@@ -456,21 +383,7 @@ along with the marginal weights
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mrow><mi>u</mi><mo>⋅</mo></mrow></msub><annotation encoding="application/x-tex">p_{u\cdot}</annotation></semantics></math>,
 use <code><a href="../reference/mutual_local.html">mutual_local()</a></code>:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/mutual_local.html">mutual_local</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Key: &lt;school&gt;</span></span>
-<span><span class="co">#&gt;       school        ls            p</span></span>
-<span><span class="co">#&gt;       &lt;fctr&gt;     &lt;num&gt;        &lt;num&gt;</span></span>
-<span><span class="co">#&gt;    1:   A1_1 0.1826710 0.0004522985</span></span>
-<span><span class="co">#&gt;    2:   A1_2 0.1825592 0.0004978701</span></span>
-<span><span class="co">#&gt;    3:   A1_3 0.2756157 0.0006642066</span></span>
-<span><span class="co">#&gt;    4:   A1_4 0.1368034 0.0005685061</span></span>
-<span><span class="co">#&gt;    5:   A2_1 0.3585546 0.0004260948</span></span>
-<span><span class="co">#&gt;   ---                              </span></span>
-<span><span class="co">#&gt; 2041: C165_1 0.3174930 0.0004568556</span></span>
-<span><span class="co">#&gt; 2042: C165_2 0.3835477 0.0005297702</span></span>
-<span><span class="co">#&gt; 2043: C165_3 0.2972550 0.0005650883</span></span>
-<span><span class="co">#&gt; 2044: C166_1 0.3072281 0.0011586588</span></span>
-<span><span class="co">#&gt; 2045: C167_1 0.3166498 0.0005354667</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/mutual_local.html">mutual_local</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Local segregation scores are based on much less data than the full M
 index, so it often makes sense to obtain confidence intervals. The
 following code plots the length of the 95% confidence interval in
@@ -480,10 +393,8 @@ relation to the size of each school:</p>
 <span>  weight <span class="op">=</span> <span class="st">"n"</span>,</span>
 <span>  se <span class="op">=</span> <span class="cn">TRUE</span>, wide <span class="op">=</span> <span class="cn">TRUE</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 500 bootstrap iterations on 877739 observations</span></span>
 <span><span class="va">localse</span><span class="op">$</span><span class="va">lengthCI</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">localse</span><span class="op">$</span><span class="va">ls_CI</span>, <span class="fu">base</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">localse</span>, <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">p</span>, y <span class="op">=</span> <span class="va">lengthCI</span>, pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="segregation_files/figure-html/unnamed-chunk-15-1.png" width="700"></p>
 <p>Although the relationship is not deterministic, larger schools have
 shorter confidence intervals.</p>
 <p>Because the M is symmetric, local segregation scores can also be
@@ -497,15 +408,7 @@ is then</p>
 <p>To obtain these scores, switch the group and unit arguments in
 <code>mutual_local</code>:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="op">(</span><span class="va">localg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutual_local.html">mutual_local</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"school"</span>, <span class="st">"race"</span>, weight <span class="op">=</span> <span class="st">"n"</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Key: &lt;race&gt;</span></span>
-<span><span class="co">#&gt;      race        ls           p</span></span>
-<span><span class="co">#&gt;    &lt;fctr&gt;     &lt;num&gt;       &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:  asian 0.6287673 0.022553401</span></span>
-<span><span class="co">#&gt; 2:  black 0.8805413 0.190149919</span></span>
-<span><span class="co">#&gt; 3:   hisp 0.7766327 0.151696575</span></span>
-<span><span class="co">#&gt; 4:  white 0.1836393 0.628092178</span></span>
-<span><span class="co">#&gt; 5: native 1.4342644 0.007507927</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="op">(</span><span class="va">localg</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutual_local.html">mutual_local</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"school"</span>, <span class="st">"race"</span>, weight <span class="op">=</span> <span class="st">"n"</span>, wide <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>These results show that the racial groups experience very different
 levels of segregation: White students are less segregated than Asian,
 Black, Hispanic, and, especially, Native American students.</p>
@@ -528,12 +431,7 @@ iterations can be specified as well:</p>
 <code class="sourceCode R"><span><span class="op">(</span><span class="va">se</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mutual_total.html">mutual_total</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>,</span>
 <span>  weight <span class="op">=</span> <span class="st">"n"</span>,</span>
 <span>  se <span class="op">=</span> <span class="cn">TRUE</span>, CI <span class="op">=</span> <span class="fl">.95</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span></span>
-<span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 500 bootstrap iterations on 877739 observations</span></span>
-<span><span class="co">#&gt;      stat       est           se                  CI        bias</span></span>
-<span><span class="co">#&gt;    &lt;char&gt;     &lt;num&gt;        &lt;num&gt;              &lt;list&gt;       &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:      M 0.4218995 0.0007976709 0.4202683,0.4234004 0.003639510</span></span>
-<span><span class="co">#&gt; 2:      H 0.4152204 0.0007404209 0.4138122,0.4166655 0.003587886</span></span></code></pre></div>
+<span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The confidence intervals are based on the percentiles from the
 bootstrap distribution, and hence require a large number of bootstrap
 iterations for valid interpretation. The estimate <code>est</code> that
@@ -551,10 +449,8 @@ intervals, as</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># M</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">se</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">est</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, <span class="va">est</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.4203360 0.4234629</span></span>
 <span><span class="co"># H</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">se</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">est</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">est</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.4137692 0.4166717</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">se</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">est</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, <span class="va">est</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">se</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>provide effectively the same coverage as the confidence intervals
 obtained from the percentile bootstrap.</p>
 <p>Whenever the bootstrap is used, the bootstrap distributions for each
@@ -569,11 +465,9 @@ segregation score:</p>
 <span>  weight <span class="op">=</span> <span class="st">"n"</span>,</span>
 <span>  se <span class="op">=</span> <span class="cn">TRUE</span>, CI <span class="op">=</span> <span class="fl">.95</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; 500 bootstrap iterations on 877739 observations</span></span>
 <span><span class="co"># pick bootstrap distribution of local segregation scores for school C137_9</span></span>
 <span><span class="va">ls_school</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">local</span>, <span class="st">"bootstrap"</span><span class="op">)</span><span class="op">[</span><span class="va">school</span> <span class="op">==</span> <span class="st">"C137_9"</span> <span class="op">&amp;</span> <span class="va">stat</span> <span class="op">==</span> <span class="st">"ls"</span>, <span class="va">boot_est</span><span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html" class="external-link">hist</a></span><span class="op">(</span><span class="va">ls_school</span>, main <span class="op">=</span> <span class="st">"Bootstrap distribution for school C137_9"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="segregation_files/figure-html/unnamed-chunk-19-1.png" width="700"></p>
 <p>For this school, the bootstrap distribution is skewed. If precise
 inference about this specific school is needed, the standard error
 should not be interpreted, and the confidence interval should only be
@@ -584,11 +478,7 @@ function <code><a href="../reference/mutual_expected.html">mutual_expected()</a>
 counts under independence from the marginal distributions of your table.
 For the <code>schools00</code> dataset:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/mutual_expected.html">mutual_expected</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span>
-<span><span class="co">#&gt;         stat         est           se</span></span>
-<span><span class="co">#&gt;       &lt;char&gt;       &lt;num&gt;        &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1: M under 0 0.004804403 7.677220e-05</span></span>
-<span><span class="co">#&gt; 2: H under 0 0.004728413 7.555791e-05</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/mutual_expected.html">mutual_expected</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></code></pre></div>
 <p>Here, there is no concern about bias due to a small sample size.</p>
 </div>
 <div class="section level2">
@@ -602,17 +492,7 @@ and recommended method, is to use <code>method = shapley</code> (or
 and are not recommended. Details on the procedure and how to interpret
 the terms of the decomposition are found in Elbers (2021).</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/mutual_difference.html">mutual_difference</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;              stat          est</span></span>
-<span><span class="co">#&gt;            &lt;char&gt;        &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:             M1  0.425538976</span></span>
-<span><span class="co">#&gt; 2:             M2  0.413385092</span></span>
-<span><span class="co">#&gt; 3:           diff -0.012153884</span></span>
-<span><span class="co">#&gt; 4:      additions -0.003412776</span></span>
-<span><span class="co">#&gt; 5:       removals -0.011405093</span></span>
-<span><span class="co">#&gt; 6: group_marginal  0.017871051</span></span>
-<span><span class="co">#&gt; 7:  unit_marginal -0.011712727</span></span>
-<span><span class="co">#&gt; 8:     structural -0.003494338</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/mutual_difference.html">mutual_difference</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="va">schools05</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></code></pre></div>
 <p>This method also supports inference by setting
 <code>se = TRUE</code>.</p>
 </div>
@@ -636,7 +516,7 @@ Indices. Sociological Methodology, 41(1), 159–194. <a href="https://doi.org/10
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

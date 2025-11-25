@@ -88,7 +88,6 @@ of plotting one or several segregation curves:</p>
 <span>  weight <span class="op">=</span> <span class="st">"n"</span>,</span>
 <span>  segment <span class="op">=</span> <span class="st">"state"</span> <span class="co"># leave this out to produce a single curve</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_files/figure-html/unnamed-chunk-2-1.png" width="700"></p>
 <p>In this case, state <code>A</code> is the most segregated, while
 state <code>B</code> and <code>C</code> are similarly segregated, but at
 a lower level. Segregation curves are closely related to the index of
@@ -100,12 +99,7 @@ values:</p>
 <span>  <span class="va">race</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"white"</span>, <span class="st">"asian"</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="../reference/dissimilarity.html">dissimilarity</a></span><span class="op">(</span><span class="va">.SD</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span>,</span>
 <span>  by <span class="op">=</span> <span class="fu">.</span><span class="op">(</span><span class="va">state</span><span class="op">)</span></span>
-<span><span class="op">]</span></span>
-<span><span class="co">#&gt;     state   stat       est</span></span>
-<span><span class="co">#&gt;    &lt;fctr&gt; &lt;char&gt;     &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:      A      D 0.6558592</span></span>
-<span><span class="co">#&gt; 2:      B      D 0.4002980</span></span>
-<span><span class="co">#&gt; 3:      C      D 0.3886178</span></span></code></pre></div>
+<span><span class="op">]</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="segplot">Segplot<a class="anchor" aria-label="anchor" href="#segplot"></a>
@@ -138,40 +132,26 @@ include the reference proportion of each group.</p>
 <code class="sourceCode R"><span><span class="va">sch</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="va">state</span> <span class="op">==</span> <span class="st">"A"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># basic segplot</span></span>
-<span><span class="fu"><a href="../reference/segplot.html">segplot</a></span><span class="op">(</span><span class="va">sch</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="../reference/segplot.html">segplot</a></span><span class="op">(</span><span class="va">sch</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># order by majority group (white in this case)</span></span>
-<span><span class="fu"><a href="../reference/segplot.html">segplot</a></span><span class="op">(</span><span class="va">sch</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>, order <span class="op">=</span> <span class="st">"majority"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_files/figure-html/unnamed-chunk-4-2.png" width="700"></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="../reference/segplot.html">segplot</a></span><span class="op">(</span><span class="va">sch</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>, order <span class="op">=</span> <span class="st">"majority"</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># increase the space between bars</span></span>
 <span><span class="co"># (has to be very low here because there are many schools in this dataset)</span></span>
-<span><span class="fu"><a href="../reference/segplot.html">segplot</a></span><span class="op">(</span><span class="va">sch</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>, bar_space <span class="op">=</span> <span class="fl">0.0005</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_files/figure-html/unnamed-chunk-4-3.png" width="700"></p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="fu"><a href="../reference/segplot.html">segplot</a></span><span class="op">(</span><span class="va">sch</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>, bar_space <span class="op">=</span> <span class="fl">0.0005</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># change the reference distribution</span></span>
 <span><span class="co"># (here, we just use an equalized distribution across the five groups)</span></span>
 <span><span class="op">(</span><span class="va">ref</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>race <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">schools00</span><span class="op">$</span><span class="va">race</span><span class="op">)</span>, p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt;     race   p</span></span>
-<span><span class="co">#&gt; 1  asian 0.2</span></span>
-<span><span class="co">#&gt; 2  black 0.2</span></span>
-<span><span class="co">#&gt; 3   hisp 0.2</span></span>
-<span><span class="co">#&gt; 4  white 0.2</span></span>
-<span><span class="co">#&gt; 5 native 0.2</span></span>
 <span><span class="fu"><a href="../reference/segplot.html">segplot</a></span><span class="op">(</span><span class="va">sch</span>, <span class="st">"race"</span>, <span class="st">"school"</span>,</span>
 <span>  weight <span class="op">=</span> <span class="st">"n"</span>,</span>
 <span>  reference_distribution <span class="op">=</span> <span class="va">ref</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_files/figure-html/unnamed-chunk-4-4.png" width="700"></p>
 <p>It is also possible to show a secondary plot that shows the adjusted
 local segregation scores:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/segplot.html">segplot</a></span><span class="op">(</span><span class="va">sch</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>, secondary_plot <span class="op">=</span> <span class="st">"segregation"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
 </div>
 <div class="section level2">
 <h2 id="compressing-segregation-information">Compressing segregation information<a class="anchor" aria-label="anchor" href="#compressing-segregation-information"></a>
@@ -197,7 +177,7 @@ the argument neighbors.</p>
 <p>The second step is then to run the actual compression algorithm using
 <code><a href="../reference/compress.html">compress()</a></code>. For this example, we choose to compress based
 on a relatively small window:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># compression based on window of 20 'neighboring' units</span></span>
 <span><span class="co"># in terms of local segregation (alternatively, neighbors can be a data frame)</span></span>
 <span><span class="va">comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/compress.html">compress</a></span><span class="op">(</span><span class="va">sch</span>, <span class="st">"race"</span>, <span class="st">"school"</span>,</span>
@@ -206,13 +186,8 @@ on a relatively small window:</p>
 <p>After running <code><a href="../reference/compress.html">compress()</a></code>—which can take some time
 depending on how many neighbors need to be considered—the output
 summarizes the compression that can be achieved:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">comp</span></span>
-<span><span class="co">#&gt; Compression of dataset with 560 units</span></span>
-<span><span class="co">#&gt; Original M: 0.4085965; Final M: 0</span></span>
-<span><span class="co">#&gt; - Threshold 99%: M = 0.4045242; Units = 92</span></span>
-<span><span class="co">#&gt; - Threshold 95%: M = 0.388871; Units = 22</span></span>
-<span><span class="co">#&gt; - Threshold 90%: M = 0.3695035; Units = 9</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">comp</span></span></code></pre></div>
 <p>The results indicate that 99% of the segregation information can be
 retained by only 98 units (out of 560 in the original dataset), 95% in
 only 24 units, and 90% in 10 units. The percentage of information
@@ -220,37 +195,26 @@ retained on each iteration can be accessed via the data frame available
 through <code>comp$iterations</code>. This data frame can also be used
 to generate a plot that shows the relationship between the number of
 merges and the loss in segregation information:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/scree_plot.html">scree_plot</a></span><span class="op">(</span><span class="va">comp</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <p>Another way to learn more about the compression is to visualize the
 information as a dendrogram:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dend</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/dendrogram.html" class="external-link">as.dendrogram</a></span><span class="op">(</span><span class="va">comp</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dend</span>, leaflab <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_files/figure-html/unnamed-chunk-9-1.png" width="700"></p>
 <p>The third step is to create a new dataset based on the desired level
 of compression. This can be achieved using the function
 <code><a href="../reference/merge_units.html">merge_units()</a></code>, and either <code>n_units</code> or
 <code>percent</code> can be specified to indicate the desired level of
 compression.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sch_compressed</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/merge_units.html">merge_units</a></span><span class="op">(</span><span class="va">comp</span>, n_units <span class="op">=</span> <span class="fl">15</span><span class="op">)</span></span>
 <span><span class="co"># or, for instance: merge_units(comp, percent = 0.80)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sch_compressed</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    school   race     n</span></span>
-<span><span class="co">#&gt;    &lt;fctr&gt; &lt;fctr&gt; &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1:    M12  asian   143</span></span>
-<span><span class="co">#&gt; 2:    M12  black   445</span></span>
-<span><span class="co">#&gt; 3:    M12   hisp   472</span></span>
-<span><span class="co">#&gt; 4:    M12  white  6174</span></span>
-<span><span class="co">#&gt; 5:     M2  black    67</span></span>
-<span><span class="co">#&gt; 6:     M2   hisp   642</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">sch_compressed</span><span class="op">)</span></span></code></pre></div>
 <p>The compressed dataset has the same format as the original dataset
 and can now be used to produce another segplot, e.g.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/segplot.html">segplot</a></span><span class="op">(</span><span class="va">sch_compressed</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>, secondary_plot <span class="op">=</span> <span class="st">"segregation"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="plotting_files/figure-html/unnamed-chunk-11-1.png" width="700"></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
@@ -263,7 +227,7 @@ and can now be used to produce another segplot, e.g.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

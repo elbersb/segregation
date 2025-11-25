@@ -1,0 +1,186 @@
+# Visualizing and compressing segregation
+
+The package provides the functions
+[`segcurve()`](https://elbersb.com/segregation/reference/segcurve.md)
+and [`segplot()`](https://elbersb.com/segregation/reference/segplot.md)
+to visualize segregation. These functions return simple ggplots, which
+can then be further styled and themed. For the
+[`segplot()`](https://elbersb.com/segregation/reference/segplot.md)
+function, it is often interesting to also compress the segregation
+information that is contained in large datasets. How to do this using
+the functions
+[`compress()`](https://elbersb.com/segregation/reference/compress.md)
+and
+[`merge_units()`](https://elbersb.com/segregation/reference/merge_units.md)
+is also described below, and in more detail [in this working
+paper](https://osf.io/preprints/socarxiv/ruw4g/).
+
+## Segregation curve
+
+The segregation curve was first introduced by [Duncan and Duncan
+(1955)](https://www.jstor.org/stable/2088328). The function
+[`segcurve()`](https://elbersb.com/segregation/reference/segcurve.md)
+provides a simple way of plotting one or several segregation curves:
+
+``` r
+segcurve(subset(schools00, race %in% c("white", "asian")),
+  "race", "school",
+  weight = "n",
+  segment = "state" # leave this out to produce a single curve
+)
+```
+
+In this case, state `A` is the most segregated, while state `B` and `C`
+are similarly segregated, but at a lower level. Segregation curves are
+closely related to the index of dissimilarity, and here this corresponds
+to the following index values:
+
+``` r
+# converting to data.table makes this easier
+data.table::as.data.table(schools00)[
+  race %in% c("white", "asian"),
+  dissimilarity(.SD, "race", "school", weight = "n"),
+  by = .(state)
+]
+```
+
+## Segplot
+
+Please consider citing the following paper if you use segplot: Benjamin
+Elbers and Rob Gruijters. 2023. “[Segplot: A New Method for Visualizing
+Patterns of Multi-Group
+Segregation](https://doi.org/10.1016/j.rssm.2023.100860). Research in
+Social Stratification and Mobility.
+
+The function
+[`segplot()`](https://elbersb.com/segregation/reference/segplot.md) is
+provided to generate segplots. Segplots are described in more detail [in
+this working paper](https://osf.io/preprints/socarxiv/ruw4g/). The
+function requires the dataset, the group, and unit variables, and, if
+required, a variable that identifies the weight (`n` in this case).
+
+Other options to customize the look of the segplot are given by the
+argument `order`. By default, the units of the segplot are ordered by
+their local segregation score, but it is also possible to order them by
+entropy (i.e., diversity) or by share of the majority population. This
+last option can be useful for the two-group case. The argument
+`bar_space` can be used to increase the space between the units from the
+default of zero space between bars. When plotting a subset of the
+dataset, the reference distribution shown on the right of the segplot
+can be changed by supplying a two-column data frame to the
+`reference_distribution` argument. One column of this frame should
+contain the group identifiers, and the other should include the
+reference proportion of each group.
+
+Examples of how to use these arguments are given below:
+
+``` r
+sch <- subset(schools00, state == "A")
+
+# basic segplot
+segplot(sch, "race", "school", weight = "n")
+
+# order by majority group (white in this case)
+segplot(sch, "race", "school", weight = "n", order = "majority")
+
+# increase the space between bars
+# (has to be very low here because there are many schools in this dataset)
+segplot(sch, "race", "school", weight = "n", bar_space = 0.0005)
+
+# change the reference distribution
+# (here, we just use an equalized distribution across the five groups)
+(ref <- data.frame(race = unique(schools00$race), p = rep(0.2, 5)))
+segplot(sch, "race", "school",
+  weight = "n",
+  reference_distribution = ref
+)
+```
+
+It is also possible to show a secondary plot that shows the adjusted
+local segregation scores:
+
+``` r
+segplot(sch, "race", "school", weight = "n", secondary_plot = "segregation")
+```
+
+## Compressing segregation information
+
+The compression algorithm requires three steps to be taken. First, it is
+important to decide which units should be permitted to merge: for
+residential segregation, we may only want to allow neighboring units
+(such as tracts) to be mergeable. In this case, the first step consists
+of compiling a data frame with exactly two columns, where each row
+identifies a pair of neighboring units. In other cases, we may want to
+allow all units to be mergeable, in principle. However, this can be very
+time-consuming as it requires each unit to be compared to all others at
+every step of the merging operation. To speed up compression, we
+therefore implement an option that allows units to be merged only within
+a window of “neighboring” units, where the definition of each window is
+based on similarities in local segregation. Hence, for a given unit,
+only `n_neighbors` are considered at every step, and these neighbors are
+based on similarities in local segregation. Smaller `n_neighbors` values
+will result in faster run times, but increase the probability of
+non-optimal merges. The method of merging can be specified in the
+[`compress()`](https://elbersb.com/segregation/reference/compress.md)
+function by supplying the argument neighbors.
+
+The second step is then to run the actual compression algorithm using
+[`compress()`](https://elbersb.com/segregation/reference/compress.md).
+For this example, we choose to compress based on a relatively small
+window:
+
+``` r
+# compression based on window of 20 'neighboring' units
+# in terms of local segregation (alternatively, neighbors can be a data frame)
+comp <- compress(sch, "race", "school",
+  weight = "n", neighbors = "local", n_neighbors = 20
+)
+```
+
+After running
+[`compress()`](https://elbersb.com/segregation/reference/compress.md)—which
+can take some time depending on how many neighbors need to be
+considered—the output summarizes the compression that can be achieved:
+
+``` r
+comp
+```
+
+The results indicate that 99% of the segregation information can be
+retained by only 98 units (out of 560 in the original dataset), 95% in
+only 24 units, and 90% in 10 units. The percentage of information
+retained on each iteration can be accessed via the data frame available
+through `comp$iterations`. This data frame can also be used to generate
+a plot that shows the relationship between the number of merges and the
+loss in segregation information:
+
+``` r
+scree_plot(comp)
+```
+
+Another way to learn more about the compression is to visualize the
+information as a dendrogram:
+
+``` r
+dend <- as.dendrogram(comp)
+plot(dend, leaflab = "none")
+```
+
+The third step is to create a new dataset based on the desired level of
+compression. This can be achieved using the function
+[`merge_units()`](https://elbersb.com/segregation/reference/merge_units.md),
+and either `n_units` or `percent` can be specified to indicate the
+desired level of compression.
+
+``` r
+sch_compressed <- merge_units(comp, n_units = 15)
+# or, for instance: merge_units(comp, percent = 0.80)
+head(sch_compressed)
+```
+
+The compressed dataset has the same format as the original dataset and
+can now be used to produce another segplot, e.g.
+
+``` r
+segplot(sch_compressed, "race", "school", weight = "n", secondary_plot = "segregation")
+```

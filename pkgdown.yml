@@ -1,11 +1,11 @@
 pandoc: 3.1.11
-pkgdown: 2.1.3
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   faq: faq.html
   plotting: plotting.html
   segregation: segregation.html
-last_built: 2025-07-02T14:54Z
+last_built: 2025-11-25T16:08Z
 urls:
   reference: https://elbersb.com/segregation/reference
   article: https://elbersb.com/segregation/articles
