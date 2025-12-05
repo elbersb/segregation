@@ -260,8 +260,9 @@ mutual_total_nested(schools00, "race", c("state", "district", "school"),
 
 ## Local segregation
 
-The M index (but not the H index) allows for another decomposition, into
-local segregation scores. To define this decomposition, let
+The M index allows for another decomposition, into local segregation
+scores. These scores allow us to understand how segregated each unit or
+group is. To define this decomposition, let
 $p_{g|u} = t_{ug}/t_{u \cdot}$ be the conditional probability of being
 in group $g$, given that one is in unit $u$. We can then define the
 *local segregation score of unit $u$* as
@@ -293,7 +294,7 @@ with(localse, plot(x = p, y = lengthCI, pch = 16, cex = 0.3))
 ```
 
 Although the relationship is not deterministic, larger schools have
-shorter confidence intervals.
+smaller confidence intervals.
 
 Because the M is symmetric, local segregation scores can also be
 obtained for groups. The equivalent definition for the *local
@@ -313,6 +314,19 @@ To obtain these scores, switch the group and unit arguments in
 These results show that the racial groups experience very different
 levels of segregation: White students are less segregated than Asian,
 Black, Hispanic, and, especially, Native American students.
+
+**Adjusted local segregation scores**: Local segregation scores are
+defined for the M index, but because the H index is only a scaled
+version of the M index, it is also possible to define local segregation
+scores for the H index. These *adjusted local segregation scores* are
+then defined as $AL_{u} = \frac{L_{u}}{E(\mathbf{T})}$, such that
+$H(\mathbf{T}) = \sum_{u = 1}^{U}p_{u \cdot}AL_{u}$. There is currently
+no quick built-in way to calculate these scores, but they can be easily
+obtained by calculating the local segregation scores and dividing by the
+group entropy calculated using the
+[`entropy()`](https://elbersb.com/segregation/reference/entropy.md)
+function. For more information on local segregation scores, see this
+[working paper](https://osf.io/preprints/socarxiv/3juyc_v1).
 
 ## Inference
 
@@ -389,12 +403,12 @@ interpreted when the number of bootstrap iterations is large.
 
 If you are concerned that your contingency table is too small to provide
 reliable segregation estimates, the package also provides a function
-[`mutual_expected()`](https://elbersb.com/segregation/reference/mutual_expected.md)
-that simulates random cell counts under independence from the marginal
-distributions of your table. For the `schools00` dataset:
+`mutual_total_expected()` that simulates random cell counts under
+independence from the marginal distributions of your table. For the
+`schools00` dataset:
 
 ``` r
-mutual_expected(schools00, "race", "school", weight = "n", n_bootstrap = 500)
+mutual_total_expected(schools00, "race", "school", weight = "n", n_bootstrap = 500)
 ```
 
 Here, there is no concern about bias due to a small sample size.

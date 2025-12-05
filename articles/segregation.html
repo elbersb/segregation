@@ -361,8 +361,9 @@ a convenience function for this use case:</p>
 <div class="section level2">
 <h2 id="local-segregation">Local segregation<a class="anchor" aria-label="anchor" href="#local-segregation"></a>
 </h2>
-<p>The M index (but not the H index) allows for another decomposition,
-into local segregation scores. To define this decomposition, let
+<p>The M index allows for another decomposition, into local segregation
+scores. These scores allow us to understand how segregated each unit or
+group is. To define this decomposition, let
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mi>g</mi><mo stretchy="false" form="prefix">|</mo><mi>u</mi></mrow></msub><mo>=</mo><msub><mi>t</mi><mrow><mi>u</mi><mi>g</mi></mrow></msub><mi>/</mi><msub><mi>t</mi><mrow><mi>u</mi><mo>⋅</mo></mrow></msub></mrow><annotation encoding="application/x-tex">p_{g|u} = t_{ug} / t_{u \cdot}</annotation></semantics></math>
 be the conditional probability of being in group
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>g</mi><annotation encoding="application/x-tex">g</annotation></semantics></math>,
@@ -396,7 +397,7 @@ relation to the size of each school:</p>
 <span><span class="va">localse</span><span class="op">$</span><span class="va">lengthCI</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="va">localse</span><span class="op">$</span><span class="va">ls_CI</span>, <span class="fu">base</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/r/base/diff.html" class="external-link">diff</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/with.html" class="external-link">with</a></span><span class="op">(</span><span class="va">localse</span>, <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">p</span>, y <span class="op">=</span> <span class="va">lengthCI</span>, pch <span class="op">=</span> <span class="fl">16</span>, cex <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Although the relationship is not deterministic, larger schools have
-shorter confidence intervals.</p>
+smaller confidence intervals.</p>
 <p>Because the M is symmetric, local segregation scores can also be
 obtained for groups. The equivalent definition for the <em>local
 segregation score of group
@@ -412,6 +413,19 @@ is then</p>
 <p>These results show that the racial groups experience very different
 levels of segregation: White students are less segregated than Asian,
 Black, Hispanic, and, especially, Native American students.</p>
+<p><strong>Adjusted local segregation scores</strong>: Local segregation
+scores are defined for the M index, but because the H index is only a
+scaled version of the M index, it is also possible to define local
+segregation scores for the H index. These <em>adjusted local segregation
+scores</em> are then defined as
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><msub><mi>L</mi><mi>u</mi></msub><mo>=</mo><mfrac><msub><mi>L</mi><mi>u</mi></msub><mrow><mi>E</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝐓</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">AL_u = \frac{L_u}{E(\mathbf{T})}</annotation></semantics></math>,
+such that
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>𝐓</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msubsup><mo>∑</mo><mrow><mi>u</mi><mo>=</mo><mn>1</mn></mrow><mi>U</mi></msubsup><msub><mi>p</mi><mrow><mi>u</mi><mo>⋅</mo></mrow></msub><mi>A</mi><msub><mi>L</mi><mi>u</mi></msub></mrow><annotation encoding="application/x-tex">H(\mathbf{T}) = \sum_{u=1}^U p_{u\cdot}AL_u</annotation></semantics></math>.
+There is currently no quick built-in way to calculate these scores, but
+they can be easily obtained by calculating the local segregation scores
+and dividing by the group entropy calculated using the
+<code><a href="../reference/entropy.html">entropy()</a></code> function. For more information on local
+segregation scores, see this <a href="https://osf.io/preprints/socarxiv/3juyc_v1" class="external-link">working paper</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="inference">Inference<a class="anchor" aria-label="anchor" href="#inference"></a>
@@ -474,11 +488,11 @@ should not be interpreted, and the confidence interval should only be
 interpreted when the number of bootstrap iterations is large.</p>
 <p>If you are concerned that your contingency table is too small to
 provide reliable segregation estimates, the package also provides a
-function <code><a href="../reference/mutual_expected.html">mutual_expected()</a></code> that simulates random cell
+function <code>mutual_total_expected()</code> that simulates random cell
 counts under independence from the marginal distributions of your table.
 For the <code>schools00</code> dataset:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/mutual_expected.html">mutual_expected</a></span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">mutual_total_expected</span><span class="op">(</span><span class="va">schools00</span>, <span class="st">"race"</span>, <span class="st">"school"</span>, weight <span class="op">=</span> <span class="st">"n"</span>, n_bootstrap <span class="op">=</span> <span class="fl">500</span><span class="op">)</span></span></code></pre></div>
 <p>Here, there is no concern about bias due to a small sample size.</p>
 </div>
 <div class="section level2">
