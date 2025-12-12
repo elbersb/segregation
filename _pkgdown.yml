@@ -23,7 +23,8 @@ reference:
       - segplot
   - title: Debiasing
     contents:
-      - mutual_expected
+      - mutual_total_expected
+      - mutual_local_expected
       - dissimilarity_expected
   - title: Comparing differences
     contents:

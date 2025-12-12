@@ -3,7 +3,7 @@ if (!identical(Sys.getenv("NOT_CRAN"), "true")) {
 }
 
 library("segregation")
-context("test_mutual_expected")
+context("test_mutual_total_expected")
 
 data1 <- data.frame(
     u = rep(c(1, 2, 3, 4), 2),
@@ -21,31 +21,41 @@ data2 <- data.frame(
 
 test_that("works both ways around", {
     expect_equal(
-        mutual_expected(data1, "u", "g", weight = "n")[stat == "M under 0", est],
-        mutual_expected(data1, "g", "u", weight = "n")[stat == "M under 0", est],
+        mutual_total_expected(data1, "u", "g", weight = "n")[stat == "M under 0", est],
+        mutual_total_expected(data1, "g", "u", weight = "n")[stat == "M under 0", est],
         tolerance = 0.01
     )
 
     expect_equal(
-        mutual_expected(data2, "u", "g", weight = "n")[stat == "M under 0", est],
-        mutual_expected(data2, "g", "u", weight = "n")[stat == "M under 0", est],
+        mutual_total_expected(data2, "u", "g", weight = "n")[stat == "M under 0", est],
+        mutual_total_expected(data2, "g", "u", weight = "n")[stat == "M under 0", est],
         tolerance = 0.05
     )
 })
 
+test_that("works nested", {
+    data1$superunit <- data1$u <= 3
+    a <- mutual_total_expected(data1, "g", c("superunit", "u"), weight = "n")
+    b <- mutual_total_expected(data1, "g", "u", weight = "n")
+
+    expect_equal(a$est, b$est, tolerance = 0.01)
+    expect_equal(a$se, b$se, tolerance = 0.01)
+    expect_equal(length(a$est), 2)
+})
+
 test_that("fixed margins = FALSE", {
     expect_equal(
-        mutual_expected(data1, "u", "g", weight = "n", fixed_margins = FALSE)[stat == "M under 0", est],
-        mutual_expected(data1, "g", "u", weight = "n", fixed_margins = FALSE)[stat == "M under 0", est],
+        mutual_total_expected(data1, "u", "g", weight = "n", fixed_margins = FALSE)[stat == "M under 0", est],
+        mutual_total_expected(data1, "g", "u", weight = "n", fixed_margins = FALSE)[stat == "M under 0", est],
         tolerance = 0.01
     )
 })
 
 test_that("within argument", {
-    within <- mutual_expected(school_ses, "ethnic_group", "school_id", within = "ses_quintile")
+    within <- mutual_total_expected(school_ses, "ethnic_group", "school_id", within = "ses_quintile")
     # manually
     d <- data.table::as.data.table(school_ses)
-    manually <- d[, mutual_expected(.SD, "ethnic_group", "school_id"), by = .(ses_quintile)]
+    manually <- d[, mutual_total_expected(.SD, "ethnic_group", "school_id"), by = .(ses_quintile)]
     p <- d[, .(p = .N), by = .(ses_quintile)][, .(ses_quintile, p = p / sum(p))]
     manually <- merge(manually, p)
     manually <- manually[, .(est_manual = sum(est * p)), by = .(stat)]
@@ -106,7 +116,7 @@ test_that("errors", {
     )
 
     expect_error(
-        mutual_expected(dat, "g", "u", weight = "n"),
+        mutual_total_expected(dat, "g", "u", weight = "n"),
         "bootstrap with a total sample size"
     )
     expect_error(
@@ -122,7 +132,7 @@ test_that("errors", {
         stringsAsFactors = FALSE
     )
 
-    expect_message(mutual_expected(schools00, "race", "school",
+    expect_message(mutual_total_expected(schools00, "race", "school",
         within = "district", weight = "n",
         n_bootstrap = 10
     ), "singleton items")
