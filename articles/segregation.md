@@ -403,9 +403,9 @@ interpreted when the number of bootstrap iterations is large.
 
 If you are concerned that your contingency table is too small to provide
 reliable segregation estimates, the package also provides a function
-`mutual_total_expected()` that simulates random cell counts under
-independence from the marginal distributions of your table. For the
-`schools00` dataset:
+[`mutual_total_expected()`](https://elbersb.com/segregation/reference/mutual_total_expected.md)
+that simulates random cell counts under independence from the marginal
+distributions of your table. For the `schools00` dataset:
 
 ``` r
 mutual_total_expected(schools00, "race", "school", weight = "n", n_bootstrap = 500)

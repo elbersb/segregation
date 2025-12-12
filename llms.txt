@@ -274,8 +274,11 @@ Working Paper. URL:
 
 ## Debiasing
 
-- [`mutual_expected()`](https://elbersb.com/segregation/reference/mutual_expected.md)
+- [`mutual_total_expected()`](https://elbersb.com/segregation/reference/mutual_total_expected.md)
   : Calculates expected values when true segregation is zero
+- [`mutual_local_expected()`](https://elbersb.com/segregation/reference/mutual_local_expected.md)
+  : Calculates expected local segregation scores when true segregation
+  is zero
 - [`dissimilarity_expected()`](https://elbersb.com/segregation/reference/dissimilarity_expected.md)
   : Calculates expected values when true segregation is zero
 
